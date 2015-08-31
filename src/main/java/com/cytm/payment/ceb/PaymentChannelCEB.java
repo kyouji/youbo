@@ -20,10 +20,10 @@ import org.springframework.stereotype.Service;
 
 import com.cytm.payment.PaymentChannel;
 import com.cytm.payment.util.PaymentUtil;
-import com.ynyes.cheyou.entity.TdOrder;
-import com.ynyes.cheyou.entity.TdPayRecord;
-import com.ynyes.cheyou.service.TdOrderService;
-import com.ynyes.cheyou.service.TdPayRecordService;
+import com.ynyes.youbo.entity.TdOrder;
+import com.ynyes.youbo.entity.TdPayRecord;
+import com.ynyes.youbo.service.TdOrderService;
+import com.ynyes.youbo.service.TdPayRecordService;
 
 @Service
 public class PaymentChannelCEB implements PaymentChannel{
