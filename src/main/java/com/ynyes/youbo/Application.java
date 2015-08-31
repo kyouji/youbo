@@ -24,7 +24,7 @@ import com.ynyes.youbo.service.TdSettingService;
 import com.ynyes.youbo.service.TdUserService;
 
 @Configuration
-@ComponentScan(basePackages={"com.ynyes.cheyou","com.cytm.payment"})
+@ComponentScan(basePackages={"com.ynyes.youbo","com.cytm.payment"})
 @EnableAutoConfiguration
 public class Application extends SpringBootServletInitializer implements CommandLineRunner {
     @Autowired
@@ -64,32 +64,32 @@ public class Application extends SpringBootServletInitializer implements Command
 	@Override
 	public void run(String... args) throws Exception {
 	    // 定时器
-	    Timer timer = new Timer();
-	    
-	    // 定时任务
-	    TimerTask task = new TimerTask() {
-            @Override
-            public void run() {
-                tdUserService.resetCount();
-                
-                TdSetting setting = tdSettingService.findTopBy();
-                
-                if (null != setting)
-                {
-                    setting.setTotalOnlines(0L);
-                    tdSettingService.save(setting);
-                }
-            }
-        };
-        
-        Calendar calendar = Calendar.getInstance();
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
-        calendar.set(year, month, day, 3, 0, 0);
-        Date date = calendar.getTime();
-        
-        timer.schedule(task, date, 1000 * 60 * 60 * 24);
+//	    Timer timer = new Timer();
+//	    
+//	    // 定时任务
+//	    TimerTask task = new TimerTask() {
+//            @Override
+//            public void run() {
+//                tdUserService.resetCount();
+//                
+//                TdSetting setting = tdSettingService.findTopBy();
+//                
+//                if (null != setting)
+//                {
+//                    setting.setTotalOnlines(0L);
+//                    tdSettingService.save(setting);
+//                }
+//            }
+//        };
+//        
+//        Calendar calendar = Calendar.getInstance();
+//        int year = calendar.get(Calendar.YEAR);
+//        int month = calendar.get(Calendar.MONTH);
+//        int day = calendar.get(Calendar.DAY_OF_MONTH);
+//        calendar.set(year, month, day, 3, 0, 0);
+//        Date date = calendar.getTime();
+//        
+//        timer.schedule(task, date, 1000 * 60 * 60 * 24);
 
 	}
 }
