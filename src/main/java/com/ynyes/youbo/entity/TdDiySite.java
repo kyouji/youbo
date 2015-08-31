@@ -7,7 +7,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 /**
- * 自提点
+ * 停车场
  * 
  * @author Sharon
  *
@@ -19,17 +19,13 @@ public class TdDiySite {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     
-    // 自提点名称
+    // 停车场名称
     @Column
     private String title;
     
-    // 自提点地址
+    // 停车场详细地址
     @Column
     private String address;
-    
-    // 付款方式
-    @Column
-    private String payType;
     
     // 营业时间
     @Column
@@ -39,19 +35,15 @@ public class TdDiySite {
     @Column
     private String serviceTele;
     
-    // 投诉电话
-    @Column
-    private String complainTele;
-    
-    // 自提点省份
+    // 省份
     @Column
     private String province;
     
-    // 自提点城市
+    // 城市
     @Column
     private String city;
     
-    // 自提点城市地区
+    // 区
     @Column
     private String disctrict;
     
@@ -75,7 +67,7 @@ public class TdDiySite {
     @Column
     private String info;
     
-    // 图片地址
+    // 封面图片
     @Column
     private String imageUri;
     
@@ -95,9 +87,25 @@ public class TdDiySite {
     @Column
     private String mobile;
     
-    // 返利
+    // 计费方式 0: 按次计费 1: 分时段计费
     @Column
-    private Double totalCash;
+    private Long enrollType;
+    
+    // 白天价格
+    @Column
+    private Double dayPrice;
+    
+    // 夜间价格
+    @Column
+    private Double nightPrice;
+    
+    // 车位类型
+    @Column
+    private String parkingType;
+    
+    // 车位分类
+    @Column
+    private String parkingClassification;
 
     public Long getId() {
         return id;
@@ -107,23 +115,7 @@ public class TdDiySite {
         this.id = id;
     }
 
-    public String getProvince() {
-		return province;
-	}
-
-	public void setProvince(String province) {
-		this.province = province;
-	}
-
-	public String getDisctrict() {
-		return disctrict;
-	}
-
-	public void setDisctrict(String disctrict) {
-		this.disctrict = disctrict;
-	}
-
-	public String getTitle() {
+    public String getTitle() {
         return title;
     }
 
@@ -137,70 +129,6 @@ public class TdDiySite {
 
     public void setAddress(String address) {
         this.address = address;
-    }
-
-    public Boolean getIsEnable() {
-        return isEnable;
-    }
-
-    public void setIsEnable(Boolean isEnable) {
-        this.isEnable = isEnable;
-    }
-    
-    public Long getSortId() {
-        return sortId;
-    }
-
-    public void setSortId(Long sortId) {
-        this.sortId = sortId;
-    }
-
-    public String getInfo() {
-        return info;
-    }
-
-    public void setInfo(String info) {
-        this.info = info;
-    }
-
-    public Double getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(Double longitude) {
-        this.longitude = longitude;
-    }
-
-    public Double getLatitude() {
-        return latitude;
-    }
-
-    public void setLatitude(Double latitude) {
-        this.latitude = latitude;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getImageUri() {
-        return imageUri;
-    }
-
-    public void setImageUri(String imageUri) {
-        this.imageUri = imageUri;
-    }
-
-    public String getPayType() {
-        return payType;
-    }
-
-    public void setPayType(String payType) {
-        this.payType = payType;
     }
 
     public String getOpenTimeSpan() {
@@ -219,12 +147,76 @@ public class TdDiySite {
         this.serviceTele = serviceTele;
     }
 
-    public String getComplainTele() {
-        return complainTele;
+    public String getProvince() {
+        return province;
     }
 
-    public void setComplainTele(String complainTele) {
-        this.complainTele = complainTele;
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getDisctrict() {
+        return disctrict;
+    }
+
+    public void setDisctrict(String disctrict) {
+        this.disctrict = disctrict;
+    }
+
+    public Boolean getIsEnable() {
+        return isEnable;
+    }
+
+    public void setIsEnable(Boolean isEnable) {
+        this.isEnable = isEnable;
+    }
+
+    public Long getSortId() {
+        return sortId;
+    }
+
+    public void setSortId(Long sortId) {
+        this.sortId = sortId;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getInfo() {
+        return info;
+    }
+
+    public void setInfo(String info) {
+        this.info = info;
+    }
+
+    public String getImageUri() {
+        return imageUri;
+    }
+
+    public void setImageUri(String imageUri) {
+        this.imageUri = imageUri;
     }
 
     public String getShowPictures() {
@@ -259,11 +251,43 @@ public class TdDiySite {
         this.mobile = mobile;
     }
 
-    public Double getTotalCash() {
-        return totalCash;
+    public Long getEnrollType() {
+        return enrollType;
     }
 
-    public void setTotalCash(Double totalCash) {
-        this.totalCash = totalCash;
+    public void setEnrollType(Long enrollType) {
+        this.enrollType = enrollType;
+    }
+
+    public Double getDayPrice() {
+        return dayPrice;
+    }
+
+    public void setDayPrice(Double dayPrice) {
+        this.dayPrice = dayPrice;
+    }
+
+    public Double getNightPrice() {
+        return nightPrice;
+    }
+
+    public void setNightPrice(Double nightPrice) {
+        this.nightPrice = nightPrice;
+    }
+
+    public String getParkingType() {
+        return parkingType;
+    }
+
+    public void setParkingType(String parkingType) {
+        this.parkingType = parkingType;
+    }
+
+    public String getParkingClassification() {
+        return parkingClassification;
+    }
+
+    public void setParkingClassification(String parkingClassification) {
+        this.parkingClassification = parkingClassification;
     }
 }

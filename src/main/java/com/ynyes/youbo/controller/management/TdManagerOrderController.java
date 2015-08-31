@@ -972,19 +972,6 @@ public class TdManagerOrderController {
                         }
 
                         // 同盟店返利
-                        if (null != tdShop) {
-                            if (null == tdShop.getTotalCash()) {
-                                tdShop.setTotalCash(totalCash);
-                            } else {
-                                tdShop.setTotalCash(tdShop.getTotalCash() + totalCash);
-                            }
-                            order.setRebate(totalCash);//设置订单同盟店所获返利
-                            order.setPlatformService(platformService);//设置订单平台服务费
-                            order.setTrainService(trainService);//设置订单培训服务费
-                            order.setOrderIncome(shopOrderincome);//设置同盟店订单收入
-                            order = tdOrderService.save(order);
-                            tdDiySiteService.save(tdShop);
-                        }
                     }
 
                     order.setPayTime(new Date());
@@ -1079,19 +1066,6 @@ public class TdManagerOrderController {
                             		order.getAppointmentTime().toString() });
                     System.out.println("---Sharon---: 向同盟店"+tdShop.getMobile()+"发送短信");
                     // 同盟店返利
-                    if (null != tdShop) {
-                        if (null == tdShop.getTotalCash()) {
-                            tdShop.setTotalCash(totalCash);
-                        } else {
-                            tdShop.setTotalCash(tdShop.getTotalCash() + totalCash);
-                        }
-                        order.setRebate(totalCash);//设置订单同盟店所获返利
-                        order.setPlatformService(platformService);//设置订单平台服务费
-                        order.setTrainService(trainService);//设置订单培训服务费
-                        order.setOrderIncome(shopOrderincome);//设置同盟店订单收入
-                        order = tdOrderService.save(order);
-                        tdDiySiteService.save(tdShop);
-                    }
                 }
             }
             // 确认已服务

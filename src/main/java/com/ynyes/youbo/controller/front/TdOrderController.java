@@ -2050,18 +2050,5 @@ public class TdOrderController extends AbstractPaytypeController {
         }
              
         // 同盟店返利
-        if (null != tdShop) {
-            if (null == tdShop.getTotalCash()) {
-                tdShop.setTotalCash(totalCash);
-            } else {
-                tdShop.setTotalCash(tdShop.getTotalCash() + totalCash);
-            }
-            tdOrder.setRebate(totalCash);//设置订单同盟店所获返利
-            tdOrder.setPlatformService(platformService);//设置订单平台服务费
-            tdOrder.setTrainService(trainService);//设置订单培训服务费
-            tdOrder.setOrderIncome(shopOrderincome);//设置同盟店订单收入
-            tdOrder = tdOrderService.save(tdOrder);
-            tdDiySiteService.save(tdShop);
-        }
     }
 }

@@ -1837,14 +1837,5 @@ public class TdTouchOrderController extends AbstractPaytypeController{
         }
 
         // 同盟店返利
-        if (null != tdShop) {
-            if (null == tdShop.getTotalCash()) {
-                tdShop.setTotalCash(totalCash);
-            } else {
-                tdShop.setTotalCash(tdShop.getTotalCash() + totalCash);
-            }
-
-            tdDiySiteService.save(tdShop);
-        }
     }
 }
