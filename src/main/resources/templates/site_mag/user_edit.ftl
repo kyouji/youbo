@@ -141,20 +141,20 @@ $(function () {
 
 <!--基本资料-->
 <div class="tab-content">
-    <#--
   <dl>
     <dt>用户类型</dt>
-    <dd>
+    <dd><#--
       <div class="rule-multi-radio multi-radio">
         <span>
             <input type="radio" name="roleId" value="0" datatype="n" <#if !user?? || user.roleId?? && user.roleId==0>checked="checked"</#if>><label>普通用户</label>
             <input type="radio" name="roleId" value="1" datatype="n" <#if user?? && user.roleId?? && user.roleId==1>checked="checked"</#if>><label>同盟店</label>
         </span>
       </div>
-      <span class="Validform_checktip"></span>
+      <span class="Validform_checktip"></span> -->
+      <span><#if user.roleId?? && user.roleId==2>停车场用户</#if></span>
+      <span><#if user.roleId?? && user.roleId==0>普通用户</#if></span>
     </dd>
   </dl>
-    -->
   <dl>
     <dt>用户状态</dt>
     <dd>
@@ -185,17 +185,19 @@ $(function () {
         </span></dd>
     </dl>
     <!--lichong -->
+    
   <dl>
-    <dt>用户粮草</dt>
-    <dd><span><#if user??>${user.totalPoints!"0"}</#if></span></dd>
+    <dt>车牌号</dt>
+    <dd><span><#if user??>${user.carCode!"无"}</#if></span></dd>
   </dl>
+  <#--
   <dl>
     <dt>修改用户粮草</dt>
     <dd>
-        <input name="totalPoints1" id="totalPoints" type="text" class="input" value="${user.totalPoints?c!"0"}">
+        <input name="totalPoints" id="totalPoints" type="text" class="input" value="<#if user??>${user.totalPoints?c!"0"}</#if>">
         <input name="btnEditRemark" type="button" id="btnEditRemark" class="ibtn" value="确认修改" style="margin-top: -3px;">
     </dd>
-  </dl> 
+  </dl> -->
   <!--  <dl>
     <dt>修改备注</dt>
     <dd>       
@@ -270,6 +272,7 @@ $(function () {
     <dt>累计消费额</dt>
     <dd><span><#if user??>${user.totalSpendCash!""}</#if></span></dd>
   </dl>
+  <#--
   <dl>
     <dt>用户等级</dt>
     <dd><input name="userLevelId" type="text" value="<#if user??>${user.userLevelId!""}</#if>" class="input normal" datatype="n0-2" errormsg="请输入正确的等级" sucmsg=" " > <span class="Validform_checktip"></span></dd>
@@ -290,7 +293,7 @@ $(function () {
   <dl>
     <dt>退换货总数</dt>
     <dd><span><#if user??>${user.totalReturns!""}</#if></span></dd>
-  </dl>
+  </dl>-->
 </div>
 <!--/安全设置-->
 <#--
