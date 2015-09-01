@@ -121,39 +121,14 @@ public class TdUserController extends AbstractPaytypeController {
     @RequestMapping(value = "/user")
     public String user(HttpServletRequest req, ModelMap map) {
         String username = (String) req.getSession().getAttribute("username");
-        if (null == username) {
-            return "redirect:/login";
-        }
+//        if (null == username) {
+//            return "redirect:/login";
+//        }
 
-        tdCommonService.setHeader(map, req);
-
-        map.addAttribute("server_ip", req.getLocalName());
-        map.addAttribute("server_port", req.getLocalPort());
-
-        TdUser tdUser = tdUserService.findByUsernameAndIsEnabled(username);
-
-        if (null == tdUser) {
-            return "/client/error_404";
-        }
-
-        map.addAttribute("user", tdUser);
-        map.addAttribute("order_page", tdOrderService.findByUsername(username,
-                0, ClientConstant.pageSize));
-        map.addAttribute("collect_page", tdUserCollectService.findByUsername(
-                username, 0, ClientConstant.pageSize));
-        map.addAttribute("recent_page", tdUserRecentVisitService
-                .findByUsernameOrderByVisitTimeDesc(username, 0,
-                        ClientConstant.pageSize));
-        map.addAttribute("total_unpayed",
-                tdOrderService.countByUsernameAndStatusId(username, 2));
-        map.addAttribute("total_undelivered",
-                tdOrderService.countByUsernameAndStatusId(username, 3));
-        map.addAttribute("total_unreceived",
-                tdOrderService.countByUsernameAndStatusId(username, 4));
-        map.addAttribute("total_finished",
-                tdOrderService.countByUsernameAndStatusId(username, 6));
-
-        return "/client/user_index";
+//        tdCommonService.setHeader(map, req);
+        
+        
+        return "/touch/mycenter";
     }
 
     @RequestMapping(value = "/user/order/list/{statusId}")

@@ -1,0 +1,42 @@
+@charset "utf-8";
+
+body{background:#efefef;}
+/*withdrawals_record*/
+.withdraw_record_list{width:100%;}
+.withdraw_record_list ul{display:block; overflow:hidden;  width:92%; padding:0 4%;margin-top:3%; background:#fff;border-top:solid 1px #dddddd;border-bottom:solid 1px #dddddd;}
+.withdraw_record_list ul li{height:50px; width:100%; float:left;}
+.withdraw_record_list ul li span{ height:50px;  float:left; line-height:50px; display:block; font-size:1.3em;color:#999999;}
+.withdraw_record_list ul li p{ height:50px;  float:right; line-height:50px; font-size:1.3em;color:#ef0000;}
+.withdraw_record_list ul li p b{font-weight:normal;}
+.withdraw_record_list ul .li_1{border-bottom:solid 1px #dddddd;}
+.withdraw_record_list ul li .time_1{color:#999999;}
+/*This chapter end*/
+
+/*my_account*/
+.my_account{position:relative;text-align:center; height:auto;}
+.my_account dt{background:#fff;padding-bottom:10%;}
+.my_account dt img{margin-top:10%; }
+.my_account dt p{padding:2%;}
+.my_account dt .p1{font-size:1.5em;color:#333333;}
+.my_account dt .p2{font-size:3em;color:#333333;}
+/*提现按钮样式*/
+.ip_1{display:block;width:100%;margin:5% auto;background:#f65741;border:none;outline:0;color:#fff;font-size:1.875em;padding:3% 0;}
+
+.my_account_record{border-top:solid 1px #dddddd;border-bottom:solid 1px #dddddd;}
+.my_account_record dl{display:block; overflow:hidden;background:#fff; height:auto; width:96%;padding:2%;border-bottom:solid 1px #dddddd;}
+.my_account_record dl dd{ float:left;}
+.my_account_record dl dd a{ font-size:2.25em; display:block;  line-height:60px; margin-left:10px;}
+.my_account_record dl dt{ float:right;position:relative;margin-top:3%; margin-right:10px;}
+.my_account_record dl dt a{ line-height:60px;}
+.my_account_record dl dt a span{display:block;position:absolute;top:-10px;right:30px;width:15px;height:15px;background:#f00;border-radius:50%;}
+/*This chapter end*/
+
+/*bankcard*/
+.bankcard{ width:90%; margin:5%;border-radius:10px; background-color:#0e5baa;}
+.bankcard dt{ padding-top:20px; padding-left:20px;padding-right:20px;}
+.bankcard dt a{ font-size:1.4em; color:white;}
+.bankcard dd{ padding-left:20px;padding-right:20px;padding-top:20px}
+.bankcard dd a{ font-size:1.2em; color:#04477f;;}
+.bankcard dd p{font-size:em; color:#fff; margin-top:14px;}
+.bankcard dd span{display:block;padding-bottom:20px;font-size:1.2em; color:#73b2e6;}
+/*This chapter end*/

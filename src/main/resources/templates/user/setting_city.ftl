@@ -1,0 +1,51 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>城市切换</title>
+<meta name="keywords" content="">
+<meta name="description" content="">
+<meta name="copyright" content="" />
+<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+
+
+<link href="/user/css/common.css" rel="stylesheet" type="text/css" />
+<link href="/user/css/style.css" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+<header class="maintop">
+    <a onclick="javascript:history.back(-1);" class="main_guide"><img src="/user/images/aboutus_left.png"></a>
+    <p>设置</p>
+</header>
+<div style=" margin-top:5%;" class="main">
+
+    <a><dl class="setting_change_last">
+        <dd><span>重庆市</span></dd>
+    </dl></a>
+    <a><dl class="setting_change_last">
+        <dd><span>上海市</span></dd>
+    </dl></a>
+    <a><dl class="setting_change_last">
+        <dd><span>北京市</span></dd>
+    </dl></a>
+    <a><dl class="setting_change_last">
+        <dd><span>成都省</span></dd>
+    </dl></a>
+
+
+   
+    
+</div><!--main END-->
+
+
+
+
+
+
+
+
+</body>
+</html>
