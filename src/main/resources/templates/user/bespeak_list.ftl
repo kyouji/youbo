@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>网站名称</title>
+<title>预约选择</title>
 <meta name="keywords" content="">
 <meta name="description" content="">
 <meta name="copyright" content="" />
@@ -16,11 +16,11 @@
 
 <body>
 
-<header class="maintop">
-    <a class="main_guide"><img src="images/aboutus_left.png"></a>
-    <p>预约选择</p>
-    <a class="main_add">帮助</a>
-</header>
+<div class="header">
+        <p>预约选择</p>
+        <a onclick="javascript:history.back(-1);" class="a4"></a>
+        <a href="/user/center/bankcard/add" class="a5">帮助</a>
+</div>
 <div class="main">
     <ul class="bespeak_list">
         <li><a>全部</a></li>

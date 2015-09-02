@@ -66,7 +66,11 @@ public class TdIndexController {
         
         // 触屏
         if (device.isMobile() || device.isTablet()) {
-            return "redirect:/touch/";
+            return "redirect:/depot/";
+        }
+        else if(device.isNormal())
+        {
+        	return "redirect:/depot/";
         }
         
         tdCommonService.setHeader(map, req);

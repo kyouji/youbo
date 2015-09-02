@@ -37,18 +37,19 @@
     });
 </script>
 
-</head>
 
 <body>
 
-<header class="maintop">
-    <a href="/user/center" class="main_guide"><img src="/user/images/aboutus_left.png"></a>
-    <p>意见反馈</p>
-</header>
+
+<div class="header">
+        <p>意见反馈</p>
+        <a onclick="javascript:history.back(-1);" class="a4"></a>
+        <a href="#" class="a5"></a>
+</div>
 <div class="main">
     <form action="/user/center/comment" id="form1" method="post">
-        <span class="Validform_checktip input1" ></span>
-        <textarea class="feedback_btn01 normal" style="color:red;" datatype="*1-255" sucmsg=" "name="content" cols="" rows=""></textarea>
+        <span class="Validform_checktip input1" style="color:red; al" ></span>
+        <textarea class="feedback_btn01 normal" datatype="*1-255" sucmsg=" "name="content" cols="" rows=""></textarea>
         
         <input class="feedback_btn02" type="submit" value="提交" />
     </form>

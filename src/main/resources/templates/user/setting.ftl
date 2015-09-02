@@ -15,13 +15,12 @@
 </head>
 
 <body>
-
-<header class="maintop">
-    <a onclick="javascript:history.back(-1);" class="main_guide"><img src="/user/images/aboutus_left.png"></a>
-    <p>设置</p>
-</header>
+<div class="header">
+        <p>设置</p>
+        <a onclick="javascript:history.back(-1);" class="a4"></a>
+        <a href="#" class="a5"></a>
+</div>
 <div style=" margin-top:5%;" class="main">
-    
   <a href="/user/center/setting/map">
     <dl class="setting_last">
         <dd><span>离线地图</span></dd>

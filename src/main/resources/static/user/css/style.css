@@ -21,23 +21,19 @@ body{ background:#efefef; }
 
 /*bankcard_add*/
 .bank{ width:90%; margin-left:5%; margin-right:5%;  margin-top:7%;}
-.bank_01{width:100%;  height:56px; background-color:white;}
-.bank_01 dt{ float:left;}
-.bank_01 dt a{ font-size:1.5em; line-height:56px; margin-left:10px;}
-.bank_01 dd{ float:right;}
-.bank_01 dd img{ width:70%; margin-top:23px;}
-.bank_mes{ color:#ef0000; margin-top:4%}
+.bank_01{width:100%;  height:56px; background-color:white;font-size:1.3em;border:none;padding-left:2%;-webkit-appearance:none;}
+.bank_01 option{border:none; padding-left:2%;}
 
-.bank_02{width:100%;  height:56px; background-color:white;  margin-top:7%; line-height:56px; font-size:1.3em; border:none;}
-.bank_03{width:100%;  height:56px; background-color:white;  margin-top:7%; line-height:56px; font-size:1.3em; border:none;}
-.bank_05{width:100%;  height:56px; background-color:white;  margin-top:7%; line-height:56px; font-size:1.3em; border:none;}
-.bank_06{width:100%;  height:56px; background-color:white;  margin-top:7%; line-height:56px; font-size:1.3em; border:none;}
+.bank_02{width:97%;  height:56px; background-color:white;  margin-top:7%; line-height:56px; font-size:1.3em; border:none; padding-left:2%;}
+.bank_03{width:97%;  height:56px; background-color:white;  margin-top:7%; line-height:56px; font-size:1.3em; border:none; padding-left:2%;}
+.bank_05{width:97%;  height:56px; background-color:white;  margin-top:7%; line-height:56px; font-size:1.3em; border:none; padding-left:2%;}
+.bank_06{width:97%;  height:56px; background-color:white;  margin-top:7%; line-height:56px; font-size:1.3em; border:none; padding-left:2%;}
 
 .bank_04{ width:100%;  height:56px; background-color:white;  margin-top:7%;}
-.bank_04 dt{ float:left;width:65%}
+.bank_04 dt{ float:left;width:60%}
 .bank_04 dt input{ font-size:1.3em; line-height:56px; margin-left:10px; border:none; }
-.bank_04 dd{ float:right; width:25%;}
-.bank_04 dd input{font-size:1.2em; line-height:56px; padding:0 8px; border:none;  background-color:#0e5baa; color:white; float:right;}
+.bank_04 dd{ float:right;}
+.bank_04 dd input{font-size:1.2em; line-height:56px; padding:0 8px; border:none;  background-color:#0e5baa; color:white; float:right; width:100%;}
 
 .bank_sure{width:100%; height:50px; line-height:50px; text-align:center; border-radius:10px; font-size:1.3em; display:block; background-color:#f65741; color:white; margin-top:7%;}
 
@@ -187,7 +183,7 @@ body{ background:#efefef; }
 
 
 
-/*bespeak_success*/
+/*pay_success*/
 .pay_success_min{   position:relative; text-align:center; height:auto; padding-bottom:10%;}
 .pay_success_min dt img{width:20%; margin-top:10%; }
 .pay_success_min dd{}
@@ -198,6 +194,18 @@ body{ background:#efefef; }
 .pay_success_last dt{ float:right;  height:50px;}
 .pay_success_last dt a{ line-height:50px; font-size:1.2em; }
 
+/*personal_info*/
+.personal_info{ width:100%; height:auto; padding-top:5%; background:#0e5baa; padding-bottom:2%;}
+.personal_info_img{ width:100% height:100px;}
+.personal_info_img a{ width:100px; height:100px; display:block; border-radius:50px; background-color:#3b93de; line-height:100px; text-align:center; color:white; border:white 2px solid; margin-left:auto; margin-right:auto;}
+.personal_info p{ width:100%; text-align:center; color:white; line-height:30px; font-size:1.1em;}
+.personal_info_list{ width:92%; padding-left:4%; padding-right:4%;  border-bottom:#ddd 1px solid;}
+.personal_info_list dd{ width:100%; height:50px; border-bottom:#ddd 1px solid;}
+.personal_info_list div{ float:left; font-size:1.3em; height:50px; line-height:50px; color:#333; width:30%;}
+.personal_info_list p{ float:left; height:50px; line-height:50px; color:#999; font-size:1.3em;}
+.personal_info_list a{ display:block; float:right;; height:50px; line-height:50px;}
+.personal_info_list a span{ height:50px; line-height:50px; float:left;  color:#0e5baa; text-align:right; margin-right:3px;;}
+.personal_info_list a img{ float:right; margin-top:12px;}
 /*personal_info_user*/
 .personal_info_user input{ width:90%; padding-left:2%; color:#666; margin-left:4%; margin-right:4%; height:50px;; background-color:white;  overflow:hidden; display:block;  border:none; font-size:1.2em; margin-top:5%; position:relative;}
 .personal_info_user p{ width:92%; color:#c7c7c7; padding-left:4%; margin-top:2%; font-size:1.1em; line-height:24px; }

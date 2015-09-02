@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>网站名称</title>
+<title>月份明细</title>
 <meta name="keywords" content="">
 <meta name="description" content="">
 <meta name="copyright" content="" />
@@ -16,10 +16,10 @@
 
 <body>
 
-<header class="maintop">
-    <a class="main_guide"><img src="images/aboutus_left.png"></a>
-    <p>月份明细</p>
-</header>
+<div class="header">
+        <p>月份明细</p>
+        <a onclick="javascript:history.back(-1);" class="a4"></a>
+</div>
 <div class="main">
     <ul class="detail_month">
         <li><span>2014年7月</span></li>

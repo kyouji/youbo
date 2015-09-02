@@ -1,7 +1,9 @@
 package com.ynyes.youbo.controller.user;
 
+import java.nio.channels.FileChannel.MapMode;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.ynyes.youbo.entity.TdBankcard;
+import com.ynyes.youbo.entity.TdPayType;
 import com.ynyes.youbo.entity.TdUser;
 import com.ynyes.youbo.entity.TdUserComment;
 import com.ynyes.youbo.service.TdCommonService;
@@ -21,6 +25,7 @@ import com.ynyes.youbo.service.TdDiySiteService;
 import com.ynyes.youbo.service.TdGoodsService;
 import com.ynyes.youbo.service.TdOrderGoodsService;
 import com.ynyes.youbo.service.TdOrderService;
+import com.ynyes.youbo.service.TdPayTypeService;
 import com.ynyes.youbo.service.TdShippingAddressService;
 import com.ynyes.youbo.service.TdUserCashRewardService;
 import com.ynyes.youbo.service.TdUserCollectService;
@@ -85,6 +90,9 @@ public class TdUserCenterController {
     @Autowired
     private TdDiySiteService tdDiySiteService;
     
+    @Autowired
+    private TdPayTypeService tdPayTypeService;
+    
     /**
      * 用户个人中心
      * @param req
@@ -98,9 +106,9 @@ public class TdUserCenterController {
 //        {
 //            return "redirect:/touch/login";
 //        }
-        
+        req.getSession().setAttribute("username", "user123");
         tdCommonService.setHeader(map, req);
-        
+        map.addAttribute("user",tdUserService.findByUsername("user123"));
         map.addAttribute("server_ip", req.getLocalName());
         map.addAttribute("server_port", req.getLocalPort());
         
@@ -155,8 +163,11 @@ public class TdUserCenterController {
      * @return
      */
     @RequestMapping(value = "/center/bankcard")
-    public String bankcard()
+    public String bankcard(HttpServletRequest req,ModelMap map)
     {
+    	String username = (String) req.getSession().getAttribute("username");
+    	TdUser user = tdUserService.findByUsername(username);
+    	map.addAttribute("bankcard_list", user.getBankcardList());
     	return "/user/bankcard";
     }
     
@@ -165,8 +176,27 @@ public class TdUserCenterController {
      * @return
      */
     @RequestMapping(value = "/center/bankcard/add")
-    public String bankcardAdd()
+    public String bankcardAdd(TdBankcard bankcard, HttpServletRequest req,ModelMap map)
     {
+    	List<TdPayType> paytype = tdPayTypeService.findAll();
+    	map.addAttribute("paytape_list", tdPayTypeService.findAll());
+    	return "/user/bankcard_add";
+    }
+    /**
+     *  保存银行卡
+     * @param bankcard
+     * @param req
+     * @return
+     */
+    @RequestMapping(value = "/center/bankcard/add",method = RequestMethod.POST)
+    public String bankcardSave(TdBankcard bankcard,HttpServletRequest req)
+    {
+    	String username = (String) req.getSession().getAttribute("username");
+    	if (username == null)
+    	{
+			
+		}
+    	
     	return "/user/bankcard_add";
     }
     

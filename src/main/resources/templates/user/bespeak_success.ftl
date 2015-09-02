@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>网站名称</title>
+<title>停车订单</title>
 <meta name="keywords" content="">
 <meta name="description" content="">
 <meta name="copyright" content="" />
@@ -20,6 +20,10 @@
     <a class="main_guide"><img src="images/aboutus_left.png"></a>
     <p>停车订单</p>
 </header>
+<div class="header">
+        <p>停车订单</p>
+        <a onclick="javascript:history.back(-1);" class="a4"></a>
+</div>
 <div class="main">
     <dl class="bespeak_success_min">
         <dt><img src="images/bespeak_success.png" /></dt>

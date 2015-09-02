@@ -27,18 +27,23 @@
     <div class="addWrap">
         <div class="swipe" id="mySwipe">
             <div class="swipe-wrap">
-              <div><a href="javascript:;"><img class="img-responsive" src="/depot/images/banner01.png"/></a></div>
-              <div><a href="javascript:;"><img class="img-responsive" src="/depot/images/banner01.png"/></a></div>
-              <div><a href="javascript:;"><img class="img-responsive" src="/depot/images/banner01.png"/></a></div>
+            <#if depot_ad_list??>
+                <#list depot_ad_list as item>
+                    <div><a href="${item.linkUri!'javascript:;'}"><img class="img-responsive" src="${item.fileUri!''}"/></a></div>
+                </#list>
+            </#if>
             </div>
       </div>
       <ul id="position">
         <li class="cur"></li>
-        <li class=""></li>
-        <li class=""></li>
+        <#if depot_ad_list??&&depot_ad_list?size gte 2>
+                <#list 2..depot_ad_list?size as item>
+                    <li class=""></li>
+                </#list>
+            </#if>
       </ul>
     </div>
-    <script src="js/swipe.js"></script> 
+    <script src="/depot/js/swipe.js"></script> 
     <script type="text/javascript">
     var bullets = document.getElementById('position').getElementsByTagName('li');
     var banner = Swipe(document.getElementById('mySwipe'), {
@@ -67,7 +72,6 @@
     </div>
     <!--导航结束--
     <div class="mb98"></div>
-    
     </div>
     
     <!--底部开始--

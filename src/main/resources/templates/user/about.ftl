@@ -15,11 +15,10 @@
 </head>
 
 <body>
-
-<header class="maintop">
-    <a href="/user/center" class="main_guide"><img src="/user/images/aboutus_left.png"></a>
-    <p>关于我们</p>
-</header>
+<div class="header">
+        <p>关于我们</p>
+        <a href="/user/center" class="a4"></a>
+</div>
 <div class="main">
     <dl class="about_us_min">
         <dt><img src="/user/images/logo.png"  /></dt>

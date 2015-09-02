@@ -35,6 +35,11 @@ public class TdUser {
 	@JoinColumn(name="userId")
 	private List<TdShippingAddress> shippingAddressList;
 	
+	// 银行卡
+	@OneToMany
+	@JoinColumn(name="userId")
+	private List<TdBankcard> bankcardList;
+	
 	// 用户头像
 	@Column
 	private String headImageUri;
@@ -210,7 +215,15 @@ public class TdUser {
     @Column
     private Long pointGetByShareGoods;
     
-    public Long getId() {
+    public List<TdBankcard> getBankcardList() {
+		return bankcardList;
+	}
+
+	public void setBankcardList(List<TdBankcard> bankcardList) {
+		this.bankcardList = bankcardList;
+	}
+
+	public Long getId() {
         return id;
     }
 
