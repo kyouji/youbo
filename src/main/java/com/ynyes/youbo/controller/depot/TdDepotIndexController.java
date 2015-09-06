@@ -38,7 +38,6 @@ public class TdDepotIndexController {
             map.addAttribute("depot_ad_list", tdAdService
                     .findByTypeIdAndIsValidTrueOrderBySortIdAsc(adType.getId()));
         }
-		
 		return "/depot/index";
 	}
 }
