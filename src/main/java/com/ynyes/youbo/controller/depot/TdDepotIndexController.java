@@ -31,14 +31,15 @@ public class TdDepotIndexController {
 		
 		tdCommonService.setHeader(map, req);
 		
-		//停车场
+		//停车场首页广告
 		TdAdType adType = tdAdTypeService.findByTitle("停车场顶部轮播");
 
         if (null != adType) {
             map.addAttribute("depot_ad_list", tdAdService
                     .findByTypeIdAndIsValidTrueOrderBySortIdAsc(adType.getId()));
         }
-		
+        
+        
 		return "/depot/index";
 	}
 }

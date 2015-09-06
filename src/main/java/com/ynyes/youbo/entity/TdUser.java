@@ -147,7 +147,7 @@ public class TdUser {
 	@Column
 	private String role;
 	
-	// 用户类型Id: 0-普通用户 1-分销商
+	// 用户类型Id: 1-普通用户 2-停车场
     @Column
     private Long roleId;
 
