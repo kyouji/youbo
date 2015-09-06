@@ -22,7 +22,6 @@
             callback: function(data) {
                 if (data.code==0)
                 {
-                    alert("添加成功");
                     window.location.reload();
                 }
                 else
@@ -55,10 +54,10 @@
             </#if>
             </select>
             <p class="bank_mes Validform_checktip">请填写以下信息用于验证身份</p>
-            <input class="bank_02"  name="name" placeholder="持卡人" datatype="*"  nullmsg="请输入姓名" />
-            <input class="bank_03"  name="idNumber" placeholder="身份证号码" datatype="idcard" nullmsg="请输入省份证号" errormsg="请输入正确的省份证号" />
-            <input class="bank_05"  name="cardNumber" placeholder="银行卡号" />
-            <input class="bank_06"  name="mobile" placeholder="银行预留手机号" />
+            <input class="bank_02"  name="name" placeholder="持卡人" datatype="*"  nullmsg="持卡人姓名不能为空" />
+            <input class="bank_03"  name="idNumber" placeholder="身份证号码" datatype="idcard" nullmsg="身份证号不能为空" errormsg="请输入正确的身份证号" />
+            <input class="bank_05"  name="cardNumber" placeholder="银行卡号" nullmsg="银行卡号不能为空" />
+            <input class="bank_06"  name="mobile" placeholder="银行预留手机号" nullmsg="银行预留手机号不能为空" />
             <dl class="bank_04">
                 <dt><input class="bank_07" type="" placeholder="验证码" /></dt>
                 <dd><input type="button" value="获取验证码" /></dd>
@@ -86,7 +85,7 @@ $(function(){
     **********************/
     
     $(".registerform").Validform({
-        tiptype:3,
+        tiptype:2,
         datatype:{//传入自定义datatype类型【方式二】;
             "idcard":function(gets,obj,curform,datatype){
                 //该方法由佚名网友提供;

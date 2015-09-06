@@ -1,13 +1,16 @@
 package com.ynyes.youbo.controller.user;
 
 import java.nio.channels.FileChannel.MapMode;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.bcel.generic.NEW;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -15,10 +18,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.sun.mail.handlers.message_rfc822;
 import com.ynyes.youbo.entity.TdBankcard;
 import com.ynyes.youbo.entity.TdPayType;
 import com.ynyes.youbo.entity.TdUser;
 import com.ynyes.youbo.entity.TdUserComment;
+import com.ynyes.youbo.service.TdBankcardService;
 import com.ynyes.youbo.service.TdCommonService;
 import com.ynyes.youbo.service.TdCouponService;
 import com.ynyes.youbo.service.TdDiySiteService;
@@ -92,6 +97,9 @@ public class TdUserCenterController {
     
     @Autowired
     private TdPayTypeService tdPayTypeService;
+    
+    @Autowired
+    private TdBankcardService tdBankcardService;
     
     /**
      * 用户个人中心
@@ -178,7 +186,6 @@ public class TdUserCenterController {
     @RequestMapping(value = "/center/bankcard/add")
     public String bankcardAdd(TdBankcard bankcard, HttpServletRequest req,ModelMap map)
     {
-    	List<TdPayType> paytype = tdPayTypeService.findAll();
     	map.addAttribute("paytape_list", tdPayTypeService.findAll());
     	return "/user/bankcard_add";
     }
@@ -189,15 +196,38 @@ public class TdUserCenterController {
      * @return
      */
     @RequestMapping(value = "/center/bankcard/add",method = RequestMethod.POST)
-    public String bankcardSave(TdBankcard bankcard,HttpServletRequest req)
+    @ResponseBody
+    public Map<String, Object> bankcardSave(TdBankcard bankcard,HttpServletRequest req,ModelMap map)
     {
     	String username = (String) req.getSession().getAttribute("username");
+    	Map<String, Object> res = new HashMap<String ,Object>();
+    	res.put("code", 1);
+    	res.put("message", "用户不存在");
     	if (username == null)
     	{
 			
 		}
+    	TdUser user = tdUserService.findByUsername(username);
+    	if (user == null)
+    	{	
+    		res.put("message", "用户不存在");
+		}
     	
-    	return "/user/bankcard_add";
+    	List<TdBankcard> list = user.getBankcardList();
+    	System.err.println(list);
+    	
+    	if(null == user.getBankcardList()){
+    		List<TdBankcard> bankCards = new ArrayList<>();
+    		bankCards.add(bankcard);
+    		user.setBankcardList(bankCards);
+    	}else{
+    		user.getBankcardList().add(bankcard);
+    	}
+    	
+    	tdBankcardService.save(bankcard);
+    	tdUserService.save(user);
+    	res.put("code", 0);
+    	return res;
     }
     
     
