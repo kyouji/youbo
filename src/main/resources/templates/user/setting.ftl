@@ -21,16 +21,20 @@
         <a href="#" class="a5"></a>
 </div>
 <div style=" margin-top:5%;" class="main">
-  <a href="/user/center/setting/map">
+    <#--
+    <a href="/user/center/setting/map">
     <dl class="setting_last">
         <dd><span>离线地图</span></dd>
         <dt><span><img src="/user/images/setting_guide.png"/></span></dt>
-    </dl></a>
+    </dl>
+    </a>
+    -->
   <a href="/user/center/setting/changecity"> 
     <dl class="setting_last">
         <dd><span>城市切换</span></dd>
         <dt><span><img src="/user/images/setting_guide.png"/></span><p>重庆市</p></dt>
-    </dl></a>
+    </dl>
+  </a>
   <a> 
     <dl class="setting_last">
         <dd><span>检查更新</span></dd>

@@ -18,7 +18,7 @@
     <div class="header">
         <p>优泊天下</p>
         <a href="#" class="a1"></a>
-        <a href="#" class="a3"></a>
+        <a href="/user/center/login" class="a3"></a>
     </div>
     <!--头部结束-->
     

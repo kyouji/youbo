@@ -51,7 +51,7 @@ function loadMap(x, y)
 
 <div class="header">
         <p>找车位</p>
-        <a onclick="javascript:history.back(-1);" class="a4"></a>
+        <a href="/user" class="a4"></a>
 </div>
 <div class="main">
     

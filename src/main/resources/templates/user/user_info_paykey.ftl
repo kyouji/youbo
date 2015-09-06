@@ -2,12 +2,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>个人信息</title>
+<title>修改支付密码</title>
 <meta name="keywords" content="">
 <meta name="description" content="">
 <meta name="copyright" content="" />
 <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
-
 
 <link href="/user/css/common.css" rel="stylesheet" type="text/css" />
 <link href="/user/css/style.css" rel="stylesheet" type="text/css" />
@@ -17,63 +16,24 @@
 <body>
 
 <div class="header">
-        <p>个人信息</p>
-        <a onclick="javascript:history.back(-1);" class="a4"></a>
+    <p>支付密码</p>
+    <a href="/user/center/info" class="a4"></a>
+     <a class="a5">保存</a>
 </div>
 
 <div class="main">
 
-    <div class="personal_info">
-        <div class="personal_info_img"><a>点击添加头像</a></div>
-        <p>13880808080</p>
+    <div class="personal_info_pwd">
+    <input class="btn1" type="" placeholder="原密码"/ >
     </div>
-    
-    <dl class="personal_info_list">
-        <dd>
-            <div>用户名</div>
-            <p>头发满天飞</p>
-            <a href="/user/center/info/edit?editType=username"><span>修改</span>
-                <img src="/user/images/setting_guide.png" />
-            </a>
-        </dd>
-        <dd>
-            <div>手机号</div>
-            <p>13880808080</p>
-            <a href="/user/center/info/edit?editType=mobile">
-                <span>更换</span>
-                <img src="/user/images/setting_guide.png" />
-            </a>
-        </dd>
-        <dd>
-            <div>车牌</div>
-            <p>渝A·326326</p>
-            <a href="/user/center/info/edit?editType=plate">
-                <span>更换</span>
-                <img src="/user/images/setting_guide.png" />
-            </a>
-        </dd>
-        <dd>
-            <div>登录密码</div>
-            <p></p>
-            <a href="/user/center/info/edit?editType=password">
-                <span>修改</span>
-                <img src="/user/images/setting_guide.png" />
-            </a>
-        </dd>
-        <dd>
-        <div>支付密码</div>
-        <p></p>
-        <a href="/user/center/info/edit?editType=paykey">
-            <span>设置/修改</span>
-            <img src="/user/images/setting_guide.png" />
-        </a>
-        </dd>
-    </dl>
+    <div class="personal_info_pwd">
+    <input class="btn2"  type="" placeholder="新密码"/ >
+    </div>  
+    <div class="personal_info_pwd">
+    <input class="btn3"  type="" placeholder="确认密码"/ >
+    </div>
+        
 
-    
-
-
-   
     
 </div><!--main END-->
 

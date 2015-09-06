@@ -345,5 +345,91 @@ public class TdUserCenterController {
 		}		
 		return "/user/center";
 	}
+	
+	/**
+	 * 用户登录
+	 * @param req
+	 * @param device
+	 * @param map
+	 * @return
+	 */
+	@RequestMapping("/login")
+    public String login(HttpServletRequest req, Device device, ModelMap map,String username,String password)
+	{
+		if (username == null && password == null)
+		{			
+			return "/user/login";
+		}
+		
+		String referer = (String)req.getHeader("referer");
+		if (null == referer) {
+			referer = "/user";
+		}
+		
+		TdUser user = tdUserService.findByUsername(username);
+		if (user.getPassword().equals(password))
+		{
+			return "redirect:" + referer;
+		}
+		map.addAttribute("error","用户名或密码错误");
+		return "redirect:" + referer;
+	}
+	
+	/**
+	 * 用户登录
+	 * @param req
+	 * @param device
+	 * @param map
+	 * @return
+	 */
+	 @RequestMapping(value = "/login", method=RequestMethod.POST)
+	    @ResponseBody
+	    public Map<String, Object> login(HttpServletRequest req, 
+	                        TdUserComment tdComment,
+	                        ModelMap map){
+	        Map<String, Object> res = new HashMap<String, Object>();
+	        res.put("code", 1);
+	        
+	        String username = (String) req.getSession().getAttribute("username");
+	        
+	        if (null == tdComment.getContent() || tdComment.getContent().equals(""))
+	        {
+	            res.put("message", "内容不能为空！");
+	            return res;
+	        }
+
+	        tdComment.setCommentTime(new Date());
+	        tdComment.setIsReplied(false);
+	        tdComment.setNegativeNumber(0L);
+	        tdComment.setPositiveNumber(0L);
+	        tdComment.setUsername(username);
+	        
+	        TdUser user = tdUserService.findByUsernameAndIsEnabled(username);
+	        
+	        if (null != user)
+	        {
+	            tdComment.setUserHeadUri(user.getHeadImageUri());
+	        }
+	        
+	        tdComment.setStatusId(0L);
+	        
+	        tdUserCommentService.save(tdComment);
+	        res.put("code", 0);
+	        
+	        return res;
+	    }
+	
+	/**
+	 * 用户登录
+	 * @param req
+	 * @param device
+	 * @param map
+	 * @return
+	 */
+	@RequestMapping("/register")
+    public String register(HttpServletRequest req, Device device, ModelMap map)
+	{
+		return "/user/register";
+	}
     
 }

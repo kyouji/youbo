@@ -67,7 +67,7 @@
     </a>
     <a>
     <dl class="mycenter_last">
-        <dd><a>我的二维码</a></dd>
+        <dd><a href="/user/code">我的二维码</a></dd>
         <dt><a><img src="/user/images/aboutus_right.png" /></a></dt>
     </dl>
     </a> <a>
