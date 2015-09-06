@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>银行卡</title>
+<title>我的二维码</title>
 <meta name="keywords" content="">
 <meta name="description" content="">
 <meta name="copyright" content="" />
@@ -15,44 +15,16 @@
 </head>
 
 <body>
+
 <div class="header">
-        <p>银行卡</p>
+        <p>二维码</p>
         <a onclick="javascript:history.back(-1);" class="a4"></a>
-        <a href="/user/center/bankcard/add" class="a5">添加</a>
 </div>
 <div class="main">
-    <#if bankcard_list?? && bankcard_list?size != 0>
-    <#list bankcard_list as item>
-    <dl class="bankcard">
-        <dt><a>${item.bankCardType!''}</a></dt>
-        <dd>
-            <a>${item.bankName!''}</a>
-            <p>**** **** **** 8888</p>
-            <span>${item.name!''}</span>
-        </dd>
-    </dl>
-    </#list>
-    <#else>
-    <p>暂无银行卡</p>
-    </#if>
-    <dl class="bankcard">
-        <dt><a>中国建设银行</a></dt>
-        <dd>
-            <a>储蓄卡</a>
-            <p>**** **** **** 5658</p>
-            <span>张全蛋</span>
-        </dd>
-    </dl>
-
-    
+    <div class="myQRcode">  
+        <span><img src="/user/images/myQRcode.png"/></span>
+        <p>给收费员扫一扫完成停车缴费</p>
+    </div>
 </div><!--main END-->
-
-
-
-
-
-
-
-
 </body>
 </html>

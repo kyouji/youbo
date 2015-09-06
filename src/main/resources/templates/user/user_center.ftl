@@ -25,7 +25,7 @@
 
 <div class="header">
        <p>个人中心</p>
-        <a href="/user/center" class="a4"></a>
+        <a href="/user" class="a4"></a>
 </div>
 
 <div class="main">
@@ -33,7 +33,7 @@
         <dt>
             <div><img src="<#if user??>${user.headImageUri!''}</#if>"/></div>
             <p>${user.mobile!''}<span>${user.carCode!'渝A·326326'}</span></p>
-            <a><img src="/user/images/aboutus_right.png" /></a>
+            <a href="/user/center/info"><img src="/user/images/aboutus_right.png" /></a>
         </dt>
         <dd>
             <a style="color:#ff665e; background:none;">订单</a>
@@ -61,8 +61,8 @@
     </a>
     <a>
     <dl class="mycenter_last">
-        <dd><a>消息中心</a></dd>
-        <dt><a><img src="/user/images/aboutus_right.png" /></a></dt>
+        <dd><a href="/user/center/message">消息中心</a></dd>
+        <dt><a href="/user/center/message"><img src="/user/images/aboutus_right.png" /></a></dt>
     </dl>
     </a>
     <a>

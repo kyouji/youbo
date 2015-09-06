@@ -22,6 +22,7 @@
             callback: function(data) {
                 if (data.code==0)
                 {
+                    alert("添加成功");
                     window.location.reload();
                 }
                 else
@@ -45,17 +46,17 @@
 <div class="main">
     <div class="bank">
         <form id="form1" action="/user/center/bankcard/add" method="post">
-            <select class="bank_01">
+            <select name="bankCardType" class="bank_01">
             <option value="account">请选择开户银行</option>
             <#if paytape_list??>
             <#list paytape_list as item>
-            <option value="${item.code!''}">${item.title!''}</option>
+            <option name="bankName" value="${item.title!''}">${item.title!''}</option>
             </#list>
             </#if>
             </select>
             <p class="bank_mes Validform_checktip">请填写以下信息用于验证身份</p>
             <input class="bank_02"  name="name" placeholder="持卡人" datatype="*"  nullmsg="持卡人姓名不能为空" />
-            <input class="bank_03"  name="idNumber" placeholder="身份证号码" datatype="idcard" nullmsg="身份证号不能为空" errormsg="请输入正确的身份证号" />
+            <input class="bank_03"  name="idNumber" placeholder="身份证号码" nullmsg="身份证号不能为空" errormsg="请输入正确的身份证号" />
             <input class="bank_05"  name="cardNumber" placeholder="银行卡号" nullmsg="银行卡号不能为空" />
             <input class="bank_06"  name="mobile" placeholder="银行预留手机号" nullmsg="银行预留手机号不能为空" />
             <dl class="bank_04">

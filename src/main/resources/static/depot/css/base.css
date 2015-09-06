@@ -158,6 +158,9 @@ input.text {background:none; border:none;}
 .topNav .a3{background:#69afff;}
 .topNav .a4{background:#00bf70;}
 .topNav .p5{position:absolute;left: 39.4%;top: 35.4%;z-index:99;width:62px;height:62px;padding: 1%;}
+@media screen and (max-width:1920px) {
+.topNav .p5{position:absolute;left: 41.3%;top:38%;width:100px;height:100px;}
+}
 @media screen and (max-width:1024px) {
 .topNav .p5{position:absolute;left: 41%;top: 38%;width:100px;height:100px;}
 }
@@ -204,7 +207,34 @@ input.text {background:none; border:none;}
 .footer a.a5.sel span{display:block;position:absolute;top: 10px;right:0;width:15px;height:15px;background:#f00;border-radius:50%;}
 
 
-
+/*登录*/
+.logintext {width:90%; padding-left:10%; margin: 20px auto 0; background: #f5f5f5 url(../images/login_z.png) no-repeat 3% center; background-size:15px;height: 35px;}
+.logintext_p { background-image:url(../images/login_p.png);}
+.logintext_y { background: #f5f5f5;width:47%; padding-left:3%; float:left;}
+.logintext input {line-height: 35px; height: 35px; border: none; font-size: 0.8em; width:100%; background:none;}
+.loginbtn { text-align: center; display: block; width: 100%; margin: 20px auto 0; line-height: 35px; height: 35px; color: #fff; border: none;border-radius:5px;cursor: pointer; font-size: 1em; background: #f65741; }
+.login_yzm { display:block; width:30%;float:right;padding:0 15% 0 0; margin-top:20px; background:url(../images/f5.png) no-repeat right center; background-size:30px; height:35px; text-align:right;}
+.login_yzm img { max-height:35px;}
+.login_a { width: 100%; margin: 30px auto 0; padding-bottom: 40px; }
+.login_a a { font-size: 0.8em;}
+.login_a a.a1 { position: absolute; right: 0; top: 0; }
+.otherlogin { text-align: center; padding:0px 0 20px; border-top: 1px solid #ddd; }
+.otherlogin p { top:-10px;}
+.otherlogin p span { display:inline-block; padding:0 20px; background:#fff;color:#999;}
+.otherlogin a { margin: 0 10px; display:inline-block; width:50px; text-align:center; font-size:0.8em; line-height:30px;}
+.loginbot {
+    text-align:center;
+    padding:0px 0 10px;
+}
+.loginbot a {
+    display:inline-block;
+    font-size:0.8em;
+    padding-left:12px;
+    margin:0 5px 5px;
+    background:url(../images/login04.png) no-repeat left center;
+    background-size:10px;
+}
+/*注册*/
 
 
 

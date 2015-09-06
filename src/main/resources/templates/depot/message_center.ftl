@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta http-equiv="Content-Language" content="zh-CN">
-<title>优泊天下-银行卡</title>
+<title>优泊天下-消息中心</title>
 <meta name="keywords" content="">
 <meta name="description" content="">
 <meta name="copyright" content="" />
@@ -16,44 +16,49 @@
 <body>
     <!--头部开始-->
     <div class="header">
-        <p>银行卡</p>
+        <p>消息中心</p>
         <a onclick="javascript:history.back(-1);" class="a4"></a>
-        <a href="/depot/myaccount/addbankcard" class="a5">添加</a>
     </div>
     <!--头部结束-->
     
     <div class="ybtx">
-    <!--银行卡开始-->
-    <dl class="bankcard">
-        <dt><a>中国建设银行</a></dt>
-        <dd>
-            <a>储蓄卡</a>
-            <p>**** **** **** 8888</p>
-            <span>诸葛亮</span>
-        </dd>
-    </dl>
-    <dl class="bankcard">
-        <dt><a>中国建设银行</a></dt>
-        <dd>
-            <a>储蓄卡</a>
-            <p>**** **** **** 8888</p>
-            <span>诸葛亮</span>
-        </dd>
-    </dl>
-    <!--银行卡结束-->
+    <!--消息中心开始-->
+    <div class="message_center">
+        <ul>
+            <li class="li_1"><span>武警清理爆炸现场周边小区</span></li>
+            <li><p class="time_1">2015-04-12</p></li>
+            <span class="red_dot"></span>
+        </ul>
+        <ul>
+            <li class="li_1"><span>天津爆炸马云遭网友逼捐：你有钱为何不捐</span></li>
+            <li><p class="time_1">2015-04-12</p></li>
+            <span class="red_dot"></span>
+        </ul>
+        <ul>
+            <li class="li_1"><span>上海山寨劳斯莱斯婚车街头自燃 烧成废铁</span></li>
+            <li><p class="time_1">2015-04-12</p></li>
+            <span class="red_dot"></span>
+        </ul>
+        <ul>
+            <li class="li_1"><span>湖南长沙一女子疑因夫妻吵架跳楼身亡</span></li>
+            <li><p class="time_1">2015-04-12</p></li>
+            <span class="red_dot"></span>
+        </ul>
+    </div>
+    <!--消息中心结束-->
 
     <div class="mb98"></div>
     
     </div>
     
     <!--底部开始-->
-   <div class="footer">
+    <div class="footer">
     <a class="a1" href="/depot">主页</a>
     <a class="a2 sel" href="/depot/myaccount">账户<span></span></a>
     <a class="a3" href="/depot/charge">收费记录<span></span></a>
     <a class="a4" href="/depot/info">车场信息<span></span></a>
     <a class="a5" href="/depot/site">设置<span></span></a>
-</div>
+    </div>
     <!--底部结束-->
     
 </body>

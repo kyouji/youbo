@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.bcel.generic.NEW;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mobile.device.Device;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,7 +48,7 @@ import com.ynyes.youbo.service.TdUserService;
  *
  */
 @Controller
-@RequestMapping(value = "/user")
+@RequestMapping(value = "/user/center")
 public class TdUserCenterController {
     
     @Autowired
@@ -107,7 +108,7 @@ public class TdUserCenterController {
      * @param map
      * @return
      */
-    @RequestMapping(value = "/center")
+    @RequestMapping
     public String user(HttpServletRequest req, ModelMap map) {
         String username = (String) req.getSession().getAttribute("username");
 //        if (null == username)
@@ -120,7 +121,7 @@ public class TdUserCenterController {
         map.addAttribute("server_ip", req.getLocalName());
         map.addAttribute("server_port", req.getLocalPort());
         
-        return "/user/mycenter";
+        return "/user/user_center";
     }
     
     
@@ -129,7 +130,7 @@ public class TdUserCenterController {
      * 设置
      * @return
      */
-    @RequestMapping(value = "/center/setting")
+    @RequestMapping(value = "setting")
     public String setting()
     {
     	return "/user/setting";
@@ -139,7 +140,7 @@ public class TdUserCenterController {
      * 设置城市
      * @return
      */
-    @RequestMapping(value = "/center/setting/changecity")
+    @RequestMapping(value = "/setting/changecity")
     public String settingcity()
     {
     	return "/user/setting_city";
@@ -149,7 +150,7 @@ public class TdUserCenterController {
      * 设置离线地图
      * @return
      */
-    @RequestMapping(value = "/center/setting/map")
+    @RequestMapping(value = "/setting/map")
     public String settingmap()
     {
     	return "/user/setting_map";
@@ -160,7 +161,7 @@ public class TdUserCenterController {
      *  关于我们
      * @return
      */
-    @RequestMapping(value = "/center/about")
+    @RequestMapping(value = "/about")
     public String about()
     {
     	return "/user/about";
@@ -170,7 +171,7 @@ public class TdUserCenterController {
      *  银行卡
      * @return
      */
-    @RequestMapping(value = "/center/bankcard")
+    @RequestMapping(value = "/bankcard")
     public String bankcard(HttpServletRequest req,ModelMap map)
     {
     	String username = (String) req.getSession().getAttribute("username");
@@ -183,7 +184,7 @@ public class TdUserCenterController {
      *  银行卡添加
      * @return
      */
-    @RequestMapping(value = "/center/bankcard/add")
+    @RequestMapping(value = "/bankcard/add")
     public String bankcardAdd(TdBankcard bankcard, HttpServletRequest req,ModelMap map)
     {
     	map.addAttribute("paytape_list", tdPayTypeService.findAll());
@@ -195,7 +196,7 @@ public class TdUserCenterController {
      * @param req
      * @return
      */
-    @RequestMapping(value = "/center/bankcard/add",method = RequestMethod.POST)
+    @RequestMapping(value = "/bankcard/add",method = RequestMethod.POST)
     @ResponseBody
     public Map<String, Object> bankcardSave(TdBankcard bankcard,HttpServletRequest req,ModelMap map)
     {
@@ -237,7 +238,7 @@ public class TdUserCenterController {
      * @param map
      * @return
      */
-    @RequestMapping(value = "/center/comment")
+    @RequestMapping(value = "/comment")
     public String comment(HttpServletRequest req, ModelMap map)
     {
     	return "/user/feedback";
@@ -253,7 +254,7 @@ public class TdUserCenterController {
      * @param map
      * @return
      */
-    @RequestMapping(value = "/center/comment", method=RequestMethod.POST)
+    @RequestMapping(value = "/comment", method=RequestMethod.POST)
     @ResponseBody
     public Map<String, Object> commentAdd(HttpServletRequest req, 
                         TdUserComment tdComment,
@@ -289,5 +290,60 @@ public class TdUserCenterController {
         
         return res;
     }
+    
+    /**
+	 * 消息中心
+	 * @param req
+	 * @param device
+	 * @param map
+	 * @return
+	 */
+	@RequestMapping("/message")
+    public String message(HttpServletRequest req, Device device, ModelMap map)
+	{
+		return "/user/message_center";
+	}
+	
+	
+	/**
+	 * 个人中心
+	 * @param req
+	 * @param device
+	 * @param map
+	 * @return
+	 */
+	@RequestMapping("/info")
+    public String info(HttpServletRequest req, Device device, ModelMap map)
+	{
+		return "/user/user_info";
+	}
+	/**
+	 * 个人中心
+	 * @param req
+	 * @param device
+	 * @param map
+	 * @return
+	 */
+	@RequestMapping("/info/edit")
+    public String infoEdit(HttpServletRequest req, String editType, ModelMap map)
+	{
+		switch (editType) 
+		{
+			case "username"://用户名
+				return "/user/user_info_username";
+			case "mobile":  //手机号
+				return "/user/user_info_mobile";
+			case "plate":	//车牌号
+				return "/user/user_info_plate";
+			case "password"://登录密码
+				return "/user/user_info_password";
+			case "paykey":	//支付密码
+				return "/user/user_info_paykey";
+
+			default:
+				break;
+		}		
+		return "/user/center";
+	}
     
 }

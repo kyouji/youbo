@@ -73,9 +73,9 @@ $(function () {
   <a href="/Verwalter/order/setting/diysite/list" class="back"><i></i><span>返回列表页</span></a>
   <a href="/Verwalter/center" class="home"><i></i><span>首页</span></a>
   <i class="arrow"></i>
-  <a href="/Verwalter/order/setting/diysite/list"><span>同盟店</span></a>
+  <a href="/Verwalter/order/setting/diysite/list"><span>车库</span></a>
   <i class="arrow"></i>
-  <span>编辑同盟店</span>
+  <span>编辑车库</span>
 </div>
 <div class="line10"></div>
 <!--/导航栏-->
@@ -96,7 +96,7 @@ $(function () {
     <dt>同盟店名称</dt>
     <dd>
         <input name="title" type="text" value="<#if diy_site??>${diy_site.title!""}</#if>" class="input normal" datatype="*2-100" sucmsg=" "> 
-        <span class="Validform_checktip">*同盟店名称</span>
+        <span class="Validform_checktip">*车库名称</span>
     </dd>
   </dl>
   <dl>
