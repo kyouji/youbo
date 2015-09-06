@@ -7,6 +7,7 @@ import org.springframework.mobile.device.Device;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.ynyes.youbo.entity.TdAdType;
 import com.ynyes.youbo.service.TdAdService;
@@ -26,7 +27,7 @@ public class TdDepotIndexController {
 	@Autowired
 	private TdAdService tdAdService;
 	
-	@RequestMapping
+	@RequestMapping(method=RequestMethod.GET)
     public String index(HttpServletRequest req, Device device, ModelMap map) {
 		
 		tdCommonService.setHeader(map, req);

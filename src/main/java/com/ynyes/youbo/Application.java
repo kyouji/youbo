@@ -1,10 +1,5 @@
 package com.ynyes.youbo;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
-
 import javax.servlet.MultipartConfigElement;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,12 +14,11 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
-import com.ynyes.youbo.entity.TdSetting;
 import com.ynyes.youbo.service.TdSettingService;
 import com.ynyes.youbo.service.TdUserService;
 
 @Configuration
-@ComponentScan(basePackages={"com.ynyes.youbo","com.cytm.payment"})
+@ComponentScan
 @EnableAutoConfiguration
 public class Application extends SpringBootServletInitializer implements CommandLineRunner {
     @Autowired

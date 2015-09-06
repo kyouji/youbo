@@ -314,7 +314,7 @@ function checkTime(i)
           </div>
       <#elseif qiang?? && qiang == 3 && goods.groupSaleStartTime?? && goods.groupSaleStartTime < .now && goods.groupSaleStopTime?? && goods.groupSaleStopTime gt .now>
             <p class="p1">
-              <span class="mr10">预付价</span>
+              <span class="mr10">预付定金</span>
               <span class="red fs24 lh30 mr20">￥：<#if goods.groupSalePrice??>${goods.groupSalePrice?string("0.00")}</#if></span>
               <span class="unl-th c9">￥：<#if goods.marketPrice??>${goods.marketPrice?string("0.00")}</#if></span>
             </p>
@@ -332,7 +332,7 @@ function checkTime(i)
             </p>
       <#elseif qiang?? && qiang == 100 && goods.groupSaleHundredStartTime?? && goods.groupSaleHundredStartTime < .now && goods.groupSaleHundredStopTime?? && goods.groupSaleHundredStopTime gt .now>
             <p class="p1">
-              <span class="mr10">预付价</span>
+              <span class="mr10">预付定金</span>
               <span class="red fs24 lh30 mr20">￥：<#if goods.groupSalePrePayPrice??>${goods.groupSalePrePayPrice?string("0.00")}</#if></span>
               <span class="unl-th c9">￥：<#if goods.groupSalePrice??>${goods.groupSalePrice?string("0.00")}</#if></span>
             </p>

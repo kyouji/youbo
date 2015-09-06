@@ -18,6 +18,7 @@ import com.ynyes.youbo.service.TdCartGoodsService;
 import com.ynyes.youbo.service.TdCommonService;
 import com.ynyes.youbo.service.TdGoodsCombinationService;
 import com.ynyes.youbo.service.TdGoodsService;
+import com.ynyes.youbo.service.TdOrderService;
 
 /**
  * 购物车
@@ -31,22 +32,30 @@ public class TdCartController {
 
     @Autowired
     private TdGoodsService tdGoodsService;
-    
+
     @Autowired
     private TdGoodsCombinationService tdGoodsCombinationService;
 
     @Autowired
     private TdCommonService tdCommonService;
-    
+
     @Autowired
     private TdGoodsService tdGoodService;
+    
+    @Autowired
+    private TdOrderService tdOrderService;
 
     /**
      * 加入购物车
-     * @param id 商品ID
-     * @param quantity 数量 
-     * @param qiang 抢购类型 0：正常销售 >0：促销
-     * @param m 是否是触屏 0: 否 1: 是
+     * 
+     * @param id
+     *            商品ID
+     * @param quantity
+     *            数量
+     * @param qiang
+     *            抢购类型 0：正常销售 >0：促销
+     * @param m
+     *            是否是触屏 0: 否 1: 是
      * @param req
      * @return
      */
@@ -74,6 +83,7 @@ public class TdCartController {
         }
         
         if (null != id) {
+            
             TdGoods goods = tdGoodsService.findOne(id);
 
             if (null != goods) {
@@ -118,19 +128,21 @@ public class TdCartController {
     }
 
     @RequestMapping(value = "/cart/add")
-    public String cartInit(Long id, Integer m, HttpServletRequest req, ModelMap map) {
+    public String cartInit(Long id, Integer m, Integer r,
+            HttpServletRequest req, ModelMap map) {
         tdCommonService.setHeader(map, req);
+
+        map.addAttribute("r", r);
         
-        if (null == m)
-        {
+        if (null == m) {
             m = 0;
         }
-        
+
         if (m.equals(1)) { // 移动端浏览器
-            
+
             return "/touch/cart_add_res";
         }
-        
+
         return "/client/cart_add_res";
     }
 
@@ -142,65 +154,58 @@ public class TdCartController {
         // 未登录用户的购物车商品
         List<TdCartGoods> cartSessionGoodsList = tdCartGoodsService
                 .findByUsername(req.getSession().getId());
-        if (null == username)
-        {
+        if (null == username) {
             username = req.getSession().getId();
-        }
-        else
-        {
+        } else {
             // 合并商品
             // 已登录用户的购物车
             List<TdCartGoods> cartUserGoodsList = tdCartGoodsService
                     .findByUsername(username);
-            for (TdCartGoods cg : cartSessionGoodsList)
-            {
-            // 将未登录用户的购物车加入已登录用户购物车中
+            for (TdCartGoods cg : cartSessionGoodsList) {
+                // 将未登录用户的购物车加入已登录用户购物车中
                 cg.setUsername(username);
                 cartUserGoodsList.add(cg);
             }
 
             cartUserGoodsList = tdCartGoodsService.save(cartUserGoodsList);
 
-            for (TdCartGoods cg1 : cartUserGoodsList) 
-            {
+            for (TdCartGoods cg1 : cartUserGoodsList) {
                 // 删除重复的商品
                 List<TdCartGoods> findList = tdCartGoodsService
                         .findByGoodsIdAndUsername(cg1.getGoodsId(), username);
 
-                if (null != findList && findList.size() > 1) 
-                {
-                    tdCartGoodsService.delete(findList.subList(1,findList.size()));
+                if (null != findList && findList.size() > 1) {
+                    tdCartGoodsService.delete(findList.subList(1,
+                            findList.size()));
                 }
             }
         }
 
         List<TdCartGoods> resList = tdCartGoodsService.findByUsername(username);
-        
-        /*  添加gift  mdj 2015-8-7 09:57:28*/
+
+        /* 添加gift mdj 2015-8-7 09:57:28 */
         List<TdGoods> tdGoodsList = new ArrayList<>();
-        for (TdCartGoods tdCartGoods : resList) 
-        { 
-			TdGoods tdGoods = tdGoodService.findById(tdCartGoods.getGoodsId());
-			if (null != tdGoods) {
-				List<TdGoodsGift> tdGoodGiftUserList = tdGoods.getGiftList();
-				if (tdGoodGiftUserList != null && tdGoodGiftUserList.size()>=1)
-				{
-					tdGoodsList.add(tdGoods);
-				}
-			}			
-		}
-        
-        if (tdGoodsList != null && tdGoodsList.size()>=1)
-        {
-        	map.addAttribute("goods_list",tdGoodsList);
-		}
-        
-        map.addAttribute("cart_goods_list", tdCartGoodsService.updateGoodsInfo(resList));
-        
+        for (TdCartGoods tdCartGoods : resList) {
+            TdGoods tdGoods = tdGoodService.findById(tdCartGoods.getGoodsId());
+            if (null != tdGoods) {
+                List<TdGoodsGift> tdGoodGiftUserList = tdGoods.getGiftList();
+                if (tdGoodGiftUserList != null
+                        && tdGoodGiftUserList.size() >= 1) {
+                    tdGoodsList.add(tdGoods);
+                }
+            }
+        }
+
+        if (tdGoodsList != null && tdGoodsList.size() >= 1) {
+            map.addAttribute("goods_list", tdGoodsList);
+        }
+
+        map.addAttribute("cart_goods_list",
+                tdCartGoodsService.updateGoodsInfo(resList));
+
         tdCommonService.setHeader(map, req);
 
-        if (null == resList || resList.size() == 0)
-        {
+        if (null == resList || resList.size() == 0) {
             return "/client/cart_null";
         }
 
@@ -222,12 +227,10 @@ public class TdCartController {
         if (null != id) {
             for (TdCartGoods cartGoods : cartGoodsList) {
                 if (cartGoods.getId().equals(id)) {
-                    if (null == cartGoods.getIsSelected() || false == cartGoods.getIsSelected())
-                    {
+                    if (null == cartGoods.getIsSelected()
+                            || false == cartGoods.getIsSelected()) {
                         cartGoods.setIsSelected(true);
-                    }
-                    else
-                    {
+                    } else {
                         cartGoods.setIsSelected(false);
                     }
                     cartGoods = tdCartGoodsService.save(cartGoods);
@@ -236,7 +239,8 @@ public class TdCartController {
             }
         }
 
-        map.addAttribute("cart_goods_list", tdCartGoodsService.updateGoodsInfo(cartGoodsList));
+        map.addAttribute("cart_goods_list",
+                tdCartGoodsService.updateGoodsInfo(cartGoodsList));
 
         return "/client/cart_goods";
     }
@@ -269,7 +273,8 @@ public class TdCartController {
             tdCartGoodsService.save(cartGoodsList);
         }
 
-        map.addAttribute("cart_goods_list", tdCartGoodsService.updateGoodsInfo(cartGoodsList));
+        map.addAttribute("cart_goods_list",
+                tdCartGoodsService.updateGoodsInfo(cartGoodsList));
 
         return "/client/cart_goods";
     }
@@ -285,7 +290,7 @@ public class TdCartController {
 
         if (null != id) {
             TdCartGoods cartGoods = tdCartGoodsService.findOne(id);
-            
+
             if (cartGoods.getUsername().equalsIgnoreCase(username)) {
                 long quantity = cartGoods.getQuantity();
                 cartGoods.setQuantity(quantity + 1);
@@ -293,8 +298,8 @@ public class TdCartController {
             }
         }
 
-        map.addAttribute("cart_goods_list",
-                tdCartGoodsService.updateGoodsInfo(tdCartGoodsService.findByUsername(username)));
+        map.addAttribute("cart_goods_list", tdCartGoodsService
+                .updateGoodsInfo(tdCartGoodsService.findByUsername(username)));
 
         return "/client/cart_goods";
     }
@@ -321,8 +326,8 @@ public class TdCartController {
             }
         }
 
-        map.addAttribute("cart_goods_list",
-                tdCartGoodsService.updateGoodsInfo(tdCartGoodsService.findByUsername(username)));
+        map.addAttribute("cart_goods_list", tdCartGoodsService
+                .updateGoodsInfo(tdCartGoodsService.findByUsername(username)));
 
         return "/client/cart_goods";
     }
@@ -344,8 +349,8 @@ public class TdCartController {
             }
         }
 
-        map.addAttribute("cart_goods_list",
-                tdCartGoodsService.updateGoodsInfo(tdCartGoodsService.findByUsername(username)));
+        map.addAttribute("cart_goods_list", tdCartGoodsService
+                .updateGoodsInfo(tdCartGoodsService.findByUsername(username)));
 
         return "/client/cart_goods";
     }
