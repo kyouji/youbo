@@ -93,7 +93,7 @@ $(function () {
 
 <div class="tab-content">
   <dl>
-    <dt>同盟店名称</dt>
+    <dt>车库名称</dt>
     <dd>
         <input name="title" type="text" value="<#if diy_site??>${diy_site.title!""}</#if>" class="input normal" datatype="*2-100" sucmsg=" "> 
         <span class="Validform_checktip">*车库名称</span>
@@ -218,7 +218,7 @@ $(function () {
       <span class="Validform_checktip"></span>
     </dd>
   </dl>
-  
+  <#--
   <dl>
     <dt>付款方式</dt>
     <dd>
@@ -226,7 +226,7 @@ $(function () {
       <span class="Validform_checktip">现金/刷卡</span>
     </dd>
   </dl>
-  
+  -->
   <dl>
     <dt>营业时间</dt>
     <dd>
@@ -242,7 +242,7 @@ $(function () {
       <span class="Validform_checktip"></span>
     </dd>
   </dl>
-  
+  <#--
   <dl>
     <dt>投诉电话</dt>
     <dd>
@@ -250,7 +250,7 @@ $(function () {
       <span class="Validform_checktip"></span>
     </dd>
   </dl>
-  
+  -->
   <dl>
     <dt>是否启用</dt>
     <dd>

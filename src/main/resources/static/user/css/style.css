@@ -108,7 +108,7 @@ body{ background:#efefef; }
 
 /*find*/
 
-.find_img{width:100%;height:480px;}
+.find_img{width:100%;height:100%;display:block;overfloat:hidden; min-height:700px;}
 .find01{width:92%; padding-left:4%; padding-right:4%; overflow:hidden; height:auto; padding-top:3%; background-color:white; }
 .find01 dt { width:100%; height:auto; float:left;}
 .find01 dt span{ float:left; color:#333; font-size:1.1em;}
