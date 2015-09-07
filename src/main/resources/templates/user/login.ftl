@@ -10,6 +10,42 @@
 <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
 <!--css-->
 <link href="/depot/css/base.css" rel="stylesheet" type="text/css" />
+<script src="/user/js/jquery-1.9.1.min.js"></script>
+
+<script type="text/javascript">
+$(function(){
+
+    $("#btn_login").click(function(){
+        login();
+    });
+});
+function login(){
+    var username = $("#txt_loginId").val();
+    var password = $("#txt_loginPwd").val();
+    
+    if (username.length < 6 || password.length < 6)
+    {
+        alert("用户名或密码长度输入不足");
+        return;
+    }
+    $.ajax({
+            type: "post",
+            url: "/user/center/login",
+            data: { "username": username, "password": password },
+            dataType: "json",
+            success: function (data) { 
+            <!-- 修改 -->
+            if (data.code == 0) {
+                    window.location.href = "/user"; 
+            } else {
+                alert(data.msg);
+            }
+    }
+});
+}
+
+</script>
+
 </head>
 
 <body>
@@ -24,19 +60,19 @@
     <div class="ybtx">
     <!--登录开始-->
         <div class="mian">
-            <form  action="/user/center/login">
+           <!-- <form  action="/user/center/login" method="post">-->
                 <div class="logintext">
-                    <input type="text" name="username" class="logintext01" placeholder="用户名" />
+                    <input type="text" name="username" id="txt_loginId" class="logintext01" placeholder="手机号" />
                 </div>
                 <div class="logintext logintext_p">
-                    <input type="text" name="password" class="logintext02" placeholder="输入密码" />
+                    <input type="text" name="password" id="txt_loginPwd" class="logintext02" placeholder="输入密码" />
                 </div>
-                <input type="submit" class="loginbtn" value="登录" />
+                <input type="submit" class="loginbtn" id="btn_login" value="登录" />
                 <p class="login_a">
-                  <a href="#">找回密码</a>
+                  <!--<a href="#">找回密码</a>-->
                   <a class="a1" href="/user/center/register">注册</a>
                 </p>
-            </form>
+           <!-- </form>-->
         </div>
         <div class="otherlogin">
           <p class="ta-c fs10 pb20"><span>第三方账号登录</span></p>

@@ -52,6 +52,7 @@ body{ background:#efefef; }
 .bespeak dd{  width:92%; padding-left:4%; padding-right:4%; overflow:hidden; display:block; float:left;}
 .bespeak dd a{ width:100%; height:40px; float:left; line-height:40px;}
 .bespeak dd input{ width:100%; height:50px; float:left; line-height:50px; border:none; margin-left:-3%; padding-left:6%}
+.bespeak dd .bespeak_btn{ width:92%; padding-left:4%; padding-right:4%; overflow:hidden; display:block; float:left;background:#0e5baa;color:#fff;text-align:center;}
 
 /*bespeak_list*/
 .bespeak_list{ width:100%; height:40px; background:white;}
@@ -108,7 +109,7 @@ body{ background:#efefef; }
 
 /*find*/
 
-.find_img{width:100%;height:100%;display:block;overfloat:hidden; min-height:700px;}
+.find_img{width:100%;height:100%;display:block;overfloat:hidden; min-height:400px;}
 .find01{width:92%; padding-left:4%; padding-right:4%; overflow:hidden; height:auto; padding-top:3%; background-color:white; }
 .find01 dt { width:100%; height:auto; float:left;}
 .find01 dt span{ float:left; color:#333; font-size:1.1em;}

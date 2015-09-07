@@ -27,6 +27,11 @@ public class TdUserMyQRCodeController {
 	
 	@RequestMapping
     public String index(HttpServletRequest req, Device device, ModelMap map) {
+		String username = (String) req.getSession().getAttribute("username");
+        if (null == username)
+        {
+            return "redirect:/user/center/login";
+        }
 		return "/user/my_QRcode";
 	}
 }

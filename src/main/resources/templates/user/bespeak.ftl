@@ -9,8 +9,8 @@
 <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
 
 
-<link href="css/common.css" rel="stylesheet" type="text/css" />
-<link href="css/style.css" rel="stylesheet" type="text/css" />
+<link href="/user/css/common.css" rel="stylesheet" type="text/css" />
+<link href="/user/css/style.css" rel="stylesheet" type="text/css" />
 
 </head>
 
@@ -23,10 +23,12 @@
 </div>
 <div class="main">
     <dl class="bespeak">
-        <dt><a>停车场</a><p>郎俊三栋停车场负一楼</p></dt>
+        <dt><a>停车场</a><p><#if depot??>${depot.title}</#if></p></dt>
         <dt><a>车牌号</a><p>渝A32632</p></dt>
         <dd><a>请选择日期</a><input type="date" value="" /></dd>
         <dd><a>请选择时间</a><input type="time" value="" /></dd>
+        <div class="clear20"></div>
+        <dd><a class="bespeak_btn" type="submit">提 交</a></dd>
     </dl>
 
     

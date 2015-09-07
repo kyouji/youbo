@@ -111,13 +111,12 @@ public class TdUserCenterController {
     @RequestMapping
     public String user(HttpServletRequest req, ModelMap map) {
         String username = (String) req.getSession().getAttribute("username");
-//        if (null == username)
-//        {
-//            return "redirect:/touch/login";
-//        }
-        req.getSession().setAttribute("username", "user123");
+        if (null == username)
+        {
+            return "redirect:/user/center/login";
+        }
         tdCommonService.setHeader(map, req);
-        map.addAttribute("user",tdUserService.findByUsername("user123"));
+        map.addAttribute("user",tdUserService.findByMobile(username));
         map.addAttribute("server_ip", req.getLocalName());
         map.addAttribute("server_port", req.getLocalPort());
         
@@ -356,23 +355,12 @@ public class TdUserCenterController {
 	@RequestMapping("/login")
     public String login(HttpServletRequest req, Device device, ModelMap map,String username,String password)
 	{
-		if (username == null && password == null)
-		{			
-			return "/user/login";
-		}
-		
-		String referer = (String)req.getHeader("referer");
-		if (null == referer) {
-			referer = "/user";
-		}
-		
-		TdUser user = tdUserService.findByUsername(username);
-		if (user.getPassword().equals(password))
+		String curentuser = (String) req.getSession().getAttribute("username");
+		if (curentuser != null)
 		{
-			return "redirect:" + referer;
+			return "redirect:/user/center";
 		}
-		map.addAttribute("error","用户名或密码错误");
-		return "redirect:" + referer;
+		return "/user/login";
 	}
 	
 	/**
@@ -383,41 +371,33 @@ public class TdUserCenterController {
 	 * @return
 	 */
 	 @RequestMapping(value = "/login", method=RequestMethod.POST)
-	    @ResponseBody
-	    public Map<String, Object> login(HttpServletRequest req, 
-	                        TdUserComment tdComment,
-	                        ModelMap map){
-	        Map<String, Object> res = new HashMap<String, Object>();
-	        res.put("code", 1);
-	        
-	        String username = (String) req.getSession().getAttribute("username");
-	        
-	        if (null == tdComment.getContent() || tdComment.getContent().equals(""))
-	        {
-	            res.put("message", "内容不能为空！");
-	            return res;
-	        }
-
-	        tdComment.setCommentTime(new Date());
-	        tdComment.setIsReplied(false);
-	        tdComment.setNegativeNumber(0L);
-	        tdComment.setPositiveNumber(0L);
-	        tdComment.setUsername(username);
-	        
-	        TdUser user = tdUserService.findByUsernameAndIsEnabled(username);
-	        
-	        if (null != user)
-	        {
-	            tdComment.setUserHeadUri(user.getHeadImageUri());
-	        }
-	        
-	        tdComment.setStatusId(0L);
-	        
-	        tdUserCommentService.save(tdComment);
-	        res.put("code", 0);
-	        
-	        return res;
-	    }
+     @ResponseBody
+    public Map<String, Object> login(HttpServletRequest req, 
+                        String username,
+                        String password,
+                        ModelMap map){
+        Map<String, Object> res = new HashMap<String, Object>();
+        res.put("code", 1);
+        
+       // String user = (String) req.getSession().getAttribute("username");
+        TdUser user = tdUserService.findByMobile(username);
+        if (user == null)
+        {
+			res.put("msg", "用户不存在!");
+			return res;
+		}
+        if (!user.getPassword().equals(password))
+        {
+			res.put("msg", "密码错误！");
+			return res;
+		}
+        res.put("code", 0);
+        
+        
+        req.getSession().setAttribute("username", username);
+        
+        return res;
+    }
 	
 	/**
 	 * 用户登录

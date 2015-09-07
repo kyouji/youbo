@@ -31,7 +31,25 @@ public class TdUserFindController {
 	@RequestMapping
     public String index(HttpServletRequest req, Device device, ModelMap map)
 	{
+		String username = (String) req.getSession().getAttribute("username");
+        if (null == username)
+        {
+            return "redirect:/user/center/login";
+        }
 		map.addAttribute("depot_list", tdDiySiteService.findByIsEnableTrue());
 		return "/user/find";
+	}
+	
+	/**
+	 * 预约
+	 * @param req
+	 * @param map
+	 * @return
+	 */
+	@RequestMapping("/bespeak")
+	public String bespeak(HttpServletRequest req,ModelMap map,Long depotId)
+	{
+		map.addAttribute("depot", tdDiySiteService.findOne(depotId));
+		return "/user/bespeak";
 	}
 }
