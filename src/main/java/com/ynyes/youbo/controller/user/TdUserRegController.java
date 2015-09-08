@@ -77,6 +77,9 @@ public class TdUserRegController {
             }
         }
         
+        //设置新的用户为C端用户
+        user.setRoleId(1L);
+        
         user = tdUserService.save(user);
         
         request.getSession().setAttribute("username", username);

@@ -17,7 +17,6 @@ import org.springframework.format.annotation.DateTimeFormat;
  * 文章
  * 
  * @author Sharon
- *
  */
 
 @Entity
@@ -117,7 +116,7 @@ public class TdArticle {
     // 参数是否可检索
     @Column
     private Boolean paramIsSearchable;
-
+    
     public Long getId() {
         return id;
     }
