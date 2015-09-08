@@ -64,18 +64,7 @@ public class TdUserRegController {
         mobile = username;
         
         TdUser user = tdUserService.addNewUser(username, password, mobile, email, carCode);
-        
-        if (null == user)
-        {
-            if (null == shareId)
-            {
-                return "redirect:/reg?errCode=3";
-            }
-            else
-            {
-                return "redirect:/reg?errCode=3&shareId=" + shareId;
-            }
-        }
+        user.setRoleId(1L);
         
         user = tdUserService.save(user);
         

@@ -73,7 +73,7 @@
             </dl>
         </div>
         <ul class="sign_out">
-            <li><a href="#">退出登录</a></li>
+            <li><a href="/depot/site/exit">退出登录</a></li>
         </ul>
     </div>
     <!--设置结束-->

@@ -30,13 +30,13 @@ function login(){
     }
     $.ajax({
             type: "post",
-            url: "/user/center/login",
+            url: "/depot/login",
             data: { "username": username, "password": password },
             dataType: "json",
             success: function (data) { 
             <!-- 修改 -->
             if (data.code == 0) {
-                    window.location.href = "/user/center"; 
+                    window.location.href = "/depot"; 
             } else {
                 alert(data.msg);
             }
@@ -70,7 +70,7 @@ function login(){
                 <input type="submit" class="loginbtn" id="btn_login" value="登录" />
                 <p class="login_a">
                   <!--<a href="#">找回密码</a>-->
-                  <a class="a1" href="/user/center/register">注册</a>
+                  <a class="a1" href="/depot/register">注册</a>
                 </p>
            <!-- </form>-->
         </div>

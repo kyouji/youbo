@@ -88,6 +88,12 @@
         <dt><a href="/user/center/about"><img src="/user/images/aboutus_right.png" /></a></dt>
     </dl>
     </a>
+    <a href="/user/center/exit">
+    <dl class="mycenter_last">
+        <dd><a href="/user/center/exit">退出登录</a></dd>
+        <dt><a href="/user/center/exit"><img src="/user/images/aboutus_right.png" /></a></dt>
+    </dl>
+    </a>
  
     
 </div><!--main END-->

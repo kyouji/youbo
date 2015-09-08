@@ -27,7 +27,7 @@
         <dt><a>${item.bankCardType!''}</a></dt>
         <dd>
             <a>${item.bankName!''}</a>
-            <p>**** **** **** 8888</p>
+            <p>**** **** **** ${item.cardNumber?substring(item.cardNumber?length-5,item.cardNumber?length-1)}</p>
             <span>${item.name!''}</span>
         </dd>
     </dl>

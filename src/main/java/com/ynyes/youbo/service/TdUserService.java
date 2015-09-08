@@ -373,6 +373,12 @@ public class TdUserService {
     	PageRequest pageRequest = new PageRequest(page, size);
     	return repository.findByUpperDiySiteIdOrderByIdDesc(shopId, pageRequest);
     }
+    
+    public TdUser findByfindByMobileAndRoleId(String mobile,Long roleId)
+    {
+		return repository.findByMobileAndRoleId(mobile, roleId);
+	}
+    
     /**
      * 查找
      * 

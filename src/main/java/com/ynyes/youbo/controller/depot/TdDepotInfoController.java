@@ -24,6 +24,11 @@ public class TdDepotInfoController {
 	@RequestMapping
     public String site(HttpServletRequest req, Device device, ModelMap map)
 	{
+		String username = (String) req.getSession().getAttribute("depotuser");
+        if (null == username)
+        {
+            return "redirect:/depot/login";
+        }
 		return "/depot/depot_info";
 	}
 	

@@ -13,7 +13,7 @@ import com.ynyes.youbo.service.TdUserService;
 
 @Controller
 @RequestMapping("/depot/site")
-public class TdSiteController {
+public class TdDepotSiteController {
 	
 	@Autowired
 	private TdCommonService tdCommonService;
@@ -24,6 +24,11 @@ public class TdSiteController {
 	@RequestMapping
     public String site(HttpServletRequest req, Device device, ModelMap map)
 	{
+		String username = (String) req.getSession().getAttribute("depotuser");
+        if (null == username)
+        {
+            return "redirect:/depot/login";
+        }
 		return "/depot/site";
 	}
 	
@@ -32,5 +37,19 @@ public class TdSiteController {
 	public String charge(HttpServletRequest req, Device device, ModelMap map)
 	{
 		return "/depot/site";
+	}
+	
+	/**
+	 * 退出登录
+	 * @param req
+	 * @param device
+	 * @param map
+	 * @return
+	 */
+	@RequestMapping("/exit")
+	public String exit(HttpServletRequest req, Device device, ModelMap map)
+	{
+		req.getSession().invalidate();
+		return "/depot/index";
 	}
 }

@@ -19,12 +19,13 @@ import com.ynyes.youbo.entity.TdBankcard;
 import com.ynyes.youbo.entity.TdUser;
 import com.ynyes.youbo.service.TdBankcardService;
 import com.ynyes.youbo.service.TdCommonService;
+import com.ynyes.youbo.service.TdDiySiteService;
 import com.ynyes.youbo.service.TdPayTypeService;
 import com.ynyes.youbo.service.TdUserService;
 
 @Controller
 @RequestMapping("/depot/myaccount")
-public class TdMyAccountController {
+public class TdDepotMyAccountController {
 	
 	
 	@Autowired
@@ -39,6 +40,9 @@ public class TdMyAccountController {
 	@Autowired
 	private TdBankcardService tdBankcardService;
 	
+	@Autowired
+	private TdDiySiteService tdDiySiteService;
+	
 	/**
 	 *  我的账户首页
 	 * @param req
@@ -49,9 +53,14 @@ public class TdMyAccountController {
 	@RequestMapping
     public String index(HttpServletRequest req, Device device, ModelMap map)
 	{
-		req.getSession().setAttribute("username", "depotuser");
+		String username = (String) req.getSession().getAttribute("depotuser");
+        if (null == username)
+        {
+            return "redirect:/depot/login";
+        }
 		tdCommonService.setHeader(map, req);
-		map.addAttribute("user", tdUserService.findByUsername("depotuser"));
+		map.addAttribute("user", tdUserService.findByfindByMobileAndRoleId(username, 2L));
+		map.addAttribute("depot", tdDiySiteService.findbyUsername(username));
 		return "/depot/my_account";
 	}
 		

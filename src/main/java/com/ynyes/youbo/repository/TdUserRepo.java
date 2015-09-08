@@ -45,6 +45,8 @@ public interface TdUserRepo extends
     
     TdUser findByMobile(String mobile);		//手机号查找
     
+    TdUser findByMobileAndRoleId(String mobile,Long roleId);
+    
 
     TdUser findByQqUserId(String qqUserId);
 

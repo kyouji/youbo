@@ -174,7 +174,7 @@ public class TdUserCenterController {
     public String bankcard(HttpServletRequest req,ModelMap map)
     {
     	String username = (String) req.getSession().getAttribute("username");
-    	TdUser user = tdUserService.findByUsername(username);
+    	TdUser user = tdUserService.findByfindByMobileAndRoleId(username, 1L);
     	map.addAttribute("bankcard_list", user.getBankcardList());
     	return "/user/bankcard";
     }
@@ -202,15 +202,15 @@ public class TdUserCenterController {
     	String username = (String) req.getSession().getAttribute("username");
     	Map<String, Object> res = new HashMap<String ,Object>();
     	res.put("code", 1);
-    	res.put("message", "用户不存在");
     	if (username == null)
     	{
 			
 		}
-    	TdUser user = tdUserService.findByUsername(username);
+    	TdUser user = tdUserService.findByfindByMobileAndRoleId(username, 1L);
     	if (user == null)
     	{	
     		res.put("message", "用户不存在");
+    		return res;
 		}
     	
     	List<TdBankcard> list = user.getBankcardList();
@@ -380,7 +380,7 @@ public class TdUserCenterController {
         res.put("code", 1);
         
        // String user = (String) req.getSession().getAttribute("username");
-        TdUser user = tdUserService.findByMobile(username);
+        TdUser user = tdUserService.findByfindByMobileAndRoleId(username, 1L);
         if (user == null)
         {
 			res.put("msg", "用户不存在!");
@@ -400,7 +400,7 @@ public class TdUserCenterController {
     }
 	
 	/**
-	 * 用户登录
+	 * 用注册
 	 * @param req
 	 * @param device
 	 * @param map
@@ -411,5 +411,19 @@ public class TdUserCenterController {
 	{
 		return "/user/register";
 	}
+	/**
+	 * 退出登录
+	 * @param req
+	 * @param device
+	 * @param map
+	 * @return
+	 */
+	@RequestMapping("/exit")
+    public String exit(HttpServletRequest req, Device device, ModelMap map)
+	{
+		req.getSession().invalidate();
+		return "redirect:/user";
+	}
+	
     
 }
