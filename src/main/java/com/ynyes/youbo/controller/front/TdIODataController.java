@@ -41,6 +41,7 @@ public class TdIODataController {
             else if (ioData.getIoState().equals("正常外出"))
             {
                 
+                
             }
         }
 
