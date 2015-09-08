@@ -369,4 +369,24 @@ public class TdOrderService {
     public List<TdOrder> findAll(Long statusId){
     	return (List<TdOrder>) repository.findAll();
     }
+    
+    /**
+     * @author dengxiao
+     * 根据电话号码和交易状态查找订单（不分页）
+     */
+    
+    //查找指定用户的所有订单
+    public List<TdOrder> findByUsername(String username){
+    	return repository.findByUsernameOrderByOrderTimeDesc(username);
+    };
+    
+    //查找指定用户已经完成的订单
+    public List<TdOrder> findByUsernameAndStatusId(String username){
+    	return repository.findByUsernameAndStatusIdOrderByOrderTimeDesc(username, 6L);
+    };
+    
+    //查找指定用户未完成的订单
+    public List<TdOrder> findByUsernameAndStatusIdNot(String username){
+    	return repository.findByUsernameAndStatusIdNotOrderByOrderTimeDesc(username, 6L);
+    };
 }

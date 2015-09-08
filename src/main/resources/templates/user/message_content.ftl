@@ -18,7 +18,7 @@
 
     <div class="header">
         <p>详情</p>
-        <a href="#" class="a4"></a>
+        <a onclick="javascript:history.back(-1);" class="a4"></a>
     </div>
     <!--头部结束-->
     

@@ -49,7 +49,7 @@ public class TdOrder {
     @Column
     private String shippingAddress;
     
-    // 收货人
+    //收货人姓名
     @Column
     private String shippingName;
     
@@ -115,7 +115,7 @@ public class TdOrder {
     @Column
     private String userRemarkInfo;
     
-    // 后台备注
+    // 备注
     @Column
     private String remarkInfo;
     
@@ -190,7 +190,19 @@ public class TdOrder {
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date finishTime;
     
-    // 订单状态 2:待付款 3:待付尾款 4:待服务 5:待评价 6: 已完成 7: 已取消 8: 支付取消(失败) 9: 已删除
+    /**
+     * 订单状态列表
+     * 1. 定金未支付
+     * 2. 定金已支付
+     * 3. 预约成功（支付定金之后等待B端确认后进入此状态）
+     * 4. 正在停车（进入车库之后进入正在停车状态）
+     * 5. 办理出库（等待B端确认出库，缴纳尾款和退还余额全归纳在此状态内）
+     * 6. 交易完成（办理出库成功后完成订单）
+     * 7. 等待审核（预约成功之后可选择申请退款）
+     * 8. 审核未通过（未通过审核回到预约成功状态）
+     * 9. 交易取消（审核成功之后交易取消）
+     * @author dengxiao
+     */
     @Column
     private Long statusId;
     
@@ -198,7 +210,7 @@ public class TdOrder {
     @Column
     private Long typeId;
     
-    // 订单取消原因
+    // 申请退款原因
     @Column
     private String cancelReason;
     
@@ -274,7 +286,7 @@ public class TdOrder {
     @Column
     private Boolean isOnlinePay;
     
-    // 是否申请售后
+    // 是否申请退款
     @Column
     private Boolean isReturn;
     
@@ -286,8 +298,31 @@ public class TdOrder {
     @Column
     private Double trainService;
     
+    //预付定金金额
+    @Column(scale=2)
+    private Double firstPay;
     
-    public String getSmscode() {
+    //停车场名称
+    @Column
+    private String diyTitle;
+    
+    public String getDiyTitle() {
+		return diyTitle;
+	}
+
+	public void setDiyTitle(String diyTitle) {
+		this.diyTitle = diyTitle;
+	}
+
+	public Double getFirstPay() {
+		return firstPay;
+	}
+
+	public void setFirstPay(Double firstPay) {
+		this.firstPay = firstPay;
+	}
+
+	public String getSmscode() {
 		return smscode;
 	}
 

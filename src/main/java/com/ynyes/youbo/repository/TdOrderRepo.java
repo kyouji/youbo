@@ -111,4 +111,20 @@ public interface TdOrderRepo extends
     List<TdOrder> findByStatusId(Long statusId);
 //    List<TdOrder> findAll();
     
+    /**
+     * @author dengxiao
+     * 根据电话号码和交易状态查找订单（不分页）
+     */
+    
+    //查找指定用户的所有订单
+    List<TdOrder> findByUsernameOrderByOrderTimeDesc(String username);
+    
+    //查找指定用户已经完成的订单
+    List<TdOrder> findByUsernameAndStatusIdOrderByOrderTimeDesc(String username,Long statusId);
+    
+    //查找指定用户未完成的订单
+    List<TdOrder> findByUsernameAndStatusIdNotOrderByOrderTimeDesc(String username,Long statusId);
+    
+    
+    
 }

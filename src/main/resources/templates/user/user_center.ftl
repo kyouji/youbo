@@ -36,7 +36,7 @@
             <a href="/user/center/info"><img src="/user/images/aboutus_right.png" /></a>
         </dt>
         <dd>
-            <a style="color:#ff665e; background:none;">订单</a>
+            <a style="color:#ff665e; background:none;" href="/user/order">订单</a>
             <a style="color:#69afff; ">预约</a>
         </dd>
     </dl>

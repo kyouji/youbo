@@ -15,52 +15,80 @@
 </head>
 
 <body>
-
-<div class="header">
+    <div class="header">
         <p>订单中心</p>
         <a href="/user" class="a4"></a>
-</div>
-<div class="main">
-<ul class="order_list">
-        <li class="bespeak_list_style"><a>全部</a></li>
-        <li><a>已完成</a></li>
-        <li><a>已完成</a></li>
-    </ul>
-    
-  <dl class="order_01">
-        <dt><span>绿地海楼大厦地下停车场</span><p>-10.0</p></dt>
-        <dd><img src="/user/images/detail_month_01.png" /><span>2015-01-12   12:30</span></dd>
-        <dd><img src="/user/images/detail_month_02.png" /><span>2015-01-12   12:30</span><p class="order_red">等待取车</p></dd>
-  </dl>
-   <dl class="order_01">
-        <dt><span>绿地海楼大厦地下停车场</span><p>-10.0</p></dt>
-        <dd><img src="/user/images/detail_month_01.png" /><span>2015-01-12   12:30</span></dd>
-        <dd><img src="/user/images/detail_month_02.png" /><span>2015-01-12   12:30</span><p class="order_green">等待付款</p></dd>
-  </dl>
-   <dl class="order_01">
-        <dt><span>绿地海楼大厦地下停车场</span><p>-10.0</p></dt>
-        <dd><img src="/user/images/detail_month_01.png" /><span>2015-01-12   12:30</span></dd>
-        <dd><img src="/user/images/detail_month_02.png" /><span>2015-01-12   12:30</span><p>交易成功</p></dd>
-  </dl>
-   <dl class="order_01">
-        <dt><span>绿地海楼大厦地下停车场</span><p>-10.0</p></dt>
-        <dd><img src="/user/images/detail_month_01.png" /><span>2015-01-12   12:30</span></dd>
-        <dd><img src="/user/images/detail_month_02.png" /><span>2015-01-12   12:30</span><p>交易成功</p></dd>
-  </dl>
-   <dl class="order_01">
-        <dt><span>绿地海楼大厦地下停车场</span><p>-10.0</p></dt>
-        <dd><img src="/user/images/detail_month_01.png" /><span>2015-01-12   12:30</span></dd>
-        <dd><img src="/user/images/detail_month_02.png" /><span>2015-01-12   12:30</span><p>交易成功</p></dd>
-  </dl>
-   
-</div><!--main END-->
-
-
-
-
-
-
-
-
+    </div>
+    <div class="main">
+        <ul class="order_list">
+            <li class="bespeak_list_style"><a>全部</a></li>
+            <li><a>已完成</a></li>
+            <li><a>已完成</a></li>
+        </ul>
+        <div>
+            <#if all_order_list??&&all_order_list?size gt 0>
+                <div id="all_order_by_dx">
+                    <#list all_order_list as item>
+                        <dl class="order_01">
+                            <dt>
+                                <span>${item.diyTitle!''}</span>
+                                <#if item.totalPrice??&&item.totalPrice gt 0>                                    
+                                    <p>共消费：${item.totalPrice?string("0.00")}</p>
+                                <#else>
+                                    <#if item.firstPay??&&item.firstPay gt 0>
+                                        <p>支付定金：${item.firstPay?string("0.00")}</p>
+                                    </#if>
+                                </#if>
+                            </dt>
+                            <dd><img src="/user/images/detail_month_01.png" /><span>${item.orderTime?string("yyyy-MM-dd HH:mm")}</span></dd>
+                            <dd>
+                                <img src="/user/images/detail_month_02.png" />
+                                <#if item.finishTime??>
+                                    <span>${item.finishTime?string("yyyy-MM-dd HH:mm")}</span>
+                                </#if>
+                                <#if item.statusId??>
+                                    <#switch item.statusId>
+                                        <#case 1>
+                                            <p class="order_red">定金未支付</p>
+                                        <#break>
+                                        <#case 2>
+                                            <p class="order_red">定金已支付</p>
+                                        <#break>
+                                        <#case 3>
+                                            <p class="order_red">预约成功</p>
+                                        <#break>
+                                        <#case 4>
+                                            <p class="order_red">正在停车</p>
+                                        <#break>
+                                        <#case 5>
+                                            <p class="order_red">办理出库</p>
+                                        <#break>
+                                        <#case 6>
+                                            <p class="order_red">交易完成</p>
+                                        <#break>
+                                        <#case 7>
+                                            <p class="order_red">等待审核</p>
+                                        <#break>
+                                        <#case 8>
+                                            <p class="order_red">审核未通过</p>
+                                        <#break>
+                                        <#case 9>
+                                            <p class="order_red">交易取消</p>
+                                        <#break>
+                                    </#switch>
+                                </#if>
+                            </dd>
+                        </dl>
+                    </#list>
+                </div>
+            </#if>
+            <div id="finish_oder_by_dx">
+            
+            </div>
+            <div id="unfinish_order_by_dx">
+            
+            </div>
+        </div>
+    </div>
 </body>
 </html>

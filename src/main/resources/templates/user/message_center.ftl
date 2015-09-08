@@ -30,7 +30,7 @@
             <!--未读消息-->
             <#if unread_list??&&unread_list?size gt 0>
                 <#list unread_list as unread>
-                    <a href="/user/center/message/content/${unread.id}">
+                    <a href="/user/center/message/content/${unread.id?c}">
                         <ul>
                             <li class="li_1">${unread.title!''}</li>
                             <li><p class="time_1">${unread.releaseTime?string("yyyy-MM-dd")}</p></li>
@@ -43,7 +43,7 @@
             <#if read_list??&&read_list?size gt 0>
                 <#list read_list as read>
                     <ul>
-                        <a "/user/center/message/content/${read.id}">
+                        <a href="/user/center/message/content/${read.id?c}">
                             <li class="li_1">${read.title!''}</li>
                             <li><p class="time_1">${read.releaseTime?string("yyyy-MM-dd")}</p></li>
                         </a>
