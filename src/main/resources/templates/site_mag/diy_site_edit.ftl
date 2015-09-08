@@ -202,6 +202,14 @@ $(function () {
   </dl>
   
   <dl>
+    <dt>车位个数</dt>
+    <dd>
+      <input name="parkingTotalNumber" type="text" value="<#if diy_site?? && diy_site.longitude??>${diy_site.parkingTotalNumber!'0'}</#if>" class="input normal" datatype="*" errormsg="" sucmsg=" ">
+      <span class="Validform_checktip"></span>
+    </dd>
+  </dl>
+  
+  <dl>
     <dt>经度</dt>
     <dd>
       <input name="longitude" type="text" value="<#if diy_site?? && diy_site.longitude??>${diy_site.longitude?string("#.######")}</#if>" class="input normal" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,6})?$/" errormsg="" sucmsg=" ">

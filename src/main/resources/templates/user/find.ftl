@@ -29,7 +29,7 @@ $(document).ready(function(){
     <#list depot_list as item>
         <#if item.longitude?? && item.latitude??>
             
-        addMarker(${item.longitude?string("0.000000")}, ${item.latitude?string("0.000000")},'${item.title}','${item.address!""}',${item.id});
+        addMarker(${item.longitude?string("0.000000")}, ${item.latitude?string("0.000000")},'${item.title}','${item.address!""}',${item.id},${item.parkingNowNumber});
            
         </#if>
     </#list>
@@ -69,7 +69,7 @@ function loadMap()
 }
 
 //添加marker
-function addMarker(x, y, title,address,depotId)
+function addMarker(x, y, title,address,depotId,parkingNowNumber)
 {
     var marker = new BMap.Marker(new BMap.Point(x, y)); // 创建点
     map.addOverlay(marker);
@@ -77,7 +77,7 @@ function addMarker(x, y, title,address,depotId)
         $(".find_float").css('display','');
         $("#guid").html("<dl class='find01'>"+
         "<dt><span>" +title+ "</span><p>329m</p></dt>"+
-        "<dd><div>20 </div><span>10元/小时</span></dd>"+
+        "<dd><div>"+parkingNowNumber+" </div><span>10元/小时</span></dd>"+
         "<dd><p>"+address+"</p></dd>"+
         "</dl>"+
         "<dl class='find_btn'>"+
