@@ -25,7 +25,6 @@ public interface TdDiySiteRepo extends
     List<TdDiySite> findByIsEnableTrue();
     
     List<TdDiySite> findByCityAndIsEnableTrueOrderBySortIdAsc(String city);
-    
     /**
 	 * @author lc
 	 * @注释：

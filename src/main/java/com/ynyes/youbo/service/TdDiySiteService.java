@@ -91,6 +91,7 @@ public class TdDiySiteService {
      * @param ids
      * @return
      */
+    
     public List<TdDiySite> findAll(Iterable<Long> ids)
     {
         return (List<TdDiySite>) repository.findAll(ids);

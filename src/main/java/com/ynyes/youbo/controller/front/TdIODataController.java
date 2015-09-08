@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.ynyes.youbo.entity.TdDiySite;
 import com.ynyes.youbo.entity.TdIOData;
 import com.ynyes.youbo.service.TdDiySiteService;
 import com.ynyes.youbo.service.TdIODataService;
@@ -34,14 +35,19 @@ public class TdIODataController {
         { 
             ioData = tdIODataService.save(ioData);
             
-            if (ioData.getIoState().equals("正常进入"))
+            TdDiySite tds = tdDiySiteService.findOne(2L);
+            
+            if (null != tds)
             {
-                
-            }
-            else if (ioData.getIoState().equals("正常外出"))
-            {
-                
-                
+                if (ioData.getIoState().equals("正常进入"))
+                {
+                    tds.setParkingNowNumber(tds.getParkingNowNumber() - 1);
+                }
+                else if (ioData.getIoState().equals("正常外出"))
+                {
+                    tds.setParkingNowNumber(tds.getParkingNowNumber() + 1);
+                }
+                tdDiySiteService.save(tds);
             }
         }
 
