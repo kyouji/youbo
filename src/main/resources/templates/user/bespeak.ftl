@@ -11,7 +11,15 @@
 
 <link href="/user/css/common.css" rel="stylesheet" type="text/css" />
 <link href="/user/css/style.css" rel="stylesheet" type="text/css" />
+<script src="/user/js/Validform_v5.3.2_min.js"></script>
+<script type="text/javascript">
+$(function(){
 
+    $("#btn_login").click(function(){
+        alert("预约成功");
+    });
+});
+</script>
 </head>
 
 <body>
@@ -28,7 +36,7 @@
         <dd><a>请选择日期</a><input type="date" value="" /></dd>
         <dd><a>请选择时间</a><input type="time" value="" /></dd>
         <div class="clear20"></div>
-        <dd><a class="bespeak_btn" type="submit">提 交</a></dd>
+        <dd><a class="bespeak_btn" type="submit" id="submitId">提 交</a></dd>
     </dl>
 
     
