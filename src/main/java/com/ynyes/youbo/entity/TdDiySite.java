@@ -106,8 +106,44 @@ public class TdDiySite {
     // 车位分类
     @Column
     private String parkingClassification;
+    
+    // 车位个数
+    @Column
+    private Integer parkingTotalNumber;
+    
+    // 车位预约个数
+    @Column
+    private Integer parkingRefundNumber;
+    
+    // 车位剩余个数
+    @Column
+    private Integer parkingNowNumber;
 
-    public Long getId() {
+    public Integer getParkingTotalNumber() {
+		return parkingTotalNumber;
+	}
+
+	public void setParkingTotalNumber(Integer parkingTotalNumber) {
+		this.parkingTotalNumber = parkingTotalNumber;
+	}
+
+	public Integer getParkingRefundNumber() {
+		return parkingRefundNumber;
+	}
+
+	public void setParkingRefundNumber(Integer parkingRefundNumber) {
+		this.parkingRefundNumber = parkingRefundNumber;
+	}
+
+	public Integer getParkingNowNumber() {
+		return parkingNowNumber;
+	}
+
+	public void setParkingNowNumber(Integer parkingNowNumber) {
+		this.parkingNowNumber = parkingNowNumber;
+	}
+
+	public Long getId() {
         return id;
     }
 
