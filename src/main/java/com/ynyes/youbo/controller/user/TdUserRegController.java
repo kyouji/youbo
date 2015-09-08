@@ -66,6 +66,9 @@ public class TdUserRegController {
         TdUser user = tdUserService.addNewUser(username, password, mobile, email, carCode);
         user.setRoleId(1L);
         
+        //设置新的用户为C端用户
+        user.setRoleId(1L);
+        
         user = tdUserService.save(user);
         
         request.getSession().setAttribute("username", username);

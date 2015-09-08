@@ -25,35 +25,32 @@
     <!--头部结束-->
     
     <div class="ybtx">
-    <!--消息中心开始-->
-    <div class="message_center">
-        <ul>
-            <li class="li_1"><a>1武警清理爆炸现场周边小区</a></li>
-            <li><p class="time_1">2015-04-12</p></li>
-            <span class="red_dot"></span>
-        </ul>
-       <ul>
-            <li class="li_1"><a>武警清理爆炸现场周边小区</a></li>
-            <li><p class="time_1">2015-04-12</p></li>
-            <span class="red_dot"></span>
-        </ul>
-        <ul>
-            <li class="li_1"><a>武警清理爆炸现场周边小区</a></li>
-            <li><p class="time_1">2015-04-12</p></li>
-            <span class="red_dot"></span>
-        </ul>
-        <ul>
-            <li class="li_1"><a>武警清理爆炸现场周边小区</a></li>
-            <li><p class="time_1">2015-04-12</p></li>
-            <span class="red_dot"></span>
-        </ul>
+        <!--消息中心开始-->
+        <div class="message_center">
+            <!--未读消息-->
+            <#if unread_list??&&unread_list?size gt 0>
+                <#list unread_list as unread>
+                    <a href="/user/center/message/content/${unread.id}">
+                        <ul>
+                            <li class="li_1">${unread.title!''}</li>
+                            <li><p class="time_1">${unread.releaseTime?string("yyyy-MM-dd")}</p></li>
+                            <span class="red_dot"></span>
+                        </ul>
+                    </a>
+                </#list>
+            </#if>
+            <!--已读消息-->
+            <#if read_list??&&read_list?size gt 0>
+                <#list read_list as read>
+                    <ul>
+                        <a "/user/center/message/content/${read.id}">
+                            <li class="li_1">${read.title!''}</li>
+                            <li><p class="time_1">${read.releaseTime?string("yyyy-MM-dd")}</p></li>
+                        </a>
+                    </ul>
+                </#list>
+            </#if>
+        </div>
     </div>
-
-
-
-
-
-
-
 </body>
 </html>

@@ -48,7 +48,7 @@ $(document).ready(function(){
                     <span class="Validform_checktip Validform_wrong"></span>
                 </div>
                 <div class="logintext">         
-                    <input name="password" id="password" datatype="*" recheck="password" nullmsg="请再次输入密码！" errormsg="两次输入的密码不一致！" type="password" class="logintext01" placeholder="重复密码" />
+                    <input name="repassword" id="password" datatype="*" recheck="password" nullmsg="请再次输入密码！" errormsg="两次输入的密码不一致！" type="password" class="logintext01" placeholder="重复密码" />
                     <span class="Validform_checktip Validform_wrong"></span>
                 </div>
                 <div class="logintext logintext_y">
