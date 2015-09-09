@@ -374,8 +374,8 @@ body{ background:#efefef; }
 .share01 dd a span{ display:block; width:100%; text-align:center; margin-top:5%;}
 
 
-/*重复的样式*/
-/****弹窗****/
+/*閲嶅鐨勬牱寮�/
+/****寮圭獥****/
 #bg{width:100%;height:960px;position:absolute;top:0px;left:0px;filter: Alpha(opacity=50);opacity:0.5; background:#000000; display:none;z-index: 999;}
 #popbox{position:absolute;left:10%;top:30%;width:80%;display:none; background:#fff;border-radius:10px;z-index: 999;}
 #popbox p{ text-align:center; font-size: 1em;padding:5% 8%;}
@@ -391,7 +391,7 @@ body{ background:#efefef; }
 #popbox .yes_no{overflow:hidden;border-top:solid 1px #dddddd;padding:0;}
 #popbox .yes_no a{width: 33.33%;display:block;float:left;padding:5% 8%;border-right:solid 1px #dddddd;}
 #popbox .yes_no .blue{color:#0e5baa;}
-/****弹窗****/
+/****寮圭獥****/
 
 /*withdrawals_record*/
 .withdraw_record_list{width:100%;}
@@ -441,7 +441,7 @@ body{ background:#efefef; }
 .order_01 { display:block; overflow:hidden;  width:92%; padding-left:4%; padding-right:4%; margin-top:3%; background:white;}
 .order_01 dt{ height:40px; width:100%; float:left;}
 .order_01 dt span{ height:40px;  float:left; line-height:40px; display:block; font-size:1.3em;}
-.order_01 dt p{ height:40px;  float:right; line-height:40px; font-size:1.3em;}
+.order_01 dt p{ height:40px;  float:right; line-height:40px; font-size:1.3em;color:#ef0000}
 .order_01 dd{ height:40px; width:100%;float:left;}
 .order_01 dd span{ height:40px;  float:left; line-height:40px; display:block; margin-left:4px; color:#999;}
 .order_01 dd p{ height:40px;  float:right; line-height:40px;}
@@ -453,3 +453,4 @@ body{ background:#efefef; }
 .order_list_style{ border-bottom:#0e5baa 2px solid;}
 .order_red{ color:#ef0000;}
 .order_green{ color:#00bf70;}
+

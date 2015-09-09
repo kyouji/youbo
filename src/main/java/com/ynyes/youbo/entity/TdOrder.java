@@ -306,6 +306,7 @@ public class TdOrder {
     @Column
     private String diyTitle;
     
+    //
     public String getDiyTitle() {
 		return diyTitle;
 	}
