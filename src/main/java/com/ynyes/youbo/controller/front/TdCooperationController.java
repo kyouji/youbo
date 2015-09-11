@@ -212,7 +212,7 @@ public class TdCooperationController {
 		// 如果订单的状态为6（交易完成），代表已经支付了停车费用
 		if (6L == order.getStatusId()) {
 			System.err.println("确认该订单已经交清费用");
-			res.put("status", 1);
+			res.put("status", 0);
 			res.put("message", "已支付停车费用");
 		}else{
 			res.put("message", "未支付停车费用");
@@ -227,8 +227,8 @@ public class TdCooperationController {
 	@ResponseBody
 	public Map<String, Object> uploadImg(@RequestParam MultipartFile imgFile) {
 		Map<String, Object> res = new HashMap<>();
-		// status代表处理状态，2代表失败
-		res.put("status", 2);
+		// status代表处理状态，-1代表失败
+		res.put("status", -1);
 
 		System.err.println("开始验证图片是否存在");
 		if (null == imgFile || imgFile.isEmpty() || null == imgFile.getName()) {
@@ -261,7 +261,9 @@ public class TdCooperationController {
 			stream.write(bytes);
 			stream.close();
 			System.err.println("文件流关闭");
+			res.put("status", 0);
 		} catch (Exception e) {
+			res.put("message", "产生了IO异常");
 			e.printStackTrace();
 		}
 		return res;
