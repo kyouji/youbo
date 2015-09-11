@@ -315,7 +315,7 @@ public class TdUserCenterController {
 	}
 
 	/**
-	 * @author dengxiao 小细详情
+	 * @author dengxiao 消息详情
 	 */
 	@RequestMapping("/message/content/{id}")
 	public String messageContent(@PathVariable Long id, ModelMap map) {
@@ -364,6 +364,11 @@ public class TdUserCenterController {
 	 */
 	@RequestMapping("/info/edit")
 	public String infoEdit(HttpServletRequest req, String editType, ModelMap map) {
+		String username = (String) req.getSession().getAttribute("username");
+		TdUser user = tdUserService.findByUsernameAndIsEnabled(username);
+		if(null == user){
+			return "/user/login";
+		}
 		switch (editType) {
 		case "username":// 用户名
 			return "/user/user_info_username";
@@ -457,6 +462,87 @@ public class TdUserCenterController {
 	{
 		req.getSession().invalidate();
 		return "redirect:/user";
+	}
+	
+	/**
+	 * @author dengxiao
+	 * 修改密码时，验证原密码是否输入正确的方法
+	 */
+	@RequestMapping("/password/check")
+	@ResponseBody
+	public Map<String, Object> checkOldPassword(String param,HttpServletRequest req){
+		Map<String, Object> res = new HashMap<>();
+		res.put("status", "n");
+		res.put("info", "原密码输入错误!");
+		String username = (String) req.getSession().getAttribute("username");
+		TdUser user = tdUserService.findByUsernameAndIsEnabled(username);
+		if(null != user){
+			if(user.getPassword().equals(param)){
+				res.put("status", "y");
+				res.put("info", "");
+			}
+		}
+		return res;
+	}
+	
+	@RequestMapping(value="/password/save")
+	public String savePassword(String password,HttpServletRequest req,ModelMap map){ 
+		String username = (String) req.getSession().getAttribute("username");
+		TdUser user = tdUserService.findByUsernameAndIsEnabled(username);
+		if(null == user){
+			return "/user/login";
+		}
+		user.setPassword(password);
+		tdUserService.save(user);
+		return "redirect:/user/center/info";
+	}
+	
+	@RequestMapping(value="/info/pay")
+	public String pay(HttpServletRequest req,ModelMap map){
+		String username = (String) req.getSession().getAttribute("username");
+		TdUser user = tdUserService.findByUsernameAndIsEnabled(username);
+		if(null == user){
+			return "/user/login";
+		}
+		if(null != user.getPayPassword()){
+			String payPassword = user.getPayPassword();
+			map.addAttribute("payPassword",payPassword);
+		}
+		return "/user/user_info_pay_password";
+		
+	}
+	
+	/**
+	 * @author dengxiao
+	 * 修改支付密码时，验证原密码是否输入正确的方法
+	 */
+	@RequestMapping("/pay/check")
+	@ResponseBody
+	public Map<String, Object> checkPayPassword(String param,HttpServletRequest req){
+		Map<String, Object> res = new HashMap<>();
+		res.put("status", "n");
+		res.put("info", "原支付密码输入错误!");
+		String username = (String) req.getSession().getAttribute("username");
+		TdUser user = tdUserService.findByUsernameAndIsEnabled(username);
+		if(null != user){
+			if(user.getPayPassword().equals(param)){
+				res.put("status", "y");
+				res.put("info", "");
+			}
+		}
+		return res;
+	}
+	
+	@RequestMapping(value="/pay/save")
+	public String savePayPassword(String password,HttpServletRequest req,ModelMap map){ 
+		String username = (String) req.getSession().getAttribute("username");
+		TdUser user = tdUserService.findByUsernameAndIsEnabled(username);
+		if(null == user){
+			return "/user/login";
+		}
+		user.setPayPassword(password);
+		tdUserService.save(user);
+		return "redirect:/user/center/info";
 	}
 	
 }

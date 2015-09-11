@@ -105,6 +105,9 @@ public class TdCooperationController {
 				theOrder.setOrderTime(new Date());
 				System.err.println("开始存储新的订单");
 				order = tdOrderService.save(theOrder);
+				System.err.println("设置停车场的剩余数量-1");
+				diySite.setParkingNowNumber(diySite.getParkingNowNumber()-1);
+				tdDiySiteService.save(diySite);
 			}
 			System.err.println("继续设置属性");
 			// 设置订单的入库时间
@@ -134,6 +137,9 @@ public class TdCooperationController {
 			res.put("status", 1);
 			// 设置消息提示
 			res.put("message", "出库信息录入成功");
+			System.err.println("设置停车场剩余数量+1");
+			diySite.setParkingNowNumber(diySite.getParkingNowNumber()+1);
+			tdDiySiteService.save(diySite);
 		}
 		System.err.println("存储订单信息（属性设置完毕）");
 		tdOrderService.save(order);

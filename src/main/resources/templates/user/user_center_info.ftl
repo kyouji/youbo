@@ -24,7 +24,7 @@
         <div class="main">
             <div class="personal_info">
                 <div class="personal_info_img">
-                    <a><img src="${user.headImageUri!''}"></a>
+                    <a><img src="${user.headImageUri!'/user/images/default_head.png'}"></a>
                 </div>
                 <p></p>
             </div>
@@ -34,17 +34,18 @@
                 <dd><div>车牌</div><p>${user.carCode!''}</p><a><span>修改</span><img src="/user/images/setting_guide.png" /></a></dd>
                 <dd>
                     <div>登录密码</div>
-                    <p>
-                        <#list 1..user.password?length as item>
-                            *
-                        </#list>
-                    </p>
+                    <p>********</p>
                     <a href="/user/center/info/edit?editType=password">
                         <span>修改</span>
                         <img src="/user/images/setting_guide.png" />
                     </a>
                 </dd>
-                <dd><div>支付密码</div><p></p><a><span>设置/修改</span><img src="/user/images/setting_guide.png" /></a></dd>
+                <dd>
+                <div>支付密码</div>
+                <p></p>
+                <a href="/user/center/info/pay">
+                <span>设置/修改</span>
+                <img src="/user/images/setting_guide.png" /></a></dd>
             </dl>
         </div>
     </#if>

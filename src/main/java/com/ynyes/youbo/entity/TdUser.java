@@ -215,7 +215,19 @@ public class TdUser {
     @Column
     private Long pointGetByShareGoods;
     
-    public List<TdBankcard> getBankcardList() {
+    // 支付密码
+    @Column
+    private String payPassword;
+    
+    public String getPayPassword() {
+		return payPassword;
+	}
+
+	public void setPayPassword(String payPassword) {
+		this.payPassword = payPassword;
+	}
+
+	public List<TdBankcard> getBankcardList() {
 		return bankcardList;
 	}
 
