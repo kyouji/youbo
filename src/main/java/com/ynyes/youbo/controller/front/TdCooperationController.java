@@ -160,8 +160,8 @@ public class TdCooperationController {
 			res.put("totalPrice", order.getTotalPrice());
 			// 将支付的定金返回
 			res.put("firstPay", order.getFirstPay());
-			// 将订单的ID返回
-			res.put("orderId", order.getId());
+			// 将订单的id存储到session中
+			request.getSession().setAttribute("orderId", order.getId());
 			System.err.println("属性设置完毕");
 			// 设置status的值为0，代表处理成功
 			res.put("status", 0);
@@ -182,7 +182,7 @@ public class TdCooperationController {
 	 */
 	@RequestMapping(value = "/payInfo")
 	@ResponseBody
-	public Map<String, Object> isPay(Long orderId, HttpServletRequest request) {
+	public Map<String, Object> isPay(HttpServletRequest request) {
 		Map<String, Object> res = new HashMap<>();
 		// status代表处理状态，-1代表失败
 		res.put("status", -1);
@@ -198,8 +198,9 @@ public class TdCooperationController {
 
 
 		System.err.println("开始获取订单信息");
+		Long orderId = (Long) request.getSession().getAttribute("orderId");
 		if(null == orderId){
-			res.put("message", "未接收到orderId");
+			res.put("message", "未获得指定订单的编号");
 			return res;
 		}
 		TdOrder order = tdOrderService.findByDiyIdAndId(diySite.getId(), orderId);
