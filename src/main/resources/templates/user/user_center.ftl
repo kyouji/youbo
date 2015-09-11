@@ -64,10 +64,6 @@
         <dd><a href="/user/center/message">消息中心</a></dd>
         <dt><a href="/user/center/message"><img src="/user/images/aboutus_right.png" /></a></dt>
     </dl>
-    <dl class="mycenter_last">
-        <dd><a href="/user/center/info">个人信息</a></dd>
-        <dt><a href="/user/center/info"><img src="/user/images/aboutus_right.png" /></a></dt>
-    </dl>
     </a>
     <a>
     <dl class="mycenter_last">

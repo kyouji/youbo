@@ -49,4 +49,10 @@ public interface TdDiySiteRepo extends
      * 根据停车场的登陆用户名和密码查找到指定的停车场信息
      */
     TdDiySite findByUsernameAndPasswordAndIsEnableTrue(String username,String password);
+    
+    /**
+     * @author dengxiao
+     * 根据停车场登陆名查找停车场（用于判断是否有此登陆名的停车场）
+     */
+    TdDiySite findByUsername(String username);
 }

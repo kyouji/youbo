@@ -225,4 +225,15 @@ public class TdDiySiteService {
     	}
     	return repository.findByUsernameAndPasswordAndIsEnableTrue(username, password);
     };
+    
+    /**
+     * @author dengxiao
+     * 根据停车场登陆名查找停车场（用于判断是否有此登陆名的停车场）
+     */
+    public TdDiySite findByUsername(String username){
+    	if(null == username){
+    		return null;
+    	}
+    	return repository.findByUsername(username);
+    }
 }

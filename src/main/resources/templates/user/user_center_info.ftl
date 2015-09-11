@@ -34,18 +34,24 @@
                 <dd><div>车牌</div><p>${user.carCode!''}</p><a><span>修改</span><img src="/user/images/setting_guide.png" /></a></dd>
                 <dd>
                     <div>登录密码</div>
-                    <p>********</p>
+                    <p>******</p>
                     <a href="/user/center/info/edit?editType=password">
                         <span>修改</span>
                         <img src="/user/images/setting_guide.png" />
                     </a>
                 </dd>
                 <dd>
-                <div>支付密码</div>
-                <p></p>
-                <a href="/user/center/info/pay">
-                <span>设置/修改</span>
-                <img src="/user/images/setting_guide.png" /></a></dd>
+                    <div>支付密码</div>
+                    <p>
+                        <#if user.payPassword??>
+                            ******
+                        </#if>
+                    </p>
+                    <a href="/user/center/info/pay">
+                        <span>设置/修改</span>
+                        <img src="/user/images/setting_guide.png" />
+                    </a>
+                </dd>
             </dl>
         </div>
     </#if>
