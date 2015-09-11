@@ -52,9 +52,12 @@ public class TdCooperationController {
 		// 声明一个变量result用于代表登陆结果，其初始值为"no"，表示登陆失败
 		Boolean result = new Boolean(true);
 		TdDiySite diySite = tdDiySiteService.findByUsernameAndPasswordAndIsEnableTrue(username, password);
+		System.err.println("获取到停车场的信息，进行判断");
 		if (null != diySite) {
 			result = false;
+			System.err.println("登陆成功");
 			request.getSession().setAttribute("diySite", diySite);
+			System.err.println("将登陆的停车场信息存储到session中");
 		}
 		return result;
 	}
@@ -68,32 +71,47 @@ public class TdCooperationController {
 		Map<String, Object> res = new HashMap<>();
 		// status代表处理状态，2代表失败
 		res.put("status", 2);
+		System.err.println("开始从session中读取停车场信息");
 		TdDiySite diySite = (TdDiySite) request.getSession().getAttribute("diySite");
-
-		// 保存此出入库信息
-		ioData = tdIoDataService.save(ioData);
+		System.err.println("读取停车场信息成功，开始验证");
 
 		if (null == diySite) {
+			System.err.println("没有获取到已登陆的停车场用户的信息");
 			res.put("message", "未获取到登陆信息");
 			return res;
 		}
+		System.err.println("session中的停车场信息验证通过");
+		
+		// 保存此出入库信息
+		System.err.println("开始保存出入库信息");
+		ioData = tdIoDataService.save(ioData);
+		System.err.println("已经保存了进出库信息");
+		
+		System.err.println("开始获取订单信息");
 		// 根据车牌号码停车场id订单状态（状态为3，预约成功）查找一系列订单信息，按照时间倒序排序，选择第一个（第一个即是指定用户在指定停车场预约成功的最后一个订单）
 		TdOrder order = tdOrderService.findTopByCarCodeAndDiyIdAndStatusIdOrderByOrderTimeDesc(ioData.getBusNo(),
 				diySite.getId());
-
+		System.err.println("订单信息已经获取");
+		
 		if ("正常进入".equals(ioData.getIoState())) {
+			System.err.println("接收到车辆入库数据");
 			// 如果说没有找到相对应的订单，则表示该车辆没有预约，且立即为它生成一个订单
 			if (null == order) {
+				System.err.println("未预约车辆进入车库，创建一个新的订单");
 				TdOrder theOrder = new TdOrder();
+				System.err.println("开始设置属性");
 				theOrder.setDiyId(diySite.getId());
 				theOrder.setDiyTitle(diySite.getTitle());
 				theOrder.setOrderTime(new Date());
+				System.err.println("开始存储新的订单");
 				order = tdOrderService.save(theOrder);
 			}
+			System.err.println("继续设置属性");
 			// 设置订单的入库时间
 			order.setInputTime(ioData.getIoDate());
 			// 将订单的状态改变为4L（正在停车）
 			order.setStatusId(4L);
+			System.err.println("属性设置完毕");
 			// 设置status的值为1，代表处理成功
 			res.put("status", 1);
 			// 设置消息提示
@@ -101,20 +119,24 @@ public class TdCooperationController {
 		}
 
 		if ("正常外出".equals(ioData.getIoState())) {
+			System.err.println("接收到车辆出库数据，开始设置属性");
 			order.setOutputTime(ioData.getIoDate());
 			// 在此计算停车费用，并将其存储到order的totalPrice字段上
-
+			
 			// 将计算出来的总价格返回
 			res.put("totalPrice", order.getTotalPrice());
 			// 将支付的定金返回
 			res.put("firstPay", order.getFirstPay());
 			// 将订单的ID返回
 			res.put("orderId", order.getId());
+			System.err.println("属性设置完毕");
 			// 设置status的值为1，代表处理成功
 			res.put("status", 1);
 			// 设置消息提示
 			res.put("message", "出库信息录入成功");
 		}
+		System.err.println("存储订单信息（属性设置完毕）");
+		tdOrderService.save(order);
 		return res;
 
 	}
@@ -126,20 +148,25 @@ public class TdCooperationController {
 	@ResponseBody
 	public Map<String, Object> isPay(Long orderId, HttpServletRequest request) {
 		// 获取该停车场的信息
+		System.err.println("开始获取session中的停车场信息");
 		TdDiySite diySite = (TdDiySite) request.getSession().getAttribute("diySite");
+		System.err.println("停车场信息获取完毕");
 		Map<String, Object> res = new HashMap<>();
 
 		// status代表处理状态，2代表失败
 		res.put("status", 2);
 
+		System.err.println("开始获取订单信息");
 		TdOrder order = tdOrderService.findByDiyIdAndId(diySite.getId(), orderId);
 		if (null == order) {
+			System.err.println("未能获取到正确的订单信息");
 			res.put("message", "未获取到订单信息");
 			return res;
 		}
-
+		System.err.println("订单信息获取成功");
 		// 如果订单的状态为6（交易完成），代表已经支付了停车费用
 		if (6L == order.getStatusId()) {
+			System.err.println("确认该订单已经交清费用");
 			res.put("status", 1);
 			res.put("message", "已支付停车费用");
 		}
@@ -156,28 +183,37 @@ public class TdCooperationController {
 		// status代表处理状态，2代表失败
 		res.put("status", 2);
 
+		System.err.println("开始验证图片是否存在");
 		if (null == imgFile || imgFile.isEmpty() || null == imgFile.getName()) {
+			System.err.println("图片不存在");
 			res.put("message", "图片不存在");
 			return res;
 		}
-
+		System.err.println("图片存在通过验证，开始获取图片名称");
 		String name = imgFile.getOriginalFilename();
+		System.err.println("开始获取图片后缀名");
 		String ext = name.substring(name.lastIndexOf("."));
 
 		try {
+			System.err.println("将图片转换未字节数组");
 			byte[] bytes = imgFile.getBytes();
 
+			System.err.println("获取当前时间信息已生成新的名字");
 			Date dt = new Date(System.currentTimeMillis());
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+			System.err.println("定义存储到服务器上的图片的名字");
 			String fileName = sdf.format(dt) + ext;
-
+			System.err.println("设置存储路径");
 			String uri = ImageRoot + "/" + fileName;
-
+			
+			System.err.println("在指定的路径上生成文件");
 			File file = new File(uri);
 
 			BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(file));
+			System.err.println("开始写入文件流");
 			stream.write(bytes);
 			stream.close();
+			System.err.println("文件流关闭");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

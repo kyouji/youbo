@@ -345,7 +345,13 @@ public class TdUserCenterController {
 	 */
 	@RequestMapping("/info")
 	public String info(HttpServletRequest req, Device device, ModelMap map) {
-		return "/user/user_info";
+		String username = (String) req.getSession().getAttribute("username");
+		TdUser user = tdUserService.findByUsernameAndIsEnabled(username);
+		if(null == user){
+			return "/user/login";
+		}
+		map.addAttribute("user", user);
+		return "/user/user_center_info";
 	}
 
 	/**
@@ -452,4 +458,5 @@ public class TdUserCenterController {
 		req.getSession().invalidate();
 		return "redirect:/user";
 	}
+	
 }
