@@ -405,4 +405,12 @@ public class TdOrderService {
     	}
     	return repository.findByDiyIdAndId(diyId, orderId);
     }
+    
+    //根据车牌号码停车场id订单状态（状态为3，预约成功）查找一系列订单信息，按照时间倒序排序，选择第一个（第一个即是指定用户在指定停车场预约成功的最后一个订单）
+    public TdOrder findTopByCarCodeAndDiyIdAndStatusIdOrderByOrderTimeDesc(String carCode,Long diyId){
+    	if(null == carCode||null == diyId){
+    		return null;
+    	}
+    	return repository.findTopByCarCodeAndDiyIdAndStatusIdOrderByOrderTimeDesc(carCode, diyId, 3L);
+    };
 }

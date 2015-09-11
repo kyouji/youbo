@@ -130,6 +130,9 @@ public interface TdOrderRepo extends
     
     //根据停车场的id和订单id查找订单
     TdOrder findByDiyIdAndId(Long diyId,Long orderId);
+    
+    //根据车牌号码停车场id订单状态（状态为3，预约成功）查找一系列订单信息，按照时间倒序排序，选择第一个（第一个即是指定用户在指定停车场预约成功的最后一个订单）
+    TdOrder findTopByCarCodeAndDiyIdAndStatusIdOrderByOrderTimeDesc(String carCode,Long diyId,Long statusId);
 }
 
 
