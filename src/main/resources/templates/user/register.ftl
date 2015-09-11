@@ -40,7 +40,7 @@ $(document).ready(function(){
         <div class="mian">
             <form action="/user/reg/save" method="post" id="regist_form">
                 <div class="logintext">         
-                    <input name="username" id="username" type="text" datatype="m" ajaxurl="/user/reg/check/username" nullmsg="请输入手机号码！" errormsg="请输入一个正确的手机号码！" class="logintext01" placeholder="手机号" />
+                    <input name="username" id="username" type="text" datatype="m" ajaxurl="/user/reg/check/username" nullmsg="请输入手机号码！" errormsg="手机号码格式不正确！" class="logintext01" placeholder="手机号" />
                     <span class="Validform_checktip Validform_wrong"></span>
                 </div>
                 <div class="logintext">         
@@ -48,7 +48,7 @@ $(document).ready(function(){
                     <span class="Validform_checktip Validform_wrong"></span>
                 </div>
                 <div class="logintext">         
-                    <input name="repassword" id="password" datatype="*" recheck="password" nullmsg="请再次输入密码！" errormsg="两次输入的密码不一致！" type="password" class="logintext01" placeholder="重复密码" />
+                    <input name="repassword" id="repassword" datatype="*" recheck="password" nullmsg="请再次输入密码！" errormsg="两次输入的密码不一致！" type="password" class="logintext01" placeholder="重复密码" />
                     <span class="Validform_checktip Validform_wrong"></span>
                 </div>
                 <div class="logintext logintext_y">

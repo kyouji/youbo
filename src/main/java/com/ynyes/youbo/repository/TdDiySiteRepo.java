@@ -31,4 +31,22 @@ public interface TdDiySiteRepo extends
 	 */
     TdDiySite findByUsernameAndIsEnableTrue(String username);
     List<TdDiySite> findByDisctrictAndIsEnableTrue(String disctrict);
+    
+    /**
+     * @author dengxiao
+     * 根据名称查找到指定的停车场信息
+     */
+    TdDiySite findByTitleAndIsEnableTrue(String title);
+    
+    /**
+     * @author dengxiao
+     * 根据ID查找到指定停车场的信息
+     */
+    TdDiySite findByIdAndIsEnableTrue(Long id);
+    
+    /**
+     * @author dengxiao
+     * 根据停车场的登陆用户名和密码查找到指定的停车场信息
+     */
+    TdDiySite findByUsernameAndPasswordAndIsEnableTrue(String username,String password);
 }

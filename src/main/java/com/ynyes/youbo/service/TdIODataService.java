@@ -106,14 +106,14 @@ public class TdIODataService {
         return (List<TdIOData>) repository.findAll(new Sort(Direction.ASC, "sortId"));
     }
     
-    public TdIOData findByBusNoAndIoTime(String busNo, Date ioTime)
+    public TdIOData findByBusNoAndIoDate(String busNo, Date ioTime)
     {
         if (null == busNo || null == ioTime)
         {
             return null;
         }
         
-        return repository.findTopByBusNoAndIoTime(busNo, ioTime);
+        return repository.findTopByBusNoAndIoDate(busNo, ioTime);
     }
     
     /**

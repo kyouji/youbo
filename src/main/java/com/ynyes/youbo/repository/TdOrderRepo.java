@@ -125,6 +125,11 @@ public interface TdOrderRepo extends
     //查找指定用户未完成的订单
     List<TdOrder> findByUsernameAndStatusIdNotOrderByOrderTimeDesc(String username,Long statusId);
     
+    //根据车牌号码查找订单
+    TdOrder findByCarCode(String carCode);
     
-    
+    //根据停车场的id和订单id查找订单
+    TdOrder findByDiyIdAndId(Long diyId,Long orderId);
 }
+
+

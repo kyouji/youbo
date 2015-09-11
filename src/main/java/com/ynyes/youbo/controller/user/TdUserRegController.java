@@ -21,7 +21,7 @@ import com.ynyes.youbo.util.VerifServlet;
 @RequestMapping(value = "/user/reg")
 public class TdUserRegController {
 	
-	 @Autowired
+	@Autowired
     private TdUserService tdUserService;
 	
 	@RequestMapping(value = "/code", method = RequestMethod.GET)

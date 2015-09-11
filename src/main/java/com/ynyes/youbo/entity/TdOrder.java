@@ -306,8 +306,92 @@ public class TdOrder {
     @Column
     private String diyTitle;
     
-    //
-    public String getDiyTitle() {
+    //停车场ID
+    @Column
+    private Long diyId;
+    
+    //订单支付过期时间
+    @Column
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    private Date orderTimeExpire;
+    
+    //订单取消原因
+    @Column
+    private String abolishReason;
+    
+    //审核状态
+    @Column
+    private String checkStatus;
+    
+    //停车编号
+    @Column
+    private String carNo;
+    
+    //入库时间
+    @Column
+    private Date inputTime;
+    
+    //出库时间
+    @Column
+    private Date outputTime;
+    
+    public Date getInputTime() {
+		return inputTime;
+	}
+
+	public void setInputTime(Date inputTime) {
+		this.inputTime = inputTime;
+	}
+
+	public Date getOutputTime() {
+		return outputTime;
+	}
+
+	public void setOutputTime(Date outputTime) {
+		this.outputTime = outputTime;
+	}
+
+	public String getCarNo() {
+		return carNo;
+	}
+
+	public void setCarNo(String carNo) {
+		this.carNo = carNo;
+	}
+
+	public String getCheckStatus() {
+		return checkStatus;
+	}
+
+	public void setCheckStatus(String checkStatus) {
+		this.checkStatus = checkStatus;
+	}
+
+	public Long getDiyId() {
+		return diyId;
+	}
+
+	public void setDiyId(Long diyId) {
+		this.diyId = diyId;
+	}
+
+	public String getAbolishReason() {
+		return abolishReason;
+	}
+
+	public void setAbolishReason(String abolishReason) {
+		this.abolishReason = abolishReason;
+	}
+
+	public Date getOrderTimeExpire() {
+		return orderTimeExpire;
+	}
+
+	public void setOrderTimeExpire(Date orderTimeExpire) {
+		this.orderTimeExpire = orderTimeExpire;
+	}
+
+	public String getDiyTitle() {
 		return diyTitle;
 	}
 

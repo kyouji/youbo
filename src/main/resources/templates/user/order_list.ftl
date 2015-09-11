@@ -71,24 +71,32 @@
                         <dl class="order_01">
                             <dt>
                                 <span>${item.diyTitle!''}</span>
-                                <#if item.totalPrice??&&item.totalPrice gt 0>                                    
-                                    <p>共消费：${item.totalPrice?string("0.00")}</p>
+                                <#if item.statusId??&&item.statusId==9>
+                                    <p>交易已取消</p>
                                 <#else>
-                                    <#if item.firstPay??&&item.firstPay gt 0>
-                                        <p>支付定金：${item.firstPay?string("0.00")}</p>
+                                    <#if item.totalPrice??&&item.totalPrice gt 0>                                    
+                                        <p>共消费：${item.totalPrice?string("0.00")}</p>
+                                    <#else>
+                                        <#if item.firstPay??&&item.firstPay gt 0>
+                                            <p>支付定金：${item.firstPay?string("0.00")}</p>
+                                        <#else>
+                                            <p>未支付定金</p>
+                                        </#if>
                                     </#if>
                                 </#if>
                             </dt>
                             <dd><img src="/user/images/detail_month_01.png" /><span>${item.orderTime?string("yyyy-MM-dd HH:mm")}</span></dd>
                             <dd>
+                                <img src="/user/images/detail_month_02.png" />
                                 <#if item.finishTime??>
-                                    <img src="/user/images/detail_month_02.png" />
                                     <span>${item.finishTime?string("yyyy-MM-dd HH:mm")}</span>
+                                <#else>
+                                    <span>未完成</span>                                    
                                 </#if>
                                 <#if item.statusId??>
                                     <#switch item.statusId>
                                         <#case 1>
-                                            <p class="order_red">定金未支付</p>
+                                            <p class="order_red">未支付定金</p>
                                         <#break>
                                         <#case 2>
                                             <p class="order_green">定金已支付</p>
@@ -151,12 +159,18 @@
                     <dl class="order_01">
                         <dt>
                             <span>${item.diyTitle!''}</span>
-                            <#if item.totalPrice??&&item.totalPrice gt 0>                                    
-                                <p>共消费：${item.totalPrice?string("0.00")}</p>
+                            <#if item.statusId??&&item.statusId==9>
+                                <p>交易已取消</p>
                             <#else>
-                                <#if item.statusId??&&item.statusId!=9>
-                                    <#if item.firstPay??&&item.firstPay gt 0>
-                                        <p>支付定金：${item.firstPay?string("0.00")}</p>
+                                <#if item.totalPrice??&&item.totalPrice gt 0>                                    
+                                    <p>共消费：${item.totalPrice?string("0.00")}</p>
+                                <#else>
+                                    <#if item.statusId??&&item.statusId!=9>
+                                        <#if item.firstPay??&&item.firstPay gt 0>
+                                            <p>支付定金：${item.firstPay?string("0.00")}</p>
+                                        <#else>
+                                            <p>未支付定金</p>
+                                        </#if>
                                     </#if>
                                 </#if>
                             </#if>
@@ -166,14 +180,16 @@
                             <span>${item.orderTime?string("yyyy-MM-dd HH:mm")}</span>
                         </dd>
                         <dd>
-                            <#if item.finishTime??>
-                                <img src="/user/images/detail_month_02.png" />
-                                <span>${item.finishTime?string("yyyy-MM-dd HH:mm")}</span>
-                            </#if>
+                            <img src="/user/images/detail_month_02.png" />
+                                <#if item.finishTime??>
+                                    <span>${item.finishTime?string("yyyy-MM-dd HH:mm")}</span>
+                                <#else>
+                                    <span>未完成</span>
+                                </#if>
                             <#if item.statusId??>
                                 <#switch item.statusId>
                                     <#case 1>
-                                        <p class="order_red">定金未支付</p>
+                                        <p class="order_red">未支付定金</p>
                                     <#break>
                                     <#case 2>
                                         <p class="order_green">定金已支付</p>

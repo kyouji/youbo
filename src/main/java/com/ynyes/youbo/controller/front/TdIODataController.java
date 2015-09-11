@@ -31,7 +31,7 @@ public class TdIODataController {
     public String addCart(TdIOData ioData,
             HttpServletRequest req) {
         
-        if (null == tdIODataService.findByBusNoAndIoTime(ioData.getBusNo(), ioData.getIoTime()))
+        if (null == tdIODataService.findByBusNoAndIoDate(ioData.getBusNo(), ioData.getIoDate()))
         { 
             ioData = tdIODataService.save(ioData);
             

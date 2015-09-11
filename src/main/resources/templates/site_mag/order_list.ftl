@@ -44,19 +44,23 @@ function __doPostBack(eventTarget, eventArgument) {
                 <#if 0==statusId>
                     <span>全部订单</span>
                 <#elseif 1==statusId>
-                    <span>待确认订单</span>
+                    <span>定金未支付</span>
                 <#elseif 2==statusId>
-                    <span>待付款订单</span>
+                    <span>定金已支付</span>
                 <#elseif 3==statusId>
-                    <span>待发货订单</span>
+                    <span>预约成功</span>
                 <#elseif 4==statusId>
-                    <span>待收货订单</span>
+                    <span>正在停车</span>
                 <#elseif 5==statusId>
-                    <span>待评价订单</span>
+                    <span>办理出库</span>
                 <#elseif 6==statusId>
-                    <span>已完成订单</span>
+                    <span>交易完成</span>
                 <#elseif 7==statusId>
-                    <span>已取消订单</span>
+                    <span>等待审核</span>
+                <#elseif 8==statusId>
+                    <span>审核未通过</span>
+                <#elseif 9==statusId>
+                    <span>交易取消</span>
                 </#if>
             </#if>
     </div>
@@ -69,6 +73,7 @@ function __doPostBack(eventTarget, eventArgument) {
                     <li>
                         <a class="all" href="javascript:;" onclick="checkAll(this);"><i></i><span>全选</span></a>
                     </li>
+                    <!--
                     <#if statusId?? && 1==statusId>
                     <li>
                         <a onclick="return ExePostBack('btnConfirm','确认后将进入待发货状态，是否继续？');" class="save" href="javascript:__doPostBack('btnConfirm','')"><i></i><span>确认订单</span></a>
@@ -78,12 +83,18 @@ function __doPostBack(eventTarget, eventArgument) {
                         <a onclick="return ExePostBack('btnDelete','删除后订单将无法恢复，是否继续？');" class="del" href="javascript:__doPostBack('btnDelete','')"><i></i><span>删除订单</span></a>
                     </li>
                     </#if>
-                    <li>
-                        <a class="all"><span>订单总额：￥${price!0.00}</span></a>
-                    </li>
-                    <li>
-                        <a class="all"><span>销售额：￥${sales!0.00}</span></a>
-                    </li>
+                    -->
+                    <#if statusId??&&(6==statusId||5==statusId||0==statusId)>
+                        <li>
+                            <a class="all"><span>订单总额：￥${totalPrice!0.00}</span></a>
+                        </li>
+                    </#if>
+                    <#if statusId??&&(6==statusId||0==statusId)>
+                        <li>
+                            <a class="all"><span>实际收入：￥${price!0.00}</span></a>
+                        </li>
+                    </#if>
+                    <!--
                     <li>
                     	<a class="all" href="/Verwalter/order/list/${statusId!''}/1"><span>普通订单</span></a>
                     </li>                  
@@ -99,6 +110,7 @@ function __doPostBack(eventTarget, eventArgument) {
                     <li>
                     	<a class="all" href="/Verwalter/order/list/${statusId!''}/5"><span>百人团</span></a>
                     </li>
+                    -->
                     <li>
                     	<a class="all" href="javascript:__doPostBack('export','')"><span>导出本页</span></a>
                     
@@ -108,12 +120,12 @@ function __doPostBack(eventTarget, eventArgument) {
                     <div class="rule-single-select">
                         <select name="timeId" onchange="javascript:setTimeout(__doPostBack('btnTime',''), 0)">
                             <option value="0" <#if !time_id?? || time_id==0>selected="selected"</#if>>所有订单</option>
-                            <option value="1" <#if time_id==1>selected="selected"</#if>>今天</option>
-                            <option value="2" <#if time_id==2>selected="selected"</#if>>最近一周</option>
-                            <option value="3" <#if time_id==3>selected="selected"</#if>>最近一个月</option>
-                            <option value="4" <#if time_id==4>selected="selected"</#if>>最近三个月</option>
-                            <option value="6" <#if time_id==6>selected="selected"</#if>>最近半年</option>
-                            <option value="12" <#if time_id==12>selected="selected"</#if>>最近一年</option> 
+                            <option value="1" <#if time_id?? &&time_id==1>selected="selected"</#if>>今天</option>
+                            <option value="2" <#if time_id?? &&time_id==2>selected="selected"</#if>>最近一周</option>
+                            <option value="3" <#if time_id?? &&time_id==3>selected="selected"</#if>>最近一个月</option>
+                            <option value="4" <#if time_id?? &&time_id==4>selected="selected"</#if>>最近三个月</option>
+                            <option value="6" <#if time_id?? &&time_id==6>selected="selected"</#if>>最近半年</option>
+                            <option value="12" <#if time_id?? &&time_id==12>selected="selected"</#if>>最近一年</option> 
                         </select>
                     </div>
             </div>
@@ -129,33 +141,16 @@ function __doPostBack(eventTarget, eventArgument) {
 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="ltable">
 <tbody>
     <tr class="odd_bg">
-        <th width="8%">
-            选择
-        </th>
-        <th align="left">
-            订单号
-        </th>
-        <th align="left" width="12%">
-            会员账号
-        </th>
-        <th align="left" width="10%">
-            支付方式
-        </th>
-        <th align="left" width="10%">
-            配送方式
-        </th>
-        <th width="8%">
-            订单状态
-        </th>
-        <th width="10%">
-            总金额
-        </th>
-        <th align="left" width="16%">
-            下单时间
-        </th>
-        <th width="8%">
-            操作
-        </th>
+        <th width="8%">选择</th>
+        <th align="left">订单号</th>
+        <th align="left" width="12%">会员账号</th>
+        <th align="left" width="8%">支付方式</th>
+        <th width="10%">订单状态</th>
+        <th width="10%">支付定金</th>
+        <th width="10%">总金额</th>
+        <th width="11%">下单时间</th>
+        <th width="11%">完成时间</th>
+        <th width="8%">操作</th>
     </tr>
 
     <#if order_page??>
@@ -171,28 +166,55 @@ function __doPostBack(eventTarget, eventArgument) {
                     <a href="/Verwalter/order/edit?id=${order.id?c}&statusId=${statusId!'0'}">${order.orderNumber!""}</a></td>
                 <td>${order.username!""}</td>
                 <td>${order.payTypeTitle!""}</td>
-                <td>${order.deliverTypeTitle!""}</td>
                 <td align="center">
                     <#if order.statusId??>
-                        <#if 1==order.statusId>
-                            <span>待确认订单</span>
-                        <#elseif 2==order.statusId>
-                            <span>待付款订单</span>
-                        <#elseif 3==order.statusId>
-                            <span>待发货订单</span>
-                        <#elseif 4==order.statusId>
-                            <span>待收货订单</span>
-                        <#elseif 5==order.statusId>
-                            <span>待评价订单</span>
-                        <#elseif 6==order.statusId>
-                            <span>已完成订单</span>
-                        <#elseif 7==order.statusId>
-                            <span>已取消订单</span>
-                        </#if>
+                        <#switch order.statusId>
+                            <#case 1>
+                                <span>未支付定金</span>
+                            <#break>
+                            <#case 2>
+                                <span>已支付定金</span>
+                            <#break>
+                            <#case 3>
+                                <span>预约成功</span>
+                            <#break>
+                            <#case 4>
+                                <span>正在停车</span>
+                            <#break>
+                            <#case 5>
+                                <span>办理出库</span>
+                            <#break>
+                            <#case 6>
+                                <span>交易完成</span>
+                            <#break>
+                            <#case 7>
+                                <span>等待审核</span>
+                            <#break>
+                            <#case 8>
+                                <span>审核未通过</span>
+                            <#break>
+                            <#case 9>
+                                <span>交易取消</span>
+                            <#break>
+                        </#switch>
                     </#if>
                 </td>
-                <td align="center" width="10%">￥<font color="#C30000">${order.totalPrice?string("#.00")}</font></td>
-                <td>${order.orderTime?string("yyyy-MM-dd HH:mm:ss")}</td>
+                <#if order.firstPay??&&order.firstPay gt 0>
+                    <td align="center">￥<font color="#C30000">${order.firstPay?string("0.00")}</font></td>
+                <#else>
+                    <td align="center">未支付定金</td>
+                </#if>
+                <#if order.totalPrice??&&order.totalPrice gt 0>
+                    <td align="center" width="10%">￥<font color="#C30000">${order.totalPrice?string("0.00")}</font></td>
+                <#else>
+                    <td align="center" width="10%"><font color="#C30000"></font></td>
+                </#if>
+                <td align="center">${order.orderTime?string("yyyy-MM-dd HH:mm")}</td>
+                <#if order.finishTime??>
+                    <td align="center">${order.finishTime?string("yyyy-MM-dd HH:mm")}</td>
+                <#else>
+                    <td align="center">未完成</td>
+                </#if>
                 <td align="center">
                     <a href="/Verwalter/order/edit?id=${order.id?c}&statusId=${statusId!"0"}">详细</a>
                 </td>

@@ -18,5 +18,5 @@ public interface TdIODataRepo extends
 		PagingAndSortingRepository<TdIOData, Long>,
 		JpaSpecificationExecutor<TdIOData> 
 {
-    TdIOData findTopByBusNoAndIoTime(String busNo, Date ioTime);
+    TdIOData findTopByBusNoAndIoDate(String busNo, Date ioTime);
 }

@@ -38,88 +38,142 @@
     <div id="content">
         <table width="800" border="0" align="center" cellpadding="3" cellspacing="0" style="font-size: 12px; font-family: '微软雅黑'; background: #fff;">
             <tbody><tr>
-                <td width="346" height="50" style="font-size: 20px;">
-                    商品订单</td>
-                <td width="216">订单号：${order.orderNumber!''}<br>
-                    日&nbsp;&nbsp; 期：${order.orderTime?string("yyyy-MM-dd")}</td>
-                <td width="220">操&nbsp;作&nbsp;人：${manager!''}<br>
-                    打印时间：${now?string("yyyy-MM-dd HH:mm:ss")}</td>
+                <td width="346" height="50" style="font-size: 20px;">优泊天下</td>
+                <td width="216">订单号：${order.orderNumber!''}<br>日&nbsp;&nbsp; 期：${order.orderTime?string("yyyy-MM-dd")}</td>
+                <td width="220">操&nbsp;作&nbsp;人：${manager!''}<br>打印时间：${now?string("yyyy-MM-dd HH:mm:ss")}</td>
             </tr>
             <tr>
                 <td colspan="3" style="padding: 10px 0; border-top: 1px solid #000;">
                     
                     <table width="100%" border="0" cellspacing="0" cellpadding="5" style="font-size: 12px; font-family: '微软雅黑'; background: #fff;">
-                        <tbody><tr>
-                            <td align="left" style="background: #ccc;">商品名称</td>
-                            <td width="12%" align="left" style="background: #ccc;">成交价</td>
-                            <td width="10%" align="left" style="background: #ccc;">粮草</td>
-                            <td width="10%" align="left" style="background: #ccc;">数量</td>
-                            <td width="12%" align="left" style="background: #ccc;">金额合计</td>
-                            <td width="12%" align="left" style="background: #ccc;">粮草合计</td>
-                        </tr>
-                    <#if order??>
-                        <#list order.orderGoodsList as og>
+                        <tbody>
                             <tr>
-                                <td>
-                                    ${og.goodsTitle!''} ${og.goodsColor!''} ${og.goodsCapacity!''} ${og.goodsVersion!''}
-                                </td>
-                                <td>${og.price?string("0.00")}</td>
-                                <td>${og.points!'0'}</td>
-                                <td>${og.quantity!'0'}</td>
-                                <td>${(og.price*og.quantity)?string("0.00")}</td>
-                                <td><#if og.points??>${og.points*og.quantity}<#else>0</#if></td>
+                                <td align="left" style="background: #ccc;">车库编号</td>
+                                <td width="25%" align="left" style="background: #ccc;">车库名称</td>
+                                <td width="20%" align="left" style="background: #ccc;">营业时间</td>
+                                <td width="20%" align="left" style="background: #ccc;">详细地址</td>
+                                <td width="20%" align="left" style="background: #ccc;">客服电话</td>
                             </tr>
-                        </#list>
-                    </#if>
-                    </tbody>
-                </table>
+                            <#if diySite??>
+                                <tr>
+                                    <td>${diySite.id}</td>
+                                    <td>${diySite.title}</td>
+                                    <td>${diySite.openTimeSpan}</td>
+                                    <td>${diySite.address}</td>
+                                    <td>${diySite.serviceTele}</td>
+                                    <td></td>
+                                </tr>
+                            </#if>
+                        </tbody>
+                    </table>
                         
                 </td>
             </tr>
             <tr>
                 <td colspan="3" style="border-top: 1px solid #000;">
+                    <#if user??>
                     <table width="100%" border="0" cellspacing="0" cellpadding="5" style="margin: 5px auto; font-size: 12px; font-family: '微软雅黑'; background: #fff;">
                         <tbody>
-                        <tr>
-                            <td width="44%">会员账户：
-                                ${order.username}
-                            </td>
-                          <#--  <td width="56%">客户姓名：<#if user??>${user.realName!''}</#if><br>          -->                
-                            </td>
-                            <td width="56%">姓名：${order.shippingName!''}<br>                          
-                            </td>
-                        </tr>
-                        <#--
-                        <tr>
-                            <td valign="top">支付方式：${order.payTypeTitle!''}</td>
-                            <td>送货地址：
-                                ${order.shippingAddress!''}<br>
-                            </td>
-                        </tr>
-                        -->
-                        <tr>
-                            <td valign="top">用户留言：${order.userRemarkInfo!''}</td>
-                            <td valign="top">电&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;话：${order.shippingPhone!''}</td>
-                        </tr>
-                        <tr>
-                            <td>车型：${order.carType!''}</td>
-                            <td>车牌：${order.carCode!''}</td>
-                        </tr>
-                        <tr>
-                            <td valign="top">订单备注：${order.remarkInfo!''}</td>
-                            <#if order.isNeedInvoice><td valign="top">发票抬头：${order.invoiceTitle!''}</td></#if>
-                        </tr>
-                    </tbody></table>
-                    <table width="100%" border="0" align="center" cellpadding="5" cellspacing="0" style="border-top: 1px solid #000; font-size: 12px; font-family: '微软雅黑'; background: #fff;">
-                        <tbody><tr>
-                            <td align="right">商品金额：￥${order.totalGoodsPrice?string("0.00")}
-                       <#--         + 配送费：￥${order.deliverTypeFee?string("0.00")}
-                                + 支付手续费：￥${order.payTypeFee?string("0.00")}
-                                = 订单总额：${order.totalPrice?string("0.00")}
-                          -->      
+                            <tr>
+                                <td width="44%">会员账户：
+                                    ${user.username}
                                 </td>
-                        </tr>
-                    </tbody></table>
+                              <#--  <td width="56%">客户姓名：<#if user??>${user.realName!''}</#if><br>          -->                
+                                </td>
+                                <td width="56%">昵称：${user.nickname!''}<br>                          
+                                </td>
+                            </tr>
+                            <#--
+                            <tr>
+                                <td valign="top">支付方式：${order.payTypeTitle!''}</td>
+                                <td>送货地址：
+                                    ${order.shippingAddress!''}<br>
+                                </td>
+                            </tr>
+                            -->
+                            <tr>
+                                <#--<td valign="top">用户留言：${order.userRemarkInfo!''}</td>-->
+                                <td valign="top">电话：${order.shippingPhone!''}</td>
+                                <td>车牌：${user.carCode!''}</td>
+                            </tr>
+                            <#--
+                            <tr>
+                                <td>车型：${order.carType!''}</td>
+                                <td>车牌：${order.carCode!''}</td>
+                            </tr>
+                            <tr>
+                                <td valign="top">备注信息：${order.remarkInfo!''}</td>
+                                <td valign="top">发票抬头：${order.invoiceTitle!''}</td>
+                            </tr>
+                            -->
+                        </tbody>
+                    </table>
+                    </#if>
+                    <table width="100%" border="0" align="center" cellpadding="5" cellspacing="0" style="border-top: 1px solid #000; font-size: 12px; font-family: '微软雅黑'; background: #fff;">
+                        <tbody>
+                            <tr>
+                                <#switch order.statusId>
+                                    <#case 1>
+                                        <td align="left">订单状态：定金未支付</td> 
+                                    <#break>
+                                    <#case 2>
+                                        <td align="left">订单状态：定金已支付</td> 
+                                    <#break>
+                                    <#case 3>
+                                        <td align="left">订单状态：预约成功</td> 
+                                    <#break>
+                                    <#case 4>
+                                        <td align="left">订单状态：正在停车</td> 
+                                    <#break>
+                                    <#case 5>
+                                        <td align="left">订单状态：办理出库</td> 
+                                    <#break>
+                                    <#case 6>
+                                        <td align="left">订单状态：交易完成</td> 
+                                    <#break>
+                                    <#case 7>
+                                        <td align="left">订单状态：等待审核</td> 
+                                    <#break>
+                                    <#case 8>
+                                        <td align="left">订单状态：审核未通过</td> 
+                                    <#break>
+                                    <#case 9>
+                                        <td align="left">订单状态：交易取消</td> 
+                                    <#break>
+                                </#switch>
+                            </tr>
+                            <tr>
+                                <#if order.firstPay??&&order.firstPay gt 0>
+                                    <td align="left">预付定金：￥${order.firstPay?string("0.00")}</td>
+                                <#else>
+                                    <td align="left">预付定金：未支付定金</td>
+                                </#if>
+                                <#if order.totalPrice??&&order.totalPrice gt 0>
+                                    <td align="left">停车费用：￥${order.totalPrice?string("0.00")}</td>
+                                <#else>
+                                    <td align="left">停车费用：暂无</td>
+                                </#if>
+                            </tr>
+                            <tr>
+                                <td align="left">下单时间：${order.orderTime?string("yyyy-MM-dd HH:mm")}</td>
+                                <#if order.finishTime??>
+                                    <td align="left">完成时间：￥${order.finishTime?string("yyyy-MM-dd HH:mm")}</td>
+                                <#else>
+                                    <td align="left">完成时间：还未完成</td>
+                                </#if>
+                            </tr>
+                            <tr>
+                                <td align="left">申请退款：<#if order.isReturn??&&order.isReturn>是<#else>否</#if></td>
+                                <td align="left">退款原因：<#if order.cancelReason??>${order.cancelReason!''}</#if></td>
+                            </tr>
+                            <tr>
+                                <td align="left">审核状态：${order.checkStatus!''}</td>
+                            </tr>
+                            <tr>
+                                <td align="left">备注信息：${order.remarkInfo!''}</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </td>
             </tr>
         </tbody></table>

@@ -1,0 +1,25 @@
+//改变订单状态的方法
+function changeOrderStatus(orderId,event,type,reason){
+	if(null==orderId||null==event||null==type){
+		$.dialog.confirm("参数错误，操作失败！");
+	}
+	if("cancel"==type&&7!=orderId){
+			$.dialog.prompt("请输入取消订单的原因：",function(reason){
+				if(""==reason.trim()){
+					$.dialog.confirm("原因不能为空！",function(){});
+					return;
+				}
+				window.location.href="/Verwalter/order/change/"+orderId+"?event="+event+"&type="+type+"&reason="+reason;
+		});
+			return;
+	}
+	$.dialog.confirm("此操作将修改当前订单的状态，是否确定？",function(){
+		if(7==orderId){
+			$.dialog.prompt("请输入备注信息：",function(reason){
+				window.location.href="/Verwalter/order/change/"+orderId+"?event="+event+"&type="+type+"&reason="+reason;
+			});
+			return;
+		}
+		window.location.href="/Verwalter/order/change/"+orderId+"?event="+event+"&type="+type+"&reason="+reason;
+	});
+}

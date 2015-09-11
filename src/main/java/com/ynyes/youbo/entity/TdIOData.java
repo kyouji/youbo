@@ -40,7 +40,7 @@ public class TdIOData {
     // 时间
     @Column
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    private Date ioTime;
+    private Date ioDate;
     
     // 出入状态
     @Column
@@ -102,15 +102,15 @@ public class TdIOData {
         this.owner = owner;
     }
 
-    public Date getIoTime() {
-        return ioTime;
-    }
+    public Date getIoDate() {
+		return ioDate;
+	}
 
-    public void setIoTime(Date ioTime) {
-        this.ioTime = ioTime;
-    }
+	public void setIoDate(Date ioDate) {
+		this.ioDate = ioDate;
+	}
 
-    public String getIoState() {
+	public String getIoState() {
         return ioState;
     }
 

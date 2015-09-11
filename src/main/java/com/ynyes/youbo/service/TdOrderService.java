@@ -389,4 +389,20 @@ public class TdOrderService {
     public List<TdOrder> findByUsernameAndStatusIdNot(String username){
     	return repository.findByUsernameAndStatusIdNotOrderByOrderTimeDesc(username, 6L);
     };
+    
+    //根据车牌号码查找订单信息
+    public TdOrder findByCarCode(String carCode){
+    	if(null == carCode){
+    		return null;
+    	}
+    	return repository.findByCarCode(carCode);
+    }
+    
+    //根据订单id和停车场id查找指定订单的信息
+    public TdOrder findByDiyIdAndId(Long diyId,Long orderId){
+    	if(null == diyId||null == orderId){
+    		return null;
+    	}
+    	return repository.findByDiyIdAndId(diyId, orderId);
+    }
 }
