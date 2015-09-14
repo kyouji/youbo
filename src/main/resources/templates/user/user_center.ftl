@@ -31,7 +31,7 @@
 <div class="main">
     <dl class="mycenter_min">
         <dt>
-            <div><img src="<#if user??>${user.headImageUri!''}</#if>"/></div>
+            <div><img src="<#if user??>${user.headImageUri!'/user/images/default_head.png'}</#if>"/></div>
             <p>${user.mobile!''}<span>${user.carCode!'渝A·326326'}</span></p>
             <a href="/user/center/info"><img src="/user/images/aboutus_right.png" /></a>
         </dt>
@@ -43,8 +43,8 @@
 
     <a>
     <dl class="mycenter_last">
-        <dd><a>明细</a></dd>
-        <dt><a><img src="/user/images/aboutus_right.png" /></a></dt>
+        <dd><a href="/user/center/detail">明细</a></dd>
+        <dt><a href="/user/center/detail"><img src="/user/images/aboutus_right.png" /></a></dt>
     </dl>
     </a>
     <a>
@@ -55,7 +55,7 @@
     </a>
     <a>
     <dl class="mycenter_last">
-        <dd><a>停车记录</a></dd>
+        <dd><a>退款记录</a></dd>
         <dt><a><img src="/user/images/aboutus_right.png" /></a></dt>
     </dl>
     </a>

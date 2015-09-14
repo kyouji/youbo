@@ -91,7 +91,7 @@ body{ background:#efefef; }
 
 /*bespeak_list*/
 .detail_month{ width:92%; padding-left:4%; padding-right:4%;  height:40px; background:white;}
-.detail_month li{ float:left; width:33.3%;}
+.detail_month li{ float:left; width:50%;}
 .detail_month span{ display:block; height:40px; width:100%; font-size:1.3em; line-height:40px; text-align:left; }
 .detail_month_style span{ color:#ef0000; text-align:right;}
 .detail_month_01 { display:block; overflow:hidden;  width:92%; padding-left:4%; padding-right:4%; margin-top:3%; background:white;}

@@ -29,7 +29,7 @@ $(document).ready(function(){
     <#list depot_list as item>
         <#if item.longitude?? && item.latitude??>
             
-        addMarker(${item.longitude?string("0.000000")}, ${item.latitude?string("0.000000")},'${item.title}','${item.address!""}',${item.id},${item.parkingNowNumber});
+        addMarker(${item.longitude?string("0.000000")}, ${item.latitude?string("0.000000")},'${item.title}','${item.address!""}',${item.id},${item.parkingNowNumber!'0'});
            
         </#if>
     </#list>
@@ -39,7 +39,7 @@ function loadMap()
 {
     <#--自定义marker图片-->
     var myIcon = new BMap.Icon("/user/images/map.png", new BMap.Size(23, 25), {
-     offset: new BMap.Size(10, 25), // 指定定位位置
+    offset: new BMap.Size(10, 25), // 指定定位位置
     imageOffset: new BMap.Size(0, 0 - 0 * 25) // 设置图片偏移
     });
     <#--end-->
@@ -137,17 +137,8 @@ function getClickPoint(e){
     </div> 
     
     <div class="find_float" style="display:none;"> 
-    <span id="guid">
-        <dl class="find01">
-            <dt><span>首创·立方停车库</span><p>329m</p></dt>
-            <dd><div>20 </div><span>10元/小时</span></dd>
-            <dd><p>重庆市九龙坡区龙腾大道99号</p></dd>
-        </dl>
-        <dl class="find_btn">
-            <dt><a><img src="/user/images/park_icon01.png" /><span>导航</span></a></dt>
-            <dd><a><img src="/user/images/park_icon02.png" /><span>预约</span></a></dd>
-        </dl>
-     </span>
+        <span id="guid">
+        </span>
     </div>
 </div><!--main END-->
 

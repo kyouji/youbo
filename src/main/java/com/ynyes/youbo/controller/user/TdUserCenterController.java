@@ -1,5 +1,6 @@
 package com.ynyes.youbo.controller.user;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -11,14 +12,18 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mobile.device.Device;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.ibm.icu.text.SimpleDateFormat;
+import com.ibm.icu.util.Calendar;
 import com.ynyes.youbo.entity.TdBankcard;
 import com.ynyes.youbo.entity.TdInformation;
+import com.ynyes.youbo.entity.TdOrder;
 import com.ynyes.youbo.entity.TdUser;
 import com.ynyes.youbo.entity.TdUserComment;
 import com.ynyes.youbo.service.TdBankcardService;
@@ -324,13 +329,13 @@ public class TdUserCenterController {
 		}
 
 		TdInformation theInfo = tdInfoService.findOne(id);
-		
-		//如果此消息处于未读状态
+
+		// 如果此消息处于未读状态
 		if (theInfo.getStatusId() == 0) {
 			theInfo.setStatusId(1L);
 			theInfo = tdInfoService.save(theInfo);
 		}
-		
+
 		map.addAttribute("info", theInfo);
 		return "/user/message_content";
 	}
@@ -347,7 +352,7 @@ public class TdUserCenterController {
 	public String info(HttpServletRequest req, Device device, ModelMap map) {
 		String username = (String) req.getSession().getAttribute("username");
 		TdUser user = tdUserService.findByUsernameAndIsEnabled(username);
-		if(null == user){
+		if (null == user) {
 			return "/user/login";
 		}
 		map.addAttribute("user", user);
@@ -366,7 +371,7 @@ public class TdUserCenterController {
 	public String infoEdit(HttpServletRequest req, String editType, ModelMap map) {
 		String username = (String) req.getSession().getAttribute("username");
 		TdUser user = tdUserService.findByUsernameAndIsEnabled(username);
-		if(null == user){
+		if (null == user) {
 			return "/user/login";
 		}
 		switch (editType) {
@@ -412,19 +417,15 @@ public class TdUserCenterController {
 	 * @param map
 	 * @return
 	 */
-	 @RequestMapping(value = "/login", method=RequestMethod.POST)
-     @ResponseBody
-    public Map<String, Object> login(HttpServletRequest req, 
-                        String username,
-                        String password,
-                        ModelMap map){
-        Map<String, Object> res = new HashMap<String, Object>();
-        res.put("code", 1);
-        
-       // String user = (String) req.getSession().getAttribute("username");
-        TdUser user = tdUserService.findByfindByMobileAndRoleId(username, 1L);
-        if (user == null)
-        {
+	@RequestMapping(value = "/login", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> login(HttpServletRequest req, String username, String password, ModelMap map) {
+		Map<String, Object> res = new HashMap<String, Object>();
+		res.put("code", 1);
+
+		// String user = (String) req.getSession().getAttribute("username");
+		TdUser user = tdUserService.findByfindByMobileAndRoleId(username, 1L);
+		if (user == null) {
 			res.put("msg", "用户不存在!");
 			return res;
 		}
@@ -441,6 +442,7 @@ public class TdUserCenterController {
 
 	/**
 	 * 用注册
+	 * 
 	 * @param req
 	 * @param device
 	 * @param map
@@ -450,99 +452,169 @@ public class TdUserCenterController {
 	public String register(HttpServletRequest req, Device device, ModelMap map) {
 		return "/user/register";
 	}
+
 	/**
 	 * 退出登录
+	 * 
 	 * @param req
 	 * @param device
 	 * @param map
 	 * @return
 	 */
 	@RequestMapping("/exit")
-    public String exit(HttpServletRequest req, Device device, ModelMap map)
-	{
+	public String exit(HttpServletRequest req, Device device, ModelMap map) {
 		req.getSession().invalidate();
 		return "redirect:/user";
 	}
-	
+
 	/**
-	 * @author dengxiao
-	 * 修改密码时，验证原密码是否输入正确的方法
+	 * @author dengxiao 修改密码时，验证原密码是否输入正确的方法
 	 */
 	@RequestMapping("/password/check")
 	@ResponseBody
-	public Map<String, Object> checkOldPassword(String param,HttpServletRequest req){
+	public Map<String, Object> checkOldPassword(String param, HttpServletRequest req) {
 		Map<String, Object> res = new HashMap<>();
 		res.put("status", "n");
 		res.put("info", "原密码输入错误!");
 		String username = (String) req.getSession().getAttribute("username");
 		TdUser user = tdUserService.findByUsernameAndIsEnabled(username);
-		if(null != user){
-			if(user.getPassword().equals(param)){
+		if (null != user) {
+			if (user.getPassword().equals(param)) {
 				res.put("status", "y");
 				res.put("info", "");
 			}
 		}
 		return res;
 	}
-	
-	@RequestMapping(value="/password/save")
-	public String savePassword(String password,HttpServletRequest req,ModelMap map){ 
+
+	@RequestMapping(value = "/password/save")
+	public String savePassword(String password, HttpServletRequest req, ModelMap map) {
 		String username = (String) req.getSession().getAttribute("username");
 		TdUser user = tdUserService.findByUsernameAndIsEnabled(username);
-		if(null == user){
+		if (null == user) {
 			return "/user/login";
 		}
 		user.setPassword(password);
 		tdUserService.save(user);
 		return "redirect:/user/center/info";
 	}
-	
-	@RequestMapping(value="/info/pay")
-	public String pay(HttpServletRequest req,ModelMap map){
+
+	@RequestMapping(value = "/info/pay")
+	public String pay(HttpServletRequest req, ModelMap map) {
 		String username = (String) req.getSession().getAttribute("username");
 		TdUser user = tdUserService.findByUsernameAndIsEnabled(username);
-		if(null == user){
+		if (null == user) {
 			return "/user/login";
 		}
-		if(null != user.getPayPassword()){
+		if (null != user.getPayPassword()) {
 			String payPassword = user.getPayPassword();
-			map.addAttribute("payPassword",payPassword);
+			map.addAttribute("payPassword", payPassword);
 		}
 		return "/user/user_info_pay_password";
-		
+
 	}
-	
+
 	/**
-	 * @author dengxiao
-	 * 修改支付密码时，验证原密码是否输入正确的方法
+	 * @author dengxiao 修改支付密码时，验证原密码是否输入正确的方法
 	 */
 	@RequestMapping("/pay/check")
 	@ResponseBody
-	public Map<String, Object> checkPayPassword(String param,HttpServletRequest req){
+	public Map<String, Object> checkPayPassword(String param, HttpServletRequest req) {
 		Map<String, Object> res = new HashMap<>();
 		res.put("status", "n");
 		res.put("info", "原支付密码输入错误!");
 		String username = (String) req.getSession().getAttribute("username");
 		TdUser user = tdUserService.findByUsernameAndIsEnabled(username);
-		if(null != user){
-			if(user.getPayPassword().equals(param)){
+		if (null != user) {
+			if (user.getPayPassword().equals(param)) {
 				res.put("status", "y");
 				res.put("info", "");
 			}
 		}
 		return res;
 	}
-	
-	@RequestMapping(value="/pay/save")
-	public String savePayPassword(String password,HttpServletRequest req,ModelMap map){ 
+
+	@RequestMapping(value = "/pay/save")
+	public String savePayPassword(String password, HttpServletRequest req, ModelMap map) {
 		String username = (String) req.getSession().getAttribute("username");
 		TdUser user = tdUserService.findByUsernameAndIsEnabled(username);
-		if(null == user){
+		if (null == user) {
 			return "/user/login";
 		}
 		user.setPayPassword(password);
 		tdUserService.save(user);
 		return "redirect:/user/center/info";
 	}
+
+	@RequestMapping(value = "/detail")
+	public String detail(HttpServletRequest request, ModelMap map) {
+		String username = (String) request.getSession().getAttribute("username");
+		if (null == username) {
+			return "user/login";
+		}
+		// 获取当前年份
+		Calendar c = Calendar.getInstance();
+		Integer year = c.get(Calendar.YEAR);
+		map.addAttribute("year", year);
+		return "/user/detail";
+	}
+
+	@RequestMapping(value = "/detail/find")
+	public String findDetail(HttpServletRequest request, Integer year, Integer month, ModelMap map) {
+		String username = (String) request.getSession().getAttribute("username");
+		if (null == username) {
+			return "/user/login";
+		}
+		if (null == year || null == month) {
+			return "redict:/user/center/detail";
+		}
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		// 起始时间
+		String sBeginDate = year + "-" + month + "-1";
+		// 结束时间
+		String sFinishDate = null;
+		if (12 == month) {
+			sFinishDate = (year + 1) + "-1-1";
+		} else {
+			sFinishDate = year + "-" + (month + 1) + "-1";
+		}
+
+		Date beginDate = null;
+		Date finishDate = null;
+		try {
+			beginDate = sdf.parse(sBeginDate);
+			finishDate = sdf.parse(sFinishDate);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+
+		List<TdOrder> orders = tdOrderService.findByUsernameAndFinishTimeBetweenAndStatusId(username,
+				beginDate, finishDate);
+
+		Double totalPrice = new Double(0);
+		for (TdOrder tdOrder : orders) {
+			if (null != tdOrder.getTotalPrice() && tdOrder.getTotalPrice() > 0) {
+				totalPrice += tdOrder.getTotalPrice();
+			}
+		}
+
+		map.addAttribute("orders", orders);
+		map.addAttribute("year", year);
+		map.addAttribute("month", month);
+		map.addAttribute("totalPrice", totalPrice);
+		
+		return "/user/detail_month";
+	}
 	
+	@RequestMapping("/info/nickname")
+	public String nickname(HttpServletRequest request,ModelMap map){
+		String username = (String) request.getSession().getAttribute("username");
+		TdUser user = tdUserService.findByUsername(username);
+		if(null == user){
+			return "user/login";
+		}
+		map.addAttribute("nickname", user.getNickname());
+		return "/user/user_info_nickname";
+	}
+
 }

@@ -50,37 +50,37 @@ public class TdCooperationController {
 	@ResponseBody
 	public Map<String, Object> login(String username, String password, HttpServletRequest request) {
 		Map<String, Object> res = new HashMap<>();
-		//status代表处理状态，-1代表失败
+		// status代表处理状态，-1代表失败
 		res.put("status", -1);
-		if(null == username){
+		if (null == username) {
 			System.err.println("未能正确接收到username");
 			res.put("message", "username的值为null");
 			return res;
 		}
-		if(null == password){
+		if (null == password) {
 			System.err.println("未能正确接收到password");
 			res.put("message", "password的值为null");
 			return res;
 		}
 		TdDiySite diySite = tdDiySiteService.findByUsernameAndPasswordAndIsEnableTrue(username, password);
 		System.err.println("获取到停车场的信息，进行判断");
-		
+
 		if (null != diySite) {
 			System.err.println("登陆成功");
-			//设置status的值为0，代表登陆成功
+			// 设置status的值为0，代表登陆成功
 			res.put("status", 0);
 			res.put("message", "登陆成功");
 			System.err.println("将登陆的停车场信息存储到session中");
 			request.getSession().setAttribute("diySite", diySite);
-		}else{
-			//判断何种原因导致登录失败
+		} else {
+			// 判断何种原因导致登录失败
 			System.err.println("未能查找到指定username和password的停车场，开始查找原因");
 			TdDiySite tdDiySite = tdDiySiteService.findbyUsername(username);
-			if(null == tdDiySite){
+			if (null == tdDiySite) {
 				res.put("message", "该用户未注册");
-			}else if(!tdDiySite.getIsEnable()){
+			} else if (!tdDiySite.getIsEnable()) {
 				res.put("message", "该用户已被禁用");
-			}else{
+			} else {
 				res.put("message", "密码错误");
 			}
 			System.err.println("结束查找原因");
@@ -110,7 +110,7 @@ public class TdCooperationController {
 
 		// 保存此出入库信息
 		System.err.println("开始保存出入库信息");
-		if(null == ioData){
+		if (null == ioData) {
 			res.put("message", "未接收到进出库信息");
 			return res;
 		}
@@ -162,6 +162,8 @@ public class TdCooperationController {
 			res.put("firstPay", order.getFirstPay());
 			// 将订单的id存储到session中
 			request.getSession().setAttribute("orderId", order.getId());
+			// 还要将orderId返回给客户端
+			res.put("orderId", order.getId());
 			System.err.println("属性设置完毕");
 			// 设置status的值为0，代表处理成功
 			res.put("status", 0);
@@ -182,7 +184,7 @@ public class TdCooperationController {
 	 */
 	@RequestMapping(value = "/payInfo")
 	@ResponseBody
-	public Map<String, Object> isPay(HttpServletRequest request) {
+	public Map<String, Object> isPay(Long orderId, HttpServletRequest request) {
 		Map<String, Object> res = new HashMap<>();
 		// status代表处理状态，-1代表失败
 		res.put("status", -1);
@@ -190,18 +192,19 @@ public class TdCooperationController {
 		// 获取该停车场的信息
 		System.err.println("开始获取session中的停车场信息");
 		TdDiySite diySite = (TdDiySite) request.getSession().getAttribute("diySite");
-		if(null == diySite){
+		if (null == diySite) {
 			res.put("message", "停车场用户未登陆");
 			return res;
 		}
 		System.err.println("停车场信息获取完毕");
 
-
 		System.err.println("开始获取订单信息");
-		Long orderId = (Long) request.getSession().getAttribute("orderId");
-		if(null == orderId){
-			res.put("message", "未获得指定订单的编号");
-			return res;
+		if (null == orderId) {
+			orderId = (Long) request.getSession().getAttribute("orderId");
+			if (null == orderId) {
+				res.put("message", "未获得指定订单的编号");
+				return res;
+			}
 		}
 		TdOrder order = tdOrderService.findByDiyIdAndId(diySite.getId(), orderId);
 		if (null == order) {
@@ -215,7 +218,7 @@ public class TdCooperationController {
 			System.err.println("确认该订单已经交清费用");
 			res.put("status", 0);
 			res.put("message", "已支付停车费用");
-		}else{
+		} else {
 			res.put("message", "未支付停车费用");
 		}
 		return res;

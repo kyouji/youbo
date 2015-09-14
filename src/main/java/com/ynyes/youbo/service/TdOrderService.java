@@ -413,4 +413,11 @@ public class TdOrderService {
     	}
     	return repository.findTopByCarCodeAndDiyIdAndStatusIdOrderByOrderTimeDesc(carCode, diyId, 3L);
     };
+    
+	public List<TdOrder> findByUsernameAndFinishTimeBetweenAndStatusId(String username, Date beginDate, Date finishDate){
+		if (null == username || null == beginDate || null == finishDate) {
+			return null;
+    	}
+		return repository.findByUsernameAndFinishTimeBetweenAndStatusId(username, beginDate, finishDate, 6L);
+    }
 }

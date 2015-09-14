@@ -26,7 +26,7 @@
 <body>
 
 <div class="header">
-    <p>用户名</p>
+    <p>修改密码</p>
     <a href="/user/center/info" class="a4"></a>
     <#--<a class="a5" href="javascript:submitTheForm();">保存</a>-->
 </div>

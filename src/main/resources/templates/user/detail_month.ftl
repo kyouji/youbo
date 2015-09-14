@@ -9,57 +9,33 @@
 <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
 
 
-<link href="css/common.css" rel="stylesheet" type="text/css" />
-<link href="css/style.css" rel="stylesheet" type="text/css" />
+<link href="/user/css/common.css" rel="stylesheet" type="text/css" />
+<link href="/user/css/style.css" rel="stylesheet" type="text/css" />
 
 </head>
 
 <body>
 
-<div class="header">
+    <div class="header">
         <p>月份明细</p>
-        <a onclick="javascript:history.back(-1);" class="a4"></a>
-</div>
-<div class="main">
-    <ul class="detail_month">
-        <li><span>2014年7月</span></li>
-        <li><span></span></li>
-        <li  class="detail_month_style"><span>-325.00</span></li>
-    </ul>
-  <dl class="detail_month_01">
-        <dt><span>绿地海楼大厦地下停车场</span><p>-10.0</p></dt>
-        <dd><img src="images/detail_month_01.png" /><span>2015-01-12   12:30</span></dd>
-        <dd><img src="images/detail_month_02.png" /><span>2015-01-12   12:30</span><p>交易成功</p></dd>
-  </dl>
-   <dl class="detail_month_01">
-        <dt><span>绿地海楼大厦地下停车场</span><p>-10.0</p></dt>
-        <dd><img src="images/detail_month_01.png" /><span>2015-01-12   12:30</span></dd>
-        <dd><img src="images/detail_month_02.png" /><span>2015-01-12   12:30</span><p>交易成功</p></dd>
-  </dl>
-   <dl class="detail_month_01">
-        <dt><span>绿地海楼大厦地下停车场</span><p>-10.0</p></dt>
-        <dd><img src="images/detail_month_01.png" /><span>2015-01-12   12:30</span></dd>
-        <dd><img src="images/detail_month_02.png" /><span>2015-01-12   12:30</span><p>交易成功</p></dd>
-  </dl>
-   <dl class="detail_month_01">
-        <dt><span>绿地海楼大厦地下停车场</span><p>-10.0</p></dt>
-        <dd><img src="images/detail_month_01.png" /><span>2015-01-12   12:30</span></dd>
-        <dd><img src="images/detail_month_02.png" /><span>2015-01-12   12:30</span><p>交易成功</p></dd>
-  </dl>
-   <dl class="detail_month_01">
-        <dt><span>绿地海楼大厦地下停车场</span><p>-10.0</p></dt>
-        <dd><img src="images/detail_month_01.png" /><span>2015-01-12   12:30</span></dd>
-        <dd><img src="images/detail_month_02.png" /><span>2015-01-12   12:30</span><p>交易成功</p></dd>
-  </dl>
-   
-</div><!--main END-->
-
-
-
-
-
-
-
+        <a href="javascript:history.back(-1);" class="a4"></a>
+    </div>
+    
+    <div class="main">
+        <ul class="detail_month">
+            <li><span><#if year??>${year?c}</#if>年<#if month??>${month}</#if>月所有已完成订单</span></li>
+            <li class="detail_month_style"><span>-<#if totalPrice??>${totalPrice?string("0.00")}</#if></span></li>
+        </ul>
+        <#if orders??>
+            <#list orders as item>
+                <dl class="detail_month_01">
+                    <dt><span>${item.diyTitle!''}</span><p><#if item.totalPrice??>-${item.totalPrice?string("0.00")}</#if></p></dt>
+                    <dd><img src="/user/images/detail_month_01.png" /><span><#if item.orderTime??>${item.orderTime?string("yyyy-MM-dd HH:mm")}</#if></span></dd>
+                    <dd><img src="/user/images/detail_month_02.png" /><span><#if item.finishTime??>${item.finishTime?string("yyyy-MM-dd HH:mm")}</#if></span><p>交易成功</p></dd>
+                </dl>
+            </#list>
+        </#if>
+    </div><!--main END-->
 
 </body>
 </html>
