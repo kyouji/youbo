@@ -6,7 +6,6 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 import com.ynyes.youbo.entity.TdOrder;
@@ -190,4 +189,16 @@ public interface TdOrderRepo extends PagingAndSortingRepository<TdOrder, Long>, 
 	
 	//根据停车场的ID和下单时间查找订单
 	List<TdOrder> findByDiyIdAndOrderTimeBetween(Long id,Date beginDate,Date finishDate);
+	
+	//查找指定停车场未支付的订单
+	List<TdOrder> findByDiyIdAndStatusIdNotAndStatusIdNotAndStatusIdNotAndStatusIdNotOrderByOrderTimeDesc(Long id,Long statusId1,Long statusId2,Long statusId3,Long statusId4);
+	
+	//查找指定停车场指定时间段的未支付订单
+	List<TdOrder> findByDiyIdAndStatusIdNotAndStatusIdNotAndStatusIdNotAndStatusIdNotAndOrderTimeBetweenOrderByOrderTimeDesc(Long id,Long statusId1,Long statusId2,Long statusId3,Long statusId4,Date beginDate,Date finishDate);
+	
+	//查找指定停车场已支付的订单
+	List<TdOrder> findByDiyIdAndStatusIdOrderByOrderTimeDesc(Long id,Long statusId);
+	
+	//查找指定停车场指定时间段内已支付的订单
+	List<TdOrder> findByDiyIdAndStatusIdAndOrderTimeBetweenOrderByOrderTimeDesc(Long id,Long statusId,Date beginDate,Date finishDate);
 }

@@ -146,7 +146,7 @@ body{background:#efefef;}
 .pay_record .select_dates .pre_1{ position:absolute;top:0;right:3%;width:21px;height:36px;background:url(../images/advance.png) no-repeat 0 center;background-size:10px;}
 
 .pay_record .payment_situation{width:100%;height:40px; background:#fff;margin-top:2%;}
-.pay_record .payment_situation a{display:block;float:left;width:33.33%;line-height:40px;text-align:center;}
+.pay_record .payment_situation a{display:block;float:left;width:50%;line-height:40px;text-align:center;}
 .pay_record .payment_situation a.sel{border-bottom:solid 3px #0e5baa;height:37px;}
 
 

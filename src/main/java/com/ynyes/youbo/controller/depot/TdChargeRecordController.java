@@ -1,5 +1,9 @@
 package com.ynyes.youbo.controller.depot;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,36 +11,80 @@ import org.springframework.mobile.device.Device;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.ynyes.youbo.entity.TdDiySite;
+import com.ynyes.youbo.entity.TdOrder;
 import com.ynyes.youbo.service.TdCommonService;
+import com.ynyes.youbo.service.TdDiySiteService;
+import com.ynyes.youbo.service.TdOrderService;
 import com.ynyes.youbo.service.TdUserService;
 
 @Controller
 @RequestMapping("/depot/charge")
 public class TdChargeRecordController {
-	
+
 	@Autowired
 	private TdCommonService tdCommonService;
-	
+
 	@Autowired
 	private TdUserService tdUserService;
-	
+
+	@Autowired
+	private TdOrderService tdOrderService;
+
+	@Autowired
+	private TdDiySiteService tdDiySiteService;
+
 	@RequestMapping
-    public String site(HttpServletRequest req, Device device, ModelMap map)
-	{
-		String username = (String) req.getSession().getAttribute("siteUsername");
-        if (null == username)
-        {
-            return "redirect:/depot/login";
-        }
+	public String site(HttpServletRequest req, Device device, ModelMap map) {
+		String siteUsername = (String) req.getSession().getAttribute("siteUsername");
+		TdDiySite site = tdDiySiteService.findbyUsername(siteUsername);
+		if (null == site) {
+			return "redirect:/depot/login";
+		}
+
+		// 获取该停车场所有的已付款订单
+		List<TdOrder> payed_list = tdOrderService.findByDiyIdAndStatusIdOrderByOrderTimeDesc(site.getId());
+		// 获取该停车场所有未支付订单
+		List<TdOrder> unpayed_list = tdOrderService
+				.findByDiyIdAndStatusIdNotAndStatusIdNotAndStatusIdNotAndStatusIdNotOrderByOrderTimeDesc(site.getId());
+		map.addAttribute("payed_list", payed_list);
+		map.addAttribute("unpayed_list", unpayed_list);
 		return "/depot/charge_record";
 	}
-	
-	
+
 	@RequestMapping("/charge")
-	public String charge(HttpServletRequest req, Device device, ModelMap map)
-	{
-		
+	public String charge(HttpServletRequest req, Device device, ModelMap map) {
+		String siteUsername = (String) req.getSession().getAttribute("siteUsername");
+		TdDiySite site = tdDiySiteService.findbyUsername(siteUsername);
+		if (null == site) {
+			return "/depot/login";
+		}
+
 		return "/depot/site";
+	}
+
+	@RequestMapping(value="/date")
+	public String changeDate(HttpServletRequest req,String date,ModelMap map){
+		String siteUsername = (String) req.getSession().getAttribute("siteUsername");
+		TdDiySite site = tdDiySiteService.findbyUsername(siteUsername);
+		String sBeginDate = date+" 00:00:00";
+		String sFinishDate = date+" 24:00:00";
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date beginDate = null;
+		Date finishDate = null;
+		try {
+			beginDate = sdf.parse(sBeginDate);
+			finishDate = sdf.parse(sFinishDate);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		List<TdOrder> unpayed_list = tdOrderService.findByDiyIdAndStatusIdNotAndStatusIdNotAndStatusIdNotAndStatusIdNotAndOrderTimeBetweenOrderByOrderTimeDesc(site.getId(), beginDate, finishDate);		
+		List<TdOrder> payed_list = tdOrderService.findByDiyIdAndStatusIdAndOrderTimeBetweenOrderByOrderTimeDesc(site.getId(), beginDate, finishDate);
+		
+		map.addAttribute("unpayed_list", unpayed_list);
+		map.addAttribute("payed_list", payed_list);
+		return "/depot/charge_detail";
 	}
 }

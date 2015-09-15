@@ -11,8 +11,39 @@
 <!--css-->
 <link href="/depot/css/base.css" rel="stylesheet" type="text/css" />
 <link href="/depot/css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="/depot/js/jquery-1.9.1.min.js"></script>
 <script type="text/javascript">
+    var check;
+    $(function(){
+        changeOrder(1);
+    })
+    
     function changeDate(){
+        var date = $("#date").val();
+        $.post("/depot/charge/date",{"check":check,"date":date},function(data){
+            $("#theOrder").html(data);
+            changeOrder(check);
+        }); 
+    }
+    
+    function changeOrder(type){
+        if(1 == type){
+            check = 1;
+           $("#unpayed_label").addClass("sel");
+           $("#payed_label").removeClass("sel");
+           
+           $("#unpayed").css("display","block");
+           $("#payed").css("display","none"); 
+        }
+        
+        if(2 == type){
+            check = 2;
+           $("#unpayed_label").removeClass("sel");
+           $("#payed_label").addClass("sel");
+           
+           $("#unpayed").css("display","none");
+           $("#payed").css("display","block"); 
+        }
     }
 </script>
 </head>
@@ -30,19 +61,17 @@
         <!--收费信息开始-->
         <div class="pay_record">
             <div class="select_dates">
-                <p class="select_1"><input type="date" onChange="changeDate();"></p>
+                <p class="select_1"><input type="date" id="date" onChange="changeDate();" <#if theDate??>value="${theDate?string("YYYY-MM-dd")}"</#if>></p>
             </div>
             <div class="payment_situation">
-                <a href="#" class="a1 sel">未付款</a>
-                <a href="#" class="a1">已付款</a>
-                <a href="#" class="a1">全部</a>
+                <a href="javascript:changeOrder(1);" id="unpayed_label" class="a1 sel">未付款</a>
+                <a href="javascript:changeOrder(2);" id="payed_label" class="a1">已付款</a>
             </div>
             
-            <dl class="detail_month_01">
-                <dt><span>渝A·326326</span></dt>
-                <dd><img src="/depot/images/detail_month_01.png" /><span>2015-01-12   12:30</span></dd>
-                <dd><img src="/depot/images/detail_month_02.png" /><span>2015-01-12   12:30</span></dd>
-            </dl>
+            <div id="theOrder">
+                <#include "/depot/charge_detail.ftl">
+            </div>
+            
         </div>
         <!--收费信息结束-->
         <div class="mb98"></div>
