@@ -22,28 +22,17 @@
 </div>
 <div class="main">
     <#if bankcard_list?? && bankcard_list?size != 0>
-    <#list bankcard_list as item>
-    <dl class="bankcard">
-        <dt><a>${item.bankCardType!''}</a></dt>
-        <dd>
-            <a>${item.bankName!''}</a>
-            <p>**** **** **** ${item.cardNumber?substring(item.cardNumber?length-5,item.cardNumber?length-1)}</p>
-            <span>${item.name!''}</span>
-        </dd>
-    </dl>
-    </#list>
-    <#else>
-    <p>暂无银行卡</p>
+        <#list bankcard_list as item>
+        <dl class="bankcard">
+            <dt><a>${item.bankCardType!''}</a></dt>
+            <dd>
+                <a>${item.bankName!''}</a>
+                <p>**** **** **** ${item.cardNumber?substring(item.cardNumber?length-5,item.cardNumber?length-1)}</p>
+                <span>${item.name!''}</span>
+            </dd>
+        </dl>
+        </#list>
     </#if>
-    <dl class="bankcard">
-        <dt><a>中国建设银行</a></dt>
-        <dd>
-            <a>储蓄卡</a>
-            <p>**** **** **** 5658</p>
-            <span>张全蛋</span>
-        </dd>
-    </dl>
-
     
 </div><!--main END-->
 

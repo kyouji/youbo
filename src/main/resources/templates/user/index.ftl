@@ -10,14 +10,46 @@
 <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
 <!--css-->
 <link href="/depot/css/base.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="/user/js/jquery-1.9.1.min.js"></script>
 </head>
-
+<script>
+    <#--
+    $(function(){
+        var video = document.getElementById("video");
+        var canvas = document.getElementById("canvas");
+        var errocb = function(){
+            console.log("sth wrong!");
+        }
+        var context = canvas.getContext("2d");
+        
+        if(navigator.getUserMedia){
+            navigator.getUserMedia({"video":true},function(stream){
+                video.src = stream;
+                video.play();
+            },errocb);
+        }else if(navigator.webkitGetUserMedia){
+            navigator.webkitGetUserMedia({"video":true},function(stream){
+                video.src = window.webkitURL.createObjectURL(stream);
+                video.play();
+            },errocb);
+        }
+        
+        document.getElementById("picture").addEventListener("click",function(){
+            context.drawImage(vedio,0,0,640,480);
+        });
+    });
+    -->
+</script>
 <body>
 
     <!--头部开始-->
     <div class="header">
         <p>优泊天下</p>
-        <a href="#" class="a1"></a>
+        <!--
+        <video id="video" autoplay="" style='width:640px;height:480px'></video>
+        <canvas id="canvas" width="640" height="480"></canvas>
+        -->
+        <a id="picture" class="a1"></a>
         <a href="/user/center/login" class="a3"></a>
     </div>
     <!--头部结束-->

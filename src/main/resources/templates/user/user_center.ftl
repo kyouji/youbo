@@ -37,7 +37,7 @@
         </dt>
         <dd>
             <a style="color:#ff665e; background:none;" href="/user/order">订单</a>
-            <a style="color:#69afff; ">预约</a>
+            <a style="color:#69afff; " href="/user/find">预约</a>
         </dd>
     </dl>
 
@@ -55,14 +55,14 @@
     </a>
     <a>
     <dl class="mycenter_last">
-        <dd><a>退款记录</a></dd>
-        <dt><a><img src="/user/images/aboutus_right.png" /></a></dt>
-    </dl>
-    </a>
-    <a>
-    <dl class="mycenter_last">
         <dd><a href="/user/center/message">消息中心</a></dd>
         <dt><a href="/user/center/message"><img src="/user/images/aboutus_right.png" /></a></dt>
+    </dl>
+    </a>
+     <a>
+    <dl class="mycenter_last">
+        <dd><a href="/user/order/cancel">已取消订单</a></dd>
+        <dt><a href="/user/order/cancel"><img src="/user/images/aboutus_right.png" /></a></dt>
     </dl>
     </a>
     <a>

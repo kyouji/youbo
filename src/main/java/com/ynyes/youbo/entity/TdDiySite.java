@@ -1,10 +1,14 @@
 package com.ynyes.youbo.entity;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 
 /**
  * 停车场
@@ -23,7 +27,12 @@ public class TdDiySite {
     @Column
     private String title;
     
-    // 停车场详细地址
+    // 银行卡
+ 	@OneToMany
+ 	@JoinColumn(name="siteId")
+ 	private List<TdBankcard> bankcardList;
+    
+	// 停车场详细地址
     @Column
     private String address;
     
@@ -99,7 +108,7 @@ public class TdDiySite {
     @Column
     private Double nightPrice;
     
-    // 车位类型
+    // 车库类型
     @Column
     private String parkingType;
     
@@ -118,6 +127,14 @@ public class TdDiySite {
     // 车位剩余个数
     @Column
     private Integer parkingNowNumber;
+    
+    public List<TdBankcard> getBankcardList() {
+		return bankcardList;
+	}
+
+	public void setBankcardList(List<TdBankcard> bankcardList) {
+		this.bankcardList = bankcardList;
+	}
 
     public Integer getParkingTotalNumber() {
 		return parkingTotalNumber;

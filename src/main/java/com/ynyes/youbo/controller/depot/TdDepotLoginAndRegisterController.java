@@ -15,8 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.ynyes.youbo.entity.TdDiySite;
 import com.ynyes.youbo.entity.TdUser;
 import com.ynyes.youbo.service.TdCommonService;
+import com.ynyes.youbo.service.TdDiySiteService;
 import com.ynyes.youbo.service.TdUserService;
 import com.ynyes.youbo.util.VerifServlet;
 
@@ -26,6 +28,9 @@ public class TdDepotLoginAndRegisterController {
 	
 	@Autowired
 	private TdUserService tdUserService;
+	
+	@Autowired
+	private TdDiySiteService tdDiySiteService;
 	
 	/**
 	 * 用户登录
@@ -61,7 +66,7 @@ public class TdDepotLoginAndRegisterController {
         Map<String, Object> res = new HashMap<String, Object>();
         res.put("code", 1);
         
-        TdUser user = tdUserService.findByfindByMobileAndRoleId(username, 2L);
+        TdDiySite user = tdDiySiteService.findByUsernameAndPasswordAndIsEnableTrue(username, password);
         if (user == null)
         {
 			res.put("msg", "用户不存在!");
@@ -75,7 +80,7 @@ public class TdDepotLoginAndRegisterController {
         res.put("code", 0);
         
         
-        req.getSession().setAttribute("depotuser", username);
+        req.getSession().setAttribute("siteUsername", username);
         
         return res;
     }

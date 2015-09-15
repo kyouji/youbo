@@ -442,7 +442,7 @@ body{ background:#efefef; }
 .order_01 dt{ height:40px; width:100%; float:left;}
 .order_01 dt span{ height:40px;  float:left; line-height:40px; display:block; font-size:1.3em;}
 .order_01 dt p{ height:40px;  float:right; line-height:40px; font-size:1.3em;color:#ef0000}
-.order_01 dd{ height:40px; width:100%;float:left;}
+.order_01 dd{ height:60px; width:100%;float:left;}
 .order_01 dd span{ height:40px;  float:left; line-height:40px; display:block; margin-left:4px; color:#999;}
 .order_01 dd p{ height:40px;  float:right; line-height:40px;}
 .order_01 dd img{ float:left; margin-top:8px;}

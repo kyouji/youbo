@@ -17,7 +17,7 @@
 <body>
     <div class="header">
         <p>个人信息</p>
-        <a href="javascript:history.go(-1);" class="a4"></a>
+        <a href="/user/center;" class="a4"></a>
     </div>
     
     <#if user??>
@@ -31,7 +31,7 @@
             <dl class="personal_info_list">
                 <dd><div>手机号</div><p>${user.mobile!''}</p><a><span></span></a></dd>
                 <dd><div>昵称</div><p>${user.nickname!''}</p><a href="/user/center/info/nickname"><span></span><img src="/user/images/setting_guide.png" /></a></dd>
-                <dd><div>车牌</div><p>${user.carCode!''}</p><a><span></span><img src="/user/images/setting_guide.png" /></a></dd>
+                <dd><div>车牌</div><p>${user.carCode!''}</p><a href="/user/center/info/carcode"><span></span><img src="/user/images/setting_guide.png" /></a></dd>
                 <dd>
                     <div>登录密码</div>
                     <p>******</p>

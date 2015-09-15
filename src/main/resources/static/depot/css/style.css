@@ -39,7 +39,7 @@ body{background:#efefef;}
 .my_account dt .p1{font-size:1.5em;color:#333333;}
 .my_account dt .p2{font-size:2em;line-height:40px;color:#333333;}
 /*提现按钮样式*/
-.ip_1{display:block;width:100%;margin:5% auto;background:#f65741;border:none;outline:0;color:#fff;font-size:1.875em;padding:3% 0;}
+.ip_1{text-align:center;display:block;width:100%;margin:5% auto;background:#f65741;border:none;outline:0;color:#fff;font-size:1.875em;padding:3% 0;}
 
 .my_account_record{border-top:solid 1px #dddddd;}
 .my_account_record dl{display:block; overflow:hidden;background:#fff; height:auto; width:96%;padding: 0 2%;border-bottom:solid 1px #dddddd;}
@@ -164,7 +164,7 @@ body{background:#efefef;}
 /*refund_request*/
 .refund_request{width:100%;}
 .refund_request .payment_situation{width:100%;height:40px; background:#fff;}
-.refund_request .payment_situation a{display:block;float:left;width:33.33%;line-height:40px;text-align:center;}
+.refund_request .payment_situation a{display:block;float:left;width:25%;line-height:40px;text-align:center;}
 .refund_request .payment_situation a.sel{border-bottom:solid 3px #0e5baa;height:37px;}
 
 .bespeak_list_01 { display:block; overflow:hidden;  width:92%; padding-left:4%; padding-right:4%; margin-top:5%; background:white;}
@@ -181,6 +181,7 @@ body{background:#efefef;}
 .bespeak_list_01 dd img{ float:left; margin-top:8px;}
 .bespeak_list_btn{ position:relative;}
 .bespeak_list_btn input{ width:100%; height:36px; background:#00aaef; border:none; color:white; font-size:1.1em;}
+.bespeak_list_btn .input_by_dx{ width:50%; height:36px; background:#00aaef; border:none; color:white; font-size:1.1em;float:left}
 .bespeak_list_btn .sel_2{background:#c8c8c8;}
 /*This chapter end*/
 

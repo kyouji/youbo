@@ -36,7 +36,7 @@ function login(){
             success: function (data) { 
             <!-- 修改 -->
             if (data.code == 0) {
-                    window.location.href = "/user/center"; 
+                    window.location.href = "/user"; 
             } else {
                 alert(data.msg);
             }

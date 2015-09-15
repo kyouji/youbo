@@ -178,8 +178,12 @@ public class TdUserCenterController {
 	@RequestMapping(value = "/bankcard")
 	public String bankcard(HttpServletRequest req, ModelMap map) {
 		String username = (String) req.getSession().getAttribute("username");
+		if(null == username){
+			return "/user/login";
+		}
 		TdUser user = tdUserService.findByUsername(username);
-		map.addAttribute("bankcard_list", user.getBankcardList());
+		List<TdBankcard> bankcardList = user.getBankcardList();
+		map.addAttribute("bankcard_list", bankcardList);
 		return "/user/bankcard";
 	}
 
@@ -588,8 +592,8 @@ public class TdUserCenterController {
 			e.printStackTrace();
 		}
 
-		List<TdOrder> orders = tdOrderService.findByUsernameAndFinishTimeBetweenAndStatusId(username,
-				beginDate, finishDate);
+		List<TdOrder> orders = tdOrderService.findByUsernameAndFinishTimeBetweenAndStatusId(username, beginDate,
+				finishDate);
 
 		Double totalPrice = new Double(0);
 		for (TdOrder tdOrder : orders) {
@@ -602,19 +606,63 @@ public class TdUserCenterController {
 		map.addAttribute("year", year);
 		map.addAttribute("month", month);
 		map.addAttribute("totalPrice", totalPrice);
-		
+
 		return "/user/detail_month";
 	}
-	
-	@RequestMapping("/info/nickname")
-	public String nickname(HttpServletRequest request,ModelMap map){
+
+	@RequestMapping(value = "/info/nickname")
+	public String nickname(HttpServletRequest request, ModelMap map) {
 		String username = (String) request.getSession().getAttribute("username");
 		TdUser user = tdUserService.findByUsername(username);
-		if(null == user){
+		if (null == user) {
 			return "user/login";
 		}
 		map.addAttribute("nickname", user.getNickname());
 		return "/user/user_info_nickname";
 	}
 
+	@RequestMapping(value = "/nickname/edit")
+	public String nicknameEdit(HttpServletRequest request, String nickname) {
+		String username = (String) request.getSession().getAttribute("username");
+		TdUser user = tdUserService.findByUsername(username);
+		if (null == user) {
+			return "/user/login";
+		}
+		user.setNickname(nickname);
+		tdUserService.save(user);
+		return "redirect:/user/center/info";
+	}
+
+	@RequestMapping(value = "/share")
+	public String share(HttpServletRequest request) {
+		String username = (String) request.getSession().getAttribute("username");
+		TdUser user = tdUserService.findByUsername(username);
+		if (null == user) {
+			return "/user/login";
+		}
+		return "/user/share";
+	}
+	
+	@RequestMapping(value = "/info/carcode")
+	public String carCode(HttpServletRequest request, ModelMap map) {
+		String username = (String) request.getSession().getAttribute("username");
+		TdUser user = tdUserService.findByUsername(username);
+		if (null == user) {
+			return "user/login";
+		}
+		map.addAttribute("carcode", user.getCarCode());
+		return "/user/user_info_carcode";
+	}
+	
+	@RequestMapping(value = "/carcode/edit")
+	public String carcodeEdit(HttpServletRequest request, String carcode) {
+		String username = (String) request.getSession().getAttribute("username");
+		TdUser user = tdUserService.findByUsername(username);
+		if (null == user) {
+			return "/user/login";
+		}
+		user.setCarCode(carcode);
+		tdUserService.save(user);
+		return "redirect:/user/center/info";
+	}
 }

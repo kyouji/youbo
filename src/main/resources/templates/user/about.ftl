@@ -33,7 +33,7 @@
         <dt><a><img src="/user/images/aboutus_right.png" /></a></dt>
     </dl>
     <dl class="about_us_last">
-        <dd><a>分享给小伙伴</a></dd>
+        <dd><a href="/user/center/share">分享给小伙伴</a></dd>
         <dt><a><img src="/user/images/aboutus_right.png" /></a></dt>
     </dl>
     <div class="about_us_fin">

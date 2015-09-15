@@ -25,28 +25,28 @@
     <!--我的账户开始-->
     <dl class="my_account">
         <dt>
-            <img src="/depot/images/money.png"  />
+            <img src="/depot/images/money.png"/>
             <p class="p1">当日累计手机收费</p>
-            <p class="p2">￥<span><#if user??>${user.totalSpendCash?string("0.00")!''}元<#else>0.00元</#if></span></p>
+            <p class="p2">￥<span><#if income??>${income?string("0.00")!''}元<#else>0.00元</#if></span></p>
         </dt>
     </dl>
     <a class="ip_1" type="button" style="ali" href="/depot/myaccount/withdrawal">提现</a>
     <div class="my_account_record">
         <dl>
             <dd><a href="/depot/myaccount/cashrecord">提现记录</a></dd>
-            <dt><a href="/depot/myaccount/cashrecord"><img src="/depot/images/advance.png" /><span></span></a></dt>
+            <dt><a href="/depot/myaccount/cashrecord"><img src="/depot/images/advance.png" /></a></dt>
         </dl>
         <dl>
             <dd><a href="/depot/myaccount/refund">退款申请</a></dd>
-            <dt><a href="/depot/myaccount/refund"><img src="/depot/images/advance.png" /><span></span></a></dt>
+            <dt><a href="/depot/myaccount/refund"><img src="/depot/images/advance.png" /></a></dt>
         </dl>
         <dl>
             <dd><a href="/depot/myaccount/bankcard">银行卡</a></dd>
-            <dt><a href="/depot/myaccount//bankcard"><img src="/depot/images/advance.png" /><span></span></a></dt>
+            <dt><a href="/depot/myaccount//bankcard"><img src="/depot/images/advance.png" /></a></dt>
         </dl>
         <dl>
             <dd><a href="/depot/myaccount/message">消息中心</a></dd>
-            <dt><a href="/depot/myaccount/message"><img src="/depot/images/advance.png" /><span></span></a></dt>
+            <dt><a href="/depot/myaccount/message"><img src="/depot/images/advance.png" /></a></dt>
         </dl>
     </div>
     <!--我的账户结束-->
@@ -57,11 +57,11 @@
     
     <!--底部开始-->
     <div class="footer">
-    <a class="a1" href="/depot">主页</a>
-    <a class="a2 sel" href="/depot/myaccount">账户<span></span></a>
-    <a class="a3" href="/depot/charge">收费记录<span></span></a>
-    <a class="a4" href="/depot/info">车场信息<span></span></a>
-    <a class="a5" href="/depot/site">设置<span></span></a>
+        <a class="a1" href="/depot">主页</a>
+        <a class="a2 sel" href="/depot/myaccount">账户</a>
+        <a class="a3" href="/depot/charge">收费记录</a>
+        <a class="a4" href="/depot/info">车场信息</a>
+        <a class="a5" href="/depot/site">设置</a>
     </div>
     <!--底部结束-->
     

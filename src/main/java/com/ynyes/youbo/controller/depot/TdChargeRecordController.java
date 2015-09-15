@@ -24,7 +24,7 @@ public class TdChargeRecordController {
 	@RequestMapping
     public String site(HttpServletRequest req, Device device, ModelMap map)
 	{
-		String username = (String) req.getSession().getAttribute("depotuser");
+		String username = (String) req.getSession().getAttribute("siteUsername");
         if (null == username)
         {
             return "redirect:/depot/login";
@@ -36,6 +36,7 @@ public class TdChargeRecordController {
 	@RequestMapping("/charge")
 	public String charge(HttpServletRequest req, Device device, ModelMap map)
 	{
+		
 		return "/depot/site";
 	}
 }

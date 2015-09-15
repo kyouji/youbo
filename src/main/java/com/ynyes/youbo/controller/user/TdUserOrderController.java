@@ -11,10 +11,12 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.ynyes.youbo.entity.TdOrder;
+import com.ynyes.youbo.entity.TdUser;
 import com.ynyes.youbo.service.TdAdService;
 import com.ynyes.youbo.service.TdAdTypeService;
 import com.ynyes.youbo.service.TdCommonService;
 import com.ynyes.youbo.service.TdOrderService;
+import com.ynyes.youbo.service.TdUserService;
 
 @Controller
 @RequestMapping("/user/order")
@@ -31,6 +33,9 @@ public class TdUserOrderController {
 	@Autowired
 	private TdOrderService tdOrderService;
 	
+	@Autowired
+	private TdUserService tdUserService;
+	
 	@RequestMapping
     public String index(String type,HttpServletRequest req, Device device, ModelMap map)
 	{
@@ -41,13 +46,48 @@ public class TdUserOrderController {
         }
 		
 		List<TdOrder> all_order_list = tdOrderService.findByUsername(username);
-		List<TdOrder> finish_order_list = tdOrderService.findByUsernameAndStatusId(username);
-		List<TdOrder> unfinish_order_list = tdOrderService.findByUsernameAndStatusIdNot(username);
+		List<TdOrder> parked_order_list = tdOrderService.findByUsernameAndParked(username);
+		List<TdOrder> unparked_order_list = tdOrderService.findByUsernameAndNotParked(username);
 		
 		map.addAttribute("all_order_list",all_order_list);
-		map.addAttribute("finish_order_list",finish_order_list);
-		map.addAttribute("unfinish_order_list",unfinish_order_list);
+		map.addAttribute("parked_order_list",parked_order_list);
+		map.addAttribute("unparked_order_list",unparked_order_list);
 		
 		return "/user/order_list";
 	}
+	@RequestMapping("/cancel")
+	public String cancel(HttpServletRequest request,ModelMap map){
+		String username = (String) request.getSession().getAttribute("username");
+		if(null == username){
+			return "/user/login";
+		}
+		List<TdOrder> checking_list = tdOrderService.findCheckingOrder(username);
+		List<TdOrder> checkfalse_list = tdOrderService.findCheckFlaseOrder(username);
+		List<TdOrder> checktrue_list = tdOrderService.findCheckTrueOrder(username);
+		List<TdOrder> cancel_list = tdOrderService.findByCancelOrder(username);
+		
+		map.addAttribute("checking_list", checking_list);
+		map.addAttribute("checkfalse_list", checkfalse_list);
+		map.addAttribute("checktrue_list", checktrue_list);
+		map.addAttribute("cancel_list", cancel_list);
+		return "/user/cancel_list";
+	}
+	
+	/**
+	 * 支付定金的方法
+	 * @author dengxiao
+	 */
+	@RequestMapping(value="/first/pay")
+	public String firstPay(HttpServletRequest request,Long id,ModelMap map){
+		String username = (String) request.getSession().getAttribute("username");
+		TdUser user = tdUserService.findByUsername(username);
+		if(null == user){
+			return "/user/login";
+		}
+		TdOrder order = tdOrderService.findOne(id);
+		map.addAttribute("user", user);
+		map.addAttribute("order", order);
+		return "/user/first_pay";
+	}
+	
 }

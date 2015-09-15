@@ -194,10 +194,26 @@ $(function () {
        </dd>
   </dl>
   <dl>
-    <dt>同盟店详细位置</dt>
+    <dt>车库详细位置</dt>
     <dd>
       <input name="address" type="text" value="<#if diy_site??>${diy_site.address!""}</#if>" class="input normal" datatype="*" errormsg="" sucmsg=" ">
       <span class="Validform_checktip">该信息可以帮助用户选择最合适的同盟店</span>
+    </dd>
+  </dl>
+  
+  <dl>
+    <dt>车库类型</dt>
+    <dd>
+      <input name="parkingType" type="text" value="<#if diy_site?? && diy_site.parkingType??>${diy_site.parkingType!''}</#if>" class="input normal" datatype="*" errormsg="" sucmsg=" ">
+      <span class="Validform_checktip"></span>
+    </dd>
+  </dl>
+  
+  <dl>
+    <dt>车位类型</dt>
+    <dd>
+      <input name="parkingClassification" type="text" value="<#if diy_site?? && diy_site.parkingClassification??>${diy_site.parkingClassification!''}</#if>" class="input normal" datatype="*" errormsg="" sucmsg=" ">
+      <span class="Validform_checktip"></span>
     </dd>
   </dl>
   

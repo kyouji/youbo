@@ -41,7 +41,7 @@ public class TdBankcard {
 	//卡类型
 	@Column
 	private String bankCardType;
-
+	
 	public Long getId() {
 		return id;
 	}

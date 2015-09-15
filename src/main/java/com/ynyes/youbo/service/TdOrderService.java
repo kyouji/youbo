@@ -418,6 +418,95 @@ public class TdOrderService {
 		if (null == username || null == beginDate || null == finishDate) {
 			return null;
     	}
-		return repository.findByUsernameAndFinishTimeBetweenAndStatusId(username, beginDate, finishDate, 6L);
+		return repository.findByUsernameAndFinishTimeBetweenAndStatusIdOrderByOrderTimeAsc(username, beginDate, finishDate, 6L);
     }
+	
+	//查找指定用户已停车的订单
+	public List<TdOrder> findByUsernameAndParked(String username){
+		if(null == username){
+			return null;
+		}
+		return repository.findByUsernameAndStatusIdOrUsernameAndStatusIdOrUsernameAndStatusIdOrderByOrderTimeDesc(username, 4L, username, 5L, username, 6L);
+	}
+	
+	//查找指定用户未停车的订单
+	public List<TdOrder> findByUsernameAndNotParked(String username){
+		if(null == username){
+			return null;
+		}
+		return repository.findByUsernameAndStatusIdOrUsernameAndStatusIdOrUsernameAndStatusIdOrderByOrderTimeDesc(username, 1L, username, 2L, username, 3L);
+	}
+	
+	//查找指定用户等待审核的订单
+	public List<TdOrder> findCheckingOrder(String username){
+		if(null == username){
+			return null;
+		}
+		return repository.findByUsernameAndStatusIdOrderByOrderTimeDesc(username, 7L);
+	}
+	
+	//查找指定用户审核通过的订单
+	public List<TdOrder> findCheckTrueOrder(String username){
+		if(null == username){
+			return null;
+		}
+		return repository.findByUsernameAndCheckStatusAndStatusIdOrderByOrderTimeDesc(username, "审核通过", 9L);
+	}
+	
+	//查找指定用户审核未通过的订单
+	public List<TdOrder> findCheckFlaseOrder(String username){
+		if(null == username){
+			return null;
+		}
+		return repository.findByUsernameAndCheckStatusOrderByOrderTimeDesc(username, "审核未通过");
+	}
+	
+	//查找指定用户所有已取消的订单
+	public List<TdOrder> findByCancelOrder(String username){
+		if(null == username){
+			return null;
+		}
+		return repository.findByUsernameAndStatusIdOrUsernameAndStatusIdOrUsernameAndStatusIdOrderByOrderTimeDesc(username, 7L, username, 8L, username, 9L);
+	}
+		
+	//查找指定停车场的所有被申请退款的订单
+	public List<TdOrder> findByIdAndRefund(Long id){
+		if(null == id){
+			return null;
+		}
+		return repository.findByDiyIdAndCheckStatusOrDiyIdAndCheckStatusOrDiyIdAndCheckStatusOrderByOrderTimeDesc(id, "审核中", id, "审核通过", id, "审核未通过");
+	}
+	
+	//查找指定停车场正在审核中的退款订单
+	public List<TdOrder> findChecking(Long id){
+		if(null == id){
+			return null;
+		}
+		return repository.findByDiyIdAndCheckStatusOrderByOrderTimeDesc(id, "审核中");
+	}
+	
+	//查找指定停车场审核通过的退款订单
+	public List<TdOrder> findCheckedTrue(Long id){
+		if(null == id){
+			return null;
+		}
+		return repository.findByDiyIdAndCheckStatusOrderByOrderTimeDesc(id, "审核通过");
+	}
+	
+	//查找指定停车场审核未通过的退款订单
+	public List<TdOrder> findCheckedFalse(Long id){
+		if(null == id){
+			return null;
+		}
+		return repository.findByDiyIdAndCheckStatusOrderByOrderTimeDesc(id, "审核未通过");
+	}
+	
+	//根据停车场ID查找在某个时间段之内的所有订单
+	public List<TdOrder> findByDiyIdAndOrderTimeBetween(Long id,Date beginDate,Date finishDate){
+		if(null == id||null == beginDate||null == finishDate){
+			return null;
+		}
+		return repository.findByDiyIdAndOrderTimeBetween(id, beginDate, finishDate);
+	}
+	
 }

@@ -18,30 +18,25 @@
 <script type="text/javascript">
 var map;
 var userPiont;
+var endPoint;
 var drivingRoute;//路线
 
 $(document).ready(function(){
-//102.739129,25.087506
 
    // $(".find_float").css('display','');
    loadMap();
-   <#if depot_list??>
-    <#list depot_list as item>
-        <#if item.longitude?? && item.latitude??>
-            
-        addMarker(${item.longitude?string("0.000000")}, ${item.latitude?string("0.000000")},'${item.title}','${item.address!""}',${item.id},${item.parkingNowNumber!'0'});
-           
-        </#if>
-    </#list>
-    </#if>
+   <#if x??>
+        //addMarker(${x!"0.000000"}, ${y!"0.000000"},'${site.title}','${site.address!""}',${site.id},${site.parkingNowNumber!'0'});
+        endPoint =  new BMap.Point(${x!"0.000000"}, ${y!"0.000000"});
+   </#if>
 });
 function loadMap()
 {
     <#--自定义marker图片-->
-    var myIcon = new BMap.Icon("/user/images/map.png", new BMap.Size(23, 25), {
-    offset: new BMap.Size(10, 25), // 指定定位位置
-    imageOffset: new BMap.Size(0, 0 - 0 * 25) // 设置图片偏移
-    });
+//    var myIcon = new BMap.Icon("/user/images/map.png", new BMap.Size(23, 25), {
+//    offset: new BMap.Size(10, 25), // 指定定位位置
+//    imageOffset: new BMap.Size(0, 0 - 0 * 25) // 设置图片偏移
+//    });
     <#--end-->
     // 百度地图API功能
     map = new BMap.Map("myMap");
@@ -56,9 +51,10 @@ function loadMap()
         function(r){
             if(this.getStatus() == BMAP_STATUS_SUCCESS){
                 userPiont = r.point;
-                var mk = new BMap.Marker(r.point, {icon: myIcon});
-                map.addOverlay(mk);
+                //var mk = new BMap.Marker(r.point, {icon: myIcon});
+                //map.addOverlay(mk);
                 map.panTo(r.point);
+                startNavigation(${x!"0.000000"}, ${y!"0.000000"});
             }
             else 
             {
@@ -81,8 +77,6 @@ function addMarker(x, y, title,address,depotId,parkingNowNumber)
         "<dd><p>"+address+"</p></dd>"+
         "</dl>"+
         "<dl class='find_btn'>"+
-        "<dt><a onclick='javascript:goNavigation(" + x + "," + y +","+depotId+");'><img src='/user/images/park_icon01.png' /><span>导航</span></a></dt>"+
-        "<dd><a href='/user/find/bespeak?depotId="+depotId+ "'><img src='/user/images/park_icon02.png' /><span>预约</span></a></dd>"+
         "</dl>");
     });
 }
@@ -122,11 +116,6 @@ function getClickPoint(e){
     }
     $(".find_float").css('display','none');
 }
-
-//跳转到下一个页面并开始导航的方法
-function goNavigation(x,y,id){
-    window.location.href="/user/find/navigation?x="+x+"&y="+y+"&id="+id;
-}
 </script>
 </head>
 
@@ -135,13 +124,13 @@ function goNavigation(x,y,id){
 
 <div class="header">
         <p>找车位</p>
-        <a href="/user" class="a4"></a>
+        <a href="javascript:history.go(-1);" class="a4"></a>
 </div>
 <div class="main">
     <div class="find_img" id="myMap">
     </div> 
     
-    <div class="find_float" style="display:none;"> 
+    <div class="find_float1" style="display:block;"> 
         <span id="guid">
         </span>
     </div>

@@ -55,4 +55,5 @@ public interface TdDiySiteRepo extends
      * 根据停车场登陆名查找停车场（用于判断是否有此登陆名的停车场）
      */
     TdDiySite findByUsername(String username);
+    
 }

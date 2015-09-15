@@ -171,5 +171,23 @@ public interface TdOrderRepo extends PagingAndSortingRepository<TdOrder, Long>, 
 	// 根据车牌号码停车场id订单状态（状态为3，预约成功）查找一系列订单信息，按照时间倒序排序，选择第一个（第一个即是指定用户在指定停车场预约成功的最后一个订单）
 	TdOrder findTopByCarCodeAndDiyIdAndStatusIdOrderByOrderTimeDesc(String carCode, Long diyId, Long statusId);
 
-	List<TdOrder> findByUsernameAndFinishTimeBetweenAndStatusId(String username, Date beginDate, Date finishDate, Long statusId);
+	List<TdOrder> findByUsernameAndFinishTimeBetweenAndStatusIdOrderByOrderTimeAsc(String username, Date beginDate, Date finishDate, Long statusId);
+	
+	//查找指定用户还未停车或已停车的订单
+	List<TdOrder> findByUsernameAndStatusIdOrUsernameAndStatusIdOrUsernameAndStatusIdOrderByOrderTimeDesc(String username1,Long statusId1,String username2,Long statusId2,String username3,Long statusId3);
+	
+	//查找指定用户审核通过的订单
+	List<TdOrder> findByUsernameAndCheckStatusAndStatusIdOrderByOrderTimeDesc(String username,String checkStatus,Long statusId);
+	
+	//查找指定用户审核未通过的订单
+	List<TdOrder> findByUsernameAndCheckStatusOrderByOrderTimeDesc(String username,String checkStatus);
+	
+	//查找所有申请退费的订单
+	List<TdOrder> findByDiyIdAndCheckStatusOrDiyIdAndCheckStatusOrDiyIdAndCheckStatusOrderByOrderTimeDesc(Long id1,String checkStatus1,Long id2,String checkStatus2,Long id3,String checkStatus3);
+	
+	//查找处于某种审核状态的订单
+	List<TdOrder> findByDiyIdAndCheckStatusOrderByOrderTimeDesc(Long id,String checkStatus);
+	
+	//根据停车场的ID和下单时间查找订单
+	List<TdOrder> findByDiyIdAndOrderTimeBetween(Long id,Date beginDate,Date finishDate);
 }

@@ -122,22 +122,29 @@ public class TdDiySiteService {
 	 * @return
 	 */
 	public TdDiySite save(TdDiySite e) {
-		if (null != e.getUsername()) {
-			TdUser user = tdUserService.findByUsername(e.getUsername());
-
-			if (null == user) {
-				user = tdUserService.addNewUser(e.getUsername(), e.getPassword(), e.getMobile(), null, null);
-
-				user.setRoleId(2L); // 加盟商用户
-			}
-			// 修改加盟店密码也需要修改用户密码 @author: Sharon
-			else {
-				user.setPassword(e.getPassword());
-			}
-
-			tdUserService.save(user);
+//		if (null != e.getUsername()) {
+//			TdUser user = tdUserService.findByUsername(e.getUsername());
+//
+//			if (null == user) {
+//				user = tdUserService.addNewUser(e.getUsername(), e.getPassword(), e.getMobile(), null, null);
+//
+//				user.setRoleId(2L); // 加盟商用户
+//			}
+//			// 修改加盟店密码也需要修改用户密码 @author: Sharon
+//			else {
+//				user.setPassword(e.getPassword());
+//			}
+//
+//			tdUserService.save(user);
+//		}
+		/**
+		 * 不添加停车场账户到user表中
+		 * @author dengxiao
+		 */
+		if(null == e){
+			return null;
 		}
-
+		
 		return repository.save(e);
 	}
 
@@ -235,5 +242,12 @@ public class TdDiySiteService {
     		return null;
     	}
     	return repository.findByUsername(username);
+    }
+    
+    public TdDiySite findByUsernameAndIsEnableTrue(String username){
+    	if(null == username){
+    		return null;
+    	}
+    	return repository.findByUsernameAndIsEnableTrue(username);
     }
 }

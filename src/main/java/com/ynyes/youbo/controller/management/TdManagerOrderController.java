@@ -677,11 +677,12 @@ public class TdManagerOrderController {
 		String uris = parsePicUris(hid_photo_name_show360);
 
 		tdDiySite.setShowPictures(uris);
+		tdDiySite.setParkingNowNumber(tdDiySite.getParkingTotalNumber());
 
 		if (null == tdDiySite.getId()) {
-			tdManagerLogService.addLog("add", "新增同盟店", req);
+			tdManagerLogService.addLog("add", "新增车库", req);
 		} else {
-			tdManagerLogService.addLog("edit", "修改同盟店", req);
+			tdManagerLogService.addLog("edit", "修改车库", req);
 		}
 
 		tdDiySiteService.save(tdDiySite);

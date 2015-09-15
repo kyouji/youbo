@@ -70,7 +70,7 @@ function login(){
                 <input type="submit" class="loginbtn" id="btn_login" value="登录" />
                 <p class="login_a">
                   <!--<a href="#">找回密码</a>-->
-                  <a class="a1" href="/depot/register">注册</a>
+                  <!--<a class="a1" href="/depot/register">注册</a>-->
                 </p>
            <!-- </form>-->
         </div>
