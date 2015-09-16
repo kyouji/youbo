@@ -93,7 +93,7 @@ public class TdCooperationController {
 	 */
 	@RequestMapping(value = "/iodata")
 	@ResponseBody
-	public Map<String, Object> ioData(TdIOData ioData, HttpServletRequest request) {
+	public Map<String, Object> ioData(String carNo,String busNo,String ioState,String ioDate,String picture, HttpServletRequest request) {
 		Map<String, Object> res = new HashMap<>();
 		// status代表处理状态，-1代表失败
 		res.put("status", -1);
@@ -110,10 +110,27 @@ public class TdCooperationController {
 
 		// 保存此出入库信息
 		System.err.println("开始保存出入库信息");
-		if (null == ioData) {
-			res.put("message", "未接收到进出库信息");
+		if(null == carNo||null == busNo||null == ioState||null == ioDate||null == picture){
+			res.put("message", "参数未接收成功");
 			return res;
 		}
+		
+		Date theDate = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		try {
+			theDate = sdf.parse(ioDate);
+		} catch (Exception e) {
+			res.put("message", "ioDate参数格式不正确");
+			return res;
+		}
+		System.err.println("开始设置参数");
+		TdIOData ioData = new TdIOData();
+		ioData.setCardNo(carNo);
+		ioData.setBusNo(busNo);
+		ioData.setIoState(ioState);
+		ioData.setIoDate(theDate);
+		ioData.setPicture(picture);
+		System.err.println("参数设置完毕");
 		ioData = tdIoDataService.save(ioData);
 		System.err.println("已经保存了进出库信息");
 
@@ -133,6 +150,7 @@ public class TdCooperationController {
 				theOrder.setDiyId(diySite.getId());
 				theOrder.setDiyTitle(diySite.getTitle());
 				theOrder.setOrderTime(new Date());
+				theOrder.setCarCode(busNo);
 				System.err.println("开始存储新的订单");
 				order = tdOrderService.save(theOrder);
 				System.err.println("设置停车场的剩余数量-1");
@@ -153,7 +171,14 @@ public class TdCooperationController {
 
 		if ("正常外出".equals(ioData.getIoState())) {
 			System.err.println("接收到车辆出库数据，开始设置属性");
-			order.setOutputTime(ioData.getIoDate());
+			order = tdOrderService.findbyStatusFour(busNo, diySite.getId());
+			if(null == order){
+				res.put("message", "未能找到指定的订单");
+				return res;
+			}
+			order.setStatusId(5L);
+			
+			order.setOutputTime(theDate);
 			// 在此计算停车费用，并将其存储到order的totalPrice字段上
 
 			// 将计算出来的总价格返回

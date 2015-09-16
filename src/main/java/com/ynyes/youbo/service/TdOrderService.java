@@ -432,6 +432,14 @@ public class TdOrderService {
 		}
 		return repository.findTopByCarCodeAndDiyIdAndStatusIdOrderByOrderTimeDesc(carCode, diyId, 3L);
 	};
+	
+	//根据车牌号码和停车场id查找状态为4的订单按照时间倒序排序选择第一个
+	public TdOrder findbyStatusFour(String carCode,Long diyId){
+		if (null == carCode || null == diyId) {
+			return null;
+		}
+		return repository.findTopByCarCodeAndDiyIdAndStatusIdOrderByOrderTimeDesc(carCode, diyId, 4L);
+	}
 
 	public List<TdOrder> findByUsernameAndFinishTimeBetweenAndStatusId(String username, Date beginDate,
 			Date finishDate) {
