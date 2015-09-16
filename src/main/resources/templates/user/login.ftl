@@ -65,7 +65,7 @@ function login(){
                     <input type="text" name="username" id="txt_loginId" class="logintext01" placeholder="手机号" />
                 </div>
                 <div class="logintext logintext_p">
-                    <input type="text" name="password" id="txt_loginPwd" class="logintext02" placeholder="输入密码" />
+                    <input type="password" name="password" id="txt_loginPwd" class="logintext02" placeholder="输入密码" />
                 </div>
                 <input type="submit" class="loginbtn" id="btn_login" value="登录" />
                 <p class="login_a">

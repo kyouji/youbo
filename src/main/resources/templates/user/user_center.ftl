@@ -23,16 +23,16 @@
 <body>
 
 
-<div class="header">
-       <p>个人中心</p>
+    <div class="header">
+        <p>个人中心</p>
         <a href="/user" class="a4"></a>
-</div>
+    </div>
 
 <div class="main">
     <dl class="mycenter_min">
         <dt>
             <div><img src="<#if user??>${user.headImageUri!'/user/images/default_head.png'}</#if>"/></div>
-            <p>${user.mobile!''}<span>${user.carCode!'渝A·326326'}</span></p>
+            <p>${user.mobile!''}<span>${user.carCode!''}</span></p>
             <a href="/user/center/info"><img src="/user/images/aboutus_right.png" /></a>
         </dt>
         <dd>

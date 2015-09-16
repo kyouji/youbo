@@ -507,7 +507,7 @@ public class TdOrderService {
 			return null;
 		}
 		return repository.findByDiyIdAndCheckStatusOrDiyIdAndCheckStatusOrDiyIdAndCheckStatusOrderByOrderTimeDesc(id,
-				"审核中", id, "审核通过", id, "审核未通过");
+				"待审核", id, "审核通过", id, "审核未通过");
 	}
 
 	// 查找指定停车场正在审核中的退款订单
@@ -515,7 +515,7 @@ public class TdOrderService {
 		if (null == id) {
 			return null;
 		}
-		return repository.findByDiyIdAndCheckStatusOrderByOrderTimeDesc(id, "审核中");
+		return repository.findByDiyIdAndCheckStatusOrderByOrderTimeDesc(id, "待审核");
 	}
 
 	// 查找指定停车场审核通过的退款订单

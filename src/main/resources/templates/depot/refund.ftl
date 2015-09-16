@@ -63,6 +63,23 @@
             $("#all_refund").css("display","block");        
         }        
     }
+    
+    function refund(id,type){
+        if(null==id||null==type){
+            alert("参数错误，操作失败！");
+            return;
+        }
+        
+        var reason = prompt("请输入留言以告知用户审核通过（未通过）的原因");
+        $.post("/depot/myaccount/refund/edit",{"orderId":id,"type":type,"reason":reason},function(res){
+            if(-1==res.status){
+                alert(res.message);
+            }
+            if(0==res.status){
+                window.location.reload();
+            }
+        })
+    }
 </script>
 </head>
 
@@ -89,14 +106,14 @@
                 <#if checking_refund??&&checking_refund?size gt 0>
                     <#list checking_refund as item>
                         <dl class="bespeak_list_01">
-                            <dt><a>${item.diyTitle!''}</a><p class="sel_3">待审核</p></dt>
+                            <dt><a>${item.diyTitle!''}</a><p>待审核</p></dt>
                             <dd><img src="/depot/images/bespeak_list_01.png" /><a><#if item.orderTime??>${item.orderTime?string("yyyy-MM-dd HH:mm")}</#if></a></dd>
                             <dt><b>退款金额</b><p class="red_1">￥<span>1.00</span></p></dt>
                             <dt><b>退款理由：</b><p class="red_1"><span>${item.cancelReason!''}</span></p></dt>
                         </dl>
                         <div class="bespeak_list_btn">
-                            <input type="button" class="input_by_dx" value="通过"/ >
-                            <input type="button" class="input_by_dx" value="拒绝" style="background-color:#ef0000"/ >
+                            <input type="button" class="input_by_dx" onclick="refund(${item.id?c},0);" value="通过"/ >
+                            <input type="button" class="input_by_dx" value="拒绝" onclick="refund(${item.id?c},-1);" style="background-color:#ef0000"/ >
                         </div>
                     </#list>
                 </#if>
@@ -152,8 +169,8 @@
                             <#elseif item.checkStatus=='审核未通过'>
                                 <input class="sel_2" type="button" value="退款失败"/ >
                             <#else>
-                                <input type="button" class="input_by_dx" value="通过"/ >
-                                <input type="button" class="input_by_dx" value="拒绝" style="background-color:#ef0000"/ >
+                                <input type="button" class="input_by_dx" onclick="refund(${item.id?c},0)" value="通过"/ >
+                                <input type="button" class="input_by_dx" value="拒绝" onclick="refund(${item.id?c},-1)" style="background-color:#ef0000"/ >
                             </#if> 
                         </div>
                     </#list>

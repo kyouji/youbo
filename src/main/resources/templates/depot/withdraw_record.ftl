@@ -17,30 +17,36 @@
     <!--头部开始-->
     <div class="header">
         <p>提现记录</p>
-        <a href="/depot/myaccount" class="a4"></a>
+        <a href="javascript:history.go(-1);" class="a4"></a>
     </div>
     <!--头部结束-->
     
     <div class="ybtx">
     <!--提现记录开始-->
-    <div class="withdraw_record_list">
-        <ul>
-            <li class="li_1"><span>提现金额</span><p>￥<b>80000.00</b></p></li>
-            <li><span>提现时间</span><p class="time_1">2015-04-12</p></li>
-        </ul>
-        <ul>
-            <li class="li_1"><span>提现金额</span><p>￥<b>80000.00</b></p></li>
-            <li><span>提现时间</span><p class="time_1">2015-04-12</p></li>
-        </ul>
-        <ul>
-            <li class="li_1"><span>提现金额</span><p>￥<b>80000.00</b></p></li>
-            <li><span>提现时间</span><p class="time_1">2015-04-12</p></li>
-        </ul>
-        <ul>
-            <li class="li_1"><span>提现金额</span><p>￥<b>80000.00</b></p></li>
-            <li><span>提现时间</span><p class="time_1">2015-04-12</p></li>
-        </ul>
-    </div>
+    <#if deposit_list??>
+        <div class="withdraw_record_list">
+            <#list deposit_list as item>
+                <ul>
+                    <li class="li_1">
+                        <span>提现金额</span>
+                        <p>￥
+                            <#if item.money??>
+                                <b>${item.money?string("0.00")}</b>
+                            <#else>
+                                <b>0.00</b>
+                            </#if>
+                        </p>
+                    </li>
+                    <li>
+                    <span>提现时间</span>
+                        <#if item.depositDate??>
+                            <p class="time_1">${item.depositDate?string("yyyy-MM-dd HH:mm:ss")}</p>
+                        </#if>
+                    </li>
+                </ul>
+            </#list>
+        </div>
+    </#if>
     <!--提现记录结束-->
 
     <div class="mb98"></div>

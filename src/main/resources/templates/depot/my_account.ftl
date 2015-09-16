@@ -17,7 +17,7 @@
     <!--头部开始-->
     <div class="header">
         <p>我的账户</p>
-        <a href="/depot" class="a4"></a>
+        <a href="javascript:history.go(-1);" class="a4"></a>
     </div>
     <!--头部结束-->
     

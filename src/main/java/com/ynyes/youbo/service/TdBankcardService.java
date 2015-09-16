@@ -1,5 +1,7 @@
 package com.ynyes.youbo.service;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,5 +25,12 @@ public class TdBankcardService {
 	public void save(TdBankcard e)
 	{
 		repository.save(e);
+	}
+	
+	public List<TdBankcard> findByDiyId(Long diyId){
+		if(null == diyId){
+			return null;
+		}
+		return repository.findByDiyId(diyId);
 	}
 }

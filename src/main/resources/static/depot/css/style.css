@@ -167,7 +167,7 @@ body{background:#efefef;}
 .refund_request .payment_situation a{display:block;float:left;width:25%;line-height:40px;text-align:center;}
 .refund_request .payment_situation a.sel{border-bottom:solid 3px #0e5baa;height:37px;}
 
-.bespeak_list_01 { display:block; overflow:hidden;  width:92%; padding-left:4%; padding-right:4%; margin-top:5%; background:white;}
+.bespeak_list_01 { display:block; overflow:hidden;  width:92%; padding-left:4%; padding-right:4%; margin-top:5%; background:white;float:left;}
 .bespeak_list_01 dt{ height:40px; width:100%; float:left;}
 .bespeak_list_01 dt a{ height:40px;  float:left; line-height:40px; display:block; font-size:1.3em;}
 .bespeak_list_01 dt p{ height:40px;  float:right; line-height:40px; font-size:1em;color:#999999;}

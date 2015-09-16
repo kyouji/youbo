@@ -97,6 +97,12 @@ public class TdBankcard {
 	public void setBankCardType(String bankCardType) {
 		this.bankCardType = bankCardType;
 	}
+
+	@Override
+	public String toString() {
+		return "TdBankcard [id=" + id + ", name=" + name + ", idNumber=" + idNumber + ", cardNumber=" + cardNumber
+				+ ", mobile=" + mobile + ", bankName=" + bankName + ", bankCardType=" + bankCardType + "]";
+	}
 	
 
 }

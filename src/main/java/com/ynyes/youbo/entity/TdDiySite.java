@@ -128,7 +128,31 @@ public class TdDiySite {
     @Column
     private Integer parkingNowNumber;
     
-    public List<TdBankcard> getBankcardList() {
+    //提现密码
+    @Column
+    private String depositPassword;
+    
+    //该停车场所有的收入
+    @Column
+    private Double allMoney;
+    
+    public Double getAllMoney() {
+		return allMoney;
+	}
+
+	public void setAllMoney(Double allMoney) {
+		this.allMoney = allMoney;
+	}
+
+	public String getDepositPassword() {
+		return depositPassword;
+	}
+
+	public void setDepositPassword(String depositPassword) {
+		this.depositPassword = depositPassword;
+	}
+
+	public List<TdBankcard> getBankcardList() {
 		return bankcardList;
 	}
 

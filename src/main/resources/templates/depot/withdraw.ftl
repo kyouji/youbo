@@ -51,20 +51,29 @@
     <form>
         <ul>
             <li>
-                <p class="p1">储蓄卡</p>
+                <p class="p1">银行卡</p>
                 <p class="p2">
-                    <select>
-                        <option value="CCB">建设银行(0202)</option>
-                        <option value="new">使用新卡提现</option>
+                    <select name="bankcard">
+                        <#if cards??>
+                            <#list cards as item>
+                                <option value="${item.cardNumber!''}">${item.bankName!''}(<#if item.cardNumber??>${item.cardNumber?substring((item.cardNumber?length-5),(item.cardNumber?length-1))}</#if>)</option>
+                            </#list>                        
+                        <#else>
+                            <option>未绑定银行卡</option>    
+                        </#if>
                     </select>
                 </p>
             </li>
             <li>
                 <p class="p1">金额(元)</p>
-                <p class="p2"><input type="text" placeholder="当前可提现余额3210000.00元" /></p>
+                <p class="p2"><input type="text" name="money" placeholder="当前可提现余额<#if allMoney??>${allMoney?string("0.00")}<#else>0.00</#if>元" /></p>
             </li>
         </ul>
-        <input class="bank_sure" type="button"  onclick="pupopen()" value="下一步">
+        <#if cards??&&allMoney??&&allMoney gt 0>
+            <input class="bank_sure" type="button"  onclick="pupopen();" value="下一步">
+        <#else>
+            <input class="bank_sure" type="button" style="background-color:#999999;" value="下一步">
+        </#if>
     </form>
     </div>
     <!--我的账户结束-->
@@ -76,10 +85,10 @@
     <!--底部开始-->
     <div class="footer">
     <a class="a1" href="/depot">主页</a>
-    <a class="a2 sel" href="/depot/myaccount">账户<span></span></a>
-    <a class="a3" href="/depot/charge">收费记录<span></span></a>
-    <a class="a4" href="/depot/info">车场信息<span></span></a>
-    <a class="a5" href="/depot/site">设置<span></span></a>
+    <a class="a2 sel" href="/depot/myaccount">账户</a>
+    <a class="a3" href="/depot/charge">收费记录</a>
+    <a class="a4" href="/depot/info">车场信息</a>
+    <a class="a5" href="/depot/site">设置</a>
     </div>
     <!--底部结束-->
     

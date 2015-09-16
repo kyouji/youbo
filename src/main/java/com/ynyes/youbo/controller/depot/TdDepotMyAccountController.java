@@ -20,11 +20,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ynyes.youbo.entity.TdBankcard;
+import com.ynyes.youbo.entity.TdDeposit;
 import com.ynyes.youbo.entity.TdDiySite;
 import com.ynyes.youbo.entity.TdOrder;
 import com.ynyes.youbo.entity.TdUser;
 import com.ynyes.youbo.service.TdBankcardService;
 import com.ynyes.youbo.service.TdCommonService;
+import com.ynyes.youbo.service.TdDepositService;
 import com.ynyes.youbo.service.TdDiySiteService;
 import com.ynyes.youbo.service.TdOrderService;
 import com.ynyes.youbo.service.TdPayTypeService;
@@ -51,6 +53,9 @@ public class TdDepotMyAccountController {
 
 	@Autowired
 	private TdOrderService tdOrderService;
+	
+	@Autowired
+	private TdDepositService tdDepositService;
 
 	/**
 	 * 我的账户首页
@@ -222,6 +227,19 @@ public class TdDepotMyAccountController {
 	 */
 	@RequestMapping("/withdrawal")
 	public String withdrawal(HttpServletRequest req, Device device, ModelMap map) {
+		String siteUsername = (String) req.getSession().getAttribute("siteUsername");
+		TdDiySite site = tdDiySiteService.findbyUsername(siteUsername);
+		
+		if(null == site){
+			return "/depot/login";
+		}
+		
+		if(null == site.getAllMoney()){
+			site.setAllMoney(new Double(0));
+		}
+		map.addAttribute("allMoney", site.getAllMoney());
+		map.addAttribute("cards", site.getBankcardList());
+		
 		return "/depot/withdraw";
 	}
 
@@ -235,6 +253,46 @@ public class TdDepotMyAccountController {
 	 */
 	@RequestMapping("/cashrecord")
 	public String cashrecord(HttpServletRequest req, Device device, ModelMap map) {
+		String siteUsername = (String) req.getSession().getAttribute("siteUsername");
+		TdDiySite site = tdDiySiteService.findbyUsername(siteUsername);
+		if(null == site){
+			return "/depot/login";
+		}
+		List<TdDeposit> deposit_list = tdDepositService.findByDiyIdOrderByDepositDateDesc(site.getId());
+		map.addAttribute("deposit_list", deposit_list);
 		return "/depot/withdraw_record";
+	}
+	
+	@RequestMapping(value="/refund/edit")
+	@ResponseBody
+	public Map<String, Object> refundEdit(HttpServletRequest req,Long orderId,Integer type,String reason){
+		Map<String , Object> res = new HashMap<>();
+		res.put("status", -1);
+		String siteUsername = (String) req.getSession().getAttribute("siteUsername");
+		TdDiySite site = tdDiySiteService.findbyUsername(siteUsername);
+		if(null == site){
+			res.put("message", "未获取到已登录用户的信息！");
+			return res;
+		}
+		if(null == orderId||null == type||null == reason){
+			res.put("message", "参数获取失败！");
+			return res;
+		}
+		
+		TdOrder order = tdOrderService.findOne(orderId);
+		if(0 == type){
+			order.setStatusId(9L);
+			order.setCheckStatus("审核通过");
+			order.setFinishTime(new Date());
+			//在此开始调用银行接口进行退款
+		}
+		if(-1 == type){
+			order.setStatusId(8L);
+			order.setCheckStatus("审核未通过");
+		}
+		order.setRemarkInfo(reason);
+		tdOrderService.save(order);
+		res.put("status", 0);
+		return res;
 	}
 }

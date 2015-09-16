@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ynyes.youbo.entity.TdDiySite;
 import com.ynyes.youbo.entity.TdUser;
-import com.ynyes.youbo.service.TdCommonService;
 import com.ynyes.youbo.service.TdDiySiteService;
 import com.ynyes.youbo.service.TdUserService;
 import com.ynyes.youbo.util.VerifServlet;
@@ -85,7 +84,7 @@ public class TdDepotLoginAndRegisterController {
         return res;
     }
 	
-	/**
+	/**                      
 	 * 用注册
 	 * @param req
 	 * @param device
