@@ -235,31 +235,37 @@ public class TdManagerOrderController {
 			res.put("info", "该字段不能为空");
 			return res;
 		}
-
-		TdUser tdUser = tdUserService.findByUsername(param);
-
-		if (null == id) // 新增
-		{
-			if (null != tdUser) {
-				res.put("info", "该登录名不能使用");
-				return res;
-			}
-		} else // 修改，查找除当前ID的所有
-		{
-			TdDiySite dSite = tdDiySiteService.findOne(id);
-
-			if (null == dSite) {
-				if (null != tdUser && tdUser.getRoleId() == 2L) {
-					res.put("info", "该登录名不能使用");
-					return res;
-				}
-			} else {
-				if (null != tdUser && tdUser.getUsername() != dSite.getUsername() && tdUser.getRoleId() != 2L) {
-					res.put("info", "该登录名不能使用");
-					return res;
-				}
-			}
+		
+		TdDiySite site = tdDiySiteService.findbyUsername(param);
+		if(null != site){
+			res.put("info", "该登录名不能使用");
+			return res;
 		}
+
+//		TdUser tdUser = tdUserService.findByUsername(param);
+//
+//		if (null == id) // 新增
+//		{
+//			if (null != tdUser) {
+//				res.put("info", "该登录名不能使用");
+//				return res;
+//			}
+//		} else // 修改，查找除当前ID的所有
+//		{
+//			TdDiySite dSite = tdDiySiteService.findOne(id);
+//
+//			if (null == dSite) {
+//				if (null != tdUser && tdUser.getRoleId() == 2L) {
+//					res.put("info", "该登录名不能使用");
+//					return res;
+//				}
+//			} else {
+//				if (null != tdUser && tdUser.getUsername() != dSite.getUsername() && tdUser.getRoleId() != 2L) {
+//					res.put("info", "该登录名不能使用");
+//					return res;
+//				}
+//			}
+//		}
 
 		res.put("status", "y");
 
@@ -681,6 +687,7 @@ public class TdManagerOrderController {
 
 		if (null == tdDiySite.getId()) {
 			tdManagerLogService.addLog("add", "新增车库", req);
+			tdDiySite.setAllMoney(new Double(0));
 		} else {
 			tdManagerLogService.addLog("edit", "修改车库", req);
 		}

@@ -5,11 +5,11 @@
 <link href="/mag/style/idialog.css" rel="stylesheet" id="lhgdialoglink">
 <title>编辑物流配送</title>
 <script type="text/javascript" src="/mag/js/jquery-1.10.2.min.js"></script>
-<script type="text/javascript" src="/mag/js/Validform_v5.3.2_min.js"></script>
-<script type="text/javascript" src="/mag/js/lhgdialog.js"></script>
 <script type="text/javascript" src="/mag/js/swfupload.js"></script>
 <script type="text/javascript" src="/mag/js/swfupload.queue.js"></script>
 <script type="text/javascript" src="/mag/js/swfupload.handlers.js"></script>
+<script type="text/javascript" src="/mag/js/Validform_v5.3.2_min.js"></script>
+<script type="text/javascript" src="/mag/js/lhgdialog.js"></script>
 <script src="/client/js/jquery.cityselect.js"></script>
 <script type="text/javascript" src="/mag/js/layout.js"></script>
 <link href="/mag/style/style.css" rel="stylesheet" type="text/css">
@@ -102,7 +102,7 @@ $(function () {
   <dl>
     <dt>登录名</dt>
     <dd>
-        <input name="username" type="text" value="<#if diy_site??>${diy_site.username!""}</#if>" class="input normal" ajaxurl="/Verwalter/order/setting/diysite/check<#if diy_site??>?id=${diy_site.id?c}</#if>" datatype="*6-100" sucmsg=" "> 
+        <input name="username" type="text" value="<#if diy_site??>${diy_site.username!""}</#if>" class="input normal" ajaxurl="/Verwalter/order/setting/diysite/check <#if diy_site??>?id=${diy_site.id?c}</#if>" datatype="*6-100" sucmsg=" "> 
         <span class="Validform_checktip">*登录账号</span>
     </dd>
   </dl>
@@ -117,6 +117,20 @@ $(function () {
     <dt>重复密码</dt>
     <dd>
         <input type="password" value="<#if diy_site??>${diy_site.password!""}</#if>" class="input normal" datatype="*" recheck="password" sucmsg=" "> 
+        <span class="Validform_checktip">*</span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>提现密码</dt>
+    <dd>
+        <input name="depositPassword" type="password" value="<#if diy_site??>${diy_site.depositPassword!""}</#if>" class="input normal" datatype="*6-6" errormsg="请输入6位任意字符" sucmsg=" "> 
+        <span class="Validform_checktip">*</span>
+    </dd>
+  </dl>
+  <dl>
+    <dt>重复提现密码</dt>
+    <dd>
+        <input type="password" value="<#if diy_site??>${diy_site.depositPassword!""}</#if>" class="input normal" datatype="*" recheck="depositPassword" sucmsg=" "> 
         <span class="Validform_checktip">*</span>
     </dd>
   </dl>
