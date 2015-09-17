@@ -15,7 +15,9 @@
 <script type="text/javascript">
     function startReserve(username,diyId){
         $.post("/user/find/reserve",{"username":username,"diyId":diyId},function(res){
-            alert(res.message);
+            if(0 != res.status){
+                alert(res.message);
+            }
             if(0==res.status){
                 window.location.href="/user/order/first/pay?id="+res.id;
             }
@@ -56,12 +58,12 @@
             </dl>
         
             <dl class="park_last">
-                <dd><span>车位数</span></dd>
-                <dt><p>平面自走式</p></dt>
+                <dd><span>车库类型</span></dd>
+                <dt><p>${diySite.parkingType!''}</p></dt>
             </dl>
             <dl class="park_last">
-                <dd><span>车位分类</span></dd>
-                <dt><p>占道停车场</p></dt>
+                <dd><span>车位类型</span></dd>
+                <dt><p>${diySite.parkingClassification!''}</p></dt>
             </dl>
             <dl class="park_last">
                 <dd><span>地址</span></dd>

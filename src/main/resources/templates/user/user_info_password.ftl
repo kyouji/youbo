@@ -36,15 +36,19 @@
     <form id="theForm" action="/user/center/password/save" method="post">
         <div class="personal_info_pwd">
             <input class="btn1" name="oldpassword" type="password" datatype="*" nullmsg="请输入原密码！" ajaxurl="/user/center/password/check" placeholder="原密码"/ >
+            <span style="color:red;margin-left:4%;" class="Validform_checktip Validform_wrong"></span>
         </div>
         <div class="personal_info_pwd">
             <input class="btn2" name="password"  type="password" datatype="*6-12" nullmsg="请输入新密码！" placeholder="新密码"/ >
+            <span style="color:red;margin-left:4%;" class="Validform_checktip Validform_wrong"></span>
         </div>  
         <div class="personal_info_pwd">
             <input class="btn3" name="repassword" type="password" datatype="*" placeholder="确认密码！" recheck="password" nullmsg="请再次输入新密码" / >
+            <span style="color:red;margin-left:4%;" class="Validform_checktip Validform_wrong"></span>
         </div>
         <div class="personal_info_pwd">
-            <input type="submit" value="保存">
+            <input style=" background:#0e5baa; color:white; width:92%; margin-left:4%;margin-right:4%" type="submit" value="保存">
+            <span style="color:red;margin-left:4%;" class="Validform_checktip Validform_wrong"></span>
         </div>
     </form>
 

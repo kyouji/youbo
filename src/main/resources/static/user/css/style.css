@@ -21,7 +21,7 @@ body{ background:#efefef; }
 
 /*bankcard_add*/
 .bank{ width:90%; margin-left:5%; margin-right:5%;  margin-top:7%;}
-.bank_01{width:100%;  height:56px; background-color:white;}
+.bank_01{-webkit-appearance:none;width:100%;  height:56px; background-color:white;}
 .bank_01 dt{ float:left;}
 .bank_01 dt a{ font-size:1.5em; line-height:56px; margin-left:10px;}
 .bank_01 dd{ float:right;}
@@ -47,8 +47,9 @@ body{ background:#efefef; }
 /*bespeak*/
 .bespeak{ width:100%; height:auto; margin-top:5%;}
 .bespeak dt{ width:94%; padding-left:3%; padding-right:3%; height:50px; background:white; border-bottom:#dddddd 1px solid; float:left;}
-.bespeak dt a{display:block; float:left; font-size:1.3em; line-height:50px; color:#333333;}
-.bespeak dt p{ float:right; font-size:1.1em; line-height:50px;}
+.bespeak dt div{display:block; float:left; font-size:1.3em; line-height:50px; color:#333333;}
+.bespeak dt p{ float:right; font-size:1.1em; line-height:50px; margin-right:36px;}
+.bespeak dt span{ float:right; display:block; margin-top:13px;}
 .bespeak dd{  width:92%; padding-left:4%; padding-right:4%; overflow:hidden; display:block; float:left;}
 .bespeak dd a{ width:100%; height:40px; float:left; line-height:40px;}
 .bespeak dd input{ width:100%; height:50px; float:left; line-height:50px; border:none; margin-left:-3%; padding-left:6%}
@@ -178,9 +179,9 @@ body{ background:#efefef; }
 /*mycenter*/
 .mycenter_min{ width:92%; padding-left:4%; padding-right:4%; height:auto; background-color:white; padding-top:5%; overflow:hidden; display:block; margin-bottom:5%;padding-bottom:5%;}
 .mycenter_min dt{width:100%; height:116px; text-align:center; float:left;}
-.mycenter_min dt div{ width:100px; height:100px; background-color:red; border-radius:50px; float:left;}
+.mycenter_min dt div{ width:100px; height:100px; border-radius:50px; float:left;}
 .mycenter_min dt p{ padding-top:9%; width:40%; float:left; margin-left:6%;}
-.mycenter_min dt span{ display:block; line-height:30px;}
+.mycenter_min dt span{ display:block; line-height:30px; float:left;}
 .mycenter_min dt a{ float:right; display:block;float:right;  margin-top:9%; }
 .mycenter_min dd{ width:100%; height:60px; border:#dddddd 1px solid; border-radius:6px; float:left; line-height:60px; text-align:center;}
 .mycenter_min dd a{ height:58px; width:50%; display:block; float:left; background:url(../images/mycenter_line.png) no-repeat left;}
@@ -268,8 +269,9 @@ body{ background:#efefef; }
 
 /*personal_info*/
 .personal_info{ width:100%; height:auto; padding-top:5%; background:#0e5baa; padding-bottom:2%;}
-.personal_info_img{ width:100% height:100px;}
-.personal_info_img a{ width:100px; height:100px; display:block; border-radius:50px; background-color:#3b93de; line-height:100px; text-align:center; color:white; border:white 2px solid; margin-left:auto; margin-right:auto;}
+.personal_info_img{ width:100% height:100px; }
+.personal_info_img a{ width:100px; height:100px; display:block; border-radius:50px;  line-height:100px; text-align:center; color:white; ; margin-left:auto; margin-right:auto;}
+.personal_info_img img{width:100%; border-radius:50%;}
 .personal_info p{ width:100%; text-align:center; color:white; line-height:30px; font-size:1.1em; margin-top:2%;}
 .personal_info_list{ width:92%; padding-left:4%; padding-right:4%;  border-bottom:#ddd 1px solid; background-color:white;}
 .personal_info_list dd{ width:100%; height:50px; border-bottom:#ddd 1px solid;}
@@ -442,7 +444,8 @@ body{ background:#efefef; }
 .order_01 dt{ height:40px; width:100%; float:left;}
 .order_01 dt span{ height:40px;  float:left; line-height:40px; display:block; font-size:1.3em;}
 .order_01 dt p{ height:40px;  float:right; line-height:40px; font-size:1.3em;color:#ef0000}
-.order_01 dd{ height:60px; width:100%;float:left;}
+.order_01 dd{ height:40px; width:100%;float:left;}
+.order_01 dd label{ line-height:40px; color:#666666;}
 .order_01 dd span{ height:40px;  float:left; line-height:40px; display:block; margin-left:4px; color:#999;}
 .order_01 dd p{ height:40px;  float:right; line-height:40px;}
 .order_01 dd img{ float:left; margin-top:8px;}

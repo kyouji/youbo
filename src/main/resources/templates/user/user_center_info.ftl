@@ -11,7 +11,6 @@
 
 <link href="/user/css/common.css" rel="stylesheet" type="text/css" />
 <link href="/user/css/style.css" rel="stylesheet" type="text/css" />
-
 </head>
 
 <body>
@@ -29,6 +28,7 @@
                 <p></p>
             </div>
             <dl class="personal_info_list">
+                <dd><input type="file"></dd>
                 <dd><div>手机号</div><p>${user.mobile!''}</p><a><span></span></a></dd>
                 <dd><div>昵称</div><p>${user.nickname!''}</p><a href="/user/center/info/nickname"><span></span><img src="/user/images/setting_guide.png" /></a></dd>
                 <dd><div>车牌</div><p>${user.carCode!''}</p><a href="/user/center/info/carcode"><span></span><img src="/user/images/setting_guide.png" /></a></dd>

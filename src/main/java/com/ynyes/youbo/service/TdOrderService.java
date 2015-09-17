@@ -430,7 +430,13 @@ public class TdOrderService {
 		if (null == carCode || null == diyId) {
 			return null;
 		}
-		return repository.findTopByCarCodeAndDiyIdAndStatusIdOrderByOrderTimeDesc(carCode, diyId, 3L);
+		List<TdOrder> list = repository.findByCarCodeAndDiyIdAndStatusIdOrderByOrderTimeDesc(carCode, diyId, 3L);
+		if(null != list&&list.size()>0){
+			return list.get(0);
+		}else{
+			return null;
+		}
+		
 	};
 	
 	//根据车牌号码和停车场id查找状态为4的订单按照时间倒序排序选择第一个
@@ -438,7 +444,12 @@ public class TdOrderService {
 		if (null == carCode || null == diyId) {
 			return null;
 		}
-		return repository.findTopByCarCodeAndDiyIdAndStatusIdOrderByOrderTimeDesc(carCode, diyId, 4L);
+		List<TdOrder> list = repository.findByCarCodeAndDiyIdAndStatusIdOrderByOrderTimeDesc(carCode, diyId, 4L);
+		if(null != list&&list.size()>0){
+			return list.get(0);
+		}else{
+			return null;
+		}
 	}
 
 	public List<TdOrder> findByUsernameAndFinishTimeBetweenAndStatusId(String username, Date beginDate,

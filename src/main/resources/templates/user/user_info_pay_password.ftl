@@ -37,25 +37,32 @@
         <#if payPassword??>
             <div class="personal_info_pwd">
                 <input class="btn1" name="oldpassword" type="password" datatype="*" nullmsg="请输入原支付密码！" ajaxurl="/user/center/pay/check" placeholder="原支付密码"/ >
+                <span style="color:red;margin-left:4%;" class="Validform_checktip Validform_wrong"></span>
             </div>
             <div class="personal_info_pwd">
                 <input class="btn2" name="password"  type="password" datatype="*6-12" nullmsg="请输入新支付密码！" placeholder="新支付密码"/ >
+                <span style="color:red;margin-left:4%;" class="Validform_checktip Validform_wrong"></span>
             </div>  
             <div class="personal_info_pwd">
                 <input class="btn3" name="repassword" type="password" datatype="*" placeholder="确认支付密码" recheck="password" nullmsg="请再次输入新支付密码" / >
+                <span style="color:red;margin-left:4%;" class="Validform_checktip Validform_wrong"></span>
             </div>
             <div class="personal_info_pwd">
-                <input type="submit" value="保存">
+                <input style=" background:#0e5baa; color:white; width:92%; margin-left:4%;margin-right:4%" type="submit" value="保存">
+                <span style="color:red;margin-left:4%;" class="Validform_checktip Validform_wrong"></span>
             </div>
         <#else>
             <div class="personal_info_pwd">
                 <input class="btn2" name="password"  type="password" datatype="*6-6" nullmsg="请输入支付密码！" errormsg="请输入6位任意字符！" placeholder="支付密码"/ >
+                <span style="color:red;margin-left:4%;" class="Validform_checktip Validform_wrong"></span>
             </div>  
             <div class="personal_info_pwd">
                 <input class="btn3" name="repassword" type="password" datatype="*" placeholder="确认支付密码" recheck="password" nullmsg="请再次输入支付密码" / >
+                <span style="color:red;margin-left:4%;" class="Validform_checktip Validform_wrong"></span>
             </div>
             <div class="personal_info_pwd">
-                <input type="submit" value="保存">
+                <input style=" background:#0e5baa; color:white; width:92%; margin-left:4%;margin-right:4%" type="submit" value="保存">
+                <span style="color:red;margin-left:4%;" class="Validform_checktip Validform_wrong"></span>
             </div>
         </#if>
     </form>

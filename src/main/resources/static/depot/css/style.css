@@ -141,8 +141,9 @@ body{background:#efefef;}
 /*select_dates*/
 .pay_record{width:100%;}
 
-.pay_record .select_dates{position:relative;width:92%; padding-left:4%; padding-right:4%;  height:40px; background:#fff;}
-.pay_record .select_dates .select_1{background:url(../images/select_dates.png) no-repeat 2% center;background-size:20px;line-height:40px;padding-left:11%;}
+.pay_record .select_dates{position:relative;width:92%;padding:5px 4% 10px 4%;background:#fff;}
+.pay_record .select_dates .select_1{background:url(../images/select_dates.png) no-repeat 3% center;top:3px;background-size:20px;line-height:40px;padding-left:11%;}
+.pay_record .select_dates .select_1 input{border:solid 1px #dddddd;background:#ffffff;}
 .pay_record .select_dates .pre_1{ position:absolute;top:0;right:3%;width:21px;height:36px;background:url(../images/advance.png) no-repeat 0 center;background-size:10px;}
 
 .pay_record .payment_situation{width:100%;height:40px; background:#fff;margin-top:2%;}
@@ -181,8 +182,8 @@ body{background:#efefef;}
 .bespeak_list_01 dd img{ float:left; margin-top:8px;}
 .bespeak_list_btn{ position:relative;}
 .bespeak_list_btn input{ width:100%; height:36px; background:#00aaef; border:none; color:white; font-size:1.1em;}
-.bespeak_list_btn .input_by_dx{ width:50%; height:36px; background:#00aaef; border:none; color:white; font-size:1.1em;float:left}
-.bespeak_list_btn .sel_2{background:#c8c8c8;}
+.bespeak_list_btn .input_by_dx{ -webkit-appearance:none;border-radius:0; -moz-border-radius:0;-webkit-border-radius:0;width:50%; height:36px; background:#00aaef; border:none; color:white; font-size:1.1em;float:left}
+.bespeak_list_btn .sel_2{-webkit-appearance:none;border-radius:0; -moz-border-radius:0;-webkit-border-radius:0;background:#c8c8c8;}
 /*This chapter end*/
 
 /*site*/
@@ -242,7 +243,7 @@ body{background:#efefef;}
 .account_withdrawals ul li p{float:left;line-height:60px;}
 .account_withdrawals ul li .p1{width:23%;text-align:center;color:#999999;}
 .account_withdrawals ul li .p2{width:77%;}
-.account_withdrawals select{width:100%;height:60px;border:none; font-family:"微软雅黑";font-size:1em; line-height:60px;padding:0 10px;}
+.account_withdrawals select{-webkit-appearance:none;width:100%;height:60px;border:none; font-family:"微软雅黑";font-size:1em; line-height:60px;padding:0 10px;}
 .account_withdrawals ul li .p2 input{width:92%;height:60px;line-height:60px;border:none;padding:0 10px;}
 .bank_01{width:100%;  height:56px; background-color:#fff;}
 .bank_01 dt{ float:left;}
@@ -251,7 +252,7 @@ body{background:#efefef;}
 .bank_01 dd img{ width:70%; margin-top:23px;}
 .bank_mes{ color:#ef0000; margin-top:4%;}
 /*下一步按钮*/
-.bank_sure{width:100%; height:50px; line-height:50px; text-align:center; border-radius:5px; font-size:1.3em; display:block; background-color:#f65741; color:#fff; margin-top:7%;border:none;outline:0;}
+.bank_sure{-webkit-appearance:none;width:100%; height:50px; line-height:50px; text-align:center; border-radius:5px; font-size:1.3em; display:block; background-color:#f65741; color:#fff; margin-top:7%;border:none;outline:0;}
 /*This chapter end*/
 
 

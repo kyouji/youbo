@@ -41,8 +41,8 @@ public class TdDepotLoginAndRegisterController {
 	@RequestMapping("/login")
     public String login(HttpServletRequest req, Device device, ModelMap map,String username,String password)
 	{
-		String curentuser = (String) req.getSession().getAttribute("depotuser");
-		if (curentuser != null)
+		String siteUsername = (String) req.getSession().getAttribute("siteUsername");
+		if (siteUsername != null)
 		{
 			return "redirect:/depot/myaccount";
 		}
@@ -68,12 +68,7 @@ public class TdDepotLoginAndRegisterController {
         TdDiySite user = tdDiySiteService.findByUsernameAndPasswordAndIsEnableTrue(username, password);
         if (user == null)
         {
-			res.put("msg", "用户不存在!");
-			return res;
-		}
-        if (!user.getPassword().equals(password))
-        {
-			res.put("msg", "密码错误！");
+			res.put("msg", "账号或密码错误!");
 			return res;
 		}
         res.put("code", 0);

@@ -85,10 +85,10 @@
     <!--底部开始-->
     <div class="footer">
     <a class="a1" href="/depot">主页</a>
-    <a class="a2" href="/depot/myaccount">账户<span></span></a>
-    <a class="a3" href="/depot/charge">收费记录<span></span></a>
-    <a class="a4" href="/depot/info">车场信息<span></span></a>
-    <a class="a5 sel" href="/depot/site">设置<span></span></a>
+    <a class="a2" href="/depot/myaccount">账户</a>
+    <a class="a3" href="/depot/charge">收费记录</a>
+    <a class="a4" href="/depot/info">车场信息</a>
+    <a class="a5 sel" href="/depot/site">设置</a>
     </div>
     <!--底部结束-->
     

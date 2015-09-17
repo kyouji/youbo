@@ -117,7 +117,9 @@
                         </div>
                     </#list>
                 </#if>
+                <div class="clear"></div>
             </div>
+            
     
             <div id="false_refund">
                 <#if false_refund??&&false_refund?size gt 0>
@@ -134,6 +136,7 @@
                         </div>
                     </#list>
                 </#if>
+                <div class="clear"></div>
             </div>
     
             <div id="true_refund">
@@ -151,6 +154,7 @@
                         </div>
                     </#list>
                 </#if>
+                <div class="clear"></div>
             </div>
     
             <div id="all_refund">
@@ -175,6 +179,7 @@
                         </div>
                     </#list>
                 </#if>
+                <div class="clear"></div>
             </div>
         </div>
         <!--退款申请结束-->

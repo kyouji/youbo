@@ -208,14 +208,14 @@ input.text {background:none; border:none;}
 
 
 /*登录*/
-.logintext {width:90%; padding-left:10%; margin: 20px auto 0; background: #f5f5f5 url(../images/login_z.png) no-repeat 3% center; background-size:15px;height: 35px;}
+.logintext {width:90%; padding-left:3%; margin: 20px auto 0; background: #f5f5f5;height: 35px;}
 .logintext_p { background-image:url(../images/login_p.png);}
-.logintext_y { background: #f5f5f5;width:47%; padding-left:3%; float:left;}
+.logintext_y { background: #f5f5f5;width:47%; padding-left:3%;margin-left:3.5%; float:left;}
 .logintext input {line-height: 35px; height: 35px; border: none; font-size: 0.8em; width:100%; background:none;}
-.loginbtn { -webkit-appearance:none;text-align: center; display: block; width: 100%; margin: 20px auto 0; line-height: 35px; height: 35px; color: #fff; border: none;border-radius:5px;cursor: pointer; font-size: 1em; background: #f65741; }
+.loginbtn { -webkit-appearance:none;text-align: center; display: block; width: 93%; margin: 20px auto 0; line-height: 35px; height: 35px; color: #fff; border: none;border-radius:5px;cursor: pointer; font-size: 1em; background: #f65741; }
 .login_yzm { display:block; width:30%;float:right;padding:0 15% 0 0; margin-top:20px; background:url(../images/f5.png) no-repeat right center; background-size:30px; height:35px; text-align:right;}
 .login_yzm img { max-height:35px;}
-.login_a { width: 100%; margin: 30px auto 0; padding-bottom: 40px; }
+.login_a { width: 90%; margin: 30px auto 0; padding-bottom: 40px; }
 .login_a a { font-size: 0.8em;}
 .login_a a.a1 { position: absolute; right: 0; top: 0; }
 .otherlogin { text-align: center; padding:0px 0 20px; border-top: 1px solid #ddd; }

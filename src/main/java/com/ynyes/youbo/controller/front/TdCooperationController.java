@@ -252,7 +252,7 @@ public class TdCooperationController {
 	/**
 	 * @author dengxiao 上传图片的接口
 	 */
-	@RequestMapping(value = " /upImg")
+	@RequestMapping(value = "/upImg")
 	@ResponseBody
 	public Map<String, Object> uploadImg(@RequestParam MultipartFile imgFile) {
 		Map<String, Object> res = new HashMap<>();

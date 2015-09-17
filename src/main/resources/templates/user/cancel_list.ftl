@@ -16,8 +16,8 @@
     <!--初始化调用changeOrder()方法使页面只显示全部订单-->
     $(function(){
         changeOrder(4);
-    });   
-   
+    });  
+
     <!--改变顶部订单标签（全部、已完成、未完成）的选中样式的方法-->
     function changeOrder(type){
         if(1 == type){
@@ -150,9 +150,13 @@
                                 </#if>
                             </dd>
                             <dd>
-                                <label>审核状态：${item.checkStatus!'审核中'}</label><br>
-                                <label>取消原因：${item.cancelReason!'无'}</label><br>
-                                <label>客服备注：${item.remarkInfo!'无'}</label>
+                                <label>审核状态：${item.checkStatus!'审核中'}</label>
+                            </dd>
+                            <dd>
+                             <label>取消原因：${item.cancelReason!'无'}</label>
+                            </dd>
+                            <dd>
+                             <label>客服备注：${item.remarkInfo!'无'}</label>
                             </dd>
                         </dl>
                     </#list>
@@ -226,7 +230,11 @@
                             </dd>
                             <dd>
                                 <label>审核状态：${item.checkStatus!'审核中'}</label><br>
+                            </dd>
+                            <dd>
                                 <label>取消原因：${item.cancelReason!'无'}</label><br>
+                            </dd>
+                            <dd>
                                 <label>客服备注：${item.remarkInfo!'无'}</label>
                             </dd>
                         </dl>
@@ -301,7 +309,11 @@
                             </dd>
                             <dd>
                                 <label>审核状态：${item.checkStatus!'审核中'}</label><br>
+                            </dd>
+                            <dd>
                                 <label>取消原因：${item.cancelReason!'无'}</label><br>
+                            </dd>
+                            <dd>
                                 <label>客服备注：${item.remarkInfo!'无'}</label>
                             </dd>
                         </dl>
@@ -376,7 +388,11 @@
                             </dd>
                             <dd>
                                 <label>审核状态：${item.checkStatus!'审核中'}</label><br>
+                            </dd>
+                            <dd>
                                 <label>取消原因：${item.cancelReason!'无'}</label><br>
+                            </dd>
+                            <dd>
                                 <label>客服备注：${item.remarkInfo!'无'}</label>
                             </dd>
                         </dl>

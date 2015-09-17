@@ -65,7 +65,7 @@ function login(){
                     <input type="text" name="username" id="txt_loginId" class="logintext01" placeholder="手机号" />
                 </div>
                 <div class="logintext logintext_p">
-                    <input type="text" name="password" id="txt_loginPwd" class="logintext02" placeholder="输入密码" />
+                    <input type="password" name="password" id="txt_loginPwd" class="logintext02" placeholder="输入密码" />
                 </div>
                 <input type="submit" class="loginbtn" id="btn_login" value="登录" />
                 <p class="login_a">
@@ -74,16 +74,10 @@ function login(){
                 </p>
            <!-- </form>-->
         </div>
-        <div class="otherlogin">
-          <p class="ta-c fs10 pb20"><span>第三方账号登录</span></p>
-          <a href="#"><img src="/depot/images/login01.png" height="40" /><span>支付宝</span></a>
-          <a href="#"><img src="/depot/images/login02.png" height="40" /><span>微信</span></a>
-          <a href="#"><img src="/depot/images/login03.png" height="40" /><span>腾讯QQ</span></a>
-        </div>
     </div>
   
     <div class="clear h15"></div>
-  
+    
     <footer class="mainbox loginbot">
       <a href="#">100%正品保障</a>
       <a href="#">100%正品保障</a>

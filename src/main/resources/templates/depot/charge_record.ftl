@@ -61,7 +61,7 @@
         <!--收费信息开始-->
         <div class="pay_record">
             <div class="select_dates">
-                <p class="select_1"><input type="date" id="date" onChange="changeDate();" <#if theDate??>value="${theDate?string("YYYY-MM-dd")}"</#if>></p>
+                <p class="select_1"><input type="date" style="-webkit-appearance:none;height:30px;width:90%;font-size:0.8em;padding-left:5%;" id="date" onChange="changeDate();" <#if theDate??>value="${theDate?string("YYYY-MM-dd")}"</#if>></p>
             </div>
             <div class="payment_situation">
                 <a href="javascript:changeOrder(1);" id="unpayed_label" class="a1 sel">未付款</a>

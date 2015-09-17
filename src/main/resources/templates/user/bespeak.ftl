@@ -24,7 +24,9 @@ $(function(){
 
     function startReserve(username,diyId){
         $.post("/user/find/reserve",{"username":username,"diyId":diyId},function(res){
-            alert(res.message);
+            if(0!=status){
+                alert(res.message);
+            }
             if(0==res.status){
                 window.location.href="/user/order/first/pay?id="+res.id;
             }
@@ -42,9 +44,9 @@ $(function(){
 </div>
 <div class="main">
     <dl class="bespeak">
-        <dt><a>用户</a><p><#if user??>${user.username!''}</#if></p></dt>
-        <dt><a>车牌号</a><p><#if user??>${user.carCode!''}</#if></p></dt>
-        <dt><a href="/user/find/diy/detail?id=${depot.id?c}">停车场</a><p><#if depot??>${depot.title!''}</#if></p><a href="/user/find/diy/detail?id=${depot.id?c}"><span><img src="/user/images/setting_guide.png" /></span></a></dt>
+        <dt><div>用户</div><p><#if user??>${user.username!''}</#if></p></dt>
+        <dt><div>车牌号</div><p><#if user??>${user.carCode!''}</#if></p></dt>
+        <dt><a href="/user/find/diy/detail?id=${depot.id?c}"><div >停车场</div><span><img src="/user/images/setting_guide.png" /></span><p style="margin-right:22px;"><#if depot??>${depot.title!''}</#if></p></a></dt>
         <div class="clear20"></div>
         <dd><a class="bespeak_btn" type="button" id="submitId" onClick="startReserve('${user.username!''}',${depot.id?c});">确认</a></dd>
     </dl>

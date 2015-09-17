@@ -1,5 +1,6 @@
 package com.ynyes.youbo.controller.user;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -88,6 +89,36 @@ public class TdUserOrderController {
 		map.addAttribute("user", user);
 		map.addAttribute("order", order);
 		return "/user/first_pay";
+	}
+	
+	/**
+	 * 在订单列表取消订单的方法 
+	 * @author dengxiao
+	 */
+	@RequestMapping(value="/cancelOrder")
+	public String cancelOrder(HttpServletRequest req,Long id,String reason){
+		String username = (String) req.getSession().getAttribute("username");
+		if(null == username){
+			return "/user/login";
+		}
+		if(null == reason){
+			reason = "";
+		}
+		TdOrder order = tdOrderService.findOne(id);
+		if(null != order){
+			order.setCancelReason(reason);
+			if(1 == order.getStatusId()){
+				order.setStatusId(9L);
+				order.setFinishTime(new Date());
+			}else{
+				order.setStatusId(7L);
+				order.setCheckStatus("待审核");
+				order.setIsReturn(true);
+			}
+			tdOrderService.save(order);
+		}
+		return "redirect:/user/order";
+		
 	}
 	
 }

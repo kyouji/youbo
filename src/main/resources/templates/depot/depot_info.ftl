@@ -39,7 +39,9 @@
         
         $.post("/depot/info/edit",{"theNum":theNum},function(res){
             pupclose();
-            alert(res.message);
+            if(0 != res.status){
+                alert(res.message);
+            }
             if(0 == res.status){
                 document.getElementById("surplus").innerHTML = theNum;
             }
@@ -79,7 +81,7 @@
                 </dl>
         
                 <dl class="park_last">
-                    <dd><span>车位数<font color="gray">(点击数字可修改剩余车位数)</font></span></dd>
+                    <dd><span>车位数<font style="font-size:0.6em;" color="gray">(点击数字可修改剩余车位数)</font></span></dd>
                     <dt onclick="pupopen()"><span style=" color:#ff665e;" id="surplus">${site.parkingNowNumber!'0'}</span>/<span>${site.parkingTotalNumber!'0'}</span></dt>
                 </dl>
         

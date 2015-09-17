@@ -18,6 +18,19 @@
         changeOrder(3);
     });   
    
+    <!--取消订单的方法-->
+    function cancelOrder(id){
+        if(null == id){
+            alert("未能获取到该订单的信息！");
+            return;
+        }
+        var check = confirm("是否确定取消该订单？");   
+        if(check){
+            var reason = prompt("请输入取消订单的原因：");
+            window.location.href="/user/order/cancelOrder?id="+id+"&reason="+reason;
+        }
+    }
+   
     <!--改变顶部订单标签（全部、已完成、未完成）的选中样式的方法-->
     function changeOrder(type){
         if(1 == type){
@@ -130,6 +143,7 @@
                                     </#switch>
                                 </#if>
                             </dd>
+                            <dd><input class="sel_2" onclick="cancelOrder(${item.id?c});" type="button" value="取消订单"/ ></dd>
                         </dl>
                     </#list>
                 </div>
@@ -259,8 +273,12 @@
                                             <p>交易取消</p>
                                         <#break>
                                     </#switch>
+                                    
                                 </#if>
                             </dd>
+                            <#if 1==item.statusId||2==item.statusId||3==item.statusId>
+                                <dd><input class="sel_2" onclick="cancelOrder(${item.id?c});" type="button" value="取消订单"/ ></dd>
+                            </#if> 
                         </dl>
                     </#list>
                 </div>
