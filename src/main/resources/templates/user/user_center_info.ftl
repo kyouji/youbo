@@ -23,12 +23,24 @@
         <div class="main">
             <div class="personal_info">
                 <div class="personal_info_img">
-                    <a><img src="${user.headImageUri!'/user/images/default_head.png'}"></a>
+                    <a onclick="changeHeads();"><img src="${user.headImageUri!'/user/images/default_head.png'}"></a>
+                    <script>
+                        function changeHeads(){
+                            var filebutton = document.getElementById("filebutton");
+                            filebutton.click();
+                        }
+                        function getFile(){
+                            document.getElementById("uploadImgForm").submit();
+                            
+                        }
+                    </script>
                 </div>
                 <p></p>
             </div>
             <dl class="personal_info_list">
-                <dd><input type="file"></dd>
+                <form id="uploadImgForm" enctype="multipart/form-data" action="/user/center/headImg" method="post">
+                    <input style="display:none" name="Filedata" type="file" onchange="getFile();" id="filebutton">
+                </from>
                 <dd><div>手机号</div><p>${user.mobile!''}</p><a><span></span></a></dd>
                 <dd><div>昵称</div><p>${user.nickname!''}</p><a href="/user/center/info/nickname"><span></span><img src="/user/images/setting_guide.png" /></a></dd>
                 <dd><div>车牌</div><p>${user.carCode!''}</p><a href="/user/center/info/carcode"><span></span><img src="/user/images/setting_guide.png" /></a></dd>

@@ -1,5 +1,8 @@
 package com.ynyes.youbo.controller.user;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -17,7 +20,9 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.Calendar;
@@ -44,6 +49,7 @@ import com.ynyes.youbo.service.TdUserPointService;
 import com.ynyes.youbo.service.TdUserRecentVisitService;
 import com.ynyes.youbo.service.TdUserReturnService;
 import com.ynyes.youbo.service.TdUserService;
+import com.ynyes.youbo.util.SiteMagConstant;
 
 /**
  * 用户中心
@@ -664,5 +670,42 @@ public class TdUserCenterController {
 		user.setCarCode(carcode);
 		tdUserService.save(user);
 		return "redirect:/user/center/info";
+	}
+	
+	@RequestMapping(value="/headImg",method = RequestMethod.POST)
+	public String uploadImg(@RequestParam MultipartFile Filedata, HttpServletRequest req){
+		String username = (String) req.getSession().getAttribute("username");
+		TdUser user = tdUserService.findByUsername(username);
+		if(null == user){
+			return "/user/login";
+		}
+		
+		String name = Filedata.getOriginalFilename();
+
+		String ext = name.substring(name.lastIndexOf("."));
+		
+		 try {
+	            byte[] bytes = Filedata.getBytes();
+
+	            Date dt = new Date(System.currentTimeMillis());
+	            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+	            String fileName = sdf.format(dt) + ext;
+
+	            String uri = SiteMagConstant.imagePath + "/" + fileName;
+
+	            File file = new File(uri);
+
+	            BufferedOutputStream stream = new BufferedOutputStream(
+	                    new FileOutputStream(file));
+	            stream.write(bytes);
+	            stream.close();
+	            user.setHeadImageUri("/images/"+fileName);
+	            tdUserService.save(user);
+	        } catch (Exception e) {
+	        	e.printStackTrace();
+	        }
+
+	        return "redirect:/user/center/info";
+
 	}
 }
