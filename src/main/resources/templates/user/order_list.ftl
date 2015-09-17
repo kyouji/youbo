@@ -143,6 +143,8 @@
                                     </#switch>
                                 </#if>
                             </dd>
+                        </dl>
+                        <dl class="order_btn">
                             <dd><input class="sel_2" onclick="cancelOrder(${item.id?c});" type="button" value="取消订单"/ ></dd>
                         </dl>
                     </#list>
@@ -211,6 +213,9 @@
                                 </#if>
                             </dd>
                         </dl>
+                        <dl class="order_btn">
+                            <dd><input class="sel_2" style="background-color:#999999;" type="button" value="取消订单"/ ></dd>
+                        </dl>
                     </#list>
                 </div>
             </#if>
@@ -276,10 +281,16 @@
                                     
                                 </#if>
                             </dd>
-                            <#if 1==item.statusId||2==item.statusId||3==item.statusId>
-                                <dd><input class="sel_2" onclick="cancelOrder(${item.id?c});" type="button" value="取消订单"/ ></dd>
-                            </#if> 
                         </dl>
+                        <#if 1==item.statusId||2==item.statusId||3==item.statusId>
+                            <dl class="order_btn">
+                                <dd><input class="sel_2" onclick="cancelOrder(${item.id?c});" type="button" value="取消订单"/ ></dd>
+                            </dl>
+                        <#else>
+                            <dl class="order_btn">
+                                <dd><input class="sel_2" style="background-color:#999999;" type="button" value="取消订单"/ ></dd>
+                            </dl>
+                        </#if> 
                     </#list>
                 </div>
             </#if>
