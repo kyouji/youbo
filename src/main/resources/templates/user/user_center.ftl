@@ -32,7 +32,7 @@
     <dl class="mycenter_min">
         <dt>
             
-            <div><img style="height:100px;border-radius:50%;" src="<#if user??>${user.headImageUri!'/user/images/default_head.png'}</#if>"/></div>
+            <div><img src="<#if user??>${user.headImageUri!'/user/images/default_head.png'}</#if>"/></div>
             <p><span>${user.mobile!''}</span><span>${user.carCode!''}</span></p>
             <a href="/user/center/info"><img src="/user/images/aboutus_right.png" /></a>
         </dt>

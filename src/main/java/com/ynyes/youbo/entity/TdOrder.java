@@ -335,7 +335,7 @@ public class TdOrder {
     @Column
     private Date outputTime;
     
-    public Date getInputTime() {
+	public Date getInputTime() {
 		return inputTime;
 	}
 

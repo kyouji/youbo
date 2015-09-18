@@ -2,6 +2,8 @@ package com.ynyes.youbo.controller.user;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -708,4 +710,49 @@ public class TdUserCenterController {
 	        return "redirect:/user/center/info";
 
 	}
+	
+//	@RequestMapping(value="/headImg",method = RequestMethod.POST)
+//	public String uploadImg(@RequestParam MultipartFile Filedata, HttpServletRequest req,ModelMap map){
+//		String username = (String) req.getSession().getAttribute("username");
+//		TdUser user = tdUserService.findByUsername(username);
+//		if(null == user){
+//			return "/user/login";
+//		}
+//		
+//		File file = new File("C:/Users/Administrator/Desktop/order_icon.jpg");
+//		FileInputStream input = null;
+//		try {
+//			 input = new FileInputStream(file);
+//		} catch (FileNotFoundException e) {
+//			e.printStackTrace();
+//		}
+//		
+//		try {
+//
+//			Date dt = new Date(System.currentTimeMillis());
+//			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+//			String fileName = sdf.format(dt) + ".jpg";
+//			String uri = SiteMagConstant.imagePath + "/" + fileName;
+//
+//			File file1 = new File(uri);
+//			file1.createNewFile();
+//			
+//			FileOutputStream out = new FileOutputStream(file1);
+//			byte buffer[] = new byte[1024];  
+//            
+//            int count,i;  
+//            while((count=input.read(buffer))!=-1){  
+//                for(i=0; i<count; i++){  
+//                    out.write(buffer[i]);  
+//                }  
+//            }  
+//            input.close();  
+//            out.close();  
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		
+//		return "redirect:/user/center/info";
+//
+//	}
 }

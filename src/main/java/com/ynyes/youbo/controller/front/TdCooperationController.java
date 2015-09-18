@@ -297,5 +297,52 @@ public class TdCooperationController {
 		}
 		return res;
 	}
+	
+//	/**
+//	 * @author dengxiao 上传图片的接口
+//	 */
+//	@RequestMapping(value = "/upImg")
+//	@ResponseBody
+//	public Map<String, Object> uploadImg(@RequestParam FileInputStream input) {
+//		Map<String, Object> res = new HashMap<>();
+//		// status代表处理状态，-1代表失败
+//		res.put("status", -1);
+//
+//		if (null == input) {
+//			System.err.println("图片不存在");
+//			res.put("message", "未获取到文件流");
+//			return res;
+//		}
+//
+//		try {
+//
+//			Date dt = new Date(System.currentTimeMillis());
+//			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+//			String fileName = sdf.format(dt) + ".jpg";
+//			String uri = ImageRoot + "/" + fileName;
+//
+//			File file = new File(uri);
+//			file.createNewFile();
+//			
+//			FileOutputStream out = new FileOutputStream(file);
+//			byte buffer[] = new byte[1024];  
+//            
+//            int count,i;  
+//            while((count=input.read(buffer))!=-1){  
+//                for(i=0; i<count; i++){  
+//                    out.write(buffer[i]);  
+//                }  
+//            }  
+//            input.close();  
+//            out.close();  
+//			res.put("status", 0);
+//		} catch (Exception e) {
+//			res.put("message", "产生了异常");
+//			e.printStackTrace();
+//		}
+//		return res;
+//	}
+	
+	
 
 }

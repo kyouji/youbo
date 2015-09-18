@@ -87,4 +87,31 @@ public class TdChargeRecordController {
 		map.addAttribute("payed_list", payed_list);
 		return "/depot/charge_detail";
 	}
+	
+	@RequestMapping(value="/cashOrFree")
+	public String cashOrFree(HttpServletRequest req,Long id,Long type){
+		String siteUsername = (String) req.getSession().getAttribute("siteUsername");
+		if(null == siteUsername){
+			return "/depot/login";
+		}
+		TdOrder order = tdOrderService.findOne(id);
+		
+		if(null != order){
+			if(0==type){
+				order.setPayTypeId(27L);
+				order.setPayTypeTitle("免除费用");
+				order.setRemarkInfo("免除该订单的停车费用");
+			}
+			if(1==type){
+				order.setPayTypeId(26L);
+				order.setPayTypeTitle("现金支付");
+				order.setRemarkInfo("该订单由现金支付");
+			}
+			order.setStatusId(6L);
+			order.setFinishTime(new Date());
+			tdOrderService.save(order);
+		}
+		return "redirect:/depot/charge";
+	}
+	
 }
