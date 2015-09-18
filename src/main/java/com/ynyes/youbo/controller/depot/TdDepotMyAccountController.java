@@ -1,5 +1,8 @@
 package com.ynyes.youbo.controller.depot;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -17,7 +20,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.ynyes.youbo.entity.TdBankcard;
 import com.ynyes.youbo.entity.TdDeposit;
@@ -31,6 +36,7 @@ import com.ynyes.youbo.service.TdDiySiteService;
 import com.ynyes.youbo.service.TdOrderService;
 import com.ynyes.youbo.service.TdPayTypeService;
 import com.ynyes.youbo.service.TdUserService;
+import com.ynyes.youbo.util.SiteMagConstant;
 
 @Controller
 @RequestMapping("/depot/myaccount")
@@ -53,7 +59,7 @@ public class TdDepotMyAccountController {
 
 	@Autowired
 	private TdOrderService tdOrderService;
-	
+
 	@Autowired
 	private TdDepositService tdDepositService;
 
@@ -92,11 +98,12 @@ public class TdDepotMyAccountController {
 		List<TdOrder> orders = tdOrderService.findByDiyIdAndOrderTimeBetween(site.getId(), beginDate, finishDate);
 		Double income = new Double(0);
 		for (TdOrder order : orders) {
-			if (null!=order.getTotalPrice()&&order.getTotalPrice() > 0 && order.getStatusId() != 5) {
-					income += order.getTotalPrice();
+			if (null != order.getTotalPrice() && order.getTotalPrice() > 0 && order.getStatusId() != 5) {
+				income += order.getTotalPrice();
 			} else {
-				if (null!=order.getFirstPay()&&order.getFirstPay() > 0 && !"审核通过".equalsIgnoreCase(order.getCheckStatus())) {
-						income += order.getFirstPay();
+				if (null != order.getFirstPay() && order.getFirstPay() > 0
+						&& !"审核通过".equalsIgnoreCase(order.getCheckStatus())) {
+					income += order.getFirstPay();
 				}
 			}
 		}
@@ -116,7 +123,7 @@ public class TdDepotMyAccountController {
 	public String bankcard(HttpServletRequest req, Device device, ModelMap map) {
 		String siteUsername = (String) req.getSession().getAttribute("siteUsername");
 		TdDiySite site = tdDiySiteService.findbyUsername(siteUsername);
-		if(null == site){
+		if (null == site) {
 			return "/depot/login";
 		}
 		List<TdBankcard> bankcardList = site.getBankcardList();
@@ -229,17 +236,17 @@ public class TdDepotMyAccountController {
 	public String withdrawal(HttpServletRequest req, Device device, ModelMap map) {
 		String siteUsername = (String) req.getSession().getAttribute("siteUsername");
 		TdDiySite site = tdDiySiteService.findbyUsername(siteUsername);
-		
-		if(null == site){
+
+		if (null == site) {
 			return "/depot/login";
 		}
-		
-		if(null == site.getAllMoney()){
+
+		if (null == site.getAllMoney()) {
 			site.setAllMoney(new Double(0));
 		}
 		map.addAttribute("allMoney", site.getAllMoney());
 		map.addAttribute("cards", site.getBankcardList());
-		
+
 		return "/depot/withdraw";
 	}
 
@@ -255,38 +262,38 @@ public class TdDepotMyAccountController {
 	public String cashrecord(HttpServletRequest req, Device device, ModelMap map) {
 		String siteUsername = (String) req.getSession().getAttribute("siteUsername");
 		TdDiySite site = tdDiySiteService.findbyUsername(siteUsername);
-		if(null == site){
+		if (null == site) {
 			return "/depot/login";
 		}
 		List<TdDeposit> deposit_list = tdDepositService.findByDiyIdOrderByDepositDateDesc(site.getId());
 		map.addAttribute("deposit_list", deposit_list);
 		return "/depot/withdraw_record";
 	}
-	
-	@RequestMapping(value="/refund/edit")
+
+	@RequestMapping(value = "/refund/edit")
 	@ResponseBody
-	public Map<String, Object> refundEdit(HttpServletRequest req,Long orderId,Integer type,String reason){
-		Map<String , Object> res = new HashMap<>();
+	public Map<String, Object> refundEdit(HttpServletRequest req, Long orderId, Integer type, String reason) {
+		Map<String, Object> res = new HashMap<>();
 		res.put("status", -1);
 		String siteUsername = (String) req.getSession().getAttribute("siteUsername");
 		TdDiySite site = tdDiySiteService.findbyUsername(siteUsername);
-		if(null == site){
+		if (null == site) {
 			res.put("message", "未获取到已登录用户的信息！");
 			return res;
 		}
-		if(null == orderId||null == type||null == reason){
+		if (null == orderId || null == type || null == reason) {
 			res.put("message", "参数获取失败！");
 			return res;
 		}
-		
+
 		TdOrder order = tdOrderService.findOne(orderId);
-		if(0 == type){
+		if (0 == type) {
 			order.setStatusId(9L);
 			order.setCheckStatus("审核通过");
 			order.setFinishTime(new Date());
-			//在此开始调用银行接口进行退款
+			// 在此开始调用银行接口进行退款
 		}
-		if(-1 == type){
+		if (-1 == type) {
 			order.setStatusId(8L);
 			order.setCheckStatus("审核未通过");
 		}
@@ -294,5 +301,85 @@ public class TdDepotMyAccountController {
 		tdOrderService.save(order);
 		res.put("status", 0);
 		return res;
+	}
+
+	@RequestMapping(value = "/reserve")
+	public String reserve(HttpServletRequest req, ModelMap map) {
+		String siteUsername = (String) req.getSession().getAttribute("siteUsername");
+		TdDiySite site = tdDiySiteService.findbyUsername(siteUsername);
+		if (null == site) {
+			return "/depot/login";
+		}
+		Calendar cal = Calendar.getInstance();
+		String year = cal.get(Calendar.YEAR) + "";
+		String month = (cal.get(Calendar.MONTH) + 1) + "";
+		String day = cal.get(Calendar.DAY_OF_MONTH) + "";
+		String sBeginDate = year + "-" + month + "-" + day + " 00:00:00";
+		String sFinishDate = year + "-" + month + "-" + day + " 24:00:00";
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date beginDate = null;
+		Date finishDate = null;
+		try {
+			beginDate = sdf.parse(sBeginDate);
+			finishDate = sdf.parse(sFinishDate);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		List<TdOrder> list = tdOrderService.findReservedOrder(site.getId(), beginDate, finishDate);
+		map.addAttribute("reserved_list", list);
+		return "/depot/reserved_list";
+	}
+
+	@RequestMapping(value = "/saveOrderId",method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> saveOrderId(HttpServletRequest req, Long id) {
+		Map<String, Object> res = new HashMap<>();
+		res.put("status", -1);
+		req.getSession().setAttribute("orderId", id);
+		res.put("status", 0);
+		return res;
+	}
+
+	@RequestMapping(value = "/headImg", method = RequestMethod.POST)
+	public String uploadImg(@RequestParam MultipartFile Filedata, HttpServletRequest req) {
+		String siteUsername = (String) req.getSession().getAttribute("siteUsername");
+		TdDiySite site = tdDiySiteService.findbyUsername(siteUsername);
+		if (null == site) {
+			return "/depot/login";
+		}
+
+		String name = Filedata.getOriginalFilename();
+
+		String ext = name.substring(name.lastIndexOf("."));
+
+		try {
+			byte[] bytes = Filedata.getBytes();
+
+			Date dt = new Date(System.currentTimeMillis());
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+			String fileName = sdf.format(dt) + ext;
+
+			String uri = SiteMagConstant.imagePath + "/" + fileName;
+
+			File file = new File(uri);
+
+			BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(file));
+			stream.write(bytes);
+			stream.close();
+			Long orderId = (Long) req.getSession().getAttribute("orderId");
+			TdOrder order = tdOrderService.findOne(orderId);
+			if (null != order) {
+				if (null == order.getCarCodePhoto()) {
+					order.setCarCodePhoto("");
+				}
+				order.setCarCodePhoto(order.getCarCodePhoto() + ("/images/" + fileName + ","));
+				tdOrderService.save(order);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return "redirect:/depot/myaccount/reserve";
+
 	}
 }

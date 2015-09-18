@@ -590,5 +590,13 @@ public class TdOrderService {
 		}
 		return repository.findByDiyIdAndStatusIdAndOrderTimeBetweenOrderByOrderTimeDesc(id, 6L, beginDate, finishDate);
 	};
+	
+	//查找指定停车场指定时间段内已预约的订单
+	public List<TdOrder> findReservedOrder(Long id,Date beginDate,Date finishDate){
+		if(null == id || null == beginDate || null == finishDate){
+			return null;
+		}
+		return repository.findByDiyIdAndStatusIdAndOrderTimeBetweenOrderByOrderTimeDesc(id, 3L, beginDate, finishDate);
+	}
 
 }

@@ -335,6 +335,18 @@ public class TdOrder {
     @Column
     private Date outputTime;
     
+    //车牌照片，多张以逗号隔开
+    @Column
+    private String carCodePhoto;
+    
+	public String getCarCodePhoto() {
+		return carCodePhoto;
+	}
+
+	public void setCarCodePhoto(String carCodePhoto) {
+		this.carCodePhoto = carCodePhoto;
+	}
+
 	public Date getInputTime() {
 		return inputTime;
 	}

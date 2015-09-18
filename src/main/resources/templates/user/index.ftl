@@ -13,32 +13,10 @@
 <script type="text/javascript" src="/user/js/jquery-1.9.1.min.js"></script>
 </head>
 <script>
-    <#--
-    $(function(){
-        var video = document.getElementById("video");
-        var canvas = document.getElementById("canvas");
-        var errocb = function(){
-            console.log("sth wrong!");
-        }
-        var context = canvas.getContext("2d");
-        
-        if(navigator.getUserMedia){
-            navigator.getUserMedia({"video":true},function(stream){
-                video.src = stream;
-                video.play();
-            },errocb);
-        }else if(navigator.webkitGetUserMedia){
-            navigator.webkitGetUserMedia({"video":true},function(stream){
-                video.src = window.webkitURL.createObjectURL(stream);
-                video.play();
-            },errocb);
-        }
-        
-        document.getElementById("picture").addEventListener("click",function(){
-            context.drawImage(vedio,0,0,640,480);
-        });
-    });
-    -->
+    function changeHeads(){
+        var filebutton = document.getElementById("filebutton");
+        filebutton.click();
+    }
 </script>
 <body>
 
@@ -49,7 +27,7 @@
         <video id="video" autoplay="" style='width:640px;height:480px'></video>
         <canvas id="canvas" width="640" height="480"></canvas>
         -->
-        <a id="picture" class="a1"></a>
+        <a onclick="changeHeads();" id="picture" class="a1"></a>
         <a href="/user/center/login" class="a3"></a>
     </div>
     <!--头部结束-->
@@ -96,11 +74,14 @@
     <!--导航开始-->
     <div class="topNav">
         <a href="/user/center" class="four_1 a1"><img src="/depot/images/index01.png"><p>个人中心</p></a>
-        <a href="/user/order" class="four_1 a2"><img src="/depot/images/index02.png"><p>我的订单</p></a>
+        <a href="/user/order" class="four_1 a2"><img src="/user/images/index02.png"><p>我的订单</p></a>
         <a href="/user/find" class="four_1 a3"><img src="/depot/images/index03.png"><p>找车位</p></a>
-        <a href="/user/code" class="four_1 a4"><img src="/depot/images/index04.png"><p>二维码</p></a>
+        <a href="/user/code" class="four_1 a4"><img src="/user/images/index04.png"><p>二维码</p></a>
         <div class="clear"></div>
         <a href="#" class="p5"><img src="/depot/images/index05.png"></a>
+        <form id="uploadImgForm" enctype="multipart/form-data" action="/user/center/headImg" method="post">
+            <input style="display:none" name="Filedata" type="file" onchange="getFile();" id="filebutton">
+        </from>
     </div>
     <!--导航结束--
     <div class="mb98"></div>

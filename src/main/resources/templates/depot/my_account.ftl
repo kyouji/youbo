@@ -37,6 +37,10 @@
             <dt><a href="/depot/myaccount/cashrecord"><img src="/depot/images/advance.png" /></a></dt>
         </dl>
         <dl>
+            <dd><a href="/depot/myaccount/reserve">预约订单</a></dd>
+            <dt><a href="/depot/myaccount/reserve"><img src="/depot/images/advance.png" /></a></dt>
+        </dl>
+        <dl>
             <dd><a href="/depot/myaccount/refund">退款申请</a></dd>
             <dt><a href="/depot/myaccount/refund"><img src="/depot/images/advance.png" /></a></dt>
         </dl>
