@@ -28,11 +28,13 @@
         </ul>
         <#if orders??>
             <#list orders as item>
+                <a href="/user/order/detail?orderId=${item.id?c}">
                 <dl class="detail_month_01">
                     <dt><span>${item.diyTitle!''}</span><p><#if item.totalPrice??>-${item.totalPrice?string("0.00")}</#if></p></dt>
                     <dd><img src="/user/images/detail_month_01.png" /><span><#if item.orderTime??>${item.orderTime?string("yyyy-MM-dd HH:mm")}</#if></span></dd>
                     <dd><img src="/user/images/detail_month_02.png" /><span><#if item.finishTime??>${item.finishTime?string("yyyy-MM-dd HH:mm")}</#if></span><p>交易成功</p></dd>
                 </dl>
+                </a>
             </#list>
         </#if>
     </div><!--main END-->

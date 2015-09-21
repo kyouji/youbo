@@ -236,12 +236,21 @@ public class TdManagerOrderController {
 			return res;
 		}
 		
-		TdDiySite site = tdDiySiteService.findbyUsername(param);
-		if(null != site){
-			res.put("info", "该登录名不能使用");
-			return res;
+		if(null == id){
+			TdDiySite site = tdDiySiteService.findbyUsername(param);
+			if(null != site){
+				res.put("info", "该登录名不能使用");
+				return res;
+			}
 		}
-
+		
+		if(null != id){
+			TdDiySite site = tdDiySiteService.findOne(id);
+			if(!param.equals(site.getUsername())){
+				res.put("info", "不能修改登录名");
+				return res;
+			}
+		}
 //		TdUser tdUser = tdUserService.findByUsername(param);
 //
 //		if (null == id) // 新增

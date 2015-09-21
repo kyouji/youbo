@@ -87,6 +87,7 @@
         <#if checking_list??&&checking_list?size gt 0> 
             <div id="checking_order_by_dx">
                 <#list checking_list as item>
+                    <a href="/user/order/detail?orderId=${item.id?c}">
                     <dl class="order_01">
                         <dt>
                             <span>${item.diyTitle!''}</span>
@@ -153,12 +154,13 @@
                                 <label>审核状态：${item.checkStatus!'审核中'}</label>
                             </dd>
                             <dd>
-                             <label>取消原因：${item.cancelReason!'无'}</label>
+                             <label>退款原因：${item.cancelReason!'无'}</label>
                             </dd>
                             <dd>
                              <label>客服备注：${item.remarkInfo!'无'}</label>
                             </dd>
                         </dl>
+                        </a>
                     </#list>
                 </div>
             </#if>
@@ -166,6 +168,7 @@
             <#if checktrue_list??&&checktrue_list?size gt 0>
                 <div id="checktrue_order_by_dx">
                     <#list checktrue_list as item>
+                        <a href="/user/order/detail?orderId=${item.id?c}">
                         <dl class="order_01">
                         <dt>
                             <span>${item.diyTitle!''}</span>
@@ -232,12 +235,13 @@
                                 <label>审核状态：${item.checkStatus!'审核中'}</label><br>
                             </dd>
                             <dd>
-                                <label>取消原因：${item.cancelReason!'无'}</label><br>
+                                <label>退款原因：${item.cancelReason!'无'}</label><br>
                             </dd>
                             <dd>
                                 <label>客服备注：${item.remarkInfo!'无'}</label>
                             </dd>
                         </dl>
+                        </a>
                     </#list>
                 </div>
             </#if>
@@ -245,6 +249,7 @@
             <#if checkfalse_list??&&checkfalse_list?size gt 0>
                 <div id="checkfalse_order_by_dx">
                     <#list checkfalse_list as item>
+                        <a href="/user/order/detail?orderId=${item.id?c}">
                         <dl class="order_01">
                         <dt>
                             <span>${item.diyTitle!''}</span>
@@ -311,12 +316,13 @@
                                 <label>审核状态：${item.checkStatus!'审核中'}</label><br>
                             </dd>
                             <dd>
-                                <label>取消原因：${item.cancelReason!'无'}</label><br>
+                                <label>退款原因：${item.cancelReason!'无'}</label><br>
                             </dd>
                             <dd>
                                 <label>客服备注：${item.remarkInfo!'无'}</label>
                             </dd>
                         </dl>
+                        </a>
                     </#list>
                 </div>
             </#if>
@@ -324,6 +330,7 @@
             <#if cancel_list??&&cancel_list?size gt 0>
                 <div id="cancel_order_by_dx">
                     <#list cancel_list as item>
+                        <a href="/user/order/detail?orderId=${item.id?c}">
                         <dl class="order_01">
                         <dt>
                             <span>${item.diyTitle!''}</span>
@@ -390,12 +397,13 @@
                                 <label>审核状态：${item.checkStatus!'审核中'}</label><br>
                             </dd>
                             <dd>
-                                <label>取消原因：${item.cancelReason!'无'}</label><br>
+                                <label>退款原因：${item.cancelReason!'无'}</label><br>
                             </dd>
                             <dd>
                                 <label>客服备注：${item.remarkInfo!'无'}</label>
                             </dd>
                         </dl>
+                        </a>
                     </#list>
                 </div>
             </#if>

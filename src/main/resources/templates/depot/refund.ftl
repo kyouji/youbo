@@ -107,7 +107,7 @@
                     <#list checking_refund as item>
                         <dl class="bespeak_list_01">
                             <dt><a>${item.diyTitle!''}</a><p>待审核</p></dt>
-                            <dd><img src="/depot/images/bespeak_list_01.png" /><a><#if item.orderTime??>${item.orderTime?string("yyyy-MM-dd HH:mm")}</#if></a></dd>
+                            <dd><img src="/depot/images/bespeak_list_01.png" /><a href="/depot/myaccount/detail?orderId=${item.id}"><#if item.orderTime??>${item.orderTime?string("yyyy-MM-dd HH:mm")}</#if></a><span style="float:right;magin-top:10px;"><a href="/depot/myaccount/detail?orderId=${item.id}">详情</a></span></dd>
                             <dt><b>退款金额</b><p class="red_1">￥<span>1.00</span></p></dt>
                             <dt><b>退款理由：</b><p class="red_1"><span>${item.cancelReason!''}</span></p></dt>
                         </dl>
@@ -126,7 +126,7 @@
                     <#list false_refund as item>
                         <dl class="bespeak_list_01">
                             <dt><a>${item.diyTitle!''}</a><p>审核未通过</p></dt>
-                            <dd><img src="/depot/images/bespeak_list_01.png" /><a><#if item.orderTime??>${item.orderTime?string("yyyy-MM-dd HH:mm")}</#if></a></dd>
+                            <dd><img src="/depot/images/bespeak_list_01.png" /><a href="/depot/myaccount/detail?orderId=${item.id}"><#if item.orderTime??>${item.orderTime?string("yyyy-MM-dd HH:mm")}</#if></a><span style="float:right;magin-top:10px;"><a href="/depot/myaccount/detail?orderId=${item.id}">详情</a></span></dd>
                             <dt><b>退款金额</b><p class="red_1">￥<span>10.00</span></p></dt>
                             <dt><b>退款理由：</b><p class="red_1"><span>${item.cancelReason!''}</span></p></dt>
                             <dt><b>客服回复：</b><p class="red_1"><span>${item.remarkInfo!''}</span></p></dt>
@@ -144,7 +144,7 @@
                     <#list true_refund as item>
                         <dl class="bespeak_list_01">
                             <dt><a>${item.diyTitle!''}</a><p>审核通过</p></dt>
-                            <dd><img src="/depot/images/bespeak_list_01.png" /><a><#if item.orderTime??>${item.orderTime?string("yyyy-MM-dd HH:mm")}</#if></a></dd>
+                            <dd><img src="/depot/images/bespeak_list_01.png" /><a href="/depot/myaccount/detail?orderId=${item.id}"><#if item.orderTime??>${item.orderTime?string("yyyy-MM-dd HH:mm")}</#if></a><span style="float:right;magin-top:10px;"><a href="/depot/myaccount/detail?orderId=${item.id}">详情</a></span></dd>
                             <dt><b>退款金额</b><p class="red_1">￥<span>10.00</span></p></dt>
                             <dt><b>退款理由：</b><p class="red_1"><span>${item.cancelReason!''}</span></p></dt>
                             <dt><b>客服回复：</b><p class="red_1"><span>${item.remarkInfo!''}</span></p></dt>
@@ -162,7 +162,7 @@
                     <#list all_refund as item>
                         <dl class="bespeak_list_01">
                             <dt><a>${item.diyTitle!''}</a><p>${item.checkStatus!''}</p></dt>
-                            <dd><img src="/depot/images/bespeak_list_01.png" /><a><#if item.orderTime??>${item.orderTime?string("yyyy-MM-dd HH:mm")}</#if></a></dd>
+                            <dd><img src="/depot/images/bespeak_list_01.png" /><a href="/depot/myaccount/detail?orderId=${item.id}"><#if item.orderTime??>${item.orderTime?string("yyyy-MM-dd HH:mm")}</#if></a><span style="float:right;magin-top:10px;"><a href="/depot/myaccount/detail?orderId=${item.id}">详情</a></span></dd>
                             <dt><b>退款金额</b><p class="red_1">￥<span>10.00</span></p></dt>
                             <dt><b>退款理由：</b><p class="red_1"><span>${item.cancelReason!''}</span></p></dt>
                             <dt><b>客服回复：</b><p class="red_1"><span>${item.remarkInfo!''}</span></p></dt>

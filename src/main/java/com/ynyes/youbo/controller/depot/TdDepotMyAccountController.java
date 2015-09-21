@@ -28,6 +28,7 @@ import com.ynyes.youbo.entity.TdBankcard;
 import com.ynyes.youbo.entity.TdDeposit;
 import com.ynyes.youbo.entity.TdDiySite;
 import com.ynyes.youbo.entity.TdOrder;
+import com.ynyes.youbo.entity.TdPayType;
 import com.ynyes.youbo.entity.TdUser;
 import com.ynyes.youbo.service.TdBankcardService;
 import com.ynyes.youbo.service.TdCommonService;
@@ -62,6 +63,7 @@ public class TdDepotMyAccountController {
 
 	@Autowired
 	private TdDepositService tdDepositService;
+	
 
 	/**
 	 * 我的账户首页
@@ -330,7 +332,7 @@ public class TdDepotMyAccountController {
 		return "/depot/reserved_list";
 	}
 
-	@RequestMapping(value = "/saveOrderId",method=RequestMethod.POST)
+	@RequestMapping(value = "/saveOrderId", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> saveOrderId(HttpServletRequest req, Long id) {
 		Map<String, Object> res = new HashMap<>();
@@ -381,5 +383,25 @@ public class TdDepotMyAccountController {
 
 		return "redirect:/depot/myaccount/reserve";
 
+	}
+
+	@RequestMapping(value = "/detail")
+	public String orderDetail(HttpServletRequest req, Long orderId, ModelMap map) {
+		String siteUsername = (String) req.getSession().getAttribute("siteUsername");
+		TdDiySite site = tdDiySiteService.findbyUsername(siteUsername);
+		if (null == site) {
+			return "/depot/login";
+		}
+		TdOrder order = tdOrderService.findOne(orderId);
+		if(null !=order&&null != order.getUsername()){
+			TdUser user = tdUserService.findByUsername(order.getUsername());
+			map.addAttribute("user", user);
+		}
+		if (null != order && null != order.getPayTypeId()) {
+			TdPayType payType = tdPayTypeService.findOne(order.getPayTypeId());
+			map.addAttribute("payType", payType);
+		}
+		map.addAttribute("order", order);
+		return "/depot/order_details";
 	}
 }

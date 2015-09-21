@@ -44,6 +44,7 @@
     <div class="ybtx">
         <#if reserved_list??>
             <#list reserved_list as item>
+                <a href="/depot/myaccount/detail?orderId=${item.id}">
                 <dl class="bespeak_list_01">
                     <dt><a>${item.diyTitle!''}</a><p>退款成功</p></dt>
                     <dd>
@@ -69,6 +70,7 @@
                         <input style="display:none" name="Filedata" type="file" onchange="getFile(${item.id?c});" id="filebutton">
                     </from>
                 </div>
+                </a>
             </#list>
         </#if>
     </div>

@@ -81,6 +81,7 @@
         <#if unparked_order_list??> 
             <div id="unfinish_order_by_dx">
                 <#list unparked_order_list as item>
+                    <a href="/user/order/detail?orderId=${item.id?c}">
                     <dl class="order_01">
                         <dt>
                             <span>${item.diyTitle!''}</span>
@@ -145,8 +146,9 @@
                             </dd>
                         </dl>
                         <dl class="order_btn">
-                            <dd><input class="sel_2" onclick="cancelOrder(${item.id?c});" type="button" value="取消订单"/ ></dd>
+                            <dd><input class="sel_2" onclick="cancelOrder(${item.id?c});" style="border-radius:0;" type="button" value="取消订单"/ ></dd>
                         </dl>
+                    </a>
                     </#list>
                 </div>
             </#if>
@@ -154,6 +156,7 @@
             <#if parked_order_list??&&parked_order_list?size gt 0>
                 <div id="finish_order_by_dx">
                     <#list parked_order_list as item>
+                        <a href="/user/order/detail?orderId=${item.id?c}">
                         <dl class="order_01">
                             <dt>
                                 <span>${item.diyTitle!''}</span>
@@ -214,8 +217,9 @@
                             </dd>
                         </dl>
                         <dl class="order_btn">
-                            <dd><input class="sel_2" style="background-color:#999999;" type="button" value="取消订单"/ ></dd>
+                            <dd><input class="sel_2" style="background-color:#999999;border-radius:0;" type="button" value="取消订单"/ ></dd>
                         </dl>
+                        </a>
                     </#list>
                 </div>
             </#if>
@@ -223,6 +227,7 @@
             <#if all_order_list??&&all_order_list?size gt 0>
                 <div id="all_order_by_dx">
                     <#list all_order_list as item>
+                        <a href="/user/order/detail?orderId=${item.id?c}">
                         <dl class="order_01">
                             <dt>
                                 <span>${item.diyTitle!''}</span>
@@ -284,13 +289,14 @@
                         </dl>
                         <#if 1==item.statusId||2==item.statusId||3==item.statusId>
                             <dl class="order_btn">
-                                <dd><input class="sel_2" onclick="cancelOrder(${item.id?c});" type="button" value="取消订单"/ ></dd>
+                                <dd><input class="sel_2" onclick="cancelOrder(${item.id?c});" style="border-radius:0;" type="button" value="取消订单"/ ></dd>
                             </dl>
                         <#else>
                             <dl class="order_btn">
-                                <dd><input class="sel_2" style="background-color:#999999;" type="button" value="取消订单"/ ></dd>
+                                <dd><input class="sel_2" style="background-color:#999999;border-radius:0;" type="button" value="取消订单"/ ></dd>
                             </dl>
                         </#if> 
+                    </a>
                     </#list>
                 </div>
             </#if>

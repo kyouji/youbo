@@ -21,6 +21,7 @@
 <div id="unpayed"> 
     <#if unpayed_list??> 
         <#list unpayed_list as item>  
+            <a href="/depot/myaccount/detail?orderId=${item.id}">
             <dl class="detail_month_01">
                 <dt>
                     <span>${item.carCode!''}</span>
@@ -75,6 +76,7 @@
                     <input type="button" value="免除费用" style="-webkit-appearance:none;background-color:#999999;width:50%;float:left;border-radius:0;">
                 </#if>
             </div>
+            </a>
         </#list>
     </#if>
     </div>
@@ -82,6 +84,7 @@
     <div id="payed">    
      <#if payed_list??> 
         <#list payed_list as item>  
+            <a href="/depot/myaccount/detail?orderId=${item.id}">
             <dl class="detail_month_01">
                 <dt>
                     <span>${item.carCode!''}</span>
@@ -106,6 +109,7 @@
                 <input type="button" value="现金支付" style="-webkit-appearance:none;background-color:#999999;width:50%;float:left;border-right:1px #ffffff solid;border-radius:0;">
                 <input type="button" value="免除费用" style="-webkit-appearance:none;background-color:#999999;width:50%;float:left;border-radius:0;">
             </div>
+            </a>
         </#list>
     </#if>
 </div>
