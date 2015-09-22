@@ -33,7 +33,14 @@
         <dt>
             
             <div><img src="<#if user??>${user.headImageUri!'/user/images/default_head.png'}</#if>"/></div>
-            <p><span>${user.mobile!''}</span><span>${user.carCode!''}</span></p>
+            <p>
+                <#if user.balance??&&user.balance gt 0>
+                    <span>余额：${user.balance?string("0.00")}元</span>
+                <#else>
+                    <span>余额：0元</span>
+                </#if>
+                <span>${user.carCode!''}</span>
+            </p>
             <a href="/user/center/info"><img src="/user/images/aboutus_right.png" /></a>
         </dt>
         <dd>
@@ -41,7 +48,13 @@
             <a style="color:#69afff; " href="/user/find">预约</a>
         </dd>
     </dl>
-
+    <a>
+        <dl class="mycenter_last" style="background-color:#f65741;">
+            <dd style="width:100%"><a href="/user/center/recharge" style="color:#fff;text-align:center;">充值</a></dd>
+        </dl>
+    </a>
+    
+    <div style="height:15px;"></div>  
     <a>
     <dl class="mycenter_last">
         <dd><a href="/user/center/detail">明细</a></dd>

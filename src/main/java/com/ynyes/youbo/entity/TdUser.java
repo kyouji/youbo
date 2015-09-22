@@ -219,7 +219,19 @@ public class TdUser {
     @Column
     private String payPassword;
     
-    public String getPayPassword() {
+    //账户余额
+    @Column
+    private Double balance;
+    
+    public Double getBalance() {
+		return balance;
+	}
+
+	public void setBalance(Double balance) {
+		this.balance = balance;
+	}
+
+	public String getPayPassword() {
 		return payPassword;
 	}
 

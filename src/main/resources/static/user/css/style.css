@@ -243,7 +243,7 @@ body{ background:#efefef; }
 .pay_min_01 dt{ width:100%; height:40px; line-height:40px;}
 .pay_min_01 dt span{ color:#333; float:left; font-size:1.2em;}
 .pay_min_01 dt p{ color:#999; float:right; text-align:right;}
-.pay_way{ width:100%; padding-left:10px; height:50px; background-color:white;  overflow:hidden; display:block;  border-bottom:#dddddd 1px solid; line-height:50px; font-size:1.2em;}
+.pay_way{ width:98%; padding-left:2%; height:50px; background-color:white;overflow:hidden; display:block;border-bottom:#dddddd 1px solid; line-height:50px; font-size:1.2em;}
 
 
 .pay_last{ background:white; height:auto; width:100%; display:block; overflow:hidden;  border-bottom:#dddddd 1px solid;}
