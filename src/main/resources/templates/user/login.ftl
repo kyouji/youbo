@@ -62,7 +62,7 @@ function login(){
         <div class="mian">
            <!-- <form  action="/user/center/login" method="post">-->
                 <div class="logintext">
-                    <input type="text" name="username" id="txt_loginId" class="logintext01" placeholder="手机号" />
+                    <input type="text" name="username" id="txt_loginId" class="logintext01" placeholder="车牌号码" />
                 </div>
                 <div class="logintext logintext_p">
                     <input type="password" name="password" id="txt_loginPwd" class="logintext02" placeholder="输入密码" />

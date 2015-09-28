@@ -16,8 +16,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ynyes.youbo.entity.TdDiySite;
+import com.ynyes.youbo.entity.TdDiyUser;
 import com.ynyes.youbo.entity.TdUser;
 import com.ynyes.youbo.service.TdDiySiteService;
+import com.ynyes.youbo.service.TdDiyUserService;
 import com.ynyes.youbo.service.TdUserService;
 import com.ynyes.youbo.util.VerifServlet;
 
@@ -31,6 +33,9 @@ public class TdDepotLoginAndRegisterController {
 	@Autowired
 	private TdDiySiteService tdDiySiteService;
 	
+	@Autowired
+	private TdDiyUserService tdDiyUserService;
+	
 	/**
 	 * 用户登录
 	 * @param req
@@ -41,8 +46,8 @@ public class TdDepotLoginAndRegisterController {
 	@RequestMapping("/login")
     public String login(HttpServletRequest req, Device device, ModelMap map,String username,String password)
 	{
-		String siteUsername = (String) req.getSession().getAttribute("siteUsername");
-		if (siteUsername != null)
+		TdDiySite site =  (TdDiySite) req.getSession().getAttribute("site");
+		if (site != null)
 		{
 			return "redirect:/depot/myaccount";
 		}
@@ -65,16 +70,18 @@ public class TdDepotLoginAndRegisterController {
         Map<String, Object> res = new HashMap<String, Object>();
         res.put("code", 1);
         
-        TdDiySite user = tdDiySiteService.findByUsernameAndPasswordAndIsEnableTrue(username, password);
-        if (user == null)
+        TdDiyUser diyUser = tdDiyUserService.findByUsernameAndPasswordAndIsEnableTrue(username, password);
+        
+        if (diyUser == null)
         {
 			res.put("msg", "账号或密码错误!");
 			return res;
 		}
         res.put("code", 0);
         
-        
-        req.getSession().setAttribute("siteUsername", username);
+        TdDiySite site = tdDiySiteService.findOne(diyUser.getDiyId());
+        req.getSession().setAttribute("site", site);
+        req.getSession().setAttribute("diyUser", diyUser);
         
         return res;
     }

@@ -13,21 +13,22 @@
 <link href="/depot/css/style.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="/depot/js/jquery-1.9.1.min.js"></script>
 <script type="text/javascript">
-    function changeHeads(){
-        var filebutton = document.getElementById("filebutton");
-        filebutton.click();
-    }
-    function getFile(id){
-        $.post("/depot/myaccount/saveOrderId",{"id":id},function(res){
-            if(0==res.status){
-                document.getElementById("uploadImgForm").submit();  
-            }else{
-                var check = confirm("获取订单信息失败，是否再试一次？");
-                if(check){
-                    getFile(id);
-                }
-            }
-        });
+    function reserveResult(id,type){
+        if(null == id || null == type){
+            alert("参数错误，操作失败！");
+            return;
+        }
+        var message = null;
+        if(0 == type){
+            message = "确定同意预约（一旦确定，不可更改）？";
+        }
+        if(1 == type){
+            message = "确定拒绝预约（一旦确定，不可更改）？";
+        }
+        var check = confirm(message);
+        if(check){
+            window.location.href = "/depot/myaccount/operate?id="+id+"&type="+type;
+        }        
     }
 </script>
 </head>
@@ -46,7 +47,7 @@
             <#list reserved_list as item>
                 <a href="/depot/myaccount/detail?orderId=${item.id}">
                 <dl class="bespeak_list_01">
-                    <dt><a>${item.diyTitle!''}</a><p>退款成功</p></dt>
+                    <dt><a>${item.carCode!''}</a><p></p></dt>
                     <dd>
                         <img src="/depot/images/bespeak_list_01.png" />
                         <#if item.orderTime??>
@@ -65,10 +66,8 @@
                     </dt>
                 </dl>
                 <div class="bespeak_list_btn">
-                    <input class="sel_2" type="button" style="background-color:#00aaef;" onclick="changeHeads();" value="拍摄车辆车牌号码"/ >
-                    <form id="uploadImgForm" enctype="multipart/form-data" action="/depot/myaccount/headImg" method="post">
-                        <input style="display:none" name="Filedata" type="file" onchange="getFile(${item.id?c});" id="filebutton">
-                    </from>
+                    <input class="sel_2" type="button" style="background-color:#00aaef;width:50%;float:left;" onclick="reserveResult(${item.id},0)" value="同意"/ >
+                    <input type="button" style="width:50%;float:left;background-color:#ef0000;" onclick="reserveResult(${item.id},1)" value="拒绝">
                 </div>
                 </a>
             </#list>

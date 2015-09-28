@@ -131,7 +131,7 @@ public class TdUserCenterController {
 			return "redirect:/user/center/login";
 		}
 		tdCommonService.setHeader(map, req);
-		map.addAttribute("user", tdUserService.findByMobile(username));
+		map.addAttribute("user", tdUserService.findByUsername(username));
 		map.addAttribute("server_ip", req.getLocalName());
 		map.addAttribute("server_port", req.getLocalPort());
 
@@ -186,7 +186,7 @@ public class TdUserCenterController {
 	@RequestMapping(value = "/bankcard")
 	public String bankcard(HttpServletRequest req, ModelMap map) {
 		String username = (String) req.getSession().getAttribute("username");
-		if(null == username){
+		if (null == username) {
 			return "/user/login";
 		}
 		TdUser user = tdUserService.findByUsername(username);
@@ -436,7 +436,7 @@ public class TdUserCenterController {
 		res.put("code", 1);
 
 		// String user = (String) req.getSession().getAttribute("username");
-		TdUser user = tdUserService.findByfindByMobileAndRoleId(username, 1L);
+		TdUser user = tdUserService.findByUsername(username);
 		if (user == null) {
 			res.put("msg", "用户不存在!");
 			return res;
@@ -605,8 +605,10 @@ public class TdUserCenterController {
 
 		Double totalPrice = new Double(0);
 		for (TdOrder tdOrder : orders) {
-			if (null != tdOrder.getTotalPrice() && tdOrder.getTotalPrice() > 0) {
+			if (null != tdOrder.getTotalPrice() && 5L == tdOrder.getStatusId() && tdOrder.getTotalPrice() > 0) {
 				totalPrice += tdOrder.getTotalPrice();
+			}else if(null != tdOrder.getFirstPay() && tdOrder.getFirstPay() > 0){
+				totalPrice += tdOrder.getFirstPay();
 			}
 		}
 
@@ -650,71 +652,70 @@ public class TdUserCenterController {
 		}
 		return "/user/share";
 	}
-	
-	@RequestMapping(value = "/info/carcode")
+
+	@RequestMapping(value = "/info/phone")
 	public String carCode(HttpServletRequest request, ModelMap map) {
 		String username = (String) request.getSession().getAttribute("username");
 		TdUser user = tdUserService.findByUsername(username);
 		if (null == user) {
 			return "user/login";
 		}
-		map.addAttribute("carcode", user.getCarCode());
-		return "/user/user_info_carcode";
+		map.addAttribute("phone", user.getMobile());
+		return "/user/user_info_phone";
 	}
-	
-	@RequestMapping(value = "/carcode/edit")
-	public String carcodeEdit(HttpServletRequest request, String carcode) {
+
+	@RequestMapping(value = "/phone/edit")
+	public String carcodeEdit(HttpServletRequest request, String phone) {
 		String username = (String) request.getSession().getAttribute("username");
 		TdUser user = tdUserService.findByUsername(username);
 		if (null == user) {
 			return "/user/login";
 		}
-		user.setCarCode(carcode);
+		user.setMobile(phone);
 		tdUserService.save(user);
 		return "redirect:/user/center/info";
 	}
-	
-	@RequestMapping(value="/headImg",method = RequestMethod.POST)
-	public String uploadImg(@RequestParam MultipartFile Filedata, HttpServletRequest req){
+
+	@RequestMapping(value = "/headImg", method = RequestMethod.POST)
+	public String uploadImg(@RequestParam MultipartFile Filedata, HttpServletRequest req) {
 		String username = (String) req.getSession().getAttribute("username");
 		TdUser user = tdUserService.findByUsername(username);
-		if(null == user){
+		if (null == user) {
 			return "/user/login";
 		}
-		
+
 		String name = Filedata.getOriginalFilename();
 
 		String ext = name.substring(name.lastIndexOf("."));
-		
-		 try {
-	            byte[] bytes = Filedata.getBytes();
 
-	            Date dt = new Date(System.currentTimeMillis());
-	            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
-	            String fileName = sdf.format(dt) + ext;
+		try {
+			byte[] bytes = Filedata.getBytes();
 
-	            String uri = SiteMagConstant.imagePath + "/" + fileName;
+			Date dt = new Date(System.currentTimeMillis());
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+			String fileName = sdf.format(dt) + ext;
 
-	            File file = new File(uri);
+			String uri = SiteMagConstant.imagePath + "/" + fileName;
 
-	            BufferedOutputStream stream = new BufferedOutputStream(
-	                    new FileOutputStream(file));
-	            stream.write(bytes);
-	            stream.close();
-	            user.setHeadImageUri("/images/"+fileName);
-	            tdUserService.save(user);
-	        } catch (Exception e) {
-	        	e.printStackTrace();
-	        }
+			File file = new File(uri);
 
-	        return "redirect:/user/center/info";
+			BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(file));
+			stream.write(bytes);
+			stream.close();
+			user.setHeadImageUri("/images/" + fileName);
+			tdUserService.save(user);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return "redirect:/user/center/info";
 
 	}
-	
-	@RequestMapping(value="/recharge")
-	public String reCharge(HttpServletRequest req){
+
+	@RequestMapping(value = "/recharge")
+	public String reCharge(HttpServletRequest req) {
 		String username = (String) req.getSession().getAttribute("username");
-		if(null == username){
+		if (null == username) {
 			return "/user/login";
 		}
 		return "/user/recharge";

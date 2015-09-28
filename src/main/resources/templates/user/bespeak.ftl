@@ -24,12 +24,12 @@ $(function(){
 
     function startReserve(username,diyId){
         $.post("/user/find/reserve",{"username":username,"diyId":diyId},function(res){
-            if(0!=status){
-                alert(res.message);
-            }
-            if(0==res.status){
-                window.location.href="/user/order/first/pay?id="+res.id;
-            }
+            alert(res.message);
+    <!--
+                在此处需要进行多种监控：
+                1. 在预约成功的情况下，监控指定车辆是否在两个小时之内进入指定的车库（即可以审查订单状态是否在两个小时之内改变为4L）
+                2. 在等待泊车员手动确认预约的情况下，随时监控订单是否已经预约成功
+    -->
         });
     } 
 </script>
@@ -44,11 +44,11 @@ $(function(){
 </div>
 <div class="main">
     <dl class="bespeak">
+        <dt><div style="color:#f65741;">定金</div><p style="color:#f65741;">${firstPay?string("0.00")}元</p></dt>
         <dt><div>用户</div><p><#if user??>${user.username!''}</#if></p></dt>
-        <dt><div>车牌号</div><p><#if user??>${user.carCode!''}</#if></p></dt>
         <dt><a href="/user/find/diy/detail?id=${depot.id?c}"><div >停车场</div><span><img src="/user/images/setting_guide.png" /></span><p style="margin-right:22px;"><#if depot??>${depot.title!''}</#if></p></a></dt>
         <div class="clear20"></div>
-        <dd><a class="bespeak_btn" type="button" id="submitId" onClick="startReserve('${user.username!''}',${depot.id?c});">确认</a></dd>
+        <dd><a class="bespeak_btn" type="button" id="submitId" onClick="startReserve('${user.username!''}',${depot.id?c});">预约</a></dd>
     </dl>
 </div><!--main END-->
 

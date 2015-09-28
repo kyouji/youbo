@@ -24,10 +24,9 @@
             alert("未能获取到该订单的信息！");
             return;
         }
-        var check = confirm("是否确定取消该订单？");   
+        var check = confirm("是否确定取消该订单（一旦取消订单，定金将不会退回）？");   
         if(check){
-            var reason = prompt("请输入取消订单的原因：");
-            window.location.href="/user/order/cancelOrder?id="+id+"&reason="+reason;
+            window.location.href="/user/order/cancelOrder?id="+id;
         }
     }
    
@@ -68,7 +67,7 @@
 
 <body>
     <div class="header">
-        <p>订单中心</p>
+        <p>我的订单</p>
         <a href="javascript:history.go(-1);" class="a4"></a>
     </div>
     <div class="main">
@@ -81,7 +80,6 @@
         <#if unparked_order_list??> 
             <div id="unfinish_order_by_dx">
                 <#list unparked_order_list as item>
-                    <a href="/user/order/detail?orderId=${item.id?c}">
                     <dl class="order_01">
                         <dt>
                             <span>${item.diyTitle!''}</span>
@@ -104,6 +102,7 @@
                         <dd>
                             <img src="/user/images/detail_month_01.png" />
                             <span>${item.orderTime?string("yyyy-MM-dd HH:mm")}</span>
+                            <p><a href="/user/order/detail?orderId=${item.id?c}">详情</a></p>
                         </dd>
                         <dd>
                             <img src="/user/images/detail_month_02.png" />
@@ -148,7 +147,6 @@
                         <dl class="order_btn">
                             <dd><input class="sel_2" onclick="cancelOrder(${item.id?c});" style="border-radius:0;" type="button" value="取消订单"/ ></dd>
                         </dl>
-                    </a>
                     </#list>
                 </div>
             </#if>
@@ -156,7 +154,6 @@
             <#if parked_order_list??&&parked_order_list?size gt 0>
                 <div id="finish_order_by_dx">
                     <#list parked_order_list as item>
-                        <a href="/user/order/detail?orderId=${item.id?c}">
                         <dl class="order_01">
                             <dt>
                                 <span>${item.diyTitle!''}</span>
@@ -175,6 +172,7 @@
                             <dd>
                                 <img src="/user/images/detail_month_01.png" />
                                 <span>${item.orderTime?string("yyyy-MM-dd HH:mm")}</span>
+                                <p><a href="/user/order/detail?orderId=${item.id?c}">详情</a></p>
                             </dd>
                             <dd>
                                 <img src="/user/images/detail_month_02.png" />
@@ -219,7 +217,6 @@
                         <dl class="order_btn">
                             <dd><input class="sel_2" style="background-color:#999999;border-radius:0;" type="button" value="取消订单"/ ></dd>
                         </dl>
-                        </a>
                     </#list>
                 </div>
             </#if>
@@ -227,7 +224,6 @@
             <#if all_order_list??&&all_order_list?size gt 0>
                 <div id="all_order_by_dx">
                     <#list all_order_list as item>
-                        <a href="/user/order/detail?orderId=${item.id?c}">
                         <dl class="order_01">
                             <dt>
                                 <span>${item.diyTitle!''}</span>
@@ -245,7 +241,11 @@
                                     </#if>
                                 </#if>
                             </dt>
-                            <dd><img src="/user/images/detail_month_01.png" /><span>${item.orderTime?string("yyyy-MM-dd HH:mm")}</span></dd>
+                            <dd>
+                                <img src="/user/images/detail_month_01.png" />
+                                <span>${item.orderTime?string("yyyy-MM-dd HH:mm")}</span>
+                                <p><a href="/user/order/detail?orderId=${item.id?c}">详情</a></p>
+                            </dd>
                             <dd>
                                 <img src="/user/images/detail_month_02.png" />
                                 <#if item.finishTime??>
@@ -283,7 +283,6 @@
                                             <p>交易取消</p>
                                         <#break>
                                     </#switch>
-                                    
                                 </#if>
                             </dd>
                         </dl>
@@ -296,7 +295,6 @@
                                 <dd><input class="sel_2" style="background-color:#999999;border-radius:0;" type="button" value="取消订单"/ ></dd>
                             </dl>
                         </#if> 
-                    </a>
                     </#list>
                 </div>
             </#if>

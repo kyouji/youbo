@@ -31,6 +31,8 @@ public class TdBankcardService {
 		if(null == diyId){
 			return null;
 		}
-		return repository.findByDiyId(diyId);
+		return repository.findBySiteId(diyId);
 	}
+	
+	
 }

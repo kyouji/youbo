@@ -135,28 +135,10 @@
                     </dt>
                 </dl>
                 <dl class="park_last">
-                    <dd><span>申请退款</span></dd>
-                    <dt>
-                        <#if order.isReturn??>
-                            <#if order.isReturn==true>
-                                <p>是</p>
-                            <#else>
-                                <p>否</p>
-                            </#if>
-                        <#else>
-                            <p>否</p> 
-                        </#if>
-                    </dt>
-                </dl>
-                <dl class="park_last">
-                    <dd><span>退款原因</span></dd>
+                    <dd><span>取消原因</span></dd>
                     <dt>
                         <p>${order.cancelReason!''}</p>
                     </dt>
-                </dl>
-                <dl class="park_last">
-                    <dd><span>审核状态</span></dd>
-                    <dt><p>${order.checkStatus!''}</p></dt>
                 </dl>
                 <dl class="park_last">
                     <dd><span>订单备注</span></dd>
@@ -165,19 +147,27 @@
             </div>
         <!--停车场信息结束-->
         </#if>
-        <div class="mb98"></div>
+    <div class="mb98"></div>
+    <footer class="profoot">
+        <table>
+            <tr>
+                <#switch order.statusId>
+                    <#case 1>
+                        <td><input type="submit" value="支付定金：￥${firstPay?string("0.00")}" /></td>
+                    <#break>
+                    <#case 4>
+                        <td><input type="submit" value="结算：￥${order.totalPrice?string("0.00")}" /></td>
+                    <#break>
+                    <#default>
+                        <td><input type="submit" value="结算" /></td>
+                    <#break>
+                </#switch>
+                <td>&nbsp;</td>
+                <td><input type="button" value="取消订单" /></td>
+            </tr>
+        </table>
+    </footer>
     
     </div>
-    
-    <!--底部开始-->
-    <div class="footer">
-    <a class="a1" href="#">主页</a>
-    <a class="a2 sel" href="#">账户<span></span></a>
-    <a class="a3" href="#">收费记录<span></span></a>
-    <a class="a4" href="#">车场信息<span></span></a>
-    <a class="a5" href="#">设置<span></span></a>
-    </div>
-    <!--底部结束-->
-
 </body>
 </html>

@@ -42,6 +42,17 @@ public class TdBankcard {
 	@Column
 	private String bankCardType;
 	
+	@Column
+	private Long siteId;
+	
+	public Long getSiteId() {
+		return siteId;
+	}
+
+	public void setSiteId(Long siteId) {
+		this.siteId = siteId;
+	}
+
 	public Long getId() {
 		return id;
 	}

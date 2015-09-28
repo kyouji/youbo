@@ -23,7 +23,7 @@
         <div class="main">
             <div class="personal_info">
                 <div class="personal_info_img">
-                    <a onclick="changeHeads();"><img src="${user.headImageUri!'/user/images/default_head.png'}"></a>
+                    <a onclick="changeHeads();"><img width="100px" height="100px" src="${user.headImageUri!'/user/images/default_head.png'}"></a>
                     <script>
                         function changeHeads(){
                             var filebutton = document.getElementById("filebutton");
@@ -41,9 +41,9 @@
                 <form id="uploadImgForm" enctype="multipart/form-data" action="/user/center/headImg" method="post">
                     <input style="display:none" name="Filedata" type="file" onchange="getFile();" id="filebutton">
                 </from>
-                <dd><div>手机号</div><p>${user.mobile!''}</p><a><span></span></a></dd>
+                <dd><div>车牌</div><p>${user.carCode!''}</p></dd>
                 <dd><div>昵称</div><p>${user.nickname!''}</p><a href="/user/center/info/nickname"><span></span><img src="/user/images/setting_guide.png" /></a></dd>
-                <dd><div>车牌</div><p>${user.carCode!''}</p><a href="/user/center/info/carcode"><span></span><img src="/user/images/setting_guide.png" /></a></dd>
+                <dd><div>手机</div><p style="color:#999">${user.mobile!''}</p><a href="/user/center/info/phone"><span></span><img src="/user/images/setting_guide.png" /></a></dd>
                 <dd>
                     <div>登录密码</div>
                     <p>******</p>

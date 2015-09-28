@@ -93,7 +93,8 @@ public class TdCooperationController {
 	 */
 	@RequestMapping(value = "/iodata")
 	@ResponseBody
-	public Map<String, Object> ioData(String carNo,String busNo,String ioState,String ioDate,String picture, HttpServletRequest request) {
+	public Map<String, Object> ioData(String carNo, String busNo, String ioState, String ioDate, String picture,
+			HttpServletRequest request) {
 		Map<String, Object> res = new HashMap<>();
 		// status代表处理状态，-1代表失败
 		res.put("status", -1);
@@ -110,11 +111,13 @@ public class TdCooperationController {
 
 		// 保存此出入库信息
 		System.err.println("开始保存出入库信息");
-		if(null == carNo||null == busNo||null == ioState||null == ioDate||null == picture){
+		if (null == carNo || null == busNo || null == ioState || null == ioDate || null == picture) {
 			res.put("message", "参数未接收成功");
 			return res;
 		}
-		
+		// 设置图片路径
+		String lujing = "/root/ftpimages/" + picture;
+
 		Date theDate = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		try {
@@ -129,7 +132,7 @@ public class TdCooperationController {
 		ioData.setBusNo(busNo);
 		ioData.setIoState(ioState);
 		ioData.setIoDate(theDate);
-		ioData.setPicture(picture);
+		ioData.setPicture(lujing);
 		System.err.println("参数设置完毕");
 		ioData = tdIoDataService.save(ioData);
 		System.err.println("已经保存了进出库信息");
@@ -151,6 +154,10 @@ public class TdCooperationController {
 				theOrder.setDiyTitle(diySite.getTitle());
 				theOrder.setOrderTime(new Date());
 				theOrder.setCarCode(busNo);
+				if (null == theOrder.getCarCodePhoto()) {
+					theOrder.setCarCodePhoto("");
+				}
+				theOrder.setCarCodePhoto(theOrder.getCarCodePhoto() + lujing + ",");
 				System.err.println("开始存储新的订单");
 				order = tdOrderService.save(theOrder);
 				System.err.println("设置停车场的剩余数量-1");
@@ -172,13 +179,15 @@ public class TdCooperationController {
 		if ("正常外出".equals(ioData.getIoState())) {
 			System.err.println("接收到车辆出库数据，开始设置属性");
 			order = tdOrderService.findbyStatusFour(busNo, diySite.getId());
-			if(null == order){
+			if (null == order) {
 				res.put("message", "未能找到指定的订单");
 				return res;
 			}
 			order.setStatusId(5L);
-			
+
 			order.setOutputTime(theDate);
+			
+			order.setCarCodePhoto(order.getCarCodePhoto() + lujing + ",");
 			// 在此计算停车费用，并将其存储到order的totalPrice字段上
 
 			// 将计算出来的总价格返回
@@ -297,52 +306,4 @@ public class TdCooperationController {
 		}
 		return res;
 	}
-	
-//	/**
-//	 * @author dengxiao 上传图片的接口
-//	 */
-//	@RequestMapping(value = "/upImg")
-//	@ResponseBody
-//	public Map<String, Object> uploadImg(@RequestParam FileInputStream input) {
-//		Map<String, Object> res = new HashMap<>();
-//		// status代表处理状态，-1代表失败
-//		res.put("status", -1);
-//
-//		if (null == input) {
-//			System.err.println("图片不存在");
-//			res.put("message", "未获取到文件流");
-//			return res;
-//		}
-//
-//		try {
-//
-//			Date dt = new Date(System.currentTimeMillis());
-//			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
-//			String fileName = sdf.format(dt) + ".jpg";
-//			String uri = ImageRoot + "/" + fileName;
-//
-//			File file = new File(uri);
-//			file.createNewFile();
-//			
-//			FileOutputStream out = new FileOutputStream(file);
-//			byte buffer[] = new byte[1024];  
-//            
-//            int count,i;  
-//            while((count=input.read(buffer))!=-1){  
-//                for(i=0; i<count; i++){  
-//                    out.write(buffer[i]);  
-//                }  
-//            }  
-//            input.close();  
-//            out.close();  
-//			res.put("status", 0);
-//		} catch (Exception e) {
-//			res.put("message", "产生了异常");
-//			e.printStackTrace();
-//		}
-//		return res;
-//	}
-	
-	
-
 }

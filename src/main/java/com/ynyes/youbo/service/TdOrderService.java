@@ -598,5 +598,21 @@ public class TdOrderService {
 		}
 		return repository.findByDiyIdAndStatusIdAndOrderTimeBetweenOrderByOrderTimeDesc(id, 3L, beginDate, finishDate);
 	}
+	
+	//查找指定用户已经取消的订单
+	public List<TdOrder> findCancelOrderByUsername(String username){
+		if(null == username){
+			return null;
+		}
+		return repository.findByUsernameAndStatusIdOrderByOrderTimeDesc(username, 9L);
+	}
+	
+	//根据停车场ID查找预约审核的订单
+	public List<TdOrder> findByDiyIdAndStatusIdOrderByOrderTime(Long diyId){
+		if(null == diyId){
+			return null;
+		}
+		return repository.findByDiyIdAndStatusIdOrderByOrderTimeDesc(diyId, 2L);
+	}
 
 }

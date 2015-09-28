@@ -36,6 +36,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ynyes.youbo.entity.TdDeliveryType;
 import com.ynyes.youbo.entity.TdDiySite;
+import com.ynyes.youbo.entity.TdDiyUser;
 import com.ynyes.youbo.entity.TdGoods;
 import com.ynyes.youbo.entity.TdOrder;
 import com.ynyes.youbo.entity.TdOrderGoods;
@@ -45,6 +46,7 @@ import com.ynyes.youbo.entity.TdUserPoint;
 import com.ynyes.youbo.service.TdArticleService;
 import com.ynyes.youbo.service.TdDeliveryTypeService;
 import com.ynyes.youbo.service.TdDiySiteService;
+import com.ynyes.youbo.service.TdDiyUserService;
 import com.ynyes.youbo.service.TdGoodsService;
 import com.ynyes.youbo.service.TdManagerLogService;
 import com.ynyes.youbo.service.TdOrderService;
@@ -95,6 +97,9 @@ public class TdManagerOrderController {
 
 	@Autowired
 	TdManagerLogService tdManagerLogService;
+	
+	@Autowired
+	TdDiyUserService tdDiyUserService;
 
 	// 订单设置
 	@RequestMapping(value = "/setting/{type}/list")
@@ -251,6 +256,12 @@ public class TdManagerOrderController {
 				return res;
 			}
 		}
+		
+		res.put("status", "y");
+
+		return res;
+	}
+//		}
 //		TdUser tdUser = tdUserService.findByUsername(param);
 //
 //		if (null == id) // 新增
@@ -276,10 +287,6 @@ public class TdManagerOrderController {
 //			}
 //		}
 
-		res.put("status", "y");
-
-		return res;
-	}
 
 	@RequestMapping(value = "/edit")
 	public String orderEdit(Long id, Long statusId, String __VIEWSTATE, ModelMap map, HttpServletRequest req) {
@@ -688,7 +695,6 @@ public class TdManagerOrderController {
 		if (null == username) {
 			return "redirect:/Verwalter/login";
 		}
-
 		String uris = parsePicUris(hid_photo_name_show360);
 
 		tdDiySite.setShowPictures(uris);
@@ -701,8 +707,18 @@ public class TdManagerOrderController {
 			tdManagerLogService.addLog("edit", "修改车库", req);
 		}
 
-		tdDiySiteService.save(tdDiySite);
-
+		TdDiySite diySite = tdDiySiteService.save(tdDiySite);
+		TdDiyUser diyUser = tdDiyUserService.findOne(diySite.getId());
+		if(null == diyUser){
+			diyUser = new TdDiyUser();
+			diyUser.setDiyId(diySite.getId());
+			diyUser.setRoleId(0L);
+			diyUser.setIsEnable(diySite.getIsEnable());
+			diyUser.setRealName(diySite.getTitle());
+		}
+		diyUser.setUsername(diySite.getUsername());
+		diyUser.setPassword(diySite.getPassword());
+		tdDiyUserService.save(diyUser);
 		return "redirect:/Verwalter/order/setting/diysite/list";
 	}
 

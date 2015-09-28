@@ -110,7 +110,7 @@ body{ background:#efefef; }
 
 /*find*/
 
-.find_img{width:100%;height:100%;display:block;overfloat:hidden; min-height:400px;}
+.find_img{width:100%;height:100%;display:block;overfloat:hidden; min-height:960px;}
 .find01{width:92%; padding-left:4%; padding-right:4%; overflow:hidden; height:auto; padding-top:3%; background-color:white; }
 .find01 dt { width:100%; height:auto; float:left;}
 .find01 dt span{ float:left; color:#333; font-size:1.1em;}
@@ -181,7 +181,7 @@ body{ background:#efefef; }
 .mycenter_min dt{width:100%; height:116px; text-align:center; float:left;}
 .mycenter_min dt div{ width:100px; height:100px; border-radius:50px; float:left;overflow:hidden;}
 .mycenter_min dt p{ padding-top:9%; width:40%; float:left; margin-left:6%;}
-.mycenter_min dt span{ display:block; line-height:30px; float:left;}
+.mycenter_min dt span{ display:block; line-height:30px; float:left;width:100%;}
 .mycenter_min dt a{ float:right; display:block;float:right;  margin-top:9%; }
 .mycenter_min dd{ width:100%; height:60px; border:#dddddd 1px solid; border-radius:6px; float:left; line-height:60px; text-align:center;}
 .mycenter_min dd a{ height:58px; width:50%; display:block; float:left; background:url(../images/mycenter_line.png) no-repeat left;}
@@ -470,4 +470,36 @@ body{ background:#efefef; }
 .park_last dt p{ line-height:50px; color:#999; }
 /*This chapter end*/
 
+
+.profoot {
+    position:fixed;
+    left:0;
+    bottom:0;
+    z-index:50;
+    width:100%;
+    background:#e7e7e7;
+    padding:10px 0 5px;}
+.profoot table {
+    width:80%;
+    margin:0 auto;
+    table-layout:fixed;
+    }
+.profoot td input {
+    width:100%;
+    height:40px;
+    cursor:pointer;
+    line-height:40px;
+    color:#fff;
+    font-size:0.9em;
+    border-radius:3px;
+    background:#3b93de;
+    border:none;
+    }
+.profoot a {
+    font-size:0.8em;
+    text-align:center;
+    display:block;
+    background:url(../images/pro_fq.png) no-repeat center top;
+    background-size:30px;
+    padding-top:23px;}
 

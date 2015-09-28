@@ -20,5 +20,7 @@ public interface TdBankcardRepo extends
 
     @Query(value="select * from td_bankcard where site_id=?1",nativeQuery=true)
     List<TdBankcard> findByDiyId(Long id);
+    
+    List<TdBankcard> findBySiteId(Long siteId);
 
 }

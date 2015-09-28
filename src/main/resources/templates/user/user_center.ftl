@@ -31,8 +31,7 @@
 <div class="main">
     <dl class="mycenter_min">
         <dt>
-            
-            <div><img src="<#if user??>${user.headImageUri!'/user/images/default_head.png'}</#if>"/></div>
+            <div><img src="<#if user??>${user.headImageUri!'/user/images/default_head.png'}</#if>" width="100px" height="100px"/></div>
             <p>
                 <#if user.balance??&&user.balance gt 0>
                     <span>余额：${user.balance?string("0.00")}元</span>
@@ -73,7 +72,7 @@
         <dt><a href="/user/center/message"><img src="/user/images/aboutus_right.png" /></a></dt>
     </dl>
     </a>
-     <a>
+    <a>
     <dl class="mycenter_last">
         <dd><a href="/user/order/cancel">已取消订单</a></dd>
         <dt><a href="/user/order/cancel"><img src="/user/images/aboutus_right.png" /></a></dt>

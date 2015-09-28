@@ -28,9 +28,14 @@ $(document).ready(function(){
    <#if depot_list??>
     <#list depot_list as item>
         <#if item.longitude?? && item.latitude??>
-            
-        addMarker(${item.longitude?string("0.000000")}, ${item.latitude?string("0.000000")},'${item.title}','${item.address!""}',${item.id},${item.parkingNowNumber!'0'});
-           
+            <#assign percent=item.parkingNowNumber/item.parkingTotalNumber>
+            <#if item.parkingNowNumber==0>
+                addMarker("/images/p_red.png",${item.longitude?string("0.000000")}, ${item.latitude?string("0.000000")},'${item.title}','${item.address!""}',${item.id},${item.parkingNowNumber!'0'},"red");
+            <#elseif percent lt 0.5>
+                addMarker("/images/p_yellow.png",${item.longitude?string("0.000000")}, ${item.latitude?string("0.000000")},'${item.title}','${item.address!""}',${item.id},${item.parkingNowNumber!'0'});
+            <#elseif percent gt 0.5>
+                addMarker("/images/p_green.png",${item.longitude?string("0.000000")}, ${item.latitude?string("0.000000")},'${item.title}','${item.address!""}',${item.id},${item.parkingNowNumber!'0'});
+            </#if>
         </#if>
     </#list>
     </#if>
@@ -38,7 +43,7 @@ $(document).ready(function(){
 function loadMap()
 {
     <#--自定义marker图片-->
-    var myIcon = new BMap.Icon("/user/images/map.png", new BMap.Size(23, 25), {
+    var myIcon = new BMap.Icon("/images/map2.png", new BMap.Size(23, 25), {
     offset: new BMap.Size(10, 25), // 指定定位位置
     imageOffset: new BMap.Size(0, 0 - 0 * 25) // 设置图片偏移
     });
@@ -69,22 +74,38 @@ function loadMap()
 }
 
 //添加marker
-function addMarker(x, y, title,address,depotId,parkingNowNumber)
+function addMarker(url,x, y, title,address,depotId,parkingNowNumber,type)
 {
     var marker = new BMap.Marker(new BMap.Point(x, y)); // 创建点
+    marker.setIcon(new BMap.Icon(url, new BMap.Size(23, 25)));
     map.addOverlay(marker);
-    marker.addEventListener("click", function(e){
-        $(".find_float").css('display','');
-        $("#guid").html("<dl class='find01'>"+
-        "<dt><span>" +title+ "</span><p>329m</p></dt>"+
-        "<dd><div>"+parkingNowNumber+" </div><span>10元/小时</span></dd>"+
-        "<dd><p>"+address+"</p></dd>"+
-        "</dl>"+
-        "<dl class='find_btn'>"+
-        "<dt><a onclick='javascript:goNavigation(" + x + "," + y +","+depotId+");'><img src='/user/images/park_icon01.png' /><span>导航</span></a></dt>"+
-        "<dd><a href='/user/find/bespeak?depotId="+depotId+ "'><img src='/user/images/park_icon02.png' /><span>预约</span></a></dd>"+
-        "</dl>");
-    });
+    if("red"==type){
+        marker.addEventListener("click", function(e){
+            $(".find_float").css('display','');
+            $("#guid").html("<dl class='find01'>"+
+            "<dt><span>" +title+ "</span></dt>"+
+            "<dd><div>"+parkingNowNumber+" </div><span>10元/小时</span></dd>"+
+            "<dd><p>"+address+"</p></dd>"+
+            "</dl>"+
+            "<dl class='find_btn'>"+
+            "<dt><a><img src='/user/images/park_icon01.png' /><span>导航</span></a></dt>"+
+            "<dd><a><img src='/user/images/park_icon02.png' /><span>预约</span></a></dd>"+
+            "</dl>");
+        });
+    }else{
+        marker.addEventListener("click", function(e){
+            $(".find_float").css('display','');
+            $("#guid").html("<dl class='find01'>"+
+            "<dt><span>" +title+ "</span></dt>"+
+            "<dd><div>"+parkingNowNumber+" </div><span>10元/小时</span></dd>"+
+            "<dd><p>"+address+"</p></dd>"+
+            "</dl>"+
+            "<dl class='find_btn'>"+
+            "<dt><a onclick='javascript:goNavigation(" + x + "," + y +","+depotId+");'><img src='/user/images/park_icon01.png' /><span>导航</span></a></dt>"+
+            "<dd><a href='/user/find/bespeak?depotId="+depotId+ "'><img src='/user/images/park_icon02.png' /><span>预约</span></a></dd>"+
+            "</dl>");
+        });
+    }
 }
 
 //计算距离
@@ -140,8 +161,12 @@ function goNavigation(x,y,id){
 <div class="main">
     <div class="find_img" id="myMap">
     </div> 
+    <script type="text/javascript">
+        var sHeight = document.body.scrollHeight;
+        $("#myMap").css("min-height",(sHeight-400)+"px");
+    </script>
     
-    <div class="find_float" style="display:none;"> 
+    <div class="find_float" style="display:none;width:100%;position:fixed;bottom:0;"> 
         <span id="guid">
         </span>
     </div>

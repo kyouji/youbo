@@ -13,12 +13,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.ynyes.youbo.entity.TdOrder;
 import com.ynyes.youbo.entity.TdPayType;
+import com.ynyes.youbo.entity.TdSetting;
 import com.ynyes.youbo.entity.TdUser;
 import com.ynyes.youbo.service.TdAdService;
 import com.ynyes.youbo.service.TdAdTypeService;
 import com.ynyes.youbo.service.TdCommonService;
 import com.ynyes.youbo.service.TdOrderService;
 import com.ynyes.youbo.service.TdPayTypeService;
+import com.ynyes.youbo.service.TdSettingService;
 import com.ynyes.youbo.service.TdUserService;
 
 @Controller
@@ -41,6 +43,9 @@ public class TdUserOrderController {
 
 	@Autowired
 	private TdPayTypeService tdPayService;
+
+	@Autowired
+	private TdSettingService tdSettingService;
 
 	@RequestMapping
 	public String index(String type, HttpServletRequest req, Device device, ModelMap map) {
@@ -66,15 +71,10 @@ public class TdUserOrderController {
 		if (null == username) {
 			return "/user/login";
 		}
-		List<TdOrder> checking_list = tdOrderService.findCheckingOrder(username);
-		List<TdOrder> checkfalse_list = tdOrderService.findCheckFlaseOrder(username);
-		List<TdOrder> checktrue_list = tdOrderService.findCheckTrueOrder(username);
-		List<TdOrder> cancel_list = tdOrderService.findByCancelOrder(username);
 
-		map.addAttribute("checking_list", checking_list);
-		map.addAttribute("checkfalse_list", checkfalse_list);
-		map.addAttribute("checktrue_list", checktrue_list);
-		map.addAttribute("cancel_list", cancel_list);
+		List<TdOrder> list = tdOrderService.findCancelOrderByUsername(username);
+
+		map.addAttribute("cancel_list", list);
 		return "/user/cancel_list";
 	}
 
@@ -102,25 +102,17 @@ public class TdUserOrderController {
 	 * @author dengxiao
 	 */
 	@RequestMapping(value = "/cancelOrder")
-	public String cancelOrder(HttpServletRequest req, Long id, String reason) {
+	public String cancelOrder(HttpServletRequest req, Long id) {
 		String username = (String) req.getSession().getAttribute("username");
 		if (null == username) {
 			return "/user/login";
 		}
-		if (null == reason) {
-			reason = "";
-		}
+		String reason = "用户自主取消";
 		TdOrder order = tdOrderService.findOne(id);
 		if (null != order) {
 			order.setCancelReason(reason);
-			if (1 == order.getStatusId()) {
-				order.setStatusId(9L);
-				order.setFinishTime(new Date());
-			} else {
-				order.setStatusId(7L);
-				order.setCheckStatus("待审核");
-				order.setIsReturn(true);
-			}
+			order.setStatusId(9L);
+			order.setFinishTime(new Date());
 			tdOrderService.save(order);
 		}
 		return "redirect:/user/order";
@@ -144,9 +136,33 @@ public class TdUserOrderController {
 			TdPayType payType = tdPayService.findOne(order.getPayTypeId());
 			map.addAttribute("payType", payType);
 		}
+		TdSetting setting = tdSettingService.findOne(1L);
+		map.addAttribute("firstPay", setting.getFirstPay());
 		map.addAttribute("user", user);
 		map.addAttribute("order", order);
 		return "/user/order_details";
 	}
 
+	/**
+	 * 跟踪最新订单的方法
+	 * 
+	 * @author dengxiao
+	 */
+	@RequestMapping(value = "/currentOrder")
+	public String orderDetail(HttpServletRequest req, ModelMap map) {
+		String username = (String) req.getSession().getAttribute("username");
+		TdUser user = tdUserService.findByUsername(username);
+		if (null == user) {
+			return "/user/login";
+		}
+		List<TdOrder> list = tdOrderService.findByUsername(username);
+		TdOrder new_order = null;
+		if (null != list && list.size() > 0) {
+			new_order = list.get(0);
+		}
+		map.addAttribute("orderId", new_order.getId());
+		TdSetting setting = tdSettingService.findOne(1L);
+		map.addAttribute("setting", setting);
+		return "redirect:/user/order/detail";
+	}
 }

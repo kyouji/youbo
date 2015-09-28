@@ -26,13 +26,16 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.ynyes.youbo.entity.TdBankcard;
 import com.ynyes.youbo.entity.TdDeposit;
+import com.ynyes.youbo.entity.TdDiyLog;
 import com.ynyes.youbo.entity.TdDiySite;
+import com.ynyes.youbo.entity.TdDiyUser;
 import com.ynyes.youbo.entity.TdOrder;
 import com.ynyes.youbo.entity.TdPayType;
 import com.ynyes.youbo.entity.TdUser;
 import com.ynyes.youbo.service.TdBankcardService;
 import com.ynyes.youbo.service.TdCommonService;
 import com.ynyes.youbo.service.TdDepositService;
+import com.ynyes.youbo.service.TdDiyLogService;
 import com.ynyes.youbo.service.TdDiySiteService;
 import com.ynyes.youbo.service.TdOrderService;
 import com.ynyes.youbo.service.TdPayTypeService;
@@ -64,6 +67,9 @@ public class TdDepotMyAccountController {
 	@Autowired
 	private TdDepositService tdDepositService;
 	
+	@Autowired
+	private TdDiyLogService tdDiyLogService;
+	
 
 	/**
 	 * 我的账户首页
@@ -75,13 +81,12 @@ public class TdDepotMyAccountController {
 	 */
 	@RequestMapping
 	public String index(HttpServletRequest req, Device device, ModelMap map) {
-		String siteUsername = (String) req.getSession().getAttribute("siteUsername");
-		if (null == siteUsername) {
+		TdDiySite site =  (TdDiySite) req.getSession().getAttribute("site");
+		if (null == site) {
 			return "redirect:/depot/login";
 		}
-		TdDiySite site = tdDiySiteService.findbyUsername(siteUsername);
 		tdCommonService.setHeader(map, req);
-		map.addAttribute("depot", tdDiySiteService.findByUsernameAndIsEnableTrue(siteUsername));
+		map.addAttribute("depot", site);
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Calendar cal = Calendar.getInstance();
 		String year = cal.get(Calendar.YEAR) + "";
@@ -123,12 +128,12 @@ public class TdDepotMyAccountController {
 	 */
 	@RequestMapping("/bankcard")
 	public String bankcard(HttpServletRequest req, Device device, ModelMap map) {
-		String siteUsername = (String) req.getSession().getAttribute("siteUsername");
-		TdDiySite site = tdDiySiteService.findbyUsername(siteUsername);
-		if (null == site) {
+		TdDiySite site = (TdDiySite) req.getSession().getAttribute("site");
+ 		if (null == site) {
 			return "/depot/login";
 		}
-		List<TdBankcard> bankcardList = site.getBankcardList();
+ 		
+ 		List<TdBankcard> bankcardList = tdBankcardService.findByDiyId(site.getId());
 		map.addAttribute("bankcardList", bankcardList);
 		return "/depot/bankcard";
 	}
@@ -307,27 +312,11 @@ public class TdDepotMyAccountController {
 
 	@RequestMapping(value = "/reserve")
 	public String reserve(HttpServletRequest req, ModelMap map) {
-		String siteUsername = (String) req.getSession().getAttribute("siteUsername");
-		TdDiySite site = tdDiySiteService.findbyUsername(siteUsername);
+		TdDiySite site =  (TdDiySite) req.getSession().getAttribute("site");
 		if (null == site) {
 			return "/depot/login";
 		}
-		Calendar cal = Calendar.getInstance();
-		String year = cal.get(Calendar.YEAR) + "";
-		String month = (cal.get(Calendar.MONTH) + 1) + "";
-		String day = cal.get(Calendar.DAY_OF_MONTH) + "";
-		String sBeginDate = year + "-" + month + "-" + day + " 00:00:00";
-		String sFinishDate = year + "-" + month + "-" + day + " 24:00:00";
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		Date beginDate = null;
-		Date finishDate = null;
-		try {
-			beginDate = sdf.parse(sBeginDate);
-			finishDate = sdf.parse(sFinishDate);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		List<TdOrder> list = tdOrderService.findReservedOrder(site.getId(), beginDate, finishDate);
+		List<TdOrder> list = tdOrderService.findByDiyIdAndStatusIdOrderByOrderTime(site.getId());
 		map.addAttribute("reserved_list", list);
 		return "/depot/reserved_list";
 	}
@@ -403,5 +392,39 @@ public class TdDepotMyAccountController {
 		}
 		map.addAttribute("order", order);
 		return "/depot/order_details";
+	}
+	
+	@RequestMapping(value = "/operate")
+	public String operate(HttpServletRequest req,Long id,Long type){
+		TdDiySite site = (TdDiySite) req.getSession().getAttribute("site");
+		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("diyUser");
+		if(null == site || null == diyUser){
+			return "/depot/login";
+		}
+		
+		TdOrder order = tdOrderService.findOne(id);
+		
+		TdDiyLog log = new TdDiyLog();
+		
+		log.setCreateTime(new Date());
+		log.setDiyId(site.getId());
+		log.setUsername(diyUser.getUsername());
+		
+		if(0 == type){
+			log.setActionType("同意预约");
+			log.setRemark(diyUser.getUsername()+"同意了"+order.getCarCode()+"的预约，此时车位剩余"+site.getParkingNowNumber()+"个");
+			order.setStatusId(3L);
+		}
+		
+		if(1 == type){
+			log.setActionType("拒绝预约");
+			log.setRemark(diyUser.getUsername()+"拒绝了"+order.getCarCode()+"的预约，此时车位剩余"+site.getParkingNowNumber()+"个");
+			order.setStatusId(9L);
+			order.setCancelReason("对不起，您的预约已被拒绝");
+		}
+		tdOrderService.save(order);
+		tdDiyLogService.save(log);
+		return "redirect:/depot/myaccount/reserve";
+		
 	}
 }

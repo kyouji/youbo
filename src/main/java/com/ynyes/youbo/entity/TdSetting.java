@@ -169,8 +169,20 @@ public class TdSetting {
     // 底部Logo图片3跳转
     @Column
     private String bottomLogoLink3;
+    
+    //定金
+    @Column(scale=2)
+    private Double firstPay;
+    
+    public Double getFirstPay() {
+		return firstPay;
+	}
 
-    public Long getId() {
+	public void setFirstPay(Double firstPay) {
+		this.firstPay = firstPay;
+	}
+
+	public Long getId() {
         return id;
     }
 

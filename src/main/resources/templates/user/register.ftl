@@ -19,6 +19,17 @@
 $(document).ready(function(){
     changeYzm();
     $("#regist_form").Validform({
+        datatype:{
+            "carCode":function(gets,obj,curform,regxp){
+                  var reg = /^[\u4E00-\u9FA5][\da-zA-Z]{6}$/,
+                  carCode = document.getElementById("username").value;
+                  
+                  if(reg.test(carCode)){
+                    return true; 
+                  }
+                  return false;
+            }
+        },
         tiptype: 3,
      });
 });
@@ -40,7 +51,7 @@ $(document).ready(function(){
         <div class="mian">
             <form action="/user/reg/save" method="post" id="regist_form">
                 <div class="logintext">         
-                    <input name="username" id="username" type="text" datatype="m" ajaxurl="/user/reg/check/username" nullmsg="请输入手机号码！" errormsg="手机号码格式不正确！" class="logintext01" placeholder="手机号" />
+                    <input name="username" id="username" type="text" datatype="carCode" ajaxurl="/user/reg/check/username" nullmsg="请输入车牌号码！" errormsg="车牌号码格式不正确！" class="logintext01" placeholder="车牌号码" />
                     <span class="Validform_checktip Validform_wrong"></span>
                 </div>
                 <div class="logintext">         

@@ -58,10 +58,10 @@ public class TdUserRegController {
         }
         
         /**
-         * 因为是手机注册，所以将username字段的值赋值给mobile
+         * 因为是车牌号码注册，所以将username字段的值赋值给carCode
          * @author dengxiao
          */
-        mobile = username;
+        carCode = username;
         
         TdUser user = tdUserService.addNewUser(username, password, mobile, email, carCode);
         user.setRoleId(1L);
@@ -98,7 +98,7 @@ public class TdUserRegController {
 		if("username".equalsIgnoreCase(type)){
 			TdUser user = tdUserService.findByUsername(param);
 			if(null != user){
-				res.put("info",	"该用户已经存在！");
+				res.put("info",	"该车牌号已注册！");
 				return res;
 			}
 		}

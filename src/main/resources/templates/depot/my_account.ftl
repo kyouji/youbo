@@ -11,6 +11,9 @@
 <!--css-->
 <link href="/depot/css/base.css" rel="stylesheet" type="text/css" />
 <link href="/depot/css/style.css" rel="stylesheet" type="text/css" />
+<script>
+    
+</script>
 </head>
 
 <body>
@@ -26,7 +29,7 @@
     <dl class="my_account">
         <dt>
             <img src="/depot/images/money.png"/>
-            <p class="p1">当日累计手机收费</p>
+            <p class="p1">当日累计收费</p>
             <p class="p2">￥<span><#if income??>${income?string("0.00")!''}元<#else>0.00元</#if></span></p>
         </dt>
     </dl>
@@ -37,12 +40,8 @@
             <dt><a href="/depot/myaccount/cashrecord"><img src="/depot/images/advance.png" /></a></dt>
         </dl>
         <dl>
-            <dd><a href="/depot/myaccount/reserve">预约订单</a></dd>
+            <dd><a href="/depot/myaccount/reserve">预约审核</a></dd>
             <dt><a href="/depot/myaccount/reserve"><img src="/depot/images/advance.png" /></a></dt>
-        </dl>
-        <dl>
-            <dd><a href="/depot/myaccount/refund">退款申请</a></dd>
-            <dt><a href="/depot/myaccount/refund"><img src="/depot/images/advance.png" /></a></dt>
         </dl>
         <dl>
             <dd><a href="/depot/myaccount/bankcard">银行卡</a></dd>

@@ -136,7 +136,19 @@ public class TdDiySite {
     @Column
     private Double allMoney;
     
-    public Double getAllMoney() {
+    //判断停车场是否拥有摄像设备
+    @Column
+    private Boolean isCamera;
+    
+    public Boolean getIsCamera() {
+		return isCamera;
+	}
+
+	public void setIsCamera(Boolean isCamera) {
+		this.isCamera = isCamera;
+	}
+
+	public Double getAllMoney() {
 		return allMoney;
 	}
 

@@ -150,30 +150,43 @@ input.text {background:none; border:none;}
 .topNav .four_1{float:left;display:block;width:46%;text-align: center;padding-top: 10px;border-radius:20px;margin:2%;}
 .topNav a img{width: 60%;}
 .topNav a p{color:#fff;padding:15px;font-size:2em;}
-@media screen and (max-width:320px) {
-.topNav a p{padding:5px;font-size:1em;}
+@media screen and (max-width:1024px) {
+.topNav a p{padding:20px;font-size:1.8em;}
 } 
+@media screen and (max-width:414px) {
+.topNav a p{padding:15px;font-size:1.6em;}
+} 
+@media screen and (max-width:375px) {
+.topNav a p{padding:10px;font-size:1.2em;}
+} 
+@media screen and (max-width:320px) {
+.topNav a p{padding:10px;font-size:1.2em;}
+} 
+
+
+
+
 .topNav .a1{background:#ffbd2e;}
 .topNav .a2{background:#ff665e;}
 .topNav .a3{background:#69afff;}
 .topNav .a4{background:#00bf70;}
 .topNav .p5{position:absolute;left: 39.4%;top: 35.4%;z-index:99;width:62px;height:62px;padding: 1%;}
 @media screen and (max-width:1920px) {
-.topNav .p5{position:absolute;left: 41.3%;top:38%;width:100px;height:100px;}
+.topNav .p5{position:absolute;left: 41.3%;top:38%;width:120px;height:120px;}
 }
 @media screen and (max-width:1024px) {
-.topNav .p5{position:absolute;left: 41%;top: 38%;width:100px;height:100px;}
+.topNav .p5{position:absolute;left: 33.6%;top: 29%;width:200px;height:200px;}
 }
 @media screen and (max-width:414px) {
-.topNav .p5{position:absolute;left: 41.6%;top: 39.8%;width:62px;height:62px;}
+.topNav .p5{position:absolute;left: 32%;top: 29.8%;width:140px;height:140px;}
 }
 @media screen and (max-width:375px) {
-.topNav .p5{position:absolute;left: 40.6%;top: 39.5%;width:62px;height:62px;}
+.topNav .p5{position:absolute;left: 33%;top: 29.8%;width:120px;height:120px;}
 }
 @media screen and (max-width:320px) {
-.topNav .p5{position:absolute;left: 39.4%;top: 35.4%;width:62px;height:62px;}
+.topNav .p5{position:absolute;left: 33.4%;top: 30.4%;width:100px;height:100px;}
 } 
-.topNav .p5 img{width:100%;transform: rotate(45deg);}
+.topNav .p5 img{width:100%;}
 
 /*底部footer*/
 .footer{height: 70px; width: 100%;position:fixed;left:0;bottom: 0px; z-index: 99;background-color:#f8f8f8;}

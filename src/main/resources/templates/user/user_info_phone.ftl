@@ -13,29 +13,33 @@
 <link href="/user/css/common.css" rel="stylesheet" type="text/css" />
 <link href="/user/css/style.css" rel="stylesheet" type="text/css" />
 <script>
-    function submitCarcode(){
-        var carcode=$("#carcode").val();
-        if(!/^[\u4E00-\u9FA5][\da-zA-Z]{6}$/.test(carcode)){
-            alert("请输入正确的车牌号码！");
+    function submitPhone(){
+        var phone=$("#carcode").val().trim();
+        if(!/^1\d{10}$/.test(phone)){
+            alert("请输入正确的手机号码！");
             return;
         }
-        $("#carcodeForm").submit();
+        $("#phoneForm").submit();
+    }
+    
+    function cancel(){
+        document.getElementById("phone").value = "";
     }
 </script>
 </head>
 <body>
 
     <header class="header">
-        <p>修改昵称</p>
+        <p><#if phone??>修改手机号码<#else>设置手机号码</#if></p>
         <a href="/user/center/info" class="a4"></a>
-        <a class="main_add" href="javascript:submitCarcode();">保存</a>
+        <a class="main_add" href="javascript:submitPhone();">保存</a>
     </header>
     
-    <form id="carcodeForm" action="/user/center/carcode/edit" method="post">
+    <form id="phoneForm" action="/user/center/phone/edit" method="post">
         <div class="main">
             <div class="personal_info_user">
-                <input id="carcode" class="btn" type="text" name="carcode" value="${carcode!''}"/ >
-                <p >请输入您的车牌号码（车牌号码不匹配会导致预定等功能不可用）</p>
+                <input id="phone" class="btn" type="text" name="phone" value="${phone!''}"/ >
+                <p >请输入您的手机号码</p>
                 <a href="javascript:cancel();">X</a>
             </div>
         </div>
