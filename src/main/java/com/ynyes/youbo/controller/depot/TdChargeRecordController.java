@@ -13,6 +13,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.ynyes.youbo.entity.TdDiySite;
+import com.ynyes.youbo.entity.TdDiyUser;
 import com.ynyes.youbo.entity.TdOrder;
 import com.ynyes.youbo.service.TdCommonService;
 import com.ynyes.youbo.service.TdDiySiteService;
@@ -37,8 +38,8 @@ public class TdChargeRecordController {
 
 	@RequestMapping
 	public String site(HttpServletRequest req, Device device, ModelMap map) {
-		String siteUsername = (String) req.getSession().getAttribute("siteUsername");
-		TdDiySite site = tdDiySiteService.findbyUsername(siteUsername);
+		TdDiySite site = (TdDiySite) req.getSession().getAttribute("site");
+		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("diyUser");
 		if (null == site) {
 			return "redirect:/depot/login";
 		}

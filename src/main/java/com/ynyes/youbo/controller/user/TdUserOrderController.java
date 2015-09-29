@@ -1,7 +1,9 @@
 package com.ynyes.youbo.controller.user;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -10,7 +12,10 @@ import org.springframework.mobile.device.Device;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.ynyes.youbo.entity.TdDiySite;
 import com.ynyes.youbo.entity.TdOrder;
 import com.ynyes.youbo.entity.TdPayType;
 import com.ynyes.youbo.entity.TdSetting;
@@ -18,6 +23,7 @@ import com.ynyes.youbo.entity.TdUser;
 import com.ynyes.youbo.service.TdAdService;
 import com.ynyes.youbo.service.TdAdTypeService;
 import com.ynyes.youbo.service.TdCommonService;
+import com.ynyes.youbo.service.TdDiySiteService;
 import com.ynyes.youbo.service.TdOrderService;
 import com.ynyes.youbo.service.TdPayTypeService;
 import com.ynyes.youbo.service.TdSettingService;
@@ -46,6 +52,9 @@ public class TdUserOrderController {
 
 	@Autowired
 	private TdSettingService tdSettingService;
+	
+	@Autowired
+	private TdDiySiteService tdDiySiteService;
 
 	@RequestMapping
 	public String index(String type, HttpServletRequest req, Device device, ModelMap map) {
@@ -102,7 +111,7 @@ public class TdUserOrderController {
 	 * @author dengxiao
 	 */
 	@RequestMapping(value = "/cancelOrder")
-	public String cancelOrder(HttpServletRequest req, Long id) {
+	public String cancelOrder(HttpServletRequest req, Boolean isDetail, Long id) {
 		String username = (String) req.getSession().getAttribute("username");
 		if (null == username) {
 			return "/user/login";
@@ -115,8 +124,82 @@ public class TdUserOrderController {
 			order.setFinishTime(new Date());
 			tdOrderService.save(order);
 		}
+		if (true == isDetail) {
+			return "redirect:/user/order/detail?orderId=" + id;
+		}
 		return "redirect:/user/order";
 
+	}
+	
+	/**
+	 * 结算订单的方法
+	 * @author dengxiao
+	 */
+	@RequestMapping(value="/clearing",method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> clearing(HttpServletRequest req,Long id,Long type){
+		String username = (String) req.getSession().getAttribute("username");
+		TdUser user = tdUserService.findByUsername(username);
+		Map<String, Object> res = new HashMap<>();
+		res.put("status", -1);
+		
+		TdOrder order = tdOrderService.findOne(id);
+		TdSetting setting = tdSettingService.findOne(1L);
+		TdDiySite site = tdDiySiteService.findOne(order.getDiyId());
+		
+		if(1 == type){
+			if (user.getBalance() < setting.getFirstPay()) {
+				/**
+				 * 此处将在后期修改为提交到第三方支付
+				 * 
+				 * @author dengxiao
+				 */
+				res.put("message", "余额不足");
+				return res;
+			} else {
+				// 余额足够便扣除定金
+				user.setBalance(user.getBalance() - setting.getFirstPay());
+				// 设置订单状态为已支付定金
+				order.setFirstPay(setting.getFirstPay());
+				order.setStatusId(2L);
+				// 判断停车场是否还有剩余车位
+				if (site.getParkingNowNumber() > 0) {
+					// 如果还有剩余的车位，就开始判断停车场是否有摄像头
+					if (null!=site.getIsCamera()&&site.getIsCamera()) {// 有摄像头就自动预约成功
+						if (!(site.getParkingNowNumber() > 0)) {
+							order.setFirstPay(0.00);
+							user.setBalance(user.getBalance() + 10);
+							order.setStatusId(9L);
+							order.setCancelReason("指定停车场无剩余车位");
+							res.put("message", "抱歉，已经没有车位了，预定失败！");
+							return res;
+						}
+						site.setParkingNowNumber(site.getParkingNowNumber() - 1);
+						order.setStatusId(3L);
+						res.put("message", "预约成功，请在2个小时之内到达指定的车库停车！");
+					} else {// 如果没有摄像头就需要等待泊车员手动确认预约
+						res.put("message", "定金已支付，等待工作人员确认预约！");
+					}
+				} else {// 剩余车位不足即预定失败，订单结束
+					order.setFirstPay(0.00);
+					// 返还定金
+					user.setBalance(user.getBalance() + 10);
+					// 设置订单状态为交易结束
+					order.setStatusId(9L);
+					// 设置订单取消的原因
+					order.setCancelReason("指定停车场无剩余车位");
+					// 设置消息提示
+					res.put("message", "抱歉，已经没有车位了，预定失败！");
+					return res;
+				}
+			}
+			
+		}else if(0 == type){
+			order.setStatusId(6L);
+			//以下开始计算价格，并减去用户余额
+		}
+		res.put("status", 0);
+		return res;
 	}
 
 	/**
@@ -164,5 +247,27 @@ public class TdUserOrderController {
 		TdSetting setting = tdSettingService.findOne(1L);
 		map.addAttribute("setting", setting);
 		return "redirect:/user/order/detail";
+	}
+	
+	/**
+	 * 在订单详情页取消订单的方法
+	 * @author dengxiao
+	 */
+	@RequestMapping(value="/detailCancel",method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> detailCancel(HttpServletRequest req,Long id){
+		Map<String, Object> res = new HashMap<>();
+		res.put("status", -1);
+		TdOrder order = tdOrderService.findOne(id);
+		if(null != order){
+			order.setStatusId(9L);
+			order.setFinishTime(new Date());
+			order.setCancelReason("用户自主取消");
+			res.put("status", 0);
+			res.put("message", "订单已取消");
+		}else{
+			res.put("message", "未找到指定的订单");
+		}
+		return res;
 	}
 }

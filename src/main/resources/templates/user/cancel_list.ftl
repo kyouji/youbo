@@ -22,7 +22,6 @@
     <div class="main">
             <#if cancel_list??&&cancel_list?size gt 0>
                 <#list cancel_list as item>
-                    <a href="/user/order/detail?orderId=${item.id?c}">
                     <dl class="order_01">
                     <dt>
                         <span>${item.diyTitle!''}</span>
@@ -39,6 +38,7 @@
                     <dd>
                         <img src="/user/images/detail_month_01.png" />
                         <span>${item.orderTime?string("yyyy-MM-dd HH:mm")}</span>
+                        <span style="float:right;"><a href="/user/order/detail?orderId=${item.id?c}">详情</a></span>
                     </dd>
                     <dd>
                         <img src="/user/images/detail_month_02.png" />
@@ -53,7 +53,6 @@
                             <label>退款原因：${item.cancelReason!'无'}</label><br>
                         </dd>
                     </dl>
-                    </a>
                 </#list>
             </#if>
         </div>

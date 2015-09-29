@@ -33,10 +33,10 @@ public class TdUserIndexController {
 
 	@Autowired
 	private TdOrderService tdOrderService;
-	
+
 	@Autowired
 	private TdSettingService tdSettingService;
-	
+
 	@RequestMapping
 	public String index(HttpServletRequest req, Device device, ModelMap map) {
 
@@ -50,19 +50,22 @@ public class TdUserIndexController {
 		}
 
 		String username = (String) req.getSession().getAttribute("username");
-		
-		if(null != username){
+
+		if (null != username) {
 			List<TdOrder> list = tdOrderService.findByUsername(username);
 			TdOrder currentOrder = null;
-			if(null != list&&list.size() > 0){
-				currentOrder = list.get(0);
+			if (null != list && list.size() > 0) {
+				if (list.get(0).getStatusId() != 6 && list.get(0).getStatusId() != 9) {
+					currentOrder = list.get(0);
+				}
 			}
+			req.getSession().setAttribute("currentOrder", currentOrder);
 			map.addAttribute("currentOrder", currentOrder);
 			TdSetting setting = tdSettingService.findOne(1L);
 			Double firstPay = setting.getFirstPay();
 			map.addAttribute("firstPay", firstPay);
 		}
-		
+
 		return "/user/index";
 	}
 }

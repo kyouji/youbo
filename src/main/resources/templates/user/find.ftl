@@ -16,6 +16,37 @@
 <script src="/user/js/common.js"></script>
 <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=lwRXRetipHPGz8y6lzUlUZfc"></script>
 <script type="text/javascript">
+function getPosition(){
+    var geolocation = new BMap.Geolocation();  
+    geolocation.getCurrentPosition(
+        function(r){
+            if(this.getStatus() == BMAP_STATUS_SUCCESS){
+                userPiont = r.point;
+                map.panTo(r.point);
+            }else{
+                alert('failed'+this.getStatus());
+            }        
+        },{enableHighAccuracy: true}
+    )
+}
+
+function reserve(depotId,x,y){
+    <#if user??&&user.balance gt firstPay>
+        $.post("/user/find/reserve",{"username":"${user.username!''}",diyId:depotId},function(res){
+            alert(res.message);
+            if(0==res.status){
+                window.location.href="/user/find/navigation?x="+x+"&y="+y;
+            }
+        });
+    <#else>
+        window.location.href="/user/find/bespeak?depotId="+depotId;
+    </#if>
+}
+
+function userAlert(){
+    alert("绑定银行卡后才能够预约！");
+}
+
 var map;
 var userPiont;
 var drivingRoute;//路线
@@ -64,12 +95,10 @@ function loadMap()
                 var mk = new BMap.Marker(r.point, {icon: myIcon});
                 map.addOverlay(mk);
                 map.panTo(r.point);
-            }
-            else 
-            {
+            }else{
                 alert('failed'+this.getStatus());
             }        
-            },{enableHighAccuracy: true}
+        },{enableHighAccuracy: true}
     )
 }
 
@@ -88,8 +117,8 @@ function addMarker(url,x, y, title,address,depotId,parkingNowNumber,type)
             "<dd><p>"+address+"</p></dd>"+
             "</dl>"+
             "<dl class='find_btn'>"+
-            "<dt><a><img src='/user/images/park_icon01.png' /><span>导航</span></a></dt>"+
-            "<dd><a><img src='/user/images/park_icon02.png' /><span>预约</span></a></dd>"+
+            "<dt><a style='background-color:#999999'><img src='/user/images/park_icon01.png' /><span>导航</span></a></dt>"+
+            "<dd><a style='background-color:#999999'><img src='/user/images/park_icon02.png' /><span>预约</span></a></dd>"+
             "</dl>");
         });
     }else{
@@ -98,19 +127,18 @@ function addMarker(url,x, y, title,address,depotId,parkingNowNumber,type)
             $("#guid").html("<dl class='find01'>"+
             "<dt><span>" +title+ "</span></dt>"+
             "<dd><div>"+parkingNowNumber+" </div><span>10元/小时</span></dd>"+
-            "<dd><p>"+address+"</p></dd>"+
+            "<dd><p>定金：${firstPay?string("0.00")}</p></dd>"+
             "</dl>"+
             "<dl class='find_btn'>"+
             "<dt><a onclick='javascript:goNavigation(" + x + "," + y +","+depotId+");'><img src='/user/images/park_icon01.png' /><span>导航</span></a></dt>"+
-            "<dd><a href='/user/find/bespeak?depotId="+depotId+ "'><img src='/user/images/park_icon02.png' /><span>预约</span></a></dd>"+
+            "<dd><a <#if haveBankCard??>onclick='reserve("+depotId+","+x+","+y+");'<#else>onclick='userAlert();'</#if>><img src='/user/images/park_icon02.png' /><span>预约</span></a></dd>"+
             "</dl>");
         });
     }
 }
-
 //计算距离
 var searchComplete = function (results){
-        if (transit.getStatus() != BMAP_STATUS_SUCCESS){
+        if (transit.getStatus() != BMAP_STATUS_SUCCESS){    
             return ;
         }
         var plan = results.getPlan(0);
@@ -159,6 +187,9 @@ function goNavigation(x,y,id){
         <a href="/user" class="a4"></a>
 </div>
 <div class="main">
+    <div onclick="getPosition();" style="position:absolute;top:20px;left:20px;z-index:999;">
+        <img width="50px;" height="50px;" src="/images/p1.png">
+    </div>
     <div class="find_img" id="myMap">
     </div> 
     <script type="text/javascript">

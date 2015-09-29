@@ -43,8 +43,8 @@
             <a href="/user/center/info"><img src="/user/images/aboutus_right.png" /></a>
         </dt>
         <dd>
-            <a style="color:#ff665e; background:none;" href="/user/order">订单</a>
-            <a style="color:#69afff; " href="/user/find">预约</a>
+            <a style="color:#ff665e; background:none;" href="/user/order">我的订单</a>
+            <a style="color:#69afff; " href="/user/find?isOrder=<#if currentOrder??>true<#else>false</#if>"><#if currentOrder??>车位导航<#else>寻找车位</#if></a>
         </dd>
     </dl>
     <a>
@@ -79,16 +79,12 @@
     </dl>
     </a>
     <a>
-    <dl class="mycenter_last">
-        <dd><a href="/user/code">我的二维码</a></dd>
-        <dt><a><img src="/user/images/aboutus_right.png" /></a></dt>
-    </dl>
-    </a> <a>
     <dl style="margin-top:5%;" class="mycenter_last">
         <dd><a href="/user/center/setting">设置</a></dd>
         <dt><a href="/user/center/setting"><img src="/user/images/aboutus_right.png" /></a></dt>
     </dl>
     </a>
+    <#--
     <a>
     <dl class="mycenter_last">
         <dd><a href="/user/center/comment">意见反馈</a></dd>
@@ -101,6 +97,13 @@
         <dt><a href="/user/center/about"><img src="/user/images/aboutus_right.png" /></a></dt>
     </dl>
     </a>
+    <a>
+    <dl class="mycenter_last">
+        <dd><a href="/user/code">我的二维码</a></dd>
+        <dt><a><img src="/user/images/aboutus_right.png" /></a></dt>
+    </dl>
+    </a>
+    -->
     <a href="/user/center/exit">
     <dl class="mycenter_last">
         <dd><a href="/user/center/exit">退出登录</a></dd>

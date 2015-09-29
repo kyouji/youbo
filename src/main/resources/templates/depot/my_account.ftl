@@ -33,7 +33,11 @@
             <p class="p2">￥<span><#if income??>${income?string("0.00")!''}元<#else>0.00元</#if></span></p>
         </dt>
     </dl>
-    <a class="ip_1" type="button" style="ali" href="/depot/myaccount/withdrawal">提现</a>
+    <#if diyUser??&&diyUser.roleId??>
+        <#if diyUser.roleId==0>
+            <a class="ip_1" type="button" style="ali" href="/depot/myaccount/withdrawal">提现</a>
+        </#if>
+    </#if>
     <div class="my_account_record">
         <dl>
             <dd><a href="/depot/myaccount/cashrecord">提现记录</a></dd>

@@ -25,7 +25,7 @@ $(function(){
     function startReserve(username,diyId){
         $.post("/user/find/reserve",{"username":username,"diyId":diyId},function(res){
             alert(res.message);
-    <!--
+    <#--
                 在此处需要进行多种监控：
                 1. 在预约成功的情况下，监控指定车辆是否在两个小时之内进入指定的车库（即可以审查订单状态是否在两个小时之内改变为4L）
                 2. 在等待泊车员手动确认预约的情况下，随时监控订单是否已经预约成功

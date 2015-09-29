@@ -15,21 +15,41 @@
 <script src="/user/js/jquery-1.9.1.min.js"></script>
 <script src="/user/js/common.js"></script>
 <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=9xkTHRt1N0iCXRsRWdGpuGGW"></script>
+<script>
+function getPosition(){
+    var geolocation = new BMap.Geolocation();  
+    geolocation.getCurrentPosition(
+        function(r){
+            if(this.getStatus() == BMAP_STATUS_SUCCESS){
+                userPiont = r.point;
+                map.panTo(r.point);
+            }else{
+                alert('failed'+this.getStatus());
+            }        
+        },{enableHighAccuracy: true}
+    )
+}
+</script>
 </head>
 
 <body>
     <div class="header">
-        <p>找车位</p>
-        <a href="javascript:history.go(-1);" class="a4"></a>
+        <p>导航</p>
+        <a href="/user;" class="a4"></a>
     </div>
     <div class="main">
-        <div class="find_img" id="myMap">
+        <div onclick="getPosition();" style="position:absolute;top:20px;left:20px;z-index:999;">
+            <img width="50px;" height="50px;" src="/images/p1.png">
+        </div>
+        <div class="find_img" style="min-height:500px;" id="myMap">
         </div> 
-
+        
         <div id="result"> 
         
         </div>
+        
     </div>
+    
     <!--main END-->
 </body>
 </html>
@@ -57,7 +77,7 @@
                 beginPoint = new BMap.Point(r.point.lng,r.point.lat);
                 userPiont = r.point;
                 map.panTo(r.point);
-                drivingRoute = new BMap.DrivingRoute(map, {renderOptions: {map: map, panel: "result", autoViewport: true}});
+                drivingRoute = new BMap.DrivingRoute(map, {renderOptions: {map: map, autoViewport: true}});
                 var h = drivingRoute.search(beginPoint, endPoint);     
             }
             else 

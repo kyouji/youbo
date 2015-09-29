@@ -12,9 +12,32 @@
 <link href="/user/css/common.css" rel="stylesheet" type="text/css" />
 <link href="/user/css/base.css" rel="stylesheet" type="text/css" />
 <link href="/user/css/style.css" rel="stylesheet" type="text/css" />
+<script src="/user/js/jquery-1.9.1.min.js" type="text/javascript"></script>
+<script>
+function clearing(id,type){
+    if(null == id||null == type){
+        alert("参数错误，操作失败！");
+        return;
+    }
+    $.post("/user/order/clearing",{"id":id,"type":type},function(res){
+        alert(res.message);
+        window.location.reload();
+    });
+}
 
+function cancelOrder(id){
+    if(null == id){
+        alert("参数错误，操作失败！");
+        return;
+    }
+    $.post("/user/order/detailCancel",{"id":id},function(res){
+        alert(res.message);
+        window.location.reload();
+    });
+}
+</script>
 </head>
-
+    
 <body>
 
     <!--头部开始-->
@@ -153,17 +176,30 @@
             <tr>
                 <#switch order.statusId>
                     <#case 1>
-                        <td><input type="submit" value="支付定金：￥${firstPay?string("0.00")}" /></td>
+                        <td><input type="submit" onclick="clearing(${item.id?c},1);" value="支付定金：￥${firstPay?string("0.00")}" /></td>
                     <#break>
                     <#case 4>
-                        <td><input type="submit" value="结算：￥${order.totalPrice?string("0.00")}" /></td>
+                        <td><input type="submit" onclick="clearing(${item.id?c},0);" value="结算订单：￥${order.totalPrice?string("0.00")}" /></td>
                     <#break>
                     <#default>
-                        <td><input type="submit" value="结算" /></td>
+                        <td><input type="submit" style="background:#999999;" value="结算订单" /></td>
                     <#break>
                 </#switch>
                 <td>&nbsp;</td>
-                <td><input type="button" value="取消订单" /></td>
+                <#switch order.statusId>
+                    <#case 1>
+                        <td><input type="button" onclick="cancelOrder(${item.id?c});" value="取消订单" /></td>
+                    <#break>
+                    <#case 2>
+                        <td><input type="button" onclick="cancelOrder(${item.id?c});" value="取消订单" /></td>
+                    <#break>
+                    <#case 3>
+                        <td><input type="button" onclick="cancelOrder(${item.id?c});" value="取消订单" /></td>
+                    <#break>
+                    <#default>
+                        <td><input type="submit" style="background:#999999;" value="取消订单" /></td>
+                    <#break>
+                </#switch>
             </tr>
         </table>
     </footer>

@@ -223,7 +223,45 @@ public class TdUser {
     @Column
     private Double balance;
     
-    public Double getBalance() {
+    //是否是月卡用户
+    @Column
+    private Boolean isMonthCard;
+    
+    //月卡起始时间
+    @Column
+	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+	private Date monthBegin;
+
+    //月卡结束时间
+    @Column
+	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+	private Date monthFinish;
+
+    public Boolean getIsMonthCard() {
+		return isMonthCard;
+	}
+
+	public void setIsMonthCard(Boolean isMonthCard) {
+		this.isMonthCard = isMonthCard;
+	}
+
+	public Date getMonthBegin() {
+		return monthBegin;
+	}
+
+	public void setMonthBegin(Date monthBegin) {
+		this.monthBegin = monthBegin;
+	}
+
+	public Date getMonthFinish() {
+		return monthFinish;
+	}
+
+	public void setMonthFinish(Date monthFinish) {
+		this.monthFinish = monthFinish;
+	}
+
+	public Double getBalance() {
 		return balance;
 	}
 

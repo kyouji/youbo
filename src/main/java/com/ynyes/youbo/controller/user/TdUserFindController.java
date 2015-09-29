@@ -12,6 +12,7 @@ import org.springframework.mobile.device.Device;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ibm.icu.text.SimpleDateFormat;
@@ -47,16 +48,29 @@ public class TdUserFindController {
 
 	@Autowired
 	private TdOrderService tdOrderService;
-	
+
 	@Autowired
 	private TdSettingService tdSettingService;
-
+	
 	@RequestMapping
-	public String index(HttpServletRequest req, Device device, ModelMap map) {
+	public String index(HttpServletRequest req, Boolean isOrder, Device device, ModelMap map) {
 		String username = (String) req.getSession().getAttribute("username");
 		if (null == username) {
 			return "redirect:/user/center/login";
 		}
+		if (true == isOrder) {
+			TdOrder order = (TdOrder) req.getSession().getAttribute("currentOrder");
+			TdDiySite diySite = tdDiySiteService.findOne(order.getDiyId());
+			String href = "redirect:/user/find/navigation?x="+diySite.getLongitude()+"&y="+diySite.getLatitude();
+			return href;
+		}
+		TdUser user = tdUserService.findByUsername(username);
+		if(null != user.getBankcardList()&&user.getBankcardList().size() > 0){
+			map.addAttribute("haveBankCard", 0);
+		}
+		TdSetting setting = tdSettingService.findOne(1L);
+		map.addAttribute("firstPay", setting.getFirstPay());
+		map.addAttribute("user", user);
 		map.addAttribute("depot_list", tdDiySiteService.findByIsEnableTrue());
 		return "/user/find";
 	}
@@ -72,16 +86,16 @@ public class TdUserFindController {
 	public String bespeak(HttpServletRequest req, ModelMap map, Long depotId) {
 		String username = (String) req.getSession().getAttribute("username");
 		TdUser user = tdUserService.findByUsername(username);
-		
+
 		if (null == user) {
 			return "/user/login";
 		}
 		if (null == user.getCarCode() || "".equalsIgnoreCase(user.getCarCode())) {
 			// 在此回到添加车牌页面
 		}
-		
+
 		TdSetting setting = tdSettingService.findOne(1L);
-		map.addAttribute("firstPay",setting.getFirstPay());
+		map.addAttribute("firstPay", setting.getFirstPay());
 		map.addAttribute("date", new Date());
 		map.addAttribute("depot", tdDiySiteService.findByIdAndIsEnableTrue(depotId));
 		map.addAttribute("user", user);
@@ -111,7 +125,7 @@ public class TdUserFindController {
 	 * 
 	 * @author dengxiao
 	 */
-	@RequestMapping(value = "reserve")
+	@RequestMapping(value = "/reserve",method=RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> reserve(String username, Long diyId) {
 		Map<String, Object> res = new HashMap<>();
@@ -126,6 +140,7 @@ public class TdUserFindController {
 			res.put("message", "参数错误！");
 			return res;
 		}
+		TdSetting setting = tdSettingService.findOne(1L);
 		TdOrder order = new TdOrder();
 		// 以下代码用于生成订单编号
 		Date date = new Date();
@@ -145,7 +160,7 @@ public class TdUserFindController {
 		// 订单生成完毕
 
 		// 判断余额是否能够支付定金
-		if (user.getBalance() < 10) {
+		if (user.getBalance() < setting.getFirstPay()) {
 			/**
 			 * 此处将在后期修改为提交到第三方支付
 			 * 
@@ -156,14 +171,16 @@ public class TdUserFindController {
 
 		} else {
 			// 余额足够便扣除定金
-			user.setBalance(user.getBalance() - 10);
+			user.setBalance(user.getBalance() - setting.getFirstPay());
 			// 设置订单状态为已支付定金
+			order.setFirstPay(setting.getFirstPay());
 			order.setStatusId(2L);
 			// 判断停车场是否还有剩余车位
 			if (site.getParkingNowNumber() > 0) {
 				// 如果还有剩余的车位，就开始判断停车场是否有摄像头
-				if (site.getIsCamera()) {// 有摄像头就自动预约成功
+				if (null!=site.getIsCamera()&&site.getIsCamera()) {// 有摄像头就自动预约成功
 					if (!(site.getParkingNowNumber() > 0)) {
+						order.setFirstPay(0.00);
 						user.setBalance(user.getBalance() + 10);
 						order.setStatusId(9L);
 						order.setCancelReason("指定停车场无剩余车位");
@@ -177,11 +194,12 @@ public class TdUserFindController {
 					res.put("message", "定金已支付，等待工作人员确认预约！");
 				}
 			} else {// 剩余车位不足即预定失败，订单结束
-					// 返还定金
+				order.setFirstPay(0.00);
+				// 返还定金
 				user.setBalance(user.getBalance() + 10);
 				// 设置订单状态为交易结束
 				order.setStatusId(9L);
-				//设置订单取消的原因
+				// 设置订单取消的原因
 				order.setCancelReason("指定停车场无剩余车位");
 				// 设置消息提示
 				res.put("message", "抱歉，已经没有车位了，预定失败！");

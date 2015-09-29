@@ -130,6 +130,16 @@ public class TdUserCenterController {
 		if (null == username) {
 			return "redirect:/user/center/login";
 		}
+		if (null != username) {
+			List<TdOrder> list = tdOrderService.findByUsername(username);
+			TdOrder currentOrder = null;
+			if (null != list && list.size() > 0) {
+				if (list.get(0).getStatusId() != 6 && list.get(0).getStatusId() != 9) {
+					currentOrder = list.get(0);
+				}
+			}
+			map.addAttribute("currentOrder", currentOrder);
+		}
 		tdCommonService.setHeader(map, req);
 		map.addAttribute("user", tdUserService.findByUsername(username));
 		map.addAttribute("server_ip", req.getLocalName());
@@ -600,19 +610,21 @@ public class TdUserCenterController {
 			e.printStackTrace();
 		}
 
-		List<TdOrder> orders = tdOrderService.findByUsernameAndFinishTimeBetweenAndStatusId(username, beginDate,
+		List<TdOrder> orders = tdOrderService.findByUsernameAndFinishTimeBetween(username, beginDate,
 				finishDate);
-
+		List<TdOrder> the_orders = new ArrayList<>();
 		Double totalPrice = new Double(0);
 		for (TdOrder tdOrder : orders) {
-			if (null != tdOrder.getTotalPrice() && 5L == tdOrder.getStatusId() && tdOrder.getTotalPrice() > 0) {
+			if (null != tdOrder.getTotalPrice() && 4L != tdOrder.getStatusId() && tdOrder.getTotalPrice() > 0) {
 				totalPrice += tdOrder.getTotalPrice();
+				the_orders.add(tdOrder);
 			}else if(null != tdOrder.getFirstPay() && tdOrder.getFirstPay() > 0){
 				totalPrice += tdOrder.getFirstPay();
+				the_orders.add(tdOrder);
 			}
 		}
 
-		map.addAttribute("orders", orders);
+		map.addAttribute("orders", the_orders);
 		map.addAttribute("year", year);
 		map.addAttribute("month", month);
 		map.addAttribute("totalPrice", totalPrice);

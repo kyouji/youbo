@@ -82,6 +82,7 @@ public class TdDepotMyAccountController {
 	@RequestMapping
 	public String index(HttpServletRequest req, Device device, ModelMap map) {
 		TdDiySite site =  (TdDiySite) req.getSession().getAttribute("site");
+		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("diyUser");
 		if (null == site) {
 			return "redirect:/depot/login";
 		}
@@ -114,6 +115,7 @@ public class TdDepotMyAccountController {
 				}
 			}
 		}
+		map.addAttribute("diyUser", diyUser);
 		map.addAttribute("income", income);
 		return "/depot/my_account";
 	}

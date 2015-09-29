@@ -460,6 +460,15 @@ public class TdOrderService {
 		return repository.findByUsernameAndFinishTimeBetweenAndStatusIdOrderByOrderTimeAsc(username, beginDate,
 				finishDate, 6L);
 	}
+	
+	public List<TdOrder> findByUsernameAndFinishTimeBetween(String username, Date beginDate,
+			Date finishDate) {
+		if (null == username || null == beginDate || null == finishDate) {
+			return null;
+		}
+		return repository.findByUsernameAndFinishTimeBetweenOrderByOrderTimeAsc(username, beginDate,
+				finishDate);
+	}
 
 	// 查找指定用户已停车的订单
 	public List<TdOrder> findByUsernameAndParked(String username) {
