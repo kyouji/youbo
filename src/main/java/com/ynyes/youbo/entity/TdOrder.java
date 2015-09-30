@@ -315,6 +315,11 @@ public class TdOrder {
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date orderTimeExpire;
     
+    //预约生效时间
+    @Column
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    private Date reserveTime;
+    
     //订单取消原因
     @Column
     private String abolishReason;
@@ -921,4 +926,13 @@ public class TdOrder {
     public void setDeliverTypePriceChangeInfo(String deliverTypePriceChangeInfo) {
         this.deliverTypePriceChangeInfo = deliverTypePriceChangeInfo;
     }
+
+	public Date getReserveTime() {
+		return reserveTime;
+	}
+
+	public void setReserveTime(Date reserveTime) {
+		this.reserveTime = reserveTime;
+	}
+    
 }

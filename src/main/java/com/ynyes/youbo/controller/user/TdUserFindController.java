@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -27,6 +29,7 @@ import com.ynyes.youbo.service.TdDiySiteService;
 import com.ynyes.youbo.service.TdOrderService;
 import com.ynyes.youbo.service.TdSettingService;
 import com.ynyes.youbo.service.TdUserService;
+import com.ynyes.youbo.util.DiySiteFee;
 
 @Controller
 @RequestMapping("/user/find")
@@ -51,7 +54,7 @@ public class TdUserFindController {
 
 	@Autowired
 	private TdSettingService tdSettingService;
-	
+
 	@RequestMapping
 	public String index(HttpServletRequest req, Boolean isOrder, Device device, ModelMap map) {
 		String username = (String) req.getSession().getAttribute("username");
@@ -61,11 +64,11 @@ public class TdUserFindController {
 		if (true == isOrder) {
 			TdOrder order = (TdOrder) req.getSession().getAttribute("currentOrder");
 			TdDiySite diySite = tdDiySiteService.findOne(order.getDiyId());
-			String href = "redirect:/user/find/navigation?x="+diySite.getLongitude()+"&y="+diySite.getLatitude();
+			String href = "redirect:/user/find/navigation?x=" + diySite.getLongitude() + "&y=" + diySite.getLatitude();
 			return href;
 		}
 		TdUser user = tdUserService.findByUsername(username);
-		if(null != user.getBankcardList()&&user.getBankcardList().size() > 0){
+		if (null != user.getBankcardList() && user.getBankcardList().size() > 0) {
 			map.addAttribute("haveBankCard", 0);
 		}
 		TdSetting setting = tdSettingService.findOne(1L);
@@ -125,7 +128,7 @@ public class TdUserFindController {
 	 * 
 	 * @author dengxiao
 	 */
-	@RequestMapping(value = "/reserve",method=RequestMethod.POST)
+	@RequestMapping(value = "/reserve", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> reserve(String username, Long diyId) {
 		Map<String, Object> res = new HashMap<>();
@@ -178,19 +181,55 @@ public class TdUserFindController {
 			// 判断停车场是否还有剩余车位
 			if (site.getParkingNowNumber() > 0) {
 				// 如果还有剩余的车位，就开始判断停车场是否有摄像头
-				if (null!=site.getIsCamera()&&site.getIsCamera()) {// 有摄像头就自动预约成功
+				if (null != site.getIsCamera() && site.getIsCamera()) {// 有摄像头就自动预约成功
 					if (!(site.getParkingNowNumber() > 0)) {
 						order.setFirstPay(0.00);
 						user.setBalance(user.getBalance() + setting.getFirstPay());
 						order.setStatusId(9L);
 						order.setCancelReason("指定停车场无剩余车位");
 						res.put("message", "抱歉，已经没有车位了，预定失败！");
-						tdOrderService.save(order);	
+						tdOrderService.save(order);
 						return res;
 					}
 					site.setParkingNowNumber(site.getParkingNowNumber() - 1);
 					order.setStatusId(3L);
+					order.setReserveTime(new Date());
 					res.put("message", "预约成功，请在2个小时之内到达指定的车库停车！");
+					// 开始判定2小时后车辆是否进入车库
+					final Long orderId = order.getId();
+					final Double firstPay = setting.getFirstPay();
+					final TdUser theUser = user;
+					Timer timer = new Timer();
+					timer.schedule(new TimerTask() {
+						@Override
+						public void run() {
+							TdOrder theOrder = tdOrderService.findOne(orderId);
+							TdDiySite theSite = tdDiySiteService.findOne(theOrder.getDiyId());
+							// 如果两小时之后订单的状态还是“预约成功”，则表示没有进入车库
+							if (3L == theOrder.getStatusId()) {
+								// 设置取消时间
+								theOrder.setFinishTime(new Date());
+								// 设置订单状态为交易取消
+								theOrder.setStatusId(9L);
+								// 设置取消订单的原因
+								theOrder.setCancelReason("预约2小时后车辆未进入指定车库");
+								// 判断消费了多少钱
+								if (null != theSite && null != theSite.getIsCamera() && !theSite.getIsCamera()) {
+									Double price = DiySiteFee.GET_PARKING_PRICE(theSite, theOrder.getReserveTime(),
+											theOrder.getFinishTime());
+									theOrder.setTotalPrice(price);
+								}
+								// 如果定金还有剩余就退还剩余部分的钱
+								if (firstPay > theOrder.getTotalPrice()) {
+									Double left = firstPay - theOrder.getTotalPrice();
+									theUser.setBalance(theUser.getBalance() + left);
+								}
+								//保存已经改动的订单信息和用户信息
+								tdOrderService.save(theOrder);
+								tdUserService.save(theUser);
+							}
+						}
+					}, 1000 * 60 * 60 * 2);
 				} else {// 如果没有摄像头就需要等待泊车员手动确认预约
 					res.put("message", "定金已支付，等待工作人员确认预约！");
 				}
@@ -202,7 +241,7 @@ public class TdUserFindController {
 				order.setStatusId(9L);
 				// 设置订单取消的原因
 				order.setCancelReason("指定停车场无剩余车位");
-				
+
 				tdOrderService.save(order);
 				// 设置消息提示
 				res.put("message", "抱歉，已经没有车位了，预定失败！");

@@ -68,7 +68,7 @@
     <div class="topNav">
         <a class="add_sao" href="#" style="">扫一扫收费</a>
         <a href="/depot/myaccount" class="four_1 a1"><img src="/depot/images/index01.png"><p>账 户</p></a>
-        <a href="/depot/site" class="four_1 a2"><img src="/depot/images/index02.png"><p>设 置</p></a>
+        <a href="" class="four_1 a2"><img src="/depot/images/reserve.png"><p>预约审核</p></a>
         <a href="/depot/info" class="four_1 a3"><img src="/depot/images/index03.png"><p>车库信息</p></a>
         <a href="/depot/charge" class="four_1 a4"><img src="/depot/images/index04.png"><p>收费记录</p></a>
         <div class="clear"></div>

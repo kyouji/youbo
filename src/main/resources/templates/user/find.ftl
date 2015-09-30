@@ -31,7 +31,7 @@ function getPosition(){
 }
 
 function reserve(depotId,x,y){
-    <#if user??&&user.balance gt firstPay>
+    <#if user??&&user.balance??&&user.balance gt firstPay>
         $.post("/user/find/reserve",{"username":"${user.username!''}",diyId:depotId},function(res){
             alert(res.message);
             if(0==res.status){
@@ -193,8 +193,6 @@ function goNavigation(x,y,id){
     <div class="find_img" id="myMap">
     </div> 
     <script type="text/javascript">
-        var sHeight = document.body.scrollHeight;
-        $("#myMap").css("min-height",(sHeight-400)+"px");
     </script>
     
     <div class="find_float" style="display:none;width:100%;position:fixed;bottom:0;"> 
