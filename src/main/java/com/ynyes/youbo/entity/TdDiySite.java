@@ -96,18 +96,6 @@ public class TdDiySite {
     @Column
     private String mobile;
     
-    // 计费方式 0: 按次计费 1: 分时段计费
-    @Column
-    private Long enrollType;
-    
-    // 白天价格
-    @Column
-    private Double dayPrice;
-    
-    // 夜间价格
-    @Column
-    private Double nightPrice;
-    
     // 车库类型
     @Column
     private String parkingType;
@@ -140,7 +128,139 @@ public class TdDiySite {
     @Column
     private Boolean isCamera;
     
-    public Boolean getIsCamera() {
+    //停车场每日收费最高价格
+    @Column(scale=2)
+    private Double maxPrice;
+
+    //白天收费类型(0代表计时收费，1代表按次收费)
+    @Column
+    private Long dayType;
+    
+    //晚上收费类型(0代表计时收费，1代表按次收费)
+    @Column
+    private Long nightType;
+    
+    //白天按次收费的价格
+    @Column(scale=2)
+    private Double dayOncePrice;
+    
+    //白天计时收费的基础时间(表示前几个小时)
+    @Column
+    private Long dayBaseTime;
+    
+    //白天计时收费的基础价格
+    @Column(scale=2)
+    private Double dayBasePrice;
+    
+    //白天计时收费的计时价格
+    @Column(scale=2)
+    private Double dayHourPrice;
+    
+    //晚上按次收费的价格
+    @Column(scale=2)
+    private Double nightOncePrice;
+    
+    //晚上计时收费的基础时间（表示前几个小时）
+    @Column
+    private Long nightBaseTime;
+    
+    //晚上计时收费的基础价格
+    @Column(scale=2)
+    private Double nightBasePrice;
+    
+    //晚上计时收费的计时价格
+    @Column(scale=2)
+    private Double nightHourPrice;
+    
+	public Long getDayType() {
+		return dayType;
+	}
+
+	public void setDayType(Long dayType) {
+		this.dayType = dayType;
+	}
+
+	public Long getNightType() {
+		return nightType;
+	}
+
+	public void setNightType(Long nightType) {
+		this.nightType = nightType;
+	}
+
+	public Double getDayOncePrice() {
+		return dayOncePrice;
+	}
+
+	public void setDayOncePrice(Double dayOncePrice) {
+		this.dayOncePrice = dayOncePrice;
+	}
+
+	public Long getDayBaseTime() {
+		return dayBaseTime;
+	}
+
+	public void setDayBaseTime(Long dayBaseTime) {
+		this.dayBaseTime = dayBaseTime;
+	}
+
+	public Double getDayBasePrice() {
+		return dayBasePrice;
+	}
+
+	public void setDayBasePrice(Double dayBasePrice) {
+		this.dayBasePrice = dayBasePrice;
+	}
+
+	public Double getDayHourPrice() {
+		return dayHourPrice;
+	}
+
+	public void setDayHourPrice(Double dayHourPrice) {
+		this.dayHourPrice = dayHourPrice;
+	}
+
+	public Double getNightOncePrice() {
+		return nightOncePrice;
+	}
+
+	public void setNightOncePrice(Double nightOncePrice) {
+		this.nightOncePrice = nightOncePrice;
+	}
+
+	public Long getNightBaseTime() {
+		return nightBaseTime;
+	}
+
+	public void setNightBaseTime(Long nightBaseTime) {
+		this.nightBaseTime = nightBaseTime;
+	}
+
+	public Double getNightBasePrice() {
+		return nightBasePrice;
+	}
+
+	public void setNightBasePrice(Double nightBasePrice) {
+		this.nightBasePrice = nightBasePrice;
+	}
+
+	public Double getNightHourPrice() {
+		return nightHourPrice;
+	}
+
+	public void setNightHourPrice(Double nightHourPrice) {
+		this.nightHourPrice = nightHourPrice;
+	}
+
+	public Double getMaxPrice() {
+		return maxPrice;
+	}
+
+	public void setMaxPrice(Double maxPrice) {
+		this.maxPrice = maxPrice;
+	}
+
+	public Boolean getIsCamera() {
 		return isCamera;
 	}
 
@@ -338,30 +458,6 @@ public class TdDiySite {
 
     public void setMobile(String mobile) {
         this.mobile = mobile;
-    }
-
-    public Long getEnrollType() {
-        return enrollType;
-    }
-
-    public void setEnrollType(Long enrollType) {
-        this.enrollType = enrollType;
-    }
-
-    public Double getDayPrice() {
-        return dayPrice;
-    }
-
-    public void setDayPrice(Double dayPrice) {
-        this.dayPrice = dayPrice;
-    }
-
-    public Double getNightPrice() {
-        return nightPrice;
-    }
-
-    public void setNightPrice(Double nightPrice) {
-        this.nightPrice = nightPrice;
     }
 
     public String getParkingType() {

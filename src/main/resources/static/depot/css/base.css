@@ -250,6 +250,17 @@ input.text {background:none; border:none;}
 /*注册*/
 
 
+/*saoyisao*/
+.add_sao{width:96%;text-align:center;color:#ffffff;background:#ff8b2e;float:left;border-radius:10px;margin:0 2% 10px 2%;height:80px;line-height:80px;font-size:1.4em;}
+    @media screen and (max-width:1024px) {
+    .add_sao {height:110px;line-height:110px;font-size:2.6em;}}
+    @media screen and (max-width:414px) {
+    .add_sao {height:100px;line-height:100px;font-size:2em;}}
+    @media screen and (max-width:375px) {
+    .add_sao {height:80px;line-height:80px;font-size:1.8em;}}
+     @media screen and (max-width:320px) {
+    .add_sao {height:60px;line-height:60px;font-size:1.4em;}}
+
 
 
 

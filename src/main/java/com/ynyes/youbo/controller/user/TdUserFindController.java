@@ -181,10 +181,11 @@ public class TdUserFindController {
 				if (null!=site.getIsCamera()&&site.getIsCamera()) {// 有摄像头就自动预约成功
 					if (!(site.getParkingNowNumber() > 0)) {
 						order.setFirstPay(0.00);
-						user.setBalance(user.getBalance() + 10);
+						user.setBalance(user.getBalance() + setting.getFirstPay());
 						order.setStatusId(9L);
 						order.setCancelReason("指定停车场无剩余车位");
 						res.put("message", "抱歉，已经没有车位了，预定失败！");
+						tdOrderService.save(order);	
 						return res;
 					}
 					site.setParkingNowNumber(site.getParkingNowNumber() - 1);
@@ -196,11 +197,13 @@ public class TdUserFindController {
 			} else {// 剩余车位不足即预定失败，订单结束
 				order.setFirstPay(0.00);
 				// 返还定金
-				user.setBalance(user.getBalance() + 10);
+				user.setBalance(user.getBalance() + setting.getFirstPay());
 				// 设置订单状态为交易结束
 				order.setStatusId(9L);
 				// 设置订单取消的原因
 				order.setCancelReason("指定停车场无剩余车位");
+				
+				tdOrderService.save(order);
 				// 设置消息提示
 				res.put("message", "抱歉，已经没有车位了，预定失败！");
 				return res;

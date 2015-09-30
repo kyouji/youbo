@@ -502,4 +502,17 @@ body{ background:#efefef; }
     background:url(../images/pro_fq.png) no-repeat center top;
     background-size:30px;
     padding-top:23px;}
+    
+    
+    /*jiesuanjiage*/
+    .add_price{position:absolute;top:40px;left:54px;color:#ffffff;}
+    @media screen and (max-width:1024px) {
+    .add_price {position:absolute;top:77px;left:102px;font-size:2.2em;}}
+    @media screen and (max-width:414px) {
+    .add_price {position:absolute;top:53px;left:70px;font-size:1.6em;}}
+    @media screen and (max-width:375px) {
+    .add_price {position:absolute;top:46px;left:60px;font-size:1.6em;}}
+     @media screen and (max-width:320px) {
+    .add_price {position:absolute;top:40px;left:52px;font-size:1.3em;}}
+ 
 

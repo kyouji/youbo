@@ -9,10 +9,44 @@
 <meta name="copyright" content="" />
 <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
 <!--css-->
+<link href="/user/css/style.css" rel="stylesheet" type="text/css" />
 <link href="/depot/css/base.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="/user/js/jquery-1.9.1.min.js"></script>
 </head>
 <script>
+    
+    <#if currentOrder??>
+        <#if currentOrder.statusId==4>
+            getOrderPrice();
+            setInterval("getOrderPrice()",1000);
+        </#if>
+        reloadWindow();
+        setInterval("reloadWindow()",(1000*60));
+    </#if>
+
+    function reloadWindow(){
+        var statusId = $("#hidden").val();
+        $.post("/user/order/checkOrder",{"statusId":statusId},function(res){
+            if(0==res.status){
+                alert(res.message);
+                window.location.reload();
+            }
+        });
+    }
+
+    function getOrderPrice(){
+        var priceSpan = $("#price");
+        $.post("/user/order/price",function(res){
+            if(0==res.status){
+                if(0==res.isNum){
+                    priceSpan.html(res.price+".00");
+                }else{
+                    priceSpan.html(res.price);
+                }
+            }
+        })
+    }
+
     function changeHeads(){
         var filebutton = document.getElementById("filebutton");
         filebutton.click();
@@ -73,33 +107,54 @@
     
     <!--导航开始-->
     <div class="topNav">
+        <#if currentOrder??>
+            <input type="hidden" id="hidden" value="${currentOrder.statusId!'0'}">
+        </#if>
         <a href="/user/find?isOrder=<#if currentOrder??>true<#else>false</#if>" class="four_1 a1"><img src="/depot/images/index03.png">
             <p><#if currentOrder??>导航<#else>找车位</#if></p>
         </a>
                 <#if currentOrder??>
                     <#switch currentOrder.statusId>
                         <#case 1>
-                            <a href="/user/order/currentOrder" class="four_1 a2">
+                            <a href="currentOrder()" class="four_1 a2">
                                 <img src="/user/images/my_order.png">
-                                <p>结算${firstPay?string("0.00")}元</p>
+                                <span class="add_price" id="price">${firstPay?string("0.00")}</span>
+                                <p>支付定金</p>
+                            </a>  
+                        <#break>
+                        <#case 2>
+                            <a href="currentOrder()" class="four_1 a2">
+                                <img src="/user/images/my_order.png">
+                                <span class="add_price" id="price">0.00</span>
+                                <p>正在预约</p>
+                            </a>  
+                        <#break>
+                        <#case 3>
+                            <a href="currentOrder()" class="four_1 a2">
+                                <img src="/user/images/my_order.png">
+                                <span class="add_price" id="price">0.00</span>
+                                <p>预约成功</p>
                             </a>  
                         <#break>
                         <#case 4>
-                            <a href="/user/order/currentOrder" class="four_1 a2">
+                            <a href="currentOrder()" class="four_1 a2">
                                 <img src="/user/images/my_order.png">
-                                <p>结算${order.totalPrice.string("0.00")}</p>
+                                <span class="add_price" id="price"></span>
+                                <p>结算订单</p>
                             </a> 
                         <#break>
                         <#default>
-                            <a href="/user/order/currentOrder" class="four_1 a2">
+                            <a href="currentOrder()" class="four_1 a2">
                                 <img src="/user/images/my_order.png">
-                                <p>结算0.00元</p>
+                                <span class="add_price" id="price">0.00</span>
+                                <p>查看订单</p>
                             </a> 
                         <#break>
                     </#switch>
                 <#else>
-                    <a href="" class="four_1 a2">
-                        <img src="/user/images/my_order.png">
+                    <a href="/user/center/login" class="four_1 a2">
+                        <img src="/user/images/my_order.png"">
+                        <span class="add_price" id="price">0.00</span>
                         <p>最新订单</p>
                     </a>
                 </#if>
