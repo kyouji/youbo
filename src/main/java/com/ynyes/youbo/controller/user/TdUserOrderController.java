@@ -212,7 +212,7 @@ public class TdUserOrderController {
 										Double left = firstPay - theOrder.getTotalPrice();
 										theUser.setBalance(theUser.getBalance() + left);
 									}
-									//保存已经改动的订单信息和用户信息
+									// 保存已经改动的订单信息和用户信息
 									tdOrderService.save(theOrder);
 									tdUserService.save(theUser);
 								}
@@ -362,7 +362,7 @@ public class TdUserOrderController {
 										Double left = firstPay - theOrder.getTotalPrice();
 										theUser.setBalance(theUser.getBalance() + left);
 									}
-									//保存已经改动的订单信息和用户信息
+									// 保存已经改动的订单信息和用户信息
 									tdOrderService.save(theOrder);
 									tdUserService.save(theUser);
 								}
@@ -437,7 +437,7 @@ public class TdUserOrderController {
 	}
 
 	/**
-	 * 查看最新订单状态是否发生改变的方法
+	 * 查看最新订单状态是否发生改变，同时监控预约车辆是否在两个小时之内进入车库的方法
 	 * 
 	 * @author dengxiao
 	 */
@@ -456,6 +456,38 @@ public class TdUserOrderController {
 				}
 			}
 		}
+		if (null != currentOrder && 3L == currentOrder.getStatusId()) {
+			long reserve = currentOrder.getReserveTime().getTime();
+			long now = new Date().getTime();
+			long cost = now - reserve;
+			if (cost >= 1000 * 60 * 60 * 2) {
+				Double firstPay = tdSettingService.findOne(1L).getFirstPay();
+				TdUser theUser = tdUserService.findByUsername(username);
+				TdDiySite theSite = tdDiySiteService.findOne(currentOrder.getDiyId());
+				Date finishTime = new Date(reserve + 1000 * 60 * 60 * 2);
+				// 设置取消时间
+				currentOrder.setFinishTime(finishTime);
+				// 设置订单状态为交易取消
+				currentOrder.setStatusId(9L);
+				// 设置取消订单的原因
+				currentOrder.setCancelReason("预约2小时后车辆未进入指定车库");
+				// 判断消费了多少钱
+				if (null != theSite && null != theSite.getIsCamera() && !theSite.getIsCamera()) {
+					Double price = DiySiteFee.GET_PARKING_PRICE(theSite, currentOrder.getReserveTime(),
+							currentOrder.getFinishTime());
+					currentOrder.setTotalPrice(price);
+				}
+				// 如果定金还有剩余就退还剩余部分的钱
+				if (firstPay > currentOrder.getTotalPrice()) {
+					Double left = firstPay - currentOrder.getTotalPrice();
+					theUser.setBalance(theUser.getBalance() + left);
+				}
+				// 保存已经改动的订单信息和用户信息
+				tdOrderService.save(currentOrder);
+				tdUserService.save(theUser);
+
+			}
+		}
 		if (statusId != null && statusId != currentOrder.getStatusId()) {
 			res.put("status", 0);
 			res.put("message", "您的订单发生改变！");
@@ -465,11 +497,12 @@ public class TdUserOrderController {
 
 	/**
 	 * 查看最新订单价格的方法
+	 * 
 	 * @author dengxiao
 	 */
-	@RequestMapping(value="/price")
+	@RequestMapping(value = "/price")
 	@ResponseBody
-	public Map<String, Object> price(HttpServletRequest req,ModelMap map){
+	public Map<String, Object> price(HttpServletRequest req, ModelMap map) {
 		Map<String, Object> res = new HashMap<>();
 		res.put("status", -1);
 		String username = (String) req.getSession().getAttribute("username");
@@ -478,16 +511,16 @@ public class TdUserOrderController {
 		if (null != list && list.size() > 0) {
 			order = list.get(0);
 		}
-		if(null != order){
-			if(null == order.getTotalPrice()){
+		if (null != order) {
+			if (null == order.getTotalPrice()) {
 				order.setTotalPrice(0.00);
 			}
 			DecimalFormat df = new DecimalFormat("######0.00");
-			
+
 			res.put("status", 0);
-			res.put("price",df.format(order.getTotalPrice()) );
+			res.put("price", df.format(order.getTotalPrice()));
 		}
 		return res;
 	}
-	
+
 }
