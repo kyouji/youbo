@@ -182,6 +182,7 @@ public class TdUserOrderController {
 						}
 						site.setParkingNowNumber(site.getParkingNowNumber() - 1);
 						order.setStatusId(3L);
+						order.setReserveTime(new Date());
 						res.put("message", "预约成功，请在2个小时之内到达指定的车库停车！");
 						// 开始判定2小时后车辆是否进入车库
 						final Long orderId = order.getId();
@@ -195,8 +196,9 @@ public class TdUserOrderController {
 								TdDiySite theSite = tdDiySiteService.findOne(theOrder.getDiyId());
 								// 如果两小时之后订单的状态还是“预约成功”，则表示没有进入车库
 								if (3L == theOrder.getStatusId()) {
+									long reserve = theOrder.getReserveTime().getTime();
 									// 设置取消时间
-									theOrder.setFinishTime(new Date());
+									theOrder.setFinishTime(new Date(reserve + (1000 * 60 * 60 * 2)));
 									// 设置订单状态为交易取消
 									theOrder.setStatusId(9L);
 									// 设置取消订单的原因
@@ -332,6 +334,7 @@ public class TdUserOrderController {
 						}
 						site.setParkingNowNumber(site.getParkingNowNumber() - 1);
 						order.setStatusId(3L);
+						order.setReserveTime(new Date());
 						res.put("message", "预约成功，请在2个小时之内到达指定的车库停车！");
 						// 开始判定2小时后车辆是否进入车库
 						final Long orderId = order.getId();
@@ -345,8 +348,9 @@ public class TdUserOrderController {
 								TdDiySite theSite = tdDiySiteService.findOne(theOrder.getDiyId());
 								// 如果两小时之后订单的状态还是“预约成功”，则表示没有进入车库
 								if (3L == theOrder.getStatusId()) {
+									long reserve = theOrder.getReserveTime().getTime();
 									// 设置取消时间
-									theOrder.setFinishTime(new Date());
+									theOrder.setFinishTime(new Date(reserve + (1000 * 60 * 60 * 2)));
 									// 设置订单状态为交易取消
 									theOrder.setStatusId(9L);
 									// 设置取消订单的原因
@@ -407,6 +411,7 @@ public class TdUserOrderController {
 		} else {
 			res.put("status", 1);
 			res.put("orderId", order.getId());
+			return res;
 		}
 		tdOrderService.save(order);
 		res.put("status", 0);
@@ -451,9 +456,7 @@ public class TdUserOrderController {
 		if (null != username) {
 			List<TdOrder> list = tdOrderService.findByUsername(username);
 			if (null != list && list.size() > 0) {
-				if (list.get(0).getStatusId() != 6 && list.get(0).getStatusId() != 9) {
-					currentOrder = list.get(0);
-				}
+				currentOrder = list.get(0);
 			}
 		}
 		if (null != currentOrder && 3L == currentOrder.getStatusId()) {
@@ -464,7 +467,7 @@ public class TdUserOrderController {
 				Double firstPay = tdSettingService.findOne(1L).getFirstPay();
 				TdUser theUser = tdUserService.findByUsername(username);
 				TdDiySite theSite = tdDiySiteService.findOne(currentOrder.getDiyId());
-				Date finishTime = new Date(reserve + 1000 * 60 * 60 * 2);
+				Date finishTime = new Date(reserve + (1000 * 60 * 60 * 2));
 				// 设置取消时间
 				currentOrder.setFinishTime(finishTime);
 				// 设置订单状态为交易取消

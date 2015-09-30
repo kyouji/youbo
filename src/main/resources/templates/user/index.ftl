@@ -51,6 +51,17 @@
         var filebutton = document.getElementById("filebutton");
         filebutton.click();
     }
+    
+    function currentOrder(){
+        $.post("/user/order/currentOrder",function(res){
+            if(1==res.status){
+                window.location.href="/user/order/detail?orderId="+res.orderId;
+            }else{
+                alert(res.message);
+                window.location.reload();
+            }
+        });
+    }
 </script>
 <body>
 
@@ -116,35 +127,35 @@
                 <#if currentOrder??>
                     <#switch currentOrder.statusId>
                         <#case 1>
-                            <a href="currentOrder()" class="four_1 a2">
+                            <a href="javascript:currentOrder()" class="four_1 a2">
                                 <img src="/user/images/my_order.png">
                                 <span class="add_price" id="price">${firstPay?string("0.00")}</span>
                                 <p>支付定金</p>
                             </a>  
                         <#break>
                         <#case 2>
-                            <a href="currentOrder()" class="four_1 a2">
+                            <a href="javascript:currentOrder()" class="four_1 a2">
                                 <img src="/user/images/my_order.png">
                                 <span class="add_price" id="price">0.00</span>
                                 <p>正在预约</p>
                             </a>  
                         <#break>
                         <#case 3>
-                            <a href="currentOrder()" class="four_1 a2">
+                            <a href="javascript:currentOrder()" class="four_1 a2">
                                 <img src="/user/images/my_order.png">
                                 <span class="add_price" id="price">0.00</span>
                                 <p>预约成功</p>
                             </a>  
                         <#break>
                         <#case 4>
-                            <a href="currentOrder()" class="four_1 a2">
+                            <a href="javascript:currentOrder()" class="four_1 a2">
                                 <img src="/user/images/my_order.png">
                                 <span class="add_price" id="price"></span>
                                 <p>结算订单</p>
                             </a> 
                         <#break>
                         <#default>
-                            <a href="currentOrder()" class="four_1 a2">
+                            <a href="javascript:currentOrder()" class="four_1 a2">
                                 <img src="/user/images/my_order.png">
                                 <span class="add_price" id="price">0.00</span>
                                 <p>查看订单</p>

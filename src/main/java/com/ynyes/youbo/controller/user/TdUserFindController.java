@@ -207,8 +207,9 @@ public class TdUserFindController {
 							TdDiySite theSite = tdDiySiteService.findOne(theOrder.getDiyId());
 							// 如果两小时之后订单的状态还是“预约成功”，则表示没有进入车库
 							if (3L == theOrder.getStatusId()) {
+								long reserve = theOrder.getReserveTime().getTime();
 								// 设置取消时间
-								theOrder.setFinishTime(new Date());
+								theOrder.setFinishTime(new Date(reserve + (1000 * 60 * 60 * 2)));
 								// 设置订单状态为交易取消
 								theOrder.setStatusId(9L);
 								// 设置取消订单的原因

@@ -134,9 +134,7 @@ public class TdUserCenterController {
 			List<TdOrder> list = tdOrderService.findByUsername(username);
 			TdOrder currentOrder = null;
 			if (null != list && list.size() > 0) {
-				if (list.get(0).getStatusId() != 6 && list.get(0).getStatusId() != 9) {
-					currentOrder = list.get(0);
-				}
+				currentOrder = list.get(0);
 			}
 			map.addAttribute("currentOrder", currentOrder);
 		}
