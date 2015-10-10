@@ -13,6 +13,7 @@ import com.ynyes.youbo.entity.TdAdType;
 import com.ynyes.youbo.service.TdAdService;
 import com.ynyes.youbo.service.TdAdTypeService;
 import com.ynyes.youbo.service.TdCommonService;
+import com.ynyes.youbo.util.SiteMagConstant;
 
 @Controller
 @RequestMapping("/depot")
@@ -31,6 +32,7 @@ public class TdDepotIndexController {
     public String index(HttpServletRequest req, Device device, ModelMap map) {
 		
 		tdCommonService.setHeader(map, req);
+		System.err.println(SiteMagConstant.imagePath);
 		
 		//停车场首页广告
 		TdAdType adType = tdAdTypeService.findByTitle("停车场顶部轮播");

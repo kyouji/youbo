@@ -44,4 +44,18 @@ public class TdDiyUserService {
 		}
 		return repository.findByUsernameAndPasswordAndIsEnableTrue(username, password);
 	}
+	
+	public List<TdDiyUser> findByDiyIdAndRoleId(Long diyId){
+		if(null == diyId){
+			return null;
+		}
+		return repository.findByDiyIdAndRoleId(diyId, 1L);
+	}
+	
+	public TdDiyUser findByUsername(String username){
+		if(null == username){
+			return null;
+		}
+		return repository.findByUsername(username);
+	}
 }

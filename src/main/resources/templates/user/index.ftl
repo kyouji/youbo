@@ -121,8 +121,8 @@
         <#if currentOrder??>
             <input type="hidden" id="hidden" value="${currentOrder.statusId!'0'}">
         </#if>
-        <a href="/user/find?isOrder=<#if currentOrder??>true<#else>false</#if>" class="four_1 a1"><img src="/depot/images/index03.png">
-            <p><#if currentOrder??>导航<#else>找车位</#if></p>
+        <a href="/user/find?isOrder=<#if currentOrder??&&currentOrder.statusId!=6&&currentOrder.statusId!=9>true<#else>false</#if>" class="four_1 a1"><img src="/depot/images/index03.png">
+            <p><#if currentOrder??&&currentOrder.statusId!=6&&currentOrder.statusId!=9>导航<#else>找车位</#if></p>
         </a>
                 <#if currentOrder??>
                     <#switch currentOrder.statusId>

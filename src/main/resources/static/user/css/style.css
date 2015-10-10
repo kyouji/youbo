@@ -326,7 +326,7 @@ body{ background:#efefef; }
 /*personal_info_user*/
 .personal_info_user input{ width:90%; padding-left:2%; color:#666; margin-left:4%; margin-right:4%; height:50px;; background-color:white;  overflow:hidden; display:block;  border:none; font-size:1.2em; margin-top:5%; position:relative; }
 .personal_info_user p{ width:92%; color:#c7c7c7; padding-left:4%; margin-top:2%; font-size:1.1em; line-height:24px; }
-.personal_info_user a{ display:block; width:20px; height:20x; border-radius:10px; background-color:#ddd; color:white; position:absolute; left:86%; top:0px; line-height:20px; text-align:center; margin-top:15px;}
+.personal_info_user a{ display:block; width:20px; height:20px; border-radius:10px; background-color:#ddd; color:white; position:absolute; left:86%; top:0px; line-height:20px; text-align:center; margin-top:15px;}
 
 /*personal_info_pwd*/
 .personal_info_pwd input{ width:90%; padding-left:2%; color:#666; margin-left:4%; margin-right:4%; height:50px;; background-color:white;  overflow:hidden; display:block;  border:none; font-size:1.2em; margin-top:5%; position:relative;}

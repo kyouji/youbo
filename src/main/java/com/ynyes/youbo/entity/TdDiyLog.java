@@ -12,6 +12,10 @@ import javax.persistence.TemporalType;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+/**
+ * 停车场日志
+ * @author dengxiao
+ */
 @Entity
 public class TdDiyLog {
 

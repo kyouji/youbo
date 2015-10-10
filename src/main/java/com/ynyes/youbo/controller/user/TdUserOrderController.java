@@ -277,7 +277,7 @@ public class TdUserOrderController {
 		TdOrder order = tdOrderService.findOne(orderId);
 		if (null != order && null != order.getPayTypeId()) {
 			TdPayType payType = tdPayService.findOne(order.getPayTypeId());
-			map.addAttribute("payType", payType);
+			map.addAttribute("payType", payType.getTitle());
 		}
 		TdSetting setting = tdSettingService.findOne(1L);
 		map.addAttribute("firstPay", setting.getFirstPay());
@@ -475,6 +475,9 @@ public class TdUserOrderController {
 				// 设置取消订单的原因
 				currentOrder.setCancelReason("预约2小时后车辆未进入指定车库");
 				// 判断消费了多少钱
+				if (null == currentOrder.getTotalPrice()) {
+					currentOrder.setTotalPrice(0.00);
+				}
 				if (null != theSite && null != theSite.getIsCamera() && !theSite.getIsCamera()) {
 					Double price = DiySiteFee.GET_PARKING_PRICE(theSite, currentOrder.getReserveTime(),
 							currentOrder.getFinishTime());
@@ -488,10 +491,11 @@ public class TdUserOrderController {
 				// 保存已经改动的订单信息和用户信息
 				tdOrderService.save(currentOrder);
 				tdUserService.save(theUser);
-
+				res.put("status", 0);
+				res.put("message", "您的订单发生改变！");
 			}
 		}
-		if (statusId != null && statusId != currentOrder.getStatusId()) {
+		if (statusId != null && currentOrder != null && statusId != currentOrder.getStatusId()) {
 			res.put("status", 0);
 			res.put("message", "您的订单发生改变！");
 		}

@@ -12,14 +12,33 @@
 <link href="/depot/css/common.css" rel="stylesheet" type="text/css" />
 <link href="/depot/css/base.css" rel="stylesheet" type="text/css" />
 <link href="/depot/css/style.css" rel="stylesheet" type="text/css" />
-
+<script>
+    function orderFreeOrCash(id,type){
+        if(null==id||null==type){
+            alert("参数错误，操作失败！");
+            return;
+        }
+        var message = null;
+        if(1==type){
+            message = '确认现金支付？';
+        }
+        if(0==type){
+            message = '确认免除费用？'; 
+        }
+        
+        var check = confirm(message);
+        if(check){
+            window.location.href="/depot/charge/cashOrFree?id="+id+"&type="+type+"?re=true";
+        }
+    }
+</script>
 </head>
 
 <body>
 
     <!--头部开始-->
     <header class="header">
-        <p>停车场详情</p>
+        <p>订单详情</p>
         <a href="javascript:history.go(-1);" class="a4"></a>
     </header>
     <!--头部结束-->
@@ -133,27 +152,20 @@
                 <dl class="park_last">
                     <dd><span>支付方式</span></dd>
                     <dt>
-                        <#if payType??>
-                            <p>${payType!''}</p>
-                        </#if>
-                    </dt>
-                </dl>
-                <dl class="park_last">
-                    <dd><span>申请退款</span></dd>
-                    <dt>
-                        <#if order.isReturn??>
-                            <#if order.isReturn==true>
-                                <p>是</p>
-                            <#else>
-                                <p>否</p>
+                        <p>
+                            <#if order.thePayType??>
+                                <#switch order.thePayType>
+                                    <#case 1>线上支付<#break>
+                                    <#case 1>现金支付<#break>
+                                    <#case 1>免除费用<#break>
+                                    <#case 1>月卡用户<#break>
+                                </#switch>
                             </#if>
-                        <#else>
-                            <p>否</p> 
-                        </#if>
+                        </p>
                     </dt>
                 </dl>
                 <dl class="park_last">
-                    <dd><span>退款原因</span></dd>
+                    <dd><span>取消原因</span></dd>
                     <dt>
                         <p>${order.cancelReason!''}</p>
                     </dt>
@@ -169,15 +181,38 @@
             </div>
         <!--停车场信息结束-->
         </#if>
+        <div style='height:30px;' class='clear60'></div>
         <div class="mb98"></div>
-    
+        <footer class="profoot">
+            <table>
+                <tr>
+                    <#switch order.statusId>
+                        <#case 4>
+                            <td><input type="submit" onclick="orderFreeOrCash(${order.id?c},1);" value="现金支付" /></td>
+                        <#break>
+                        <#default>
+                            <td><input type="submit" style="background:#999999;" value="现金支付" /></td>
+                        <#break>
+                    </#switch>
+                    <td>&nbsp;</td>
+                    <#switch order.statusId>
+                        <#case 4>
+                            <td><input type="button" style="background-color:#ef0000;" onclick="orderFreeOrCash(${order.id?c},0);" value="免除费用" /></td>
+                        <#break>
+                        <#default>
+                            <td><input type="submit" style="background:#999999;" value="免除费用" /></td>
+                        <#break>
+                    </#switch>
+                </tr>
+            </table>
+        </footer>
     </div>
     
     <!--底部开始-->
     <div class="footer">
         <a class="a1" href="/depot">主页</a>
         <a class="a2 sel" href="/depot/myaccount">账户</a>
-        <a class="a3" href="/depot/charge">收费记录</a>
+        <a class="a3" href="/depot/myaccount/chargeManage">收费记录</a>
         <a class="a4" href="/depot/info">车场信息</a>
         <a class="a5" href="/depot/site">设置</a>
     </div>

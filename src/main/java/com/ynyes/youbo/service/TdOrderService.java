@@ -12,10 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ynyes.youbo.entity.TdOrder;
-import com.ynyes.youbo.entity.TdUser;
 import com.ynyes.youbo.repository.TdOrderRepo;
-
-import scala.xml.dtd.PublicID;
 
 /**
  * TdOrder 服务类
@@ -431,23 +428,23 @@ public class TdOrderService {
 			return null;
 		}
 		List<TdOrder> list = repository.findByCarCodeAndDiyIdAndStatusIdOrderByOrderTimeDesc(carCode, diyId, 3L);
-		if(null != list&&list.size()>0){
+		if (null != list && list.size() > 0) {
 			return list.get(0);
-		}else{
+		} else {
 			return null;
 		}
-		
+
 	};
-	
-	//根据车牌号码和停车场id查找状态为4的订单按照时间倒序排序选择第一个
-	public TdOrder findbyStatusFour(String carCode,Long diyId){
+
+	// 根据车牌号码和停车场id查找状态为4的订单按照时间倒序排序选择第一个
+	public TdOrder findbyStatusFour(String carCode, Long diyId) {
 		if (null == carCode || null == diyId) {
 			return null;
 		}
 		List<TdOrder> list = repository.findByCarCodeAndDiyIdAndStatusIdOrderByOrderTimeDesc(carCode, diyId, 4L);
-		if(null != list&&list.size()>0){
+		if (null != list && list.size() > 0) {
 			return list.get(0);
-		}else{
+		} else {
 			return null;
 		}
 	}
@@ -460,14 +457,12 @@ public class TdOrderService {
 		return repository.findByUsernameAndFinishTimeBetweenAndStatusIdOrderByOrderTimeAsc(username, beginDate,
 				finishDate, 6L);
 	}
-	
-	public List<TdOrder> findByUsernameAndFinishTimeBetween(String username, Date beginDate,
-			Date finishDate) {
+
+	public List<TdOrder> findByUsernameAndFinishTimeBetween(String username, Date beginDate, Date finishDate) {
 		if (null == username || null == beginDate || null == finishDate) {
 			return null;
 		}
-		return repository.findByUsernameAndFinishTimeBetweenOrderByOrderTimeAsc(username, beginDate,
-				finishDate);
+		return repository.findByUsernameAndFinishTimeBetweenOrderByOrderTimeAsc(username, beginDate, finishDate);
 	}
 
 	// 查找指定用户已停车的订单
@@ -599,29 +594,121 @@ public class TdOrderService {
 		}
 		return repository.findByDiyIdAndStatusIdAndOrderTimeBetweenOrderByOrderTimeDesc(id, 6L, beginDate, finishDate);
 	};
-	
-	//查找指定停车场指定时间段内已预约的订单
-	public List<TdOrder> findReservedOrder(Long id,Date beginDate,Date finishDate){
-		if(null == id || null == beginDate || null == finishDate){
+
+	// 查找指定停车场指定时间段内已预约的订单
+	public List<TdOrder> findReservedOrder(Long id, Date beginDate, Date finishDate) {
+		if (null == id || null == beginDate || null == finishDate) {
 			return null;
 		}
 		return repository.findByDiyIdAndStatusIdAndOrderTimeBetweenOrderByOrderTimeDesc(id, 3L, beginDate, finishDate);
 	}
-	
-	//查找指定用户已经取消的订单
-	public List<TdOrder> findCancelOrderByUsername(String username){
-		if(null == username){
+
+	// 查找指定用户已经取消的订单
+	public List<TdOrder> findCancelOrderByUsername(String username) {
+		if (null == username) {
 			return null;
 		}
 		return repository.findByUsernameAndStatusIdOrderByOrderTimeDesc(username, 9L);
 	}
-	
-	//根据停车场ID查找预约审核的订单
-	public List<TdOrder> findByDiyIdAndStatusIdOrderByOrderTime(Long diyId){
-		if(null == diyId){
+
+	// 根据停车场ID查找预约审核的订单
+	public List<TdOrder> findByDiyIdAndStatusIdOrderByOrderTime(Long diyId) {
+		if (null == diyId) {
 			return null;
 		}
 		return repository.findByDiyIdAndStatusIdOrderByOrderTimeDesc(diyId, 2L);
 	}
 
+	// 查找线上支付的订单
+	public List<TdOrder> findXszf(Long diyId) {
+		if (null == diyId) {
+			return null;
+		}
+		return repository.findByThePayTypeAndStatusIdAndDiyIdOrderByOrderTimeDesc(0L, 6L, diyId);
+	}
+
+	// 查找现金支付的订单
+	public List<TdOrder> findXjzf(Long diyId) {
+		if (null == diyId) {
+			return null;
+		}
+		return repository.findByThePayTypeAndStatusIdAndDiyIdOrderByOrderTimeDesc(1L, 6L, diyId);
+	}
+
+	// 查找免单的订单
+	public List<TdOrder> findMd(Long diyId) {
+		if (null == diyId) {
+			return null;
+		}
+		return repository.findByThePayTypeAndStatusIdAndDiyIdOrderByOrderTimeDesc(2L, 6L, diyId);
+	}
+
+	// 查找月卡的订单
+	public List<TdOrder> findYk(Long diyId) {
+		if (null == diyId) {
+			return null;
+		}
+		return repository.findByThePayTypeAndStatusIdAndDiyIdOrderByOrderTimeDesc(3L, 6L, diyId);
+	}
+
+	// 查找一定时间线上支付的订单
+	public List<TdOrder> findByXszfTime(Long diyId, Date beginTime, Date finishTime) {
+		if (null == diyId || null == beginTime || null == finishTime) {
+			return null;
+		}
+		return repository.findByThePayTypeAndStatusIdAndDiyIdAndOrderTimeBetweenOrderByOrderTimeDesc(0L, 6L, diyId,
+				beginTime, finishTime);
+	}
+
+	// 查找一定时间的现金支付的订单
+	public List<TdOrder> findByXjzfTime(Long diyId, Date beginTime, Date finishTime) {
+		if (null == diyId || null == beginTime || null == finishTime) {
+			return null;
+		}
+		return repository.findByThePayTypeAndStatusIdAndDiyIdAndOrderTimeBetweenOrderByOrderTimeDesc(1L, 6L, diyId,
+				beginTime, finishTime);
+	}
+
+	// 查找一定时间内免单的订单
+	public List<TdOrder> findByMdTime(Long diyId, Date beginTime, Date finishTime) {
+		if (null == diyId || null == beginTime || null == finishTime) {
+			return null;
+		}
+		return repository.findByThePayTypeAndStatusIdAndDiyIdAndOrderTimeBetweenOrderByOrderTimeDesc(2L, 6L, diyId,
+				beginTime, finishTime);
+	}
+
+	// 查找一定时间内月卡的订单
+	public List<TdOrder> findByYkTime(Long diyId, Date beginTime, Date finishTime) {
+		if (null == diyId || null == beginTime || null == finishTime) {
+			return null;
+		}
+		return repository.findByThePayTypeAndStatusIdAndDiyIdAndOrderTimeBetweenOrderByOrderTimeDesc(3L, 6L, diyId,
+				beginTime, finishTime);
+	}
+
+	// 查找违约订单
+	public List<TdOrder> findWy(Long diyId) {
+		if (null == diyId) {
+			return null;
+		}
+		return repository.findByStatusIdAndDiyIdOrderByOrderTimeDesc(9L, diyId);
+	}
+
+	// 查找一定时间内的违约订单
+	public List<TdOrder> findByWyTime(Long diyId, Date beginTime, Date finishTime) {
+		if (null == diyId || null == beginTime || null == finishTime) {
+			return null;
+		}
+		return repository.findByStatusIdAndDiyIdAndOrderTimeBetweenOrderByOrderTimeDesc(9L, diyId, beginTime,
+				finishTime);
+	}
+	
+	//根据停车场ID和车牌号码模糊查询
+	public List<TdOrder> findByDiyIdAndCarCodeContainingOrderByOrderTimeDesc(Long diyId,String keywords){
+		if(null == diyId||null == keywords){
+			return null;
+		}
+		return repository.findByDiyIdAndCarCodeContainingOrderByOrderTimeDesc(diyId, keywords);
+	}
 }

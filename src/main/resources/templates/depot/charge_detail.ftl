@@ -21,7 +21,6 @@
 <div id="unpayed"> 
     <#if unpayed_list??> 
         <#list unpayed_list as item>  
-            <a href="/depot/myaccount/detail?orderId=${item.id}">
             <dl class="detail_month_01">
                 <dt>
                     <span>${item.carCode!''}</span>
@@ -58,25 +57,24 @@
                         </#if>
                     </span>
                 </dd>
-                <dd><img src="/depot/images/detail_month_02.png" /><span>未完成</span></dd>
+                <dd>
+                    <img src="/depot/images/detail_month_02.png" /><span>未完成</span>
+                    <span style="float:right;"><a href="/depot/myaccount/detail?orderId=${item.id?c}" style="color:#999;">详情</a></span>
+                </dd>
             </dl>
             <div class="bespeak_list_btn">
-                <#if 5==item.statusId>
-                    <#if item.firstPay??&&item.firstPay gt 0>
-                        <input type="button" value="现金支付" style="-webkit-appearance:none;background-color:#999999;width:50%;float:left;border-radius:0;">
-                    <#else>
-                        <input type="button" value="现金支付" onclick="orderFreeOrCash(${item.id?c},1);" style="-webkit-appearance:none;background-color:#00aaef;width:50%;float:left;border-radius:0;">
-                    </#if>
+                <#if 4==item.statusId>
+                    <input type="button" value="现金支付" onclick="orderFreeOrCash(${item.id?c},1);" style="-webkit-appearance:none;background-color:#00aaef;width:50%;float:left;border-radius:0;">
                 <#else>
                     <input type="button" value="现金支付" style="-webkit-appearance:none;background-color:#999999;width:50%;float:left;border-right:1px #ffffff solid;border-radius:0;">
                 </#if>
-                <#if 5==item.statusId>
+                <#if 4==item.statusId>
                     <input type="button" value="免除费用" onclick="orderFreeOrCash(${item.id?c},0);" style="-webkit-appearance:none;background-color:#ef0000;width:50%;float:left;border-radius:0;">
                 <#else>
                     <input type="button" value="免除费用" style="-webkit-appearance:none;background-color:#999999;width:50%;float:left;border-radius:0;">
                 </#if>
             </div>
-            </a>
+            
         </#list>
     </#if>
     </div>
@@ -84,7 +82,6 @@
     <div id="payed">    
      <#if payed_list??> 
         <#list payed_list as item>  
-            <a href="/depot/myaccount/detail?orderId=${item.id}">
             <dl class="detail_month_01">
                 <dt>
                     <span>${item.carCode!''}</span>
@@ -103,13 +100,13 @@
                     <#if item.finishTime??>
                         <span>${item.finishTime?string("yyyy-MM-dd HH:mm")}</span>
                     </#if>
+                    <span style="float:right;"><a href="/depot/myaccount/detail?orderId=${item.id}" style="color:#999;height:40px;line-height:40px;">详情</a></span>
                 </dd>
             </dl>
             <div class="bespeak_list_btn">
                 <input type="button" value="现金支付" style="-webkit-appearance:none;background-color:#999999;width:50%;float:left;border-right:1px #ffffff solid;border-radius:0;">
                 <input type="button" value="免除费用" style="-webkit-appearance:none;background-color:#999999;width:50%;float:left;border-radius:0;">
             </div>
-            </a>
         </#list>
     </#if>
 </div>

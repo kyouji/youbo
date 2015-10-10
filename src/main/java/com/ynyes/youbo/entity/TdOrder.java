@@ -344,6 +344,30 @@ public class TdOrder {
     @Column
     private String carCodePhoto;
     
+    //支付方式（原本已经有了支付方式，但是根据客户需求，支付方式只有4种：0.线上支付；1. 现金支付；2.免单； 3. 月卡）
+    @Column
+    private Long thePayType;
+    
+    //操作人
+    @Column
+    private String operator;
+    
+    public String getOperator() {
+		return operator;
+	}
+
+	public void setOperator(String operator) {
+		this.operator = operator;
+	}
+
+	public Long getThePayType() {
+		return thePayType;
+	}
+
+	public void setThePayType(Long thePayType) {
+		this.thePayType = thePayType;
+	}
+
 	public String getCarCodePhoto() {
 		return carCodePhoto;
 	}

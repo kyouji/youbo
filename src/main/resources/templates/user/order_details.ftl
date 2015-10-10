@@ -145,16 +145,23 @@ function cancelOrder(id){
                     <dd><span>完成时间</span></dd>
                     <dt>
                         <#if order.finishTime??>
-                            <p>${order.orderTime?string("yyyy-MM-dd HH:mm")}</p>
+                            <p>${order.finishTime?string("yyyy-MM-dd HH:mm")}</p>
                         </#if>
                     </dt>
                 </dl>
                 <dl class="park_last">
                     <dd><span>支付方式</span></dd>
                     <dt>
-                        <#if payType??>
-                            <p>${payType!''}</p>
-                        </#if>
+                        <p>
+                            <#if order.thePayType??>
+                                <#switch order.thePayType>
+                                    <#case 1>线上支付<#break>
+                                    <#case 1>现金支付<#break>
+                                    <#case 1>免除费用<#break>
+                                    <#case 1>月卡用户<#break>
+                                </#switch>
+                            </#if>
+                        </p>
                     </dt>
                 </dl>
                 <dl class="park_last">

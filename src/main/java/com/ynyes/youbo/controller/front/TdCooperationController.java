@@ -71,7 +71,7 @@ public class TdCooperationController {
 			res.put("status", 0);
 			res.put("message", "登陆成功");
 			System.err.println("将登陆的停车场信息存储到session中");
-			request.getSession().setAttribute("diySite", diySite);
+			request.getSession().setAttribute("cooperDiy", diySite);
 		} else {
 			// 判断何种原因导致登录失败
 			System.err.println("未能查找到指定username和password的停车场，开始查找原因");
@@ -99,7 +99,7 @@ public class TdCooperationController {
 		// status代表处理状态，-1代表失败
 		res.put("status", -1);
 		System.err.println("开始从session中读取停车场信息");
-		TdDiySite diySite = (TdDiySite) request.getSession().getAttribute("diySite");
+		TdDiySite diySite = (TdDiySite) request.getSession().getAttribute("cooperDiy");
 
 		System.err.println("读取停车场信息成功，开始验证");
 		if (null == diySite) {
@@ -225,7 +225,7 @@ public class TdCooperationController {
 
 		// 获取该停车场的信息
 		System.err.println("开始获取session中的停车场信息");
-		TdDiySite diySite = (TdDiySite) request.getSession().getAttribute("diySite");
+		TdDiySite diySite = (TdDiySite) request.getSession().getAttribute("cooperDiy");
 		if (null == diySite) {
 			res.put("message", "停车场用户未登陆");
 			return res;

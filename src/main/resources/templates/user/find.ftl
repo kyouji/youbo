@@ -45,6 +45,7 @@ function reserve(depotId,x,y){
 
 function userAlert(){
     alert("绑定银行卡后才能够预约！");
+    window.location.href = "/user/center/bankcard/add";
 }
 
 var map;

@@ -45,7 +45,7 @@
     <div class="ybtx">
         <#if reserved_list??>
             <#list reserved_list as item>
-                <a href="/depot/myaccount/detail?orderId=${item.id}">
+                <a href="/depot/myaccount/detail?orderId=${item.id?c}">
                 <dl class="bespeak_list_01">
                     <dt><a>${item.carCode!''}</a><p></p></dt>
                     <dd>
@@ -66,8 +66,8 @@
                     </dt>
                 </dl>
                 <div class="bespeak_list_btn">
-                    <input class="sel_2" type="button" style="background-color:#00aaef;width:50%;float:left;" onclick="reserveResult(${item.id},0)" value="同意"/ >
-                    <input type="button" style="width:50%;float:left;background-color:#ef0000;" onclick="reserveResult(${item.id},1)" value="拒绝">
+                    <input class="sel_2" type="button" style="background-color:#00aaef;width:50%;float:left;" onclick="reserveResult(${item.id?c},0)" value="同意"/ >
+                    <input type="button" style="width:50%;float:left;background-color:#ef0000;" onclick="reserveResult(${item.id?c},1)" value="拒绝">
                 </div>
                 </a>
             </#list>
@@ -81,7 +81,7 @@
     <div class="footer">
         <a class="a1" href="/depot">主页</a>
         <a class="a2 sel" href="/depot/myaccount">账户</a>
-        <a class="a3" href="/depot/charge">收费记录</a>
+        <a class="a3" href="/depot/myaccount/chargeManage">收费记录</a>
         <a class="a4" href="/depot/info">车场信息</a>
         <a class="a5" href="/depot/site">设置</a>
     </div>

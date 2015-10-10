@@ -37,6 +37,7 @@ import com.ynyes.youbo.service.TdCommonService;
 import com.ynyes.youbo.service.TdDepositService;
 import com.ynyes.youbo.service.TdDiyLogService;
 import com.ynyes.youbo.service.TdDiySiteService;
+import com.ynyes.youbo.service.TdDiyUserService;
 import com.ynyes.youbo.service.TdOrderService;
 import com.ynyes.youbo.service.TdPayTypeService;
 import com.ynyes.youbo.service.TdUserService;
@@ -66,11 +67,13 @@ public class TdDepotMyAccountController {
 
 	@Autowired
 	private TdDepositService tdDepositService;
-	
+
 	@Autowired
 	private TdDiyLogService tdDiyLogService;
-	
 
+	@Autowired
+	private TdDiyUserService tdDiyUserService;
+	
 	/**
 	 * 我的账户首页
 	 * 
@@ -81,7 +84,7 @@ public class TdDepotMyAccountController {
 	 */
 	@RequestMapping
 	public String index(HttpServletRequest req, Device device, ModelMap map) {
-		TdDiySite site =  (TdDiySite) req.getSession().getAttribute("site");
+		TdDiySite site = (TdDiySite) req.getSession().getAttribute("site");
 		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("diyUser");
 		if (null == site) {
 			return "redirect:/depot/login";
@@ -106,15 +109,16 @@ public class TdDepotMyAccountController {
 		List<TdOrder> orders = tdOrderService.findByDiyIdAndOrderTimeBetween(site.getId(), beginDate, finishDate);
 		Double income = new Double(0);
 		for (TdOrder order : orders) {
-			if (null != order.getTotalPrice() && order.getTotalPrice() > 0 && order.getStatusId() != 5) {
+			if (null != order.getTotalPrice() && order.getTotalPrice() > 0 && order.getStatusId() == 6
+					&& (order.getThePayType() == 0L||null == order.getThePayType())) {
 				income += order.getTotalPrice();
 			} else {
-				if (null != order.getFirstPay() && order.getFirstPay() > 0
-						&& !"审核通过".equalsIgnoreCase(order.getCheckStatus())) {
+				if (null != order.getFirstPay() && order.getFirstPay() > 0 && order.getStatusId() == 9L) {
 					income += order.getFirstPay();
 				}
 			}
 		}
+		map.addAttribute("site",site);
 		map.addAttribute("diyUser", diyUser);
 		map.addAttribute("income", income);
 		return "/depot/my_account";
@@ -130,12 +134,13 @@ public class TdDepotMyAccountController {
 	 */
 	@RequestMapping("/bankcard")
 	public String bankcard(HttpServletRequest req, Device device, ModelMap map) {
+		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("diyUser");
 		TdDiySite site = (TdDiySite) req.getSession().getAttribute("site");
- 		if (null == site) {
+		if (null == diyUser) {
 			return "/depot/login";
 		}
- 		
- 		List<TdBankcard> bankcardList = tdBankcardService.findByDiyId(site.getId());
+
+		List<TdBankcard> bankcardList = tdBankcardService.findByDiyId(site.getId());
 		map.addAttribute("bankcardList", bankcardList);
 		return "/depot/bankcard";
 	}
@@ -175,7 +180,6 @@ public class TdDepotMyAccountController {
 		}
 
 		List<TdBankcard> list = user.getBankcardList();
-		System.err.println(list);
 
 		if (null == user.getBankcardList()) {
 			List<TdBankcard> bankCards = new ArrayList<>();
@@ -201,9 +205,9 @@ public class TdDepotMyAccountController {
 	 */
 	@RequestMapping("/refund")
 	public String refund(HttpServletRequest req, Device device, ModelMap map) {
-		String siteUsername = (String) req.getSession().getAttribute("siteUsername");
-		TdDiySite site = tdDiySiteService.findByUsernameAndIsEnableTrue(siteUsername);
-		if (null == site) {
+		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("diyUser");
+		TdDiySite site = (TdDiySite) req.getSession().getAttribute("site");
+		if (null == diyUser) {
 			return "/depot/login";
 		}
 
@@ -243,10 +247,10 @@ public class TdDepotMyAccountController {
 	 */
 	@RequestMapping("/withdrawal")
 	public String withdrawal(HttpServletRequest req, Device device, ModelMap map) {
-		String siteUsername = (String) req.getSession().getAttribute("siteUsername");
-		TdDiySite site = tdDiySiteService.findbyUsername(siteUsername);
+		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("diyUser");
+		TdDiySite site = (TdDiySite) req.getSession().getAttribute("site");
 
-		if (null == site) {
+		if (null == diyUser) {
 			return "/depot/login";
 		}
 
@@ -254,7 +258,8 @@ public class TdDepotMyAccountController {
 			site.setAllMoney(new Double(0));
 		}
 		map.addAttribute("allMoney", site.getAllMoney());
-		map.addAttribute("cards", site.getBankcardList());
+		List<TdBankcard> bankcardList = tdBankcardService.findByDiyId(site.getId());
+		map.addAttribute("cards", bankcardList);
 
 		return "/depot/withdraw";
 	}
@@ -269,53 +274,21 @@ public class TdDepotMyAccountController {
 	 */
 	@RequestMapping("/cashrecord")
 	public String cashrecord(HttpServletRequest req, Device device, ModelMap map) {
-		String siteUsername = (String) req.getSession().getAttribute("siteUsername");
-		TdDiySite site = tdDiySiteService.findbyUsername(siteUsername);
-		if (null == site) {
+		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("diyUser");
+		if (null == diyUser) {
 			return "/depot/login";
 		}
+		TdDiySite site = (TdDiySite) req.getSession().getAttribute("site");
 		List<TdDeposit> deposit_list = tdDepositService.findByDiyIdOrderByDepositDateDesc(site.getId());
 		map.addAttribute("deposit_list", deposit_list);
 		return "/depot/withdraw_record";
 	}
 
-	@RequestMapping(value = "/refund/edit")
-	@ResponseBody
-	public Map<String, Object> refundEdit(HttpServletRequest req, Long orderId, Integer type, String reason) {
-		Map<String, Object> res = new HashMap<>();
-		res.put("status", -1);
-		String siteUsername = (String) req.getSession().getAttribute("siteUsername");
-		TdDiySite site = tdDiySiteService.findbyUsername(siteUsername);
-		if (null == site) {
-			res.put("message", "未获取到已登录用户的信息！");
-			return res;
-		}
-		if (null == orderId || null == type || null == reason) {
-			res.put("message", "参数获取失败！");
-			return res;
-		}
-
-		TdOrder order = tdOrderService.findOne(orderId);
-		if (0 == type) {
-			order.setStatusId(9L);
-			order.setCheckStatus("审核通过");
-			order.setFinishTime(new Date());
-			// 在此开始调用银行接口进行退款
-		}
-		if (-1 == type) {
-			order.setStatusId(8L);
-			order.setCheckStatus("审核未通过");
-		}
-		order.setRemarkInfo(reason);
-		tdOrderService.save(order);
-		res.put("status", 0);
-		return res;
-	}
-
 	@RequestMapping(value = "/reserve")
 	public String reserve(HttpServletRequest req, ModelMap map) {
-		TdDiySite site =  (TdDiySite) req.getSession().getAttribute("site");
-		if (null == site) {
+		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("diyUser");
+		TdDiySite site = (TdDiySite) req.getSession().getAttribute("site");
+		if (null == diyUser) {
 			return "/depot/login";
 		}
 		List<TdOrder> list = tdOrderService.findByDiyIdAndStatusIdOrderByOrderTime(site.getId());
@@ -378,13 +351,13 @@ public class TdDepotMyAccountController {
 
 	@RequestMapping(value = "/detail")
 	public String orderDetail(HttpServletRequest req, Long orderId, ModelMap map) {
-		String siteUsername = (String) req.getSession().getAttribute("siteUsername");
-		TdDiySite site = tdDiySiteService.findbyUsername(siteUsername);
-		if (null == site) {
+		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("diyUser");
+		if (null == diyUser) {
 			return "/depot/login";
 		}
+		TdDiySite site = tdDiySiteService.findOne(diyUser.getDiyId());
 		TdOrder order = tdOrderService.findOne(orderId);
-		if(null !=order&&null != order.getUsername()){
+		if (null != order && null != order.getUsername()) {
 			TdUser user = tdUserService.findByUsername(order.getUsername());
 			map.addAttribute("user", user);
 		}
@@ -395,38 +368,140 @@ public class TdDepotMyAccountController {
 		map.addAttribute("order", order);
 		return "/depot/order_details";
 	}
-	
+
 	@RequestMapping(value = "/operate")
-	public String operate(HttpServletRequest req,Long id,Long type){
-		TdDiySite site = (TdDiySite) req.getSession().getAttribute("site");
+	public String operate(HttpServletRequest req, Long id, Long type) {
 		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("diyUser");
-		if(null == site || null == diyUser){
+		TdDiySite site = (TdDiySite) req.getSession().getAttribute("site");
+		if (null == site || null == diyUser) {
 			return "/depot/login";
 		}
-		
+
 		TdOrder order = tdOrderService.findOne(id);
-		
+
 		TdDiyLog log = new TdDiyLog();
-		
+
 		log.setCreateTime(new Date());
 		log.setDiyId(site.getId());
 		log.setUsername(diyUser.getUsername());
-		
-		if(0 == type){
+
+		if (0 == type) {
 			log.setActionType("同意预约");
-			log.setRemark(diyUser.getUsername()+"同意了"+order.getCarCode()+"的预约，此时车位剩余"+site.getParkingNowNumber()+"个");
+			log.setRemark(diyUser.getUsername() + "同意了" + order.getCarCode() + "的预约， 预约前车位剩余" + site.getParkingNowNumber()
+					+ "个");
 			order.setStatusId(3L);
 		}
-		
-		if(1 == type){
+
+		if (1 == type) {
 			log.setActionType("拒绝预约");
-			log.setRemark(diyUser.getUsername()+"拒绝了"+order.getCarCode()+"的预约，此时车位剩余"+site.getParkingNowNumber()+"个");
+			log.setRemark(diyUser.getUsername() + "拒绝了" + order.getCarCode() + "的预约，预约前车位剩余" + site.getParkingNowNumber()
+					+ "个");
 			order.setStatusId(9L);
 			order.setCancelReason("对不起，您的预约已被拒绝");
 		}
 		tdOrderService.save(order);
 		tdDiyLogService.save(log);
 		return "redirect:/depot/myaccount/reserve";
-		
+
 	}
+	
+	@RequestMapping(value="/chargeManage")
+	public String chargeManage(HttpServletRequest req,ModelMap map){
+		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("diyUser");
+		if(null == diyUser){
+			return "/depot/login";
+		}
+		//查找不同支付方式的订单
+		List<TdOrder> xs_list = tdOrderService.findXszf(diyUser.getDiyId());
+		List<TdOrder> xj_list = tdOrderService.findXjzf(diyUser.getDiyId());
+		List<TdOrder> md_list = tdOrderService.findMd(diyUser.getDiyId());
+		List<TdOrder> yk_list = tdOrderService.findYk(diyUser.getDiyId());
+		
+		//查找违约订单
+		List<TdOrder> wy = tdOrderService.findWy(diyUser.getDiyId());
+		List<TdOrder> wy_list = new ArrayList<>();
+		for (TdOrder tdOrder : wy) {
+			if(null != tdOrder.getTotalPrice()&&tdOrder.getTotalPrice() > 0){
+				wy_list.add(tdOrder);
+			}
+		}
+		
+		map.addAttribute("xs_list", xs_list);
+		map.addAttribute("xj_list", xj_list);
+		map.addAttribute("md_list", md_list);
+		map.addAttribute("yk_list", yk_list);
+		
+		return "/depot/charge_manage";
+	}
+	
+	@RequestMapping("/subAccount")
+	public String subAccount(HttpServletRequest req,ModelMap map){
+		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("diyUser");
+		if(null == diyUser){
+			return "/depot/login";
+		}
+		List<TdDiyUser> subAccount_list = tdDiyUserService.findByDiyIdAndRoleId(diyUser.getDiyId());
+		map.addAttribute("subAccount_list", subAccount_list);
+		return "/depot/sub_account";
+	}
+	
+	@RequestMapping("/editSubAccount")
+	public String addSubAccount(HttpServletRequest req,Long id,ModelMap map){
+		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("diyUser");
+		if(null == diyUser){
+			return "/depot/login";
+		}
+		if(null != id){
+			TdDiyUser theUser = tdDiyUserService.findOne(id);
+			map.addAttribute("theUser", theUser);
+		}
+		return "/depot/subaccount_add";
+	}
+	
+	@RequestMapping(value="/editSubAccount",method = RequestMethod.POST)
+	public String editSubAccount(HttpServletRequest req,String username,String password,String realname,Long id,Boolean isEnable){
+		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("diyUser");
+		if(null == diyUser){
+			return "/depot/login";
+		}
+		TdDiyUser theUser = new TdDiyUser();
+		theUser.setId(id);
+		theUser.setUsername(username);
+		theUser.setPassword(password);
+		theUser.setDiyId(diyUser.getDiyId());
+		theUser.setIsEnable(isEnable);
+		theUser.setRealName(realname);
+		theUser.setRoleId(1L);
+		tdDiyUserService.save(theUser);
+		return "redirect:/depot/myaccount/subAccount";
+	}
+	
+	@RequestMapping(value = "/checkSubAccount")
+	@ResponseBody
+	public Map<String, Object> checkSubAccount(String username){
+		Map<String, Object> res = new HashMap<>();
+		res.put("status", -1);
+		if(null == username){
+			res.put("message", "获取用户名失败！");	
+			return res;
+		}
+		TdDiyUser diyUser = tdDiyUserService.findByUsername(username);
+		if(null != diyUser){
+			res.put("message", "该用户名已注册！");
+			return res;
+		}
+		res.put("status", 0);
+		return res;
+	}
+	
+	@RequestMapping("/delSubAccount")
+	public String deleteSubAccount(HttpServletRequest req,Long id){
+		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("diyUser");
+		if(null == diyUser){
+			return "/depot/login";
+		}
+		tdDiyUserService.delete(id);
+		return "redirect:/depot/myaccount/subAccount";
+	}
+	
 }

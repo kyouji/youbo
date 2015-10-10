@@ -33,28 +33,53 @@
             <p class="p2">￥<span><#if income??>${income?string("0.00")!''}元<#else>0.00元</#if></span></p>
         </dt>
     </dl>
+    
     <#if diyUser??&&diyUser.roleId??>
         <#if diyUser.roleId==0>
             <a class="ip_1" type="button" style="ali" href="/depot/myaccount/withdrawal">提现</a>
+        <#else>
+            <a class="ip_1" type="button" style="ali;background-color:#999999" >提现</a>
         </#if>
+        
     </#if>
+    
     <div class="my_account_record">
+        <#if diyUser??&&diyUser.roleId??>
+            <#if diyUser.roleId==0>
+                <dl>
+                    <dd><a href="/depot/myaccount/cashrecord">提现记录</a></dd>
+                    <dt><a href="/depot/myaccount/cashrecord"><img src="/depot/images/advance.png" /></a></dt>
+                </dl>
+            </#if>
+        </#if>
         <dl>
-            <dd><a href="/depot/myaccount/cashrecord">提现记录</a></dd>
-            <dt><a href="/depot/myaccount/cashrecord"><img src="/depot/images/advance.png" /></a></dt>
+            <dd><a href="/depot/charge">订单管理</a></dd>
+            <dt><a href="/depot/charge"><img src="/depot/images/advance.png" /></a></dt>
         </dl>
         <dl>
             <dd><a href="/depot/myaccount/reserve">预约审核</a></dd>
             <dt><a href="/depot/myaccount/reserve"><img src="/depot/images/advance.png" /></a></dt>
         </dl>
-        <dl>
-            <dd><a href="/depot/myaccount/bankcard">银行卡</a></dd>
-            <dt><a href="/depot/myaccount//bankcard"><img src="/depot/images/advance.png" /></a></dt>
-        </dl>
+        <#if diyUser??&&diyUser.roleId??>
+            <#if diyUser.roleId==0>
+                <dl>
+                    <dd><a href="/depot/myaccount/bankcard">银行卡</a></dd>
+                    <dt><a href="/depot/myaccount//bankcard"><img src="/depot/images/advance.png" /></a></dt>
+                </dl>
+            </#if>
+        </#if>
         <dl>
             <dd><a href="/depot/myaccount/message">消息中心</a></dd>
             <dt><a href="/depot/myaccount/message"><img src="/depot/images/advance.png" /></a></dt>
         </dl>
+        <#if diyUser??&&diyUser.roleId??>
+            <#if diyUser.roleId==0>
+                <dl>
+                    <dd><a href="/depot/myaccount/subAccount">子账户管理</a></dd>
+                    <dt><a href="/depot/myaccount/subAccount"><img src="/depot/images/advance.png" /></a></dt>
+                </dl>
+            </#if>
+        </#if>
     </div>
     <!--我的账户结束-->
 
@@ -66,7 +91,7 @@
     <div class="footer">
         <a class="a1" href="/depot">主页</a>
         <a class="a2 sel" href="/depot/myaccount">账户</a>
-        <a class="a3" href="/depot/charge">收费记录</a>
+        <a class="a3" href="/depot/myaccount/chargeManage">收费记录</a>
         <a class="a4" href="/depot/info">车场信息</a>
         <a class="a5" href="/depot/site">设置</a>
     </div>

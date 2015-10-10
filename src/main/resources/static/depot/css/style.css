@@ -53,7 +53,7 @@ body{background:#efefef;}
 
 /*bankcard*/
 .bankcard{ width:90%; margin:5%;border-radius:10px; background-color:#0e5baa;}
-.bankcard dt{ padding-top:20px; padding-left:20px;padding-right:20px;}
+.bankcard dt{ padding-top:20px; padding-left:20px;padding-right:20px;padding-bottom:20px;}
 .bankcard dt a{ font-size:1.4em; color:#fff;}
 .bankcard dd{ padding-left:20px;padding-right:20px;padding-top:20px}
 .bankcard dd a{ font-size:1.2em; color:#04477f;;}
@@ -71,10 +71,11 @@ body{background:#efefef;}
 .bank_01 dd img{ width:70%; margin-top:23px;}
 .bank_mes{ color:#ef0000; margin-top:4%}
 
-.bank_02{width:96%;height:56px;padding:0 2%; background-color:#fff;margin-top:7%; line-height:56px; font-size:1.3em; border:none;}
+.bank_02{width:96%;height:56px;padding:0 2%; background-color:#fff;line-height:56px; font-size:1.3em; border:none;}
 .bank_03{width:96%;height:56px;padding:0 2%; background-color:#fff;margin-top:7%; line-height:56px; font-size:1.3em; border:none;}
 .bank_05{width:96%;height:56px;padding:0 2%; background-color:#fff;margin-top:7%; line-height:56px; font-size:1.3em; border:none;}
 .bank_06{width:96%;height:56px;padding:0 2%; background-color:#fff;margin-top:7%; line-height:56px; font-size:1.3em; border:none;}
+.bank_07{width:96%;height:56px;padding:0 2%; background-color:#fff;margin-top:7%; line-height:56px; font-size:1.3em; border:none;}
 
 .bank_04{ width:100%;  height:56px; background-color:#fff;  margin-top:7%;}
 .bank_04 dt{ float:left;width:65%}
@@ -265,11 +266,48 @@ body{background:#efefef;}
 /*This chapter end*/
 
 
+.cancel_by_dx .cancel2{ display:block; width:30px; height:30px; border-radius:20px; background-color:#ddd; color:white; position:absolute; left:86%; top:20px; line-height:30px; text-align:center; margin-top:15px;}
+.cancel_by_dx .cancel{ display:block;font-size:30px;font-family:arial; width:30px; height:30px;color:white; position:absolute; left:86%; top:20px; line-height:30px; text-align:center; margin-top:15px;}
 
+.subaccount{width:100%;float:left;}
+.subaccount .L_list .listbg{background:#ffffff;width:100%;height:45px; padding:10px 0 10px 10%;border-top:1px #dddddd solid;border-bottom:1px #dddddd solid;font-size:1.4em;color:#333;}
+.subaccount .L_list .listbg dt{font-weight:700;padding-bottom:5px;}
+.subaccount .L_list .listbg dd{color:#666666;font-size:0.8em;}
+.subaccount .L_list{width:70%;height:65px;float:left;}
+.subaccount .R_list{width:30%;height:67px;float:right;background:#f65741;font-size:1.3em;line-height:67px; text-align:center;color:#ffffff;}
+.subaccount .list{width:100%;float:left; margin-top:20px;}
 
-
-
-
+.profoot {
+    position:fixed;
+    left:0;
+    bottom:70px;
+    z-index:50;
+    width:100%;
+    background:#e7e7e7;
+    padding:10px 0 5px;}
+.profoot table {
+    width:80%;
+    margin:0 auto;
+    table-layout:fixed;
+    }
+.profoot td input {
+    width:100%;
+    height:40px;
+    cursor:pointer;
+    line-height:40px;
+    color:#fff;
+    font-size:0.9em;
+    border-radius:3px;
+    background:#00aaef;
+    border:none;
+    }
+.profoot a {
+    font-size:0.8em;
+    text-align:center;
+    display:block;
+    background:url(../images/pro_fq.png) no-repeat center top;
+    background-size:30px;
+    padding-top:23px;}
 
 
 

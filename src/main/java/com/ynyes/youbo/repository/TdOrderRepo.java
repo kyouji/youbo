@@ -209,5 +209,23 @@ public interface TdOrderRepo extends PagingAndSortingRepository<TdOrder, Long>, 
 	List<TdOrder> findByDiyIdAndStatusIdAndOrderTimeBetweenOrderByOrderTimeDesc(Long id, Long statusId, Date beginDate,
 			Date finishDate);
 
-	List<TdOrder> findByUsernameAndFinishTimeBetweenOrderByOrderTimeAsc(String username, Date beginDate, Date finishDate);
+	List<TdOrder> findByUsernameAndFinishTimeBetweenOrderByOrderTimeAsc(String username, Date beginDate,
+			Date finishDate);
+
+	// 根据订单的支付方式查找订单
+	List<TdOrder> findByThePayTypeAndStatusIdAndDiyIdOrderByOrderTimeDesc(Long thePayType, Long statusId, Long diyId);
+
+	// 根据订单的支付方式查找一定时间段的订单
+	List<TdOrder> findByThePayTypeAndStatusIdAndDiyIdAndOrderTimeBetweenOrderByOrderTimeDesc(Long thePayType,
+			Long statusId, Long diyId, Date beginTime, Date finishTime);
+
+	// 查找违约订单
+	List<TdOrder> findByStatusIdAndDiyIdOrderByOrderTimeDesc(Long statusId, Long diyId);
+
+	// 查找一定时间内的违约订单
+	List<TdOrder> findByStatusIdAndDiyIdAndOrderTimeBetweenOrderByOrderTimeDesc(Long statusId, Long diyId,
+			Date beginTime, Date finishTime);
+	
+	//根据车牌号码和停车场ID模糊查询订单
+	List<TdOrder> findByDiyIdAndCarCodeContainingOrderByOrderTimeDesc(Long diyId,String keywords);
 }

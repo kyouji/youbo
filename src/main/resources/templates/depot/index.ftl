@@ -20,7 +20,7 @@
     <!--头部开始-->
     <div class="header">
         <p>优泊天下</p>
-        <a href="#" class="a1"></a>
+        <a href="/depot/search" class="a2"></a>
         <a href="/depot/login" class="a3"></a>
     </div>
     <!--头部结束-->
@@ -68,9 +68,9 @@
     <div class="topNav">
         <a class="add_sao" href="#" style="">扫一扫收费</a>
         <a href="/depot/myaccount" class="four_1 a1"><img src="/depot/images/index01.png"><p>账 户</p></a>
-        <a href="" class="four_1 a2"><img src="/depot/images/reserve.png"><p>预约审核</p></a>
+        <a href="/depot/myaccount/reserve" class="four_1 a2"><img src="/depot/images/reserve.png"><p>预约审核</p></a>
         <a href="/depot/info" class="four_1 a3"><img src="/depot/images/index03.png"><p>车库信息</p></a>
-        <a href="/depot/charge" class="four_1 a4"><img src="/depot/images/index04.png"><p>收费记录</p></a>
+        <a href="/depot/myaccount/chargeManage" class="four_1 a4"><img src="/depot/images/index04.png"><p>收费记录</p></a>
         <div class="clear"></div>
     </div>
     <!--导航结束--
