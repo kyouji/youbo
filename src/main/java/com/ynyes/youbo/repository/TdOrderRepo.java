@@ -228,4 +228,10 @@ public interface TdOrderRepo extends PagingAndSortingRepository<TdOrder, Long>, 
 	
 	//根据车牌号码和停车场ID模糊查询订单
 	List<TdOrder> findByDiyIdAndCarCodeContainingOrderByOrderTimeDesc(Long diyId,String keywords);
+	
+	//查找指定停车场正在停车的订单
+	List<TdOrder> findBydiyIdAndStatusId(Long diyId,Long statusId);
+	
+	//查找到违约的订单
+	List<TdOrder> findBydiyIdAndStatusIdAndFirstPayGreaterThanAndTotalPrice(Long diyId,Long statusId,Double firstPrice,Double totalPrice);
 }

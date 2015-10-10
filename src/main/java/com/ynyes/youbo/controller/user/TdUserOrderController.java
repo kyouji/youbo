@@ -433,6 +433,7 @@ public class TdUserOrderController {
 			order.setStatusId(9L);
 			order.setFinishTime(new Date());
 			order.setCancelReason("用户自主取消");
+			tdOrderService.save(order);
 			res.put("status", 0);
 			res.put("message", "订单已取消");
 		} else {

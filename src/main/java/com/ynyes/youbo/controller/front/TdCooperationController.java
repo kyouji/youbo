@@ -1,11 +1,10 @@
 package com.ynyes.youbo.controller.front;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,17 +12,16 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.ynyes.youbo.entity.TdDiySite;
+import com.ynyes.youbo.entity.TdDiyUser;
 import com.ynyes.youbo.entity.TdIOData;
 import com.ynyes.youbo.entity.TdOrder;
 import com.ynyes.youbo.service.TdDiySiteService;
+import com.ynyes.youbo.service.TdDiyUserService;
 import com.ynyes.youbo.service.TdIODataService;
 import com.ynyes.youbo.service.TdOrderService;
-import com.ynyes.youbo.util.SiteMagConstant;
 
 /**
  * @author dengxiao 提供给第三方的接口
@@ -31,8 +29,6 @@ import com.ynyes.youbo.util.SiteMagConstant;
 @Controller
 @RequestMapping(value = "/cooper")
 public class TdCooperationController {
-
-	private final String ImageRoot = SiteMagConstant.imagePath;
 
 	@Autowired
 	private TdDiySiteService tdDiySiteService;
@@ -42,6 +38,9 @@ public class TdCooperationController {
 
 	@Autowired
 	private TdIODataService tdIoDataService;
+
+	@Autowired
+	private TdDiyUserService tdDiyUserService;
 
 	/**
 	 * @author dengxiao 第三方登陆接口
@@ -62,23 +61,23 @@ public class TdCooperationController {
 			res.put("message", "password的值为null");
 			return res;
 		}
-		TdDiySite diySite = tdDiySiteService.findByUsernameAndPasswordAndIsEnableTrue(username, password);
+		TdDiyUser diyUser = tdDiyUserService.findByUsernameAndPasswordAndIsEnableTrue(username, password);
 		System.err.println("获取到停车场的信息，进行判断");
 
-		if (null != diySite) {
+		if (null != diyUser) {
 			System.err.println("登陆成功");
 			// 设置status的值为0，代表登陆成功
 			res.put("status", 0);
 			res.put("message", "登陆成功");
 			System.err.println("将登陆的停车场信息存储到session中");
-			request.getSession().setAttribute("cooperDiy", diySite);
+			request.getSession().setAttribute("cooperDiy", diyUser);
 		} else {
 			// 判断何种原因导致登录失败
 			System.err.println("未能查找到指定username和password的停车场，开始查找原因");
-			TdDiySite tdDiySite = tdDiySiteService.findbyUsername(username);
-			if (null == tdDiySite) {
+			TdDiyUser user = tdDiyUserService.findByUsername(username);
+			if (null == user) {
 				res.put("message", "该用户未注册");
-			} else if (!tdDiySite.getIsEnable()) {
+			} else if (!user.getIsEnable()) {
 				res.put("message", "该用户已被禁用");
 			} else {
 				res.put("message", "密码错误");
@@ -89,25 +88,103 @@ public class TdCooperationController {
 	}
 
 	/**
-	 * @author dengxiao 获取车辆出入库信息的接口
+	 * @author dengxiao
+	 * 
+	 * 计算某停车场所有正在停车的订单价格的接口
+	 */
+	@RequestMapping(value = "/getPrice")
+	@ResponseBody
+	public Map<String, Object> getPrice(HttpServletRequest req) {
+		System.err.println("开始创建map");
+		Map<String, Object> res = new HashMap<>();
+		res.put("status", -1);
+		System.err.println("开始获取session中的登陆信息");
+		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("cooperDiy");
+		System.err.println("开始判断session中的登陆用户是否存在");
+		if (null == diyUser) {
+			System.err.println("用户没有登陆");
+			res.put("message", "停车场用户未登陆");
+			System.err.println("返回结果");
+			return res;
+		}
+		System.err.println("查找到所有需要计算价格的订单");
+		List<TdOrder> parking_list = tdOrderService.findByDiyIdAndStatusId(diyUser.getDiyId());
+		System.err.println("正在停车的订单查找完毕");
+		List<TdOrder> wy_list = tdOrderService
+				.findByDiyIdAndStatusIdAndFirstPayGreaterThanAndTotalPrice(diyUser.getId());
+		System.err.println("违约订单查找完毕");
+		List<String> order_list = new ArrayList<>();
+		Date now = new Date();
+		for (TdOrder parking : parking_list) {
+			if (null != parking.getReserveTime()) {
+				order_list.add(parking.getId() + "," + parking.getReserveTime().getTime() + "," + now.getTime());
+			} else {
+				order_list.add(parking.getId() + "," + parking.getInputTime().getTime() + "," + now.getTime());
+			}
+		}
+		for (TdOrder wy : wy_list) {
+			order_list.add(wy.getId() + "," + wy.getReserveTime().getTime() + "," + now.getTime());
+		}
+		res.put("status", 0);
+		res.put("orders", order_list);
+		return res;
+	}
+
+	/**
+	 * @author dengxiao
+	 * 
+	 * 获取价格计算结果的接口
+	 */
+	@RequestMapping(value="/getResult")
+	@ResponseBody
+	public Map<String, Object> getResult(HttpServletRequest req,List<String> prices){
+		Map<String, Object> res = new HashMap<>();
+		res.put("status", -1);
+		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("diyUser");
+		if(null == diyUser){
+			res.put("message", "停车场用户未登陆");
+			return res;
+		}
+		if(null == prices){
+			res.put("message", "参数prices接收失败！");
+			return res;
+		}
+		
+		for (String string : prices) {
+			String[] infos = string.split(",");
+			TdOrder order = tdOrderService.findOne(Long.parseLong(infos[0]));
+			order.setTotalPrice(new Double(infos[1]));
+			tdOrderService.save(order);
+		}
+		
+		res.put("status", 0);
+		return res;
+	}
+
+	/**
+	 * @author dengxiao 
+	 * 
+	 * 获取车辆出入库信息的接口
 	 */
 	@RequestMapping(value = "/iodata")
 	@ResponseBody
 	public Map<String, Object> ioData(String carNo, String busNo, String ioState, String ioDate, String picture,
-			HttpServletRequest request) {
+			Boolean isrepeat, HttpServletRequest request) {
 		Map<String, Object> res = new HashMap<>();
 		// status代表处理状态，-1代表失败
 		res.put("status", -1);
 		System.err.println("开始从session中读取停车场信息");
-		TdDiySite diySite = (TdDiySite) request.getSession().getAttribute("cooperDiy");
+		TdDiyUser diyUser = (TdDiyUser) request.getSession().getAttribute("cooperDiy");
 
 		System.err.println("读取停车场信息成功，开始验证");
-		if (null == diySite) {
+		if (null == diyUser) {
 			System.err.println("没有获取到已登陆的停车场用户的信息");
 			res.put("message", "停车场用户未登陆");
 			return res;
 		}
 		System.err.println("session中的停车场信息验证通过");
+
+		TdDiySite diySite = tdDiySiteService.findOne(diyUser.getDiyId());
 
 		// 保存此出入库信息
 		System.err.println("开始保存出入库信息");
@@ -152,7 +229,8 @@ public class TdCooperationController {
 				System.err.println("开始设置属性");
 				theOrder.setDiyId(diySite.getId());
 				theOrder.setDiyTitle(diySite.getTitle());
-				theOrder.setOrderTime(new Date());
+				theOrder.setOrderTime(theDate);
+				theOrder.setReserveTime(theDate);
 				theOrder.setCarCode(busNo);
 				if (null == theOrder.getCarCodePhoto()) {
 					theOrder.setCarCodePhoto("");
@@ -177,35 +255,35 @@ public class TdCooperationController {
 		}
 
 		if ("正常外出".equals(ioData.getIoState())) {
-			System.err.println("接收到车辆出库数据，开始设置属性");
-			order = tdOrderService.findbyStatusFour(busNo, diySite.getId());
-			if (null == order) {
-				res.put("message", "未能找到指定的订单");
-				return res;
-			}
-			order.setStatusId(5L);
-
-			order.setOutputTime(theDate);
-			
-			order.setCarCodePhoto(order.getCarCodePhoto() + lujing + ",");
-			// 在此计算停车费用，并将其存储到order的totalPrice字段上
-
-			// 将计算出来的总价格返回
-			res.put("totalPrice", order.getTotalPrice());
-			// 将支付的定金返回
-			res.put("firstPay", order.getFirstPay());
-			// 将订单的id存储到session中
-			request.getSession().setAttribute("orderId", order.getId());
-			// 还要将orderId返回给客户端
-			res.put("orderId", order.getId());
-			System.err.println("属性设置完毕");
-			// 设置status的值为0，代表处理成功
-			res.put("status", 0);
-			// 设置消息提示
-			res.put("message", "出库信息录入成功");
-			System.err.println("设置停车场剩余数量+1");
-			diySite.setParkingNowNumber(diySite.getParkingNowNumber() + 1);
-			tdDiySiteService.save(diySite);
+			// System.err.println("接收到车辆出库数据，开始设置属性");
+			// order = tdOrderService.findbyStatusFour(busNo, diySite.getId());
+			// if (null == order) {
+			// res.put("message", "未能找到指定的订单");
+			// return res;
+			// }
+			// order.setStatusId(5L);
+			//
+			// order.setOutputTime(theDate);
+			//
+			// order.setCarCodePhoto(order.getCarCodePhoto() + lujing + ",");
+			// // 在此计算停车费用，并将其存储到order的totalPrice字段上
+			//
+			// // 将计算出来的总价格返回
+			// res.put("totalPrice", order.getTotalPrice());
+			// // 将支付的定金返回
+			// res.put("firstPay", order.getFirstPay());
+			// // 将订单的id存储到session中
+			// request.getSession().setAttribute("orderId", order.getId());
+			// // 还要将orderId返回给客户端
+			// res.put("orderId", order.getId());
+			// System.err.println("属性设置完毕");
+			// // 设置status的值为0，代表处理成功
+			// res.put("status", 0);
+			// // 设置消息提示
+			// res.put("message", "出库信息录入成功");
+			// System.err.println("设置停车场剩余数量+1");
+			// diySite.setParkingNowNumber(diySite.getParkingNowNumber() + 1);
+			// tdDiySiteService.save(diySite);
 		}
 		System.err.println("存储订单信息（属性设置完毕）");
 		tdOrderService.save(order);
@@ -254,55 +332,6 @@ public class TdCooperationController {
 			res.put("message", "已支付停车费用");
 		} else {
 			res.put("message", "未支付停车费用");
-		}
-		return res;
-	}
-
-	/**
-	 * @author dengxiao 上传图片的接口
-	 */
-	@RequestMapping(value = "/upImg")
-	@ResponseBody
-	public Map<String, Object> uploadImg(@RequestParam MultipartFile imgFile) {
-		Map<String, Object> res = new HashMap<>();
-		// status代表处理状态，-1代表失败
-		res.put("status", -1);
-
-		System.err.println("开始验证图片是否存在");
-		if (null == imgFile || imgFile.isEmpty() || null == imgFile.getName()) {
-			System.err.println("图片不存在");
-			res.put("message", "图片不存在");
-			return res;
-		}
-		System.err.println("图片存在通过验证，开始获取图片名称");
-		String name = imgFile.getOriginalFilename();
-		System.err.println("开始获取图片后缀名");
-		String ext = name.substring(name.lastIndexOf("."));
-
-		try {
-			System.err.println("将图片转换未字节数组");
-			byte[] bytes = imgFile.getBytes();
-
-			System.err.println("获取当前时间信息已生成新的名字");
-			Date dt = new Date(System.currentTimeMillis());
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
-			System.err.println("定义存储到服务器上的图片的名字");
-			String fileName = sdf.format(dt) + ext;
-			System.err.println("设置存储路径");
-			String uri = ImageRoot + "/" + fileName;
-
-			System.err.println("在指定的路径上生成文件");
-			File file = new File(uri);
-
-			BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(file));
-			System.err.println("开始写入文件流");
-			stream.write(bytes);
-			stream.close();
-			System.err.println("文件流关闭");
-			res.put("status", 0);
-		} catch (Exception e) {
-			res.put("message", "产生了IO异常");
-			e.printStackTrace();
 		}
 		return res;
 	}

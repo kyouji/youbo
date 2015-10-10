@@ -711,4 +711,20 @@ public class TdOrderService {
 		}
 		return repository.findByDiyIdAndCarCodeContainingOrderByOrderTimeDesc(diyId, keywords);
 	}
+	
+	//查找指定停车场正在停车的订单
+	public List<TdOrder> findByDiyIdAndStatusId(Long diyId){
+		if(null == diyId){
+			return null;
+		}
+		return repository.findBydiyIdAndStatusId(diyId, 4L);
+	}
+	
+	//查找指定停车场的违约订单
+	public List<TdOrder> findByDiyIdAndStatusIdAndFirstPayGreaterThanAndTotalPrice(Long diyId){
+		if(null == diyId){
+			return null;
+		}
+		return repository.findBydiyIdAndStatusIdAndFirstPayGreaterThanAndTotalPrice(diyId, 9L, 0.00, 0.00);
+	}
 }
