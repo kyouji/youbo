@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -31,6 +32,7 @@ import com.ynyes.youbo.entity.TdDiySite;
 import com.ynyes.youbo.entity.TdDiyUser;
 import com.ynyes.youbo.entity.TdOrder;
 import com.ynyes.youbo.entity.TdPayType;
+import com.ynyes.youbo.entity.TdSetting;
 import com.ynyes.youbo.entity.TdUser;
 import com.ynyes.youbo.service.TdBankcardService;
 import com.ynyes.youbo.service.TdCommonService;
@@ -40,6 +42,7 @@ import com.ynyes.youbo.service.TdDiySiteService;
 import com.ynyes.youbo.service.TdDiyUserService;
 import com.ynyes.youbo.service.TdOrderService;
 import com.ynyes.youbo.service.TdPayTypeService;
+import com.ynyes.youbo.service.TdSettingService;
 import com.ynyes.youbo.service.TdUserService;
 import com.ynyes.youbo.util.SiteMagConstant;
 
@@ -73,7 +76,10 @@ public class TdDepotMyAccountController {
 
 	@Autowired
 	private TdDiyUserService tdDiyUserService;
-	
+
+	@Autowired
+	private TdSettingService tdSettingService;
+
 	/**
 	 * 我的账户首页
 	 * 
@@ -110,7 +116,7 @@ public class TdDepotMyAccountController {
 		Double income = new Double(0);
 		for (TdOrder order : orders) {
 			if (null != order.getTotalPrice() && order.getTotalPrice() > 0 && order.getStatusId() == 6
-					&& (order.getThePayType() == 0L||null == order.getThePayType())) {
+					&& (order.getThePayType() == 0L || null == order.getThePayType())) {
 				income += order.getTotalPrice();
 			} else {
 				if (null != order.getFirstPay() && order.getFirstPay() > 0 && order.getStatusId() == 9L) {
@@ -118,7 +124,7 @@ public class TdDepotMyAccountController {
 				}
 			}
 		}
-		map.addAttribute("site",site);
+		map.addAttribute("site", site);
 		map.addAttribute("diyUser", diyUser);
 		map.addAttribute("income", income);
 		return "/depot/my_account";
@@ -355,7 +361,6 @@ public class TdDepotMyAccountController {
 		if (null == diyUser) {
 			return "/depot/login";
 		}
-		TdDiySite site = tdDiySiteService.findOne(diyUser.getDiyId());
 		TdOrder order = tdOrderService.findOne(orderId);
 		if (null != order && null != order.getUsername()) {
 			TdUser user = tdUserService.findByUsername(order.getUsername());
@@ -379,89 +384,94 @@ public class TdDepotMyAccountController {
 
 		TdOrder order = tdOrderService.findOne(id);
 
-		TdDiyLog log = new TdDiyLog();
+		if (9L != order.getStatusId()) {
+			TdDiyLog log = new TdDiyLog();
 
-		log.setCreateTime(new Date());
-		log.setDiyId(site.getId());
-		log.setUsername(diyUser.getUsername());
+			log.setCreateTime(new Date());
+			log.setDiyId(site.getId());
+			log.setUsername(diyUser.getUsername());
+			if (0 == type) {
+				log.setActionType("同意预约");
+				log.setRemark(diyUser.getUsername() + "同意了" + order.getCarCode() + "的预约， 预约前车位剩余"
+						+ site.getParkingNowNumber() + "个");
+				order.setStatusId(3L);
+			}
 
-		if (0 == type) {
-			log.setActionType("同意预约");
-			log.setRemark(diyUser.getUsername() + "同意了" + order.getCarCode() + "的预约， 预约前车位剩余" + site.getParkingNowNumber()
-					+ "个");
-			order.setStatusId(3L);
+			if (1 == type) {
+				log.setActionType("拒绝预约");
+				log.setRemark(diyUser.getUsername() + "拒绝了" + order.getCarCode() + "的预约，预约前车位剩余"
+						+ site.getParkingNowNumber() + "个");
+				order.setStatusId(9L);
+				order.setCancelReason("对不起，您的预约已被拒绝");
+				TdUser user = tdUserService.findByUsername(order.getUsername());
+				TdSetting setting = tdSettingService.findOne(1L);
+				user.setBalance(user.getBalance() + setting.getFirstPay());
+				tdUserService.save(user);
+			}
+			tdDiyLogService.save(log);
+			tdOrderService.save(order);
 		}
-
-		if (1 == type) {
-			log.setActionType("拒绝预约");
-			log.setRemark(diyUser.getUsername() + "拒绝了" + order.getCarCode() + "的预约，预约前车位剩余" + site.getParkingNowNumber()
-					+ "个");
-			order.setStatusId(9L);
-			order.setCancelReason("对不起，您的预约已被拒绝");
-		}
-		tdOrderService.save(order);
-		tdDiyLogService.save(log);
 		return "redirect:/depot/myaccount/reserve";
-
 	}
-	
-	@RequestMapping(value="/chargeManage")
-	public String chargeManage(HttpServletRequest req,ModelMap map){
+
+	@RequestMapping(value = "/chargeManage")
+	public String chargeManage(HttpServletRequest req, ModelMap map) {
 		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("diyUser");
-		if(null == diyUser){
+		if (null == diyUser) {
 			return "/depot/login";
 		}
-		//查找不同支付方式的订单
+		// 查找不同支付方式的订单
 		List<TdOrder> xs_list = tdOrderService.findXszf(diyUser.getDiyId());
 		List<TdOrder> xj_list = tdOrderService.findXjzf(diyUser.getDiyId());
 		List<TdOrder> md_list = tdOrderService.findMd(diyUser.getDiyId());
 		List<TdOrder> yk_list = tdOrderService.findYk(diyUser.getDiyId());
-		
-		//查找违约订单
+
+		// 查找违约订单
 		List<TdOrder> wy = tdOrderService.findWy(diyUser.getDiyId());
 		List<TdOrder> wy_list = new ArrayList<>();
 		for (TdOrder tdOrder : wy) {
-			if(null != tdOrder.getTotalPrice()&&tdOrder.getTotalPrice() > 0){
+			if (null != tdOrder.getTotalPrice() && tdOrder.getTotalPrice() > 0) {
 				wy_list.add(tdOrder);
 			}
 		}
-		
+
 		map.addAttribute("xs_list", xs_list);
 		map.addAttribute("xj_list", xj_list);
 		map.addAttribute("md_list", md_list);
 		map.addAttribute("yk_list", yk_list);
-		
+
 		return "/depot/charge_manage";
 	}
-	
+
 	@RequestMapping("/subAccount")
-	public String subAccount(HttpServletRequest req,ModelMap map){
+	public String subAccount(HttpServletRequest req, ModelMap map) {
 		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("diyUser");
-		if(null == diyUser){
+		if (null == diyUser) {
 			return "/depot/login";
 		}
 		List<TdDiyUser> subAccount_list = tdDiyUserService.findByDiyIdAndRoleId(diyUser.getDiyId());
 		map.addAttribute("subAccount_list", subAccount_list);
 		return "/depot/sub_account";
 	}
-	
+
 	@RequestMapping("/editSubAccount")
-	public String addSubAccount(HttpServletRequest req,Long id,ModelMap map){
+	public String addSubAccount(HttpServletRequest req, Long id, ModelMap map) {
 		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("diyUser");
-		if(null == diyUser){
+		if (null == diyUser) {
 			return "/depot/login";
 		}
-		if(null != id){
+		if (null != id) {
 			TdDiyUser theUser = tdDiyUserService.findOne(id);
 			map.addAttribute("theUser", theUser);
 		}
 		return "/depot/subaccount_add";
 	}
-	
-	@RequestMapping(value="/editSubAccount",method = RequestMethod.POST)
-	public String editSubAccount(HttpServletRequest req,String username,String password,String realname,Long id,Boolean isEnable){
+
+	@RequestMapping(value = "/editSubAccount", method = RequestMethod.POST)
+	public String editSubAccount(HttpServletRequest req, String username, String password, String realname, Long id,
+			Boolean isEnable) {
 		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("diyUser");
-		if(null == diyUser){
+		if (null == diyUser) {
 			return "/depot/login";
 		}
 		TdDiyUser theUser = new TdDiyUser();
@@ -475,33 +485,112 @@ public class TdDepotMyAccountController {
 		tdDiyUserService.save(theUser);
 		return "redirect:/depot/myaccount/subAccount";
 	}
-	
+
 	@RequestMapping(value = "/checkSubAccount")
 	@ResponseBody
-	public Map<String, Object> checkSubAccount(String username){
+	public Map<String, Object> checkSubAccount(String username) {
 		Map<String, Object> res = new HashMap<>();
 		res.put("status", -1);
-		if(null == username){
-			res.put("message", "获取用户名失败！");	
+		if (null == username) {
+			res.put("message", "获取用户名失败！");
 			return res;
 		}
 		TdDiyUser diyUser = tdDiyUserService.findByUsername(username);
-		if(null != diyUser){
+		if (null != diyUser) {
 			res.put("message", "该用户名已注册！");
 			return res;
 		}
 		res.put("status", 0);
 		return res;
 	}
-	
+
 	@RequestMapping("/delSubAccount")
-	public String deleteSubAccount(HttpServletRequest req,Long id){
+	public String deleteSubAccount(HttpServletRequest req, Long id) {
 		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("diyUser");
-		if(null == diyUser){
+		if (null == diyUser) {
 			return "/depot/login";
 		}
 		tdDiyUserService.delete(id);
 		return "redirect:/depot/myaccount/subAccount";
 	}
-	
+
+	@RequestMapping("/sureInput")
+	public String sureInput(HttpServletRequest req, Long id, String keywords, ModelMap map) {
+		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("diyUser");
+		if (null == diyUser) {
+			return "/depot/login";
+		}
+
+		TdOrder order = tdOrderService.findOne(id);
+		order.setStatusId(4L);
+		order.setInputTime(new Date());
+		TdDiyLog log = new TdDiyLog();
+		log.setActionType("确认入库");
+		log.setCreateTime(new Date());
+		log.setDiyId(diyUser.getDiyId());
+		log.setUsername(diyUser.getRealName());
+		log.setRemark("确认" + order.getCarCode() + "车辆进入车库");
+		tdDiyLogService.save(log);
+		tdOrderService.save(order);
+		List<TdOrder> search_list = tdOrderService
+				.findByDiyIdAndCarCodeContainingOrderByOrderTimeDesc(diyUser.getDiyId(), keywords);
+		map.addAttribute("search_list", search_list);
+		map.addAttribute("keywords", keywords);
+		return "/depot/search";
+	}
+
+	@RequestMapping(value = "/addNewCar", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> addNewCar(String carCode, HttpServletRequest req) {
+		Map<String, Object> res = new HashMap<>();
+		res.put("status", -1);
+		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("diyUser");
+		TdDiySite site = tdDiySiteService.findOne(diyUser.getDiyId());
+		List<TdOrder> orders = tdOrderService.findByReservedOrder(diyUser.getDiyId(), carCode);
+		if (null == orders||0 == orders.size()) {
+			TdOrder order = new TdOrder();
+			// 以下代码用于生成订单编号
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			Date date = new Date();
+			String sDate = sdf.format(date);
+			Random random = new Random();
+			Integer suiji = random.nextInt(900) + 100;
+			String orderNum = sDate + suiji;
+			// 生成订单编号结束
+			order.setOrderNumber(orderNum);
+			order.setOrderTime(new Date());
+			order.setInputTime(new Date());
+			order.setCarCode(carCode);
+			order.setUsername(carCode);
+			order.setDiyId(diyUser.getDiyId());
+			order.setDiyTitle(site.getTitle());
+			order.setStatusId(4L);
+			tdOrderService.save(order);
+			TdDiyLog log = new TdDiyLog();
+			log.setActionType("未预约车辆入库");
+			log.setCreateTime(new Date());
+			log.setDiyId(diyUser.getDiyId());
+			log.setUsername(diyUser.getRealName());
+			log.setRemark("确认" + carCode + "车辆进入车库");
+			tdDiyLogService.save(log);
+		} else {
+			if (orders.size() != 1) {
+				res.put("info", "该车牌号码存在有错误信息的订单，操作失败！");
+				return res;
+			} else {
+				orders.get(0).setInputTime(new Date());
+				TdDiyLog log = new TdDiyLog();
+				log.setActionType("预约车辆入库");
+				log.setCreateTime(new Date());
+				log.setDiyId(diyUser.getDiyId());
+				log.setUsername(diyUser.getRealName());
+				log.setRemark("确认" + carCode + "车辆进入车库");
+				tdDiyLogService.save(log);
+				tdOrderService.save(orders.get(0));
+			}
+		}
+		res.put("status", 0);
+		res.put("info", "操作成功！");
+		return res;
+	}
 }

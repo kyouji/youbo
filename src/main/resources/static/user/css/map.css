@@ -1,0 +1,24 @@
+.theMap{
+	height: 60px;
+	line-height: 60px;
+	background: #0e5baa;
+	color:#fff;
+	font-size: 1em;
+	position:absolute;
+	top:0px;
+	left:0px;
+	width:100%;
+	z-index:1000;
+}
+.theMap p{color:#fff;font-size:1.5em;text-align: center;position: absolute;height: 32px;display: block;left:38%;top:-10px;line-height:32px;}
+.theMap .a4{background:url(../images/aboutus_left.png) no-repeat;display: block;position: absolute;left:3%;top:15px;width:20%; height: 32px;}
+.theMap .a5{display: block;position: absolute;right:3%;top:0px;height: 60px;line-height:60px;color:#fff;font-size:1.4em;}
+#mapContainer {
+    position: absolute;
+    top: 0px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+}

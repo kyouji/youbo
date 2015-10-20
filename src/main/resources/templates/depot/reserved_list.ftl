@@ -38,7 +38,7 @@
     <!--头部开始-->
     <div class="header">
     <p>预约订单</p>
-        <a href="/depot/myaccount" class="a4"></a>    
+        <a href="javascript:history.go(-1);" class="a4"></a>    
     </div>
     <!--头部结束-->
     

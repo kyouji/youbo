@@ -435,6 +435,20 @@ public class TdOrderService {
 		}
 
 	};
+	
+	// 根据车牌号码停车场id订单状态（状态为6，交易完成）查找一系列订单信息，按照时间倒序排序，选择第一个（第一个即是指定用户在指定停车场停车缴费成功的最后一个订单）
+		public TdOrder findTopByCarCodeAndDiyIdAndOrderFinishOrderByOrderTimeDescOr(String carCode, Long diyId) {
+			if (null == carCode || null == diyId) {
+				return null;
+			}
+			List<TdOrder> list = repository.findByCarCodeAndDiyIdAndStatusIdOrderByOrderTimeDesc(carCode, diyId, 6L);
+			if (null != list && list.size() > 0) {
+				return list.get(0);
+			} else {
+				return null;
+			}
+
+		};
 
 	// 根据车牌号码和停车场id查找状态为4的订单按照时间倒序排序选择第一个
 	public TdOrder findbyStatusFour(String carCode, Long diyId) {
@@ -725,6 +739,30 @@ public class TdOrderService {
 		if(null == diyId){
 			return null;
 		}
-		return repository.findBydiyIdAndStatusIdAndFirstPayGreaterThanAndTotalPrice(diyId, 9L, 0.00, 0.00);
+		return repository.findByDiyIdAndStatusIdAndFirstPayGreaterThanAndTotalPrice(diyId, 9L, 0.00, 0.00);
+	}
+	
+	//查找指定停车场内已缴费但未出库的订单
+	public List<TdOrder> findByDiyIdAndStatusIdAndOutputTimeIsNull(Long diyId){
+		if(null == diyId){
+			return null;
+		}
+		return repository.findByDiyIdAndStatusIdAndOutputTimeIsNull(diyId, 6L);
+	}
+	
+	//根据停车场ID和车牌号码和订单状态查找指定车辆的订单
+	public List<TdOrder> findByDiyIdAndStatusIdAndCarCode(Long diyId,String carCode){
+		if(null == diyId||null == carCode){
+			return null;
+		}
+		return repository.findByDiyIdAndStatusIdAndCarCode(diyId, 4L, carCode);
+	}
+	
+	//查找指定车库，指定车辆，有没有存在预约成功的订单
+	public List<TdOrder> findByReservedOrder(Long diyId,String carCode){
+		if(null == diyId||null == carCode){
+			return null;
+		}
+		return repository.findByDiyIdAndStatusIdAndCarCode(diyId, 3L, carCode);
 	}
 }

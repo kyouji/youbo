@@ -33,6 +33,9 @@ public class TdDepotSearchController {
 	@RequestMapping(method = RequestMethod.POST)
 	public String getOrders(HttpServletRequest req,String keywords,ModelMap map){
 		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("diyUser");
+		if(null == diyUser){
+			return "/depot/login";
+		}
 		List<TdOrder> search_list = tdOrderService.findByDiyIdAndCarCodeContainingOrderByOrderTimeDesc(diyUser.getDiyId(), keywords);
 		map.addAttribute("search_list", search_list);
 		map.addAttribute("keywords", keywords);

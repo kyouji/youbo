@@ -225,13 +225,21 @@ body{background:#efefef;}
 .watch_mode{width:100%;margin-top:3%;}
 .watch_mode ul{overflow:hidden;width:100%;background:#fff;border-bottom:solid 1px #dddddd;}
 .watch_mode ul li{float:left;background:#fff;}
-.watch_mode ul li p{text-align:center;line-height:40px;height: 40px;}
+.watch_mode ul li p{overflow:hidden;text-align:center;line-height:40px;height: 40px;}
 .watch_mode ul li input{border:solid 1px #dddddd;text-align:center;}
-.watch_mode ul li .night{font-size: 1em;font-weight:700;}
-.watch_mode ul li .times{font-size: 0.8em;}
-.watch_mode ul .li_1{width:27%;border-right:solid 1px #dddddd;}
-.watch_mode ul .li_2{width:72%;}
-.watch_mode ul .li_2 p b input{width:25%;}
+.watch_mode ul li .night{padding-top:20px;font-size: 1em;font-weight:700;}
+.watch_mode ul li .times{padding-top:20px;font-size: 0.8em;}
+.watch_mode ul .li_1{width:23%;border-right:solid 1px #dddddd;box-sizing:border-box;}
+.watch_mode ul .li_2{width:77%;}
+.watch_mode ul .li_2 p{padding-left:6px;text-align:left;}
+.watch_mode ul .li_2 p b.b1{color:#0e5baa;}
+.watch_mode ul .li_2 p b.b1_1{visibility:hidden;}
+.watch_mode ul .li_2 p b input{width:14%;}
+.watch_mode ul .li_2 p b input[type="radio"]{width:5%;}
+.watch_mode ul .li_2 p.p2{border-top:1px solid #dddddd;}
+
+.watch_mode ul.ul3{margin:3% auto;}
+.watch_mode ul.ul3 li{width:100%;}
 /*选择按钮*/
 .watch_mode ol li{text-align:center;}
 .watch_mode ol li input{display:block;width:100%;background:#ffbd2e;border:none;height:40px;font-size:1em;line-height:40px;color:#fff;}

@@ -12,6 +12,27 @@
 <link href="/depot/css/base.css" rel="stylesheet" type="text/css" />
 <link href="/depot/css/style.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="/depot/js/jquery-1.9.1.min.js"></script>
+<script>
+    function sureInput(id){
+        if(null == id){
+            alert("订单信息获取失败！");
+            return; 
+        }
+        var keywords = document.getElementById("keywords").value;
+        window.location.href="/depot/myaccount/sureInput?id="+id+"&keywords="+keywords;
+    }
+    function addNewCar(){
+        var carCode = prompt("请输入新入库车辆的车牌号：");
+        var reg = /^[\u4E00-\u9FA5][\da-zA-Z]{6}$/;
+        if(!reg.test(carCode)){
+            alert("输入了非法的车牌号码，操作失败！");
+            return;
+        }
+        $.post("/depot/myaccount/addNewCar",{"carCode":carCode},function(res){
+            alert(res.info);
+        });
+    }
+</script>
 </head>
 <body>
 
@@ -19,6 +40,7 @@
     <div class="header">
         <p>订单查询</p>
         <a href="javascript:history.go(-1);" class="a4"></a>
+        <a href="javascript:addNewCar();" class="lcy_a1"></a>
     </div>
     <!--头部结束-->
 
@@ -27,7 +49,7 @@
         <div class="pay_record">
             <div style="width:90%;float:left;height:45px;margin:15px 5% 2px 5%;background:#ffffff;border:1px #dddddd solid;">
                 <form action="/depot/search" method="post">
-                    <input type="text" style="height:45px;width:75%;float:left;font-size:0.8em;border:0;" name="keywords" <#if keywords??>value="${keywords!''}"</#if>>
+                    <input type="text" id="keywords" style="height:45px;width:75%;float:left;font-size:0.8em;border:0;" name="keywords" <#if keywords??>value="${keywords!''}"</#if>>
                     <input type="submit" value="查 找"style="width:25%;float:right;height:45px;background:#f65741;border:0;border-radius:0;color:#ffffff;font-size:1em;">
                 </form>
             </div>
@@ -70,10 +92,15 @@
                         <img src="/depot/images/detail_month_02.png" />
                         <#if item.finishTime??>
                             <span>${item.finishTime?string("yyyy-MM-dd HH:mm")}</span>
+                        <#else>
+                            <span>未完成</span>
                         </#if>
                         <span style="float:right;"><a href="/depot/myaccount/detail?orderId=${item.id?c}" style="color:#999;">详情</a></span>
                     </dd>
                 </dl>
+                <div class="bespeak_list_btn">
+                    <input class="sel_2" type="button" style="background-color:<#if item.statusId==3>#00aaef<#else>#999999</#if>;width:100%;float:left;"<#if item.statusId==3>onclick="sureInput(${item.id?c})"<#else> disabled=""</#if> value="确认入库"/ >
+                </div>
             </#list>
         </#if>
     </div>

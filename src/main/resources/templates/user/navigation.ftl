@@ -1,90 +1,54 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!doctype html>
+
+<html>
+
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>网站名称</title>
-<meta name="keywords" content="">
-<meta name="description" content="">
-<meta name="copyright" content="" />
-<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
 
-
-<link href="/user/css/common.css" rel="stylesheet" type="text/css" />
-<link href="/user/css/style.css" rel="stylesheet" type="text/css" />
-
-<script src="/user/js/jquery-1.9.1.min.js"></script>
-<script src="/user/js/common.js"></script>
-<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=9xkTHRt1N0iCXRsRWdGpuGGW"></script>
-<script>
-function getPosition(){
-    var geolocation = new BMap.Geolocation();  
-    geolocation.getCurrentPosition(
-        function(r){
-            if(this.getStatus() == BMAP_STATUS_SUCCESS){
-                userPiont = r.point;
-                map.panTo(r.point);
-            }else{
-                alert('failed'+this.getStatus());
-            }        
-        },{enableHighAccuracy: true}
-    )
-}
-</script>
+      <title>地图显示</title>
+      <link href="/user/css/map.css" rel="stylesheet" type="text/css" />
+      <link href="/user/css/style.css" rel="stylesheet" type="text/css" />
+      <script src="/user/js/jquery-1.9.1.min.js"></script>
+      <script src="http://webapi.amap.com/maps?v=1.3&key=a54918ddc2bd04fdddd9e36ee5961c33"></script>
 </head>
 
 <body>
-    <div class="header">
-        <p>导航</p>
-        <a href="/user;" class="a4"></a>
+    <div class="theMap">
+        <p style="left:43%">导航</p>
+        <a href="/user" class="a4"></a>
     </div>
-    <div class="main">
-        <div onclick="getPosition();" style="position:absolute;top:20px;left:20px;z-index:999;">
-            <img width="50px;" height="50px;" src="/images/p1.png">
-        </div>
-        <div class="find_img" style="min-height:500px;" id="myMap">
-        </div> 
-        
-        <div id="result"> 
-        
-        </div>
-        
-    </div>
+    <div id="mapContainer" style="top:"></div>
+    <div id="result" style="position:absolute;width:100%;height:10%;left:0;bottom:0;z-index:1000"></div>
+    <script>
+  
+    var map = new AMap.Map('mapContainer', {
+      center: [${lng}, ${lat}],
+      zoom: 14,
+      animateEnable:true,
+      dragEnable:true,
+      zoomEnable:true,
+      resizeEnable: true
+    });
     
-    <!--main END-->
-</body>
-</html>
-<script type="text/javascript">
-    var map;
-    var userPiont;
-    var drivingRoute;//路线
-    var beginPoint;
-    var endPoint;
-
-    map = new BMap.Map("myMap");
-    var point = new BMap.Point(106.540307,29.591239);
-    map.centerAndZoom(point, 16);
-    map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
-    map.addControl(new BMap.MapTypeControl());   //添加地图类型控件
-   <#if x??>
-        endPoint =  new BMap.Point(${x!"0.000000"}, ${y!"0.000000"});
-   </#if>
-   
-   var geolocation = new BMap.Geolocation();  
-    geolocation.getCurrentPosition(
-        function(r){
-            if(this.getStatus() == BMAP_STATUS_SUCCESS){
-                console.debug(r);
-                beginPoint = new BMap.Point(r.point.lng,r.point.lat);
-                userPiont = r.point;
-                map.panTo(r.point);
-                drivingRoute = new BMap.DrivingRoute(map, {renderOptions: {map: map, autoViewport: true}});
-                var h = drivingRoute.search(beginPoint, endPoint);     
-            }
-            else 
-            {
-                alert('failed'+this.getStatus());
-            }
-            $(".BMap_Marker").css("display","none");        
-        },{enableHighAccuracy: true}
-    )
+    map.plugin(["AMap.ToolBar"],function(){
+        var tool = new AMap.ToolBar({
+            offset:new AMap.Pixel(10,120)
+        });
+        map.addControl(tool);   
+    });
+    
+    map.plugin(['AMap.Driving'],function(){
+        var driving;
+        driving = new AMap.Driving({
+            panel:result,
+            map:map  
+        });
+        driving.search(new AMap.LngLat(${lng},${lat}),new AMap.LngLat(${x},${y}));
+    });
+    
 </script>
+</body>
+
+</html>

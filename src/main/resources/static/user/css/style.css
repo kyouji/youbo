@@ -110,29 +110,29 @@ body{ background:#efefef; }
 
 /*find*/
 
-.find_img{width:100%;height:100%;display:block;overfloat:hidden; min-height:960px;}
-.find01{width:92%; padding-left:4%; padding-right:4%; overflow:hidden; height:auto; padding-top:3%; background-color:white; }
-.find01 dt { width:100%; height:auto; float:left;}
-.find01 dt span{ float:left; color:#333; font-size:1.1em;}
+.find_img{width:100%;height:100%;display:block;overflow:hidden; min-height:960px;}
+.find01{width:100%;  overflow:hidden; height:auto; padding-top:3%; background-color:white; margin:0px; padding:0px; }
+.find01 dt { width:96%; height:auto; float:left; margin-left:4%;}
+.find01 dt span{ float:left; color:#333; font-size:0.8em;}
 .find01 dt p{ float:right;}
-.find01 dd { width:100%; height:auto; float:left; margin-top:10px;}
-.find01 dd div{ float:left; background:url(../images/find_icon01.png) no-repeat left; background-size:20px; padding-left:30px;}
-.find01 dd span{ float:left; margin-left:40px; background:url(../images/find_icon02.png) no-repeat left; background-size:20px; padding-left:30px; }
-.find01 dd p{ margin-bottom:20px;}
+.find01 dd { width:96%;margin-left:4%; height:auto; float:left; margin-top:2px;font-size:0.8em; }
+.find01 dd div{ float:left; background:url(../images/find_icon01.png) no-repeat left; background-size:16px; padding-left:30px;}
+.find01 dd span{ float:left; margin-left:40px; background:url(../images/find_icon02.png) no-repeat left; background-size:16px; padding-left:30px; }
+.find01 dd p{margin-bottom:0px; padding:0px; margin-top:2px;}
 
 .find_float{ position:fixed; bottom:0;}
 
 
-.find_btn{ width:100%; height:40px;}
-.find_btn dt,.find_btn dd{ float:left; width:50%; text-align:center; line-height:40px; height:40px;}
+.find_btn{ width:100%; height:30px; margin:0px; padding:0px;}
+.find_btn dt,.find_btn dd{ float:left; width:50%; text-align:center; line-height:30px; height:30px; }
 .find_btn dt{ background-color:#0e5baa;}
-.find_btn dt a{ color:white; line-height:40px;  display:block; height:40px; width:100%; overflow:hidden;}
-.find_btn dt a span{line-height:40px; height:40px; width:30%; display:block; float:left; }
-.find_btn dt img{padding-top:5px; float:left; margin-left:30%;}
-.find_btn dd{ background-color:#ff665e;}
-.find_btn dd a{ color:white; line-height:40px;  display:block; height:40px; width:100%; overflow:hidden;}
-.find_btn dd a span{line-height:40px; height:40px; width:30%; display:block; float:left; }
-.find_btn dd img{padding-top:5px; float:left; margin-left:30%;}
+.find_btn dt a{ color:white; line-height:30px;  display:block; height:30px; width:100%; overflow:hidden;}
+.find_btn dt a span{line-height:30px; height:30px; width:52%; display:block; float:left; }
+.find_btn dt img{padding-top:5px; float:left; margin-left:10%; width:20px;}
+.find_btn dd{ background-color:#ff665e; margin-left:0px; margin-top:0px;}
+.find_btn dd a{ color:white; line-height:30px;  display:block; height:30px; width:100%; overflow:hidden;}
+.find_btn dd a span{line-height:30px; height:30px; width:52%; display:block; float:left; }
+.find_btn dd img{padding-top:5px; float:left; margin-left:10%;width:20px;}
 
 
 /*find_list*/

@@ -50,7 +50,7 @@
                             <p></p>
                         </dd>
                         <dd>
-                            <label>退款原因：${item.cancelReason!'无'}</label><br>
+                            <label>取消原因：${item.cancelReason!'无'}</label><br>
                         </dd>
                     </dl>
                 </#list>

@@ -56,8 +56,8 @@ public class TdDepotInfoController {
 	public Map<String, Object> editInfo(HttpServletRequest req,Integer theNum){
 		Map<String, Object> res = new HashMap<>();
 		res.put("status", -1);
-		String siteUsername = (String) req.getSession().getAttribute("siteUsername");
-		TdDiySite site = tdDiySiteService.findbyUsername(siteUsername);
+		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("diyUser");
+		TdDiySite site = tdDiySiteService.findOne(diyUser.getDiyId());
 		if(null == site){
 			res.put("message", "未获取到车库信息，修改失败！");
 			return res;

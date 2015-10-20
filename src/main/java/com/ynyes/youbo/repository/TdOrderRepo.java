@@ -225,13 +225,21 @@ public interface TdOrderRepo extends PagingAndSortingRepository<TdOrder, Long>, 
 	// 查找一定时间内的违约订单
 	List<TdOrder> findByStatusIdAndDiyIdAndOrderTimeBetweenOrderByOrderTimeDesc(Long statusId, Long diyId,
 			Date beginTime, Date finishTime);
+
+	// 根据车牌号码和停车场ID模糊查询订单
+	List<TdOrder> findByDiyIdAndCarCodeContainingOrderByOrderTimeDesc(Long diyId, String keywords);
+
+	// 查找指定停车场正在停车的订单
+	List<TdOrder> findBydiyIdAndStatusId(Long diyId, Long statusId);
+
+	// 查找到违约的订单
+	List<TdOrder> findByDiyIdAndStatusIdAndFirstPayGreaterThanAndTotalPrice(Long diyId, Long statusId,
+			Double firstPrice, Double totalPrice);
+
+	// 查找指定停车场内已缴费但未出库的订单
+	List<TdOrder> findByDiyIdAndStatusIdAndOutputTimeIsNull(Long diyId, Long statusId);
 	
-	//根据车牌号码和停车场ID模糊查询订单
-	List<TdOrder> findByDiyIdAndCarCodeContainingOrderByOrderTimeDesc(Long diyId,String keywords);
+	//根据停车场ID和车牌号码和订单状态查找订单
+	List<TdOrder> findByDiyIdAndStatusIdAndCarCode(Long diyId,Long statusId,String carCode);
 	
-	//查找指定停车场正在停车的订单
-	List<TdOrder> findBydiyIdAndStatusId(Long diyId,Long statusId);
-	
-	//查找到违约的订单
-	List<TdOrder> findBydiyIdAndStatusIdAndFirstPayGreaterThanAndTotalPrice(Long diyId,Long statusId,Double firstPrice,Double totalPrice);
 }

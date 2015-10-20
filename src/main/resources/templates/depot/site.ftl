@@ -13,31 +13,13 @@
 <link href="/depot/css/style.css" rel="stylesheet" type="text/css" />
 
 <script type="text/javascript">
-    function pupopen(){
-             document.getElementById("bg").style.display="block";
-                document.getElementById("popbox").style.display="block" ;
-     }
-    function pupclose(){
-    document.getElementById("bg").style.display="none";
-                document.getElementById("popbox").style.display="none" ;
-    }
+function pupopen(){
+    window.location.href = "/depot/site/changePayType";
+}
 </script>
 </head>
 
 <body>
-
-<!--弹窗-->
-<div id="bg"></div>
-<div id="popbox">
-    <p>选择模式</p>
-    <p class="mode sel"><b>计时模式</b><a href="#">编辑</a></p>
-    <p class="mode"><b>计次模式</b><a href="#">编辑</a></p>
-    <p class="yes_no">
-        <a href="#"  onclick="pupclose()">关闭</a>
-        <a href="#" class="blue"  onclick="pupclose()">确定</a>
-    </p>
-</div>
-<!--弹窗-->
 
     <!--头部开始-->
     <div class="header">

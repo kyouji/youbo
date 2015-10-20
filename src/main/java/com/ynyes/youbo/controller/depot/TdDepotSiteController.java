@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.ynyes.youbo.entity.TdDiySite;
 import com.ynyes.youbo.entity.TdDiyUser;
 import com.ynyes.youbo.service.TdCommonService;
+import com.ynyes.youbo.service.TdDiySiteService;
 import com.ynyes.youbo.service.TdUserService;
 
 @Controller
@@ -22,6 +23,9 @@ public class TdDepotSiteController {
 	
 	@Autowired
 	private TdUserService tdUserService;
+	
+	@Autowired
+	private TdDiySiteService TdDiySiteService;
 	
 	@RequestMapping
     public String site(HttpServletRequest req, Device device, ModelMap map)
@@ -55,5 +59,16 @@ public class TdDepotSiteController {
 	{
 		req.getSession().invalidate();
 		return "/depot/index";
+	}
+	
+	@RequestMapping(value = "/changePayType")
+	public String change(HttpServletRequest req,ModelMap map){
+		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("diyUser");
+		if(null == diyUser){
+			return "/depot/login";
+		}
+		TdDiySite site = TdDiySiteService.findOne(diyUser.getDiyId());
+		map.addAttribute("site", site);
+		return "/depot/change_pay_type";
 	}
 }

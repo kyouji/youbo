@@ -266,7 +266,7 @@ public class TdUserFindController {
 	 * @author dengxiao
 	 */
 	@RequestMapping(value = "/navigation")
-	public String navigation(HttpServletRequest request, String x, String y, Long id, ModelMap map) {
+	public String navigation(HttpServletRequest request, String x, String y, Long id, ModelMap map,Double lat,Double lng) {
 		String username = (String) request.getSession().getAttribute("username");
 		TdUser user = tdUserService.findByUsername(username);
 		if (null == user) {
@@ -276,6 +276,8 @@ public class TdUserFindController {
 		map.addAttribute("site", site);
 		map.addAttribute("x", x);
 		map.addAttribute("y", y);
+		map.addAttribute("lng", lng);
+		map.addAttribute("lat", lat);
 		return "/user/navigation";
 	}
 }
