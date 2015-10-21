@@ -413,6 +413,7 @@ public class TdUserOrderController {
 			res.put("orderId", order.getId());
 			return res;
 		}
+		order.setThePayType(0L);
 		tdOrderService.save(order);
 		res.put("status", 0);
 		return res;
@@ -430,9 +431,19 @@ public class TdUserOrderController {
 		res.put("status", -1);
 		TdOrder order = tdOrderService.findOne(id);
 		if (null != order) {
-			order.setStatusId(9L);
 			order.setFinishTime(new Date());
 			order.setCancelReason("用户自主取消");
+			if (2L == order.getStatusId() || 1L == order.getStatusId()) {
+				TdUser user = tdUserService.findByUsername(order.getUsername());
+				user.setBalance(order.getFirstPay() + user.getBalance());
+				order.setFirstPay(0.00);
+				tdUserService.save(user);
+			}
+			if (3L == order.getStatusId()) {
+				TdDiySite site = tdDiySiteService.findOne(order.getDiyId());
+				site.setParkingNowNumber(site.getParkingNowNumber() + 1);
+			}
+			order.setStatusId(9L);
 			tdOrderService.save(order);
 			res.put("status", 0);
 			res.put("message", "订单已取消");
@@ -520,6 +531,10 @@ public class TdUserOrderController {
 			order = list.get(0);
 		}
 		if (null != order) {
+			TdDiySite site = tdDiySiteService.findOne(order.getDiyId());
+			if (!site.getIsCamera()) {
+				order.setTotalPrice(DiySiteFee.GET_PARKING_PRICE(site, order.getReserveTime(), new Date()));
+			}
 			if (null == order.getTotalPrice()) {
 				order.setTotalPrice(0.00);
 			}

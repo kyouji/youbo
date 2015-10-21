@@ -17,6 +17,7 @@ import com.ynyes.youbo.entity.TdDiyLog;
 import com.ynyes.youbo.entity.TdDiySite;
 import com.ynyes.youbo.entity.TdDiyUser;
 import com.ynyes.youbo.entity.TdOrder;
+import com.ynyes.youbo.entity.TdUser;
 import com.ynyes.youbo.service.TdCommonService;
 import com.ynyes.youbo.service.TdDiyLogService;
 import com.ynyes.youbo.service.TdDiySiteService;
@@ -128,6 +129,8 @@ public class TdChargeRecordController {
 			order.setStatusId(6L);
 			order.setFinishTime(new Date());
 			tdOrderService.save(order);
+			TdUser user = tdUserService.findByUsername(order.getUsername());
+			user.setBalance(user.getBalance() + order.getFirstPay());
 		}
 		if (null != re && re) {
 			return "redirect:/depot/depot/myaccount/detail?orderId=" + id;

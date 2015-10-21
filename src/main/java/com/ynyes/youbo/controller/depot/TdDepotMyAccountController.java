@@ -115,13 +115,10 @@ public class TdDepotMyAccountController {
 		List<TdOrder> orders = tdOrderService.findByDiyIdAndOrderTimeBetween(site.getId(), beginDate, finishDate);
 		Double income = new Double(0);
 		for (TdOrder order : orders) {
-			if (null != order.getTotalPrice() && order.getTotalPrice() > 0 && order.getStatusId() == 6
-					&& (order.getThePayType() == 0L || null == order.getThePayType())) {
+			if (null != order.getTotalPrice() && order.getTotalPrice() > 0
+					&& (order.getStatusId() == 6L || order.getStatusId() == 9L)
+					&& (null == order.getThePayType() || order.getThePayType() == 0L)) {
 				income += order.getTotalPrice();
-			} else {
-				if (null != order.getFirstPay() && order.getFirstPay() > 0 && order.getStatusId() == 9L) {
-					income += order.getFirstPay();
-				}
 			}
 		}
 		map.addAttribute("site", site);
@@ -395,6 +392,7 @@ public class TdDepotMyAccountController {
 				log.setRemark(diyUser.getUsername() + "同意了" + order.getCarCode() + "的预约， 预约前车位剩余"
 						+ site.getParkingNowNumber() + "个");
 				order.setStatusId(3L);
+				site.setParkingNowNumber(site.getParkingNowNumber() - 1);
 			}
 
 			if (1 == type) {
@@ -547,7 +545,7 @@ public class TdDepotMyAccountController {
 		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("diyUser");
 		TdDiySite site = tdDiySiteService.findOne(diyUser.getDiyId());
 		List<TdOrder> orders = tdOrderService.findByReservedOrder(diyUser.getDiyId(), carCode);
-		if (null == orders||0 == orders.size()) {
+		if (null == orders || 0 == orders.size()) {
 			TdOrder order = new TdOrder();
 			// 以下代码用于生成订单编号
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -559,6 +557,7 @@ public class TdDepotMyAccountController {
 			// 生成订单编号结束
 			order.setOrderNumber(orderNum);
 			order.setOrderTime(new Date());
+			order.setReserveTime(new Date());
 			order.setInputTime(new Date());
 			order.setCarCode(carCode);
 			order.setUsername(carCode);

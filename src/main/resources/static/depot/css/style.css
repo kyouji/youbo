@@ -223,6 +223,7 @@ body{background:#efefef;}
 
 /*watch_mode*/
 .watch_mode{width:100%;margin-top:3%;}
+.watch_mode .div1{padding:3%;font-family:"Microsoft YaHei";font-weight:700;background:#ffffff;}
 .watch_mode ul{overflow:hidden;width:100%;background:#fff;border-bottom:solid 1px #dddddd;}
 .watch_mode ul li{float:left;background:#fff;}
 .watch_mode ul li p{overflow:hidden;text-align:center;line-height:40px;height: 40px;}

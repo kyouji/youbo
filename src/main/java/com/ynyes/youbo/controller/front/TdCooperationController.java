@@ -50,7 +50,7 @@ public class TdCooperationController {
 	private TdUserService tdUserService;
 
 	/**
-	 * @author dengxiao 第三方登陆接口
+	 * @author dengxiao 1. 第三方登陆接口
 	 */
 	@RequestMapping(value = "/login")
 	@ResponseBody
@@ -95,13 +95,11 @@ public class TdCooperationController {
 	}
 
 	/**
-	 * @author dengxiao
-	 * 
-	 *         计算某停车场所有正在停车的订单价格的接口
+	 * @author dengxiao 2. 计算某停车场所有正在停车的订单价格的接口
 	 */
-	@RequestMapping(value = "/getPrice")
+	@RequestMapping(value = "/countPrice")
 	@ResponseBody
-	public Map<String, Object> getPrice(HttpServletRequest req) {
+	public Map<String, Object> countPrice(HttpServletRequest req) {
 		System.err.println("开始创建map");
 		Map<String, Object> res = new HashMap<>();
 		res.put("status", -1);
@@ -144,9 +142,7 @@ public class TdCooperationController {
 	}
 
 	/**
-	 * @author dengxiao
-	 * 
-	 *         获取价格计算结果的接口
+	 * @author dengxiao 3. 获取价格计算结果的接口
 	 */
 	@RequestMapping(value = "/getResult")
 	@ResponseBody
@@ -195,9 +191,7 @@ public class TdCooperationController {
 	}
 
 	/**
-	 * @author dengxiao
-	 * 
-	 *         获取车辆出入库信息的接口
+	 * @author dengxiao 4. 获取车辆出入库信息的接口
 	 */
 	@RequestMapping(value = "/iodata")
 	@ResponseBody
@@ -332,7 +326,7 @@ public class TdCooperationController {
 	}
 
 	/**
-	 * @author dengxiao 获取已支付但未出库订单的方法
+	 * @author dengxiao 5. 获取已支付但未出库订单的方法
 	 */
 	@RequestMapping(value = "/payInfo")
 	@ResponseBody
@@ -356,17 +350,18 @@ public class TdCooperationController {
 		for (TdOrder tdOrder : payed_orders) {
 			carCodes.add(tdOrder.getId() + "," + tdOrder.getCarCode());
 		}
-		res.put("infos", carCodes);
+		res.put("carCodes", carCodes);
 		res.put("status", 0);
 		return res;
 	}
 
 	/**
-	 * @author dengxiao 获取在中央缴费区缴费的车辆的信息
+	 * @author dengxiao 6. 获取在中央缴费区缴费的车辆的信息
 	 */
 	@RequestMapping(value = "/payed/order")
 	@ResponseBody
-	public Map<String, Object> getPayedOrder(HttpServletRequest req,String carCode,String finishDate,Double totalPrice){
+	public Map<String, Object> getPayedOrder(HttpServletRequest req, String carCode, String finishDate,
+			Double totalPrice) {
 		Map<String, Object> res = new HashMap<>();
 		res.put("status", -1);
 		System.err.println("开始获取session中的停车场信息");
@@ -376,15 +371,15 @@ public class TdCooperationController {
 			return res;
 		}
 		System.err.println("停车场信息获取完毕");
-		//根据车牌号码和停车场ID查找指定车辆的订单
+		// 根据车牌号码和停车场ID查找指定车辆的订单
 		List<TdOrder> orders = tdOrderService.findByDiyIdAndStatusIdAndCarCode(diyUser.getDiyId(), carCode);
-		
-		if(null == orders){
+
+		if (null == orders) {
 			res.put("message", "未能获取到该车牌号码的订单");
 			return res;
 		}
-		
-		if(orders.size() != 1){
+
+		if (orders.size() != 1) {
 			res.put("message", "数据错误，未能找到指定车牌号码的订单");
 			return res;
 		}
@@ -405,13 +400,13 @@ public class TdCooperationController {
 		res.put("status", 0);
 		return res;
 	}
-	
+
 	/**
-	 * @author dengxiao 缴费车辆未在15分钟以内出库，生成了新的订单
+	 * @author dengxiao 7. 缴费车辆未在15分钟以内出库，生成了新的订单
 	 */
 	@RequestMapping(value = "/newOrder")
 	@ResponseBody
-	public Map<String, Object> newOrder(HttpServletRequest req,String carCode,String orderDate,Double totalPrice){
+	public Map<String, Object> newOrder(HttpServletRequest req, String carCode, String orderDate, Double totalPrice) {
 		Map<String, Object> res = new HashMap<>();
 		res.put("status", -1);
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
@@ -422,9 +417,9 @@ public class TdCooperationController {
 			return res;
 		}
 		System.err.println("停车场信息获取完毕");
-		
+
 		TdDiySite site = tdDiySiteService.findOne(diyUser.getDiyId());
-		
+
 		Date orderTime = null;
 		try {
 			orderTime = sdf.parse(orderDate);
@@ -433,7 +428,7 @@ public class TdCooperationController {
 			res.put("message", "时间参数错误！");
 			return res;
 		}
-		
+
 		// 以下代码用于生成订单编号
 		Date date = new Date();
 		String sDate = sdf.format(date);
@@ -455,19 +450,144 @@ public class TdCooperationController {
 		 * 在此应该给客户发送短信提示
 		 */
 		tdOrderService.save(order);
-		
+
 		res.put("message", "信息录入成功！");
 		res.put("status", 0);
 		return res;
 	}
-	
-//	/**
-//	 * @author dengxiao
-//	 * 修改价格之后的接口
-//	 */
-//	@RequestMapping(value = "/getPrice")
-//	public Map<String, Object> updatePrice(){
-//		Map<String, Object> res = new HashMap<>();
-//		return res;
-//	}
+
+	/**
+	 * @author dengxiao 8. 在新华软件修改价格之后传递到优泊B端
+	 */
+	@RequestMapping(value = "/setPrice")
+	public Map<String, Object> setPrice(HttpServletRequest req, Long dayType, Long nightType, Long dayBaseTime,
+			Long nightBaseTime, Double dayBasePrice, Double nightBasePrice, Double dayHourPrice, Double nightHourPrice,
+			Double dayOncePrice, Double nightOncePrice, Double maxPrice) {
+		Map<String, Object> res = new HashMap<>();
+		res.put("status", -1);
+
+		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("cooperDiy");
+		if (null == diyUser) {
+			res.put("message", "停车场用户未登陆");
+			return res;
+		}
+
+		TdDiySite site = tdDiySiteService.findOne(diyUser.getDiyId());
+
+		if (null == maxPrice) {
+			res.put("message", "未能获取到每日价格上限（maxPrice）");
+			return res;
+		}
+
+		site.setMaxPrice(maxPrice);
+
+		if (null == dayType) {
+			res.put("message", "未能获取到白天收费类型（dayType）");
+			return res;
+		}
+
+		if (null == nightType) {
+			res.put("message", "未能获取到夜间收费类型（nightType）");
+			return res;
+		}
+
+		if (0 == dayType) {
+			if (null == dayBaseTime) {
+				res.put("message", "未能获取到白天收费基础时间（dayBaseTime）");
+				return res;
+			}
+
+			if (null == dayBasePrice) {
+				res.put("message", "未能获取到白天收费基础价格（dayBasePrice）");
+				return res;
+			}
+
+			if (null == dayHourPrice) {
+				res.put("message", "未能获取到白天收费后续单价（dayHourPrice）");
+				return res;
+			}
+			site.setDayType(dayType);
+			site.setDayBaseTime(dayBaseTime);
+			site.setDayBasePrice(dayBasePrice);
+			site.setDayHourPrice(dayHourPrice);
+		} else {
+			if (null == dayOncePrice) {
+				res.put("message", "未能获取到白天计次收费的价格（dayOncePrice）");
+				return res;
+			}
+			site.setDayType(dayType);
+			site.setDayOncePrice(dayOncePrice);
+		}
+
+		if (0 == nightType) {
+			if (null == nightBaseTime) {
+				res.put("message", "未能获取到夜间收费基础时间（nightBaseTime）");
+				return res;
+			}
+
+			if (null == nightBasePrice) {
+				res.put("message", "未能获取到夜间收费基础价格（nightBasePrice）");
+				return res;
+			}
+
+			if (null == nightHourPrice) {
+				res.put("message", "未能获取到夜间收费后续单价（nightHourPrice）");
+				return res;
+			}
+
+			site.setNightType(nightType);
+			site.setNightBaseTime(nightBaseTime);
+			site.setNightBasePrice(nightBasePrice);
+			site.setNightHourPrice(nightHourPrice);
+		} else {
+			if (null == nightOncePrice) {
+				res.put("message", "未能获取到夜间计次收费的价格（nightOncePrice）");
+				return res;
+			}
+			site.setNightType(nightType);
+			site.setNightOncePrice(nightOncePrice);
+		}
+		tdDiySiteService.save(site);
+		res.put("status", 0);
+		return res;
+	}
+
+	/**
+	 * @author dengxiao 9. 新华软件获取B端修改的价格
+	 */
+	@RequestMapping(value = "/getPrice")
+	@ResponseBody
+	public Map<String, Object> getPrice(HttpServletRequest req) {
+		Map<String, Object> res = new HashMap<>();
+		res.put("status", -1);
+
+		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("cooperDiy");
+		if (null == diyUser) {
+			res.put("message", "停车场用户未登陆");
+			return res;
+		}
+
+		TdDiySite site = tdDiySiteService.findOne(diyUser.getDiyId());
+		if (0 == site.getDayType()) {
+			res.put("dayType", site.getDayType());
+			res.put("dayBaseTime", site.getDayBaseTime());
+			res.put("dayBasePrice", site.getDayBasePrice());
+			res.put("dayHourPrice", site.getDayHourPrice());
+		} else {
+			res.put("dayType", site.getDayType());
+			res.put("dayOncePrice", site.getDayOncePrice());
+		}
+
+		if (0 == site.getNightType()) {
+			res.put("nightType", site.getNightType());
+			res.put("nightBaseTime", site.getNightBaseTime());
+			res.put("nightBasePrice", site.getNightBasePrice());
+			res.put("nightHourPrice", site.getNightHourPrice());
+		} else {
+			res.put("nightType", site.getNightType());
+			res.put("nightOncePrice", site.getNightOncePrice());
+		}
+		res.put("status", 0);
+		return res;
+	}
 }

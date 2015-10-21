@@ -28,7 +28,6 @@
         var statusId = $("#hidden").val();
         $.post("/user/order/checkOrder",{"statusId":statusId},function(res){
             if(0==res.status){
-                alert(res.message);
                 window.location.reload();
             }
         });
