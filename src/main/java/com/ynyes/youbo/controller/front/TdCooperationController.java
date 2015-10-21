@@ -195,7 +195,7 @@ public class TdCooperationController {
 	 */
 	@RequestMapping(value = "/iodata")
 	@ResponseBody
-	public Map<String, Object> ioData(String carNo, String busNo, String ioState, String ioDate, String picture,
+	public Map<String, Object> ioData(String carNo, String busNo, String ioState, String ioDate, String picture,Boolean isVip,
 			Boolean isrepeat, HttpServletRequest request) {
 		Map<String, Object> res = new HashMap<>();
 		// status代表处理状态，-1代表失败
@@ -269,6 +269,10 @@ public class TdCooperationController {
 				tdDiySiteService.save(diySite);
 			}
 			System.err.println("继续设置属性");
+			//是否为月卡用户
+			if(isVip){
+				order.setThePayType(3L);
+			}
 			// 设置订单的入库时间
 			order.setInputTime(ioData.getIoDate());
 			// 将订单的状态改变为4L（正在停车）
@@ -288,6 +292,12 @@ public class TdCooperationController {
 			System.err.println("订单信息已经获取");
 			if (null != order) {
 				order.setOutputTime(ioData.getIoDate());
+				if(isVip){
+					if(4L == order.getStatusId()){
+						order.setFinishTime(ioData.getIoDate());
+						order.setStatusId(6L);
+					}
+				}
 				tdOrderService.save(order);
 			}
 			// System.err.println("接收到车辆出库数据，开始设置属性");
@@ -587,6 +597,7 @@ public class TdCooperationController {
 			res.put("nightType", site.getNightType());
 			res.put("nightOncePrice", site.getNightOncePrice());
 		}
+		res.put("leftNum", site.getParkingNowNumber());
 		res.put("status", 0);
 		return res;
 	}

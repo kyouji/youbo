@@ -123,6 +123,16 @@ public class TdUserOrderController {
 		String reason = "用户自主取消";
 		TdOrder order = tdOrderService.findOne(id);
 		if (null != order) {
+			if (2L == order.getStatusId() || 1L == order.getStatusId()) {
+				TdUser user = tdUserService.findByUsername(order.getUsername());
+				user.setBalance(order.getFirstPay() + user.getBalance());
+				order.setFirstPay(0.00);
+				tdUserService.save(user);
+			}
+			if (3L == order.getStatusId()) {
+				TdDiySite site = tdDiySiteService.findOne(order.getDiyId());
+				site.setParkingNowNumber(site.getParkingNowNumber() + 1);
+			}
 			order.setCancelReason(reason);
 			order.setStatusId(9L);
 			order.setFinishTime(new Date());
@@ -178,6 +188,7 @@ public class TdUserOrderController {
 							order.setCancelReason("指定停车场无剩余车位");
 							res.put("message", "抱歉，已经没有车位了，预定失败！");
 							tdOrderService.save(order);
+							tdUserService.save(user);
 							return res;
 						}
 						site.setParkingNowNumber(site.getParkingNowNumber() - 1);
@@ -235,29 +246,41 @@ public class TdUserOrderController {
 					tdOrderService.save(order);
 					// 设置消息提示
 					res.put("message", "抱歉，已经没有车位了，预定失败！");
+					tdUserService.save(user);
 					return res;
 				}
 			}
 
 		} else if (0 == type) {
 			order.setFinishTime(new Date());
-			if (null == site.getIsCamera() || !site.getIsCamera()) {
-				order.setTotalPrice(DiySiteFee.GET_PARKING_PRICE(site, order.getOrderTime(), order.getFinishTime()));
-			}
-			if (order.getTotalPrice() > user.getBalance()) {
-				/**
-				 * 此处在后期修改为跳转到第三方支付的页面
-				 */
-				res.put("message", "余额不足，支付失败！");
-				return res;
-			} else {
-				user.setBalance(user.getBalance() - order.getTotalPrice() + setting.getFirstPay());
+			if (null != order.getThePayType() && 3L == order.getThePayType()) {
+				res.put("message", "月卡用户结算成功，本次扣除0元");
+				user.setBalance(user.getBalance() + order.getFirstPay());
+				order.setTotalPrice(0.00);
 				order.setStatusId(6L);
-				order.setPayTypeId(28L);
-				res.put("status", 0);
-				res.put("message", "支付成功，您可在15分钟之内离开车库！");
+			} else {
+				if (null == site.getIsCamera() || !site.getIsCamera()) {
+					order.setTotalPrice(
+							DiySiteFee.GET_PARKING_PRICE(site, order.getOrderTime(), order.getFinishTime()));
+				}
+				if (order.getTotalPrice() > user.getBalance()) {
+					/**
+					 * 此处在后期修改为跳转到第三方支付的页面
+					 */
+					res.put("message", "余额不足，支付失败！");
+					tdUserService.save(user);
+					return res;
+				} else {
+					user.setBalance(user.getBalance() - order.getTotalPrice() + setting.getFirstPay());
+					order.setStatusId(6L);
+					order.setPayTypeId(28L);
+					res.put("status", 0);
+					res.put("message", "支付成功，您可在15分钟之内离开车库！");
+				}
 			}
 		}
+		tdOrderService.save(order);
+		tdUserService.save(user);
 		res.put("status", 0);
 		return res;
 	}
@@ -313,6 +336,7 @@ public class TdUserOrderController {
 				 * @author dengxiao
 				 */
 				res.put("message", "余额不足，支付失败！");
+				return res;
 			} else {
 				// 余额足够便扣除定金
 				user.setBalance(user.getBalance() - setting.getFirstPay());
@@ -329,6 +353,7 @@ public class TdUserOrderController {
 							order.setStatusId(9L);
 							order.setCancelReason("指定停车场无剩余车位");
 							tdOrderService.save(order);
+							tdUserService.save(user);
 							res.put("message", "抱歉，已经没有车位了，预定失败！");
 							return res;
 						}
@@ -385,28 +410,38 @@ public class TdUserOrderController {
 					order.setCancelReason("指定停车场无剩余车位");
 
 					tdOrderService.save(order);
+					tdUserService.save(user);
 					// 设置消息提示
 					res.put("message", "抱歉，已经没有车位了，预定失败！");
 					return res;
 				}
 			}
 		} else if (order.getStatusId() == 4L) {
-			order.setFinishTime(new Date());
-			if (null == site.getIsCamera() || !site.getIsCamera()) {
-				order.setTotalPrice(DiySiteFee.GET_PARKING_PRICE(site, order.getOrderTime(), order.getFinishTime()));
-			}
-			if (order.getTotalPrice() > user.getBalance()) {
-				/**
-				 * 此处在后期修改为跳转到第三方支付的页面
-				 */
-				res.put("message", "余额不足，支付失败！");
-				return res;
-			} else {
-				user.setBalance(user.getBalance() - order.getTotalPrice() + setting.getFirstPay());
+			if (null != order.getThePayType() && 3L == order.getThePayType()) {
+				res.put("message", "月卡用户结算成功，本次扣除0元");
+				user.setBalance(user.getBalance() + order.getFirstPay());
+				order.setTotalPrice(0.00);
 				order.setStatusId(6L);
-				order.setPayTypeId(28L);
-				res.put("status", 0);
-				res.put("message", "支付成功，您可在15分钟之内离开车库！");
+			} else {
+				order.setFinishTime(new Date());
+				if (null == site.getIsCamera() || !site.getIsCamera()) {
+					order.setTotalPrice(
+							DiySiteFee.GET_PARKING_PRICE(site, order.getOrderTime(), order.getFinishTime()));
+				}
+				if (order.getTotalPrice() > user.getBalance()) {
+					/**
+					 * 此处在后期修改为跳转到第三方支付的页面
+					 */
+					tdUserService.save(user);
+					res.put("message", "余额不足，支付失败！");
+					return res;
+				} else {
+					user.setBalance(user.getBalance() - order.getTotalPrice() + setting.getFirstPay());
+					order.setStatusId(6L);
+					order.setThePayType(0L);
+					res.put("status", 0);
+					res.put("message", "支付成功，您可在15分钟之内离开车库！");
+				}
 			}
 		} else {
 			res.put("status", 1);
@@ -415,6 +450,7 @@ public class TdUserOrderController {
 		}
 		order.setThePayType(0L);
 		tdOrderService.save(order);
+		tdUserService.save(user);
 		res.put("status", 0);
 		return res;
 	}

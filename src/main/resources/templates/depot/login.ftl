@@ -11,9 +11,13 @@
 <!--css-->
 <link href="/depot/css/base.css" rel="stylesheet" type="text/css" />
 <script src="/user/js/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="/depot/js/jquery.cookie.js"></script>
 
 <script type="text/javascript">
 $(function(){
+
+    $("#txt_loginId").val($.cookie("username")); 
+    $("#txt_loginPwd").val($.cookie("password")); 
 
     $("#btn_login").click(function(){
         login();
@@ -22,6 +26,9 @@ $(function(){
 function login(){
     var username = $("#txt_loginId").val();
     var password = $("#txt_loginPwd").val();
+    
+    $.cookie("username", username, { expires: 365 }); 
+    $.cookie("password", password, { expires: 365 });
     
     if (username.length < 6 || password.length < 6)
     {
