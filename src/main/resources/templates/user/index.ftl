@@ -14,7 +14,9 @@
 <script type="text/javascript" src="/user/js/jquery-1.9.1.min.js"></script>
 </head>
 <script>
-    
+    <#if reload??&&reload==true>
+        window.location.href = "/user?reload=false";
+    </#if>
     <#if currentOrder??>
         <#if currentOrder.statusId==4>
             getOrderPrice();
@@ -54,23 +56,26 @@
     function currentOrder(){
         $.post("/user/order/currentOrder",function(res){
             if(1==res.status){
-                window.location.href="/user/order/detail?orderId="+res.orderId;
+                window.location.href="/user/order/detail?reload=true&orderId="+res.orderId;
             }else{
                 alert(res.message);
                 window.location.reload();
             }
         });
     }
-    $(function(){
+    
+    function navigation(x,y){
         var u = navigator.userAgent;
-        if (u.indexOf('Android') > -1 || u.indexOf('Linux') > -1) {//安卓手机
-            alert("安卓手机");
+        if (u.indexOf('Android') > -1 || u.indexOf('Linux') > -1) {
+            window.location.href = "androidamap://navi?sourceApplication=amap&lat="+x+"&lon="+y+"&dev=1&style=2";
+            alert("启动导航功能前请确认已经安装了“高德地图”APP");
         } else if (u.indexOf('iPhone') > -1) {//苹果手机
-            alert("苹果手机");
-        } else if (u.indexOf('Windows Phone') > -1) {//winphone手机
-            alert("winphone手机");
+            alert("启动导航功能前请确认已经安装了“高德地图”APP");
+            window.location.href = "iosamap://navi?sourceApplication=applicationName&lat="+x+"&lon="+y+"&dev=1&style=2";
+        } else{//winphone手机
+            alert("只有ios和android系统的手机才能够实现导航功能！");
         }
-    });
+    }
 </script>
 <body>
 
@@ -130,7 +135,7 @@
         <#if currentOrder??>
             <input type="hidden" id="hidden" value="${currentOrder.statusId!'0'}">
         </#if>
-        <a href="/user/find?isOrder=<#if currentOrder??&&currentOrder.statusId!=6&&currentOrder.statusId!=9>true<#else>false</#if>" class="four_1 a1"><img src="/depot/images/index03.png">
+        <a href="<#if currentOrder??&&currentOrder.statusId!=6&&currentOrder.statusId!=9>javascript:navigation(${x!'0'},${y!'0'});<#else>/user/find</#if>" class="four_1 a1"><img src="/depot/images/index03.png">
             <p><#if currentOrder??&&currentOrder.statusId!=6&&currentOrder.statusId!=9>导航<#else>找车位</#if></p>
         </a>
                 <#if currentOrder??>

@@ -15,9 +15,8 @@
 
 <script type="text/javascript">
 $(function(){
-
+    
     $("#txt_loginId").val($.cookie("username")); 
-    $("#txt_loginPwd").val($.cookie("password")); 
 
     $("#btn_login").click(function(){
         login();
@@ -27,8 +26,7 @@ function login(){
     var username = $("#txt_loginId").val();
     var password = $("#txt_loginPwd").val();
     
-    $.cookie("username", username, { expires: 365 }); 
-    $.cookie("password", password, { expires: 365 });
+    $.cookie("username", username, { expires: 90 }); // 存储一个带7天期限的 cookie 
     
     if (username.length < 6 || password.length < 6)
     {
@@ -92,9 +90,6 @@ function login(){
     <div class="clear h15"></div>
   
     <footer class="mainbox loginbot">
-      <a href="#">100%正品保障</a>
-      <a href="#">100%正品保障</a>
-      <a href="#">100%正品保障</a>
     </footer>
     <!--登录结束-->
     

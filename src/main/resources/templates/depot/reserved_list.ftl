@@ -30,6 +30,10 @@
             window.location.href = "/depot/myaccount/operate?id="+id+"&type="+type;
         }        
     }
+    
+    function refresh(){
+        window.location.reload();
+    }
 </script>
 </head>
 
@@ -38,7 +42,8 @@
     <!--头部开始-->
     <div class="header">
     <p>预约订单</p>
-        <a href="javascript:history.go(-1);" class="a4"></a>    
+        <a href="/depot" class="a4"></a> 
+        <a href="javascript:refresh();" class="lcy_a2" ></a>   
     </div>
     <!--头部结束-->
     

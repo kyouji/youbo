@@ -160,7 +160,16 @@
     
     
     function goNavigation(x,y,id){
-        window.location.href="/user/find/navigation?x="+x+"&y="+y+"&id="+id+"&lat="+lat+"&lng="+lng;
+        var u = navigator.userAgent;
+        if (u.indexOf('Android') > -1 || u.indexOf('Linux') > -1) {
+            window.location.href = "androidamap://navi?sourceApplication=amap&lat="+y+"&lon="+x+"&dev=1&style=2";
+            alert("启动导航功能前请确认已经安装了“高德地图”APP");
+        } else if (u.indexOf('iPhone') > -1) {//苹果手机
+            alert("启动导航功能前请确认已经安装了“高德地图”APP");
+            window.location.href = "iosamap://navi?sourceApplication=applicationName&lat="+y+"&lon="+x+"&dev=1&style=2";
+        } else{//winphone手机
+            alert("只有ios和android系统的手机才能够实现导航功能！");
+        }
     }
     
     function userAlert(){
@@ -173,7 +182,14 @@
         $.post("/user/find/reserve",{"username":"${user.username!''}",diyId:depotId},function(res){
             alert(res.message);
             if(0==res.status){
-               window.location.href="/user/find/navigation?x="+x+"&y="+y+"&id="+depotId+"&lat="+lat+"&lng="+lng;
+                var u = navigator.userAgent;
+                if (u.indexOf('Android') > -1 || u.indexOf('Linux') > -1) {
+                    window.location.href = "androidamap://navi?sourceApplication=appname&lat="+y+"&lon="+x+"&dev=1&style=2";
+                } else if (u.indexOf('iPhone') > -1) {//苹果手机
+                    window.location.href = "iosamap://navi?sourceApplication=applicationName&lat="+y+"&lon="+x+"&dev=1&style=2";
+                } else{//winphone手机
+                    alert("只有ios和android系统的手机才能够实现导航功能！");
+                }
             }
         });
     <#else>

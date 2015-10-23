@@ -15,20 +15,18 @@
 
 <script type="text/javascript">
 $(function(){
-
-    $("#txt_loginId").val($.cookie("username")); 
-    $("#txt_loginPwd").val($.cookie("password")); 
-
+    $("#txt_loginId").val($.cookie("diy_username")); 
+    
     $("#btn_login").click(function(){
         login();
     });
 });
 function login(){
+
     var username = $("#txt_loginId").val();
     var password = $("#txt_loginPwd").val();
     
-    $.cookie("username", username, { expires: 365 }); 
-    $.cookie("password", password, { expires: 365 });
+    $.cookie("diy_username", username, { expires: 90 }); // 存储一个带7天期限的 cookie 
     
     if (username.length < 6 || password.length < 6)
     {

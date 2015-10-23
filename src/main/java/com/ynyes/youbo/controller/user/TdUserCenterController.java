@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.net.URLEncoder;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -12,13 +13,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mobile.device.Device;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -439,7 +443,8 @@ public class TdUserCenterController {
 	 */
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Object> login(HttpServletRequest req, String username, String password, ModelMap map) {
+	public Map<String, Object> login(HttpServletRequest req, HttpServletResponse resp, String username, String password,
+			ModelMap map) {
 		Map<String, Object> res = new HashMap<String, Object>();
 		res.put("code", 1);
 
@@ -456,6 +461,20 @@ public class TdUserCenterController {
 		res.put("code", 0);
 
 		req.getSession().setAttribute("username", username);
+		try {
+			String encode_username = URLEncoder.encode(username, "utf-8");
+			String encode_password = URLEncoder.encode(password, "utf-8");
+			Cookie cookie_username = new Cookie("cookie_username", encode_username);
+			cookie_username.setPath("/");
+			cookie_username.setMaxAge(60 * 60 * 24 * 30);
+			Cookie cookie_password = new Cookie("cookie_password", encode_password);
+			cookie_password.setPath("/");
+			cookie_password.setMaxAge(60 * 60 * 24 * 30);
+			resp.addCookie(cookie_username);
+			resp.addCookie(cookie_password);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 		return res;
 	}
@@ -482,8 +501,24 @@ public class TdUserCenterController {
 	 * @return
 	 */
 	@RequestMapping("/exit")
-	public String exit(HttpServletRequest req, Device device, ModelMap map) {
+	public String exit(HttpServletRequest req, HttpServletResponse resp, Device device, ModelMap map,
+			@CookieValue(value = "cookie_username", required = false) String username,
+			@CookieValue(value = "cookie_password", required = false) String password) {
 		req.getSession().invalidate();
+		try {
+			String encode_username = URLEncoder.encode(username, "utf-8");
+			String encode_password = URLEncoder.encode(password, "utf-8");
+			Cookie cookie_username = new Cookie("cookie_username", encode_username);
+			cookie_username.setPath("/");
+			cookie_username.setMaxAge(0);
+			Cookie cookie_password = new Cookie("cookie_password", encode_password);
+			cookie_password.setPath("/");
+			cookie_password.setMaxAge(0);
+			resp.addCookie(cookie_username);
+			resp.addCookie(cookie_password);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return "redirect:/user";
 	}
 
@@ -608,15 +643,14 @@ public class TdUserCenterController {
 			e.printStackTrace();
 		}
 
-		List<TdOrder> orders = tdOrderService.findByUsernameAndFinishTimeBetween(username, beginDate,
-				finishDate);
+		List<TdOrder> orders = tdOrderService.findByUsernameAndFinishTimeBetween(username, beginDate, finishDate);
 		List<TdOrder> the_orders = new ArrayList<>();
 		Double totalPrice = new Double(0);
 		for (TdOrder tdOrder : orders) {
 			if (null != tdOrder.getTotalPrice() && 4L != tdOrder.getStatusId() && tdOrder.getTotalPrice() > 0) {
 				totalPrice += tdOrder.getTotalPrice();
 				the_orders.add(tdOrder);
-			}else if(null != tdOrder.getFirstPay() && tdOrder.getFirstPay() > 0){
+			} else if (null != tdOrder.getFirstPay() && tdOrder.getFirstPay() > 0) {
 				totalPrice += tdOrder.getFirstPay();
 				the_orders.add(tdOrder);
 			}

@@ -61,7 +61,7 @@ public class TdUserFindController {
 		if (null == username) {
 			return "redirect:/user/center/login";
 		}
-		if (true == isOrder) {
+		if (null != isOrder && true == isOrder) {
 			TdOrder order = (TdOrder) req.getSession().getAttribute("currentOrder");
 			TdDiySite diySite = tdDiySiteService.findOne(order.getDiyId());
 			String href = "redirect:/user/find/navigation?x=" + diySite.getLongitude() + "&y=" + diySite.getLatitude();
@@ -225,7 +225,7 @@ public class TdUserFindController {
 									Double left = firstPay - theOrder.getTotalPrice();
 									theUser.setBalance(theUser.getBalance() + left);
 								}
-								//保存已经改动的订单信息和用户信息
+								// 保存已经改动的订单信息和用户信息
 								tdOrderService.save(theOrder);
 								tdUserService.save(theUser);
 							}
@@ -266,7 +266,8 @@ public class TdUserFindController {
 	 * @author dengxiao
 	 */
 	@RequestMapping(value = "/navigation")
-	public String navigation(HttpServletRequest request, String x, String y, Long id, ModelMap map,Double lat,Double lng) {
+	public String navigation(HttpServletRequest request, String x, String y, Long id, ModelMap map, Double lat,
+			Double lng) {
 		String username = (String) request.getSession().getAttribute("username");
 		TdUser user = tdUserService.findByUsername(username);
 		if (null == user) {

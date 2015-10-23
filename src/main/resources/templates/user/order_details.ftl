@@ -43,7 +43,7 @@ function cancelOrder(id){
     <!--头部开始-->
     <header class="header">
         <p>停车场详情</p>
-        <a href="javascript:history.go(-1);" class="a4"></a>
+        <a href="<#if reload??>/user?reload=true<#else>javascript:history.back(-1);</#if>" class="a4"></a>
     </header>
     <!--头部结束-->
     

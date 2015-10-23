@@ -22,7 +22,10 @@
 </div>
 <div class="main">
     <div class="myQRcode">  
+        <!--
         <span><img src="/user/images/myQRcode.png"/></span>
+        -->
+        <span><img src="/images/${src!'/myQRcode.png'}"/></span>
         <p>给收费员扫一扫完成停车缴费</p>
     </div>
 </div><!--main END-->

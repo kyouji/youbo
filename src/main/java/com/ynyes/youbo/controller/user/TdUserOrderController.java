@@ -291,7 +291,7 @@ public class TdUserOrderController {
 	 * @author dengxiao
 	 */
 	@RequestMapping(value = "/detail")
-	public String orderDetail(HttpServletRequest req, Long orderId, ModelMap map) {
+	public String orderDetail(HttpServletRequest req, Long orderId, ModelMap map,Boolean reload) {
 		String username = (String) req.getSession().getAttribute("username");
 		TdUser user = tdUserService.findByUsername(username);
 		if (null == user) {
@@ -306,6 +306,7 @@ public class TdUserOrderController {
 		map.addAttribute("firstPay", setting.getFirstPay());
 		map.addAttribute("user", user);
 		map.addAttribute("order", order);
+		map.addAttribute("reload", reload);
 		return "/user/order_details";
 	}
 
