@@ -146,10 +146,10 @@ public class TdCooperationController {
 	 */
 	@RequestMapping(value = "/getResult")
 	@ResponseBody
-	public Map<String, Object> getResult(HttpServletRequest req, List<String> prices) {
+	public Map<String, Object> getResult(HttpServletRequest req, String prices) {
 		Map<String, Object> res = new HashMap<>();
 		res.put("status", -1);
-		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("diyUser");
+		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("cooperDiy");
 		if (null == diyUser) {
 			res.put("message", "停车场用户未登陆");
 			return res;
@@ -159,33 +159,64 @@ public class TdCooperationController {
 			return res;
 		}
 
-		for (String string : prices) {
-			String[] infos = string.split(",");
-			TdOrder order = tdOrderService.findOne(Long.parseLong(infos[0]));
-
-			if (null != order && null != infos[1] && infos[1].trim().equals(order.getCarCode())) {
-				order.setTotalPrice(new Double(infos[2]));
-				// 如果是违约订单，则开始根据消费金额返还定金的余额
-				if (9L == order.getStatusId()) {
-					TdUser user = tdUserService.findByUsername(order.getUsername());
-					user.setBalance(user.getBalance() + order.getFirstPay() - order.getTotalPrice());
-					tdUserService.save(user);
-				}
-				tdOrderService.save(order);
-				res.put(infos[0] + "", "车牌号为" + infos[1] + "，费用为" + infos[2]);
-			} else {
-				if (null == order) {
-					res.put("message", "未找到id为" + infos[0] + "的订单");
-					return res;
-				} else if (null == infos[1]) {
-					res.put("message", "未获取到id为" + infos[0] + "的订单的车牌号");
-					return res;
-				} else if (!infos[1].trim().equals(order.getCarCode())) {
-					res.put("message", "id为" + infos[0] + "的订单车牌号信息不符合");
-					return res;
+		String[] infos = prices.split(",");
+		for (int i = 0; i < infos.length; i++) {
+			if ((i + 1) % 3 == 0) {
+				TdOrder order = tdOrderService.findOne(Long.parseLong(infos[i - 2]));
+				if (null != order && null != infos[i - 1] && infos[i - 1].trim().equals(order.getCarCode())) {
+					order.setTotalPrice(new Double(infos[i]));
+					// 如果是违约订单，则开始根据消费金额返还定金的余额
+					if (9L == order.getStatusId()) {
+						TdUser user = tdUserService.findByUsername(order.getUsername());
+						user.setBalance(user.getBalance() + order.getFirstPay() - order.getTotalPrice());
+						tdUserService.save(user);
+					}
+					tdOrderService.save(order);
+					res.put(infos[i - 2] + "", "车牌号为" + infos[i - 1] + "，费用为" + infos[i]);
+				} else {
+					if (null == order) {
+						res.put("message", "未找到id为" + infos[i - 2] + "的订单");
+						return res;
+					} else if (null == infos[i - 1]) {
+						res.put("message", "未获取到id为" + infos[i - 2] + "的订单的车牌号");
+						return res;
+					} else if (!infos[i - 1].trim().equals(order.getCarCode())) {
+						res.put("message", "id为" + infos[i - 2] + "的订单车牌号信息不符合");
+						return res;
+					}
 				}
 			}
 		}
+
+		// for (String string : prices) {
+		// String[] infos = string.split(",");
+		// TdOrder order = tdOrderService.findOne(Long.parseLong(infos[0]));
+		//
+		// if (null != order && null != infos[1] &&
+		// infos[1].trim().equals(order.getCarCode())) {
+		// order.setTotalPrice(new Double(infos[2]));
+		// // 如果是违约订单，则开始根据消费金额返还定金的余额
+		// if (9L == order.getStatusId()) {
+		// TdUser user = tdUserService.findByUsername(order.getUsername());
+		// user.setBalance(user.getBalance() + order.getFirstPay() -
+		// order.getTotalPrice());
+		// tdUserService.save(user);
+		// }
+		// tdOrderService.save(order);
+		// res.put(infos[0] + "", "车牌号为" + infos[1] + "，费用为" + infos[2]);
+		// } else {
+		// if (null == order) {
+		// res.put("message", "未找到id为" + infos[0] + "的订单");
+		// return res;
+		// } else if (null == infos[1]) {
+		// res.put("message", "未获取到id为" + infos[0] + "的订单的车牌号");
+		// return res;
+		// } else if (!infos[1].trim().equals(order.getCarCode())) {
+		// res.put("message", "id为" + infos[0] + "的订单车牌号信息不符合");
+		// return res;
+		// }
+		// }
+		// }
 		res.put("status", 0);
 		return res;
 	}
@@ -195,8 +226,8 @@ public class TdCooperationController {
 	 */
 	@RequestMapping(value = "/iodata")
 	@ResponseBody
-	public Map<String, Object> ioData(String carNo, String busNo, String ioState, String ioDate, String picture,Boolean isVip,
-			Boolean isrepeat, HttpServletRequest request) {
+	public Map<String, Object> ioData(String carNo, String busNo, String ioState, String ioDate, String picture,
+			Boolean isVip, Boolean isrepeat, HttpServletRequest request) {
 		Map<String, Object> res = new HashMap<>();
 		// status代表处理状态，-1代表失败
 		res.put("status", -1);
@@ -215,7 +246,7 @@ public class TdCooperationController {
 
 		// 保存此出入库信息
 		System.err.println("开始保存出入库信息");
-		if (null == carNo || null == busNo || null == ioState || null == ioDate || null == picture) {
+		if (null == carNo || null == busNo || null == ioState || null == ioDate || null == picture || null == isVip) {
 			res.put("message", "参数未接收成功");
 			return res;
 		}
@@ -258,6 +289,8 @@ public class TdCooperationController {
 				theOrder.setOrderTime(theDate);
 				theOrder.setReserveTime(ioData.getIoDate());
 				theOrder.setCarCode(busNo);
+				theOrder.setFirstPay(0.00);
+				theOrder.setUsername(busNo);
 				if (null == theOrder.getCarCodePhoto()) {
 					theOrder.setCarCodePhoto("");
 				}
@@ -269,8 +302,8 @@ public class TdCooperationController {
 				tdDiySiteService.save(diySite);
 			}
 			System.err.println("继续设置属性");
-			//是否为月卡用户
-			if(isVip){
+			// 是否为月卡用户
+			if (isVip) {
 				order.setThePayType(3L);
 			}
 			// 设置订单的入库时间
@@ -283,54 +316,50 @@ public class TdCooperationController {
 			res.put("status", 0);
 			// 设置消息提示
 			res.put("message", "入库信息录入成功");
+			tdOrderService.save(order);
 		}
 
 		if ("正常外出".equals(ioData.getIoState())) {
 			// 根据车牌号码停车场id订单状态（状态为6，交易完成）查找一系列订单信息，按照时间倒序排序，选择第一个（第一个即是指定用户在指定停车场停车缴费成功的最后一个订单）
-			TdOrder order = tdOrderService.findTopByCarCodeAndDiyIdAndStatusIdOrderByOrderTimeDesc(ioData.getBusNo(),
-					diySite.getId());
+			TdOrder order = tdOrderService
+					.findTopByCarCodeAndDiyIdAndOrderFinishOrderByOrderTimeDescOr(ioData.getBusNo(), diySite.getId());
 			System.err.println("订单信息已经获取");
 			if (null != order) {
-				order.setOutputTime(ioData.getIoDate());
-				if(isVip){
-					if(4L == order.getStatusId()){
+				if (isVip) {
+					if (4L == order.getStatusId()) {
 						order.setFinishTime(ioData.getIoDate());
 						order.setStatusId(6L);
+						order.setThePayType(3L);
 					}
 				}
+				if (4L == order.getStatusId()) {
+					TdUser user = tdUserService.findByUsername(busNo);
+					if(user!=null){
+						if(null != order.getTotalPrice()&&user.getBalance() > order.getTotalPrice()){
+							user.setBalance(user.getBalance() - order.getTotalPrice() + order.getFirstPay());
+							order.setFinishTime(ioData.getIoDate());
+							order.setThePayType(0L);
+						}else{
+							res.put("message", "账户余额不足，不能完成交易");
+							return res;
+						}
+					}else{
+						res.put("message", "该车辆未注册");
+						return res;
+					}	
+				}
 				tdOrderService.save(order);
+			} else {
+				res.put("message", "未找到指定订单！");
+				return res;
 			}
-			// System.err.println("接收到车辆出库数据，开始设置属性");
-			// order = tdOrderService.findbyStatusFour(busNo, diySite.getId());
-			// if (null == order) {
-			// res.put("message", "未能找到指定的订单");
-			// return res;
-			// }
-			// order.setStatusId(5L);
-			//
-			// order.setOutputTime(theDate);
-			//
-			// order.setCarCodePhoto(order.getCarCodePhoto() + lujing + ",");
-			// // 在此计算停车费用，并将其存储到order的totalPrice字段上
-			//
-			// // 将计算出来的总价格返回
-			// res.put("totalPrice", order.getTotalPrice());
-			// // 将支付的定金返回
-			// res.put("firstPay", order.getFirstPay());
-			// // 将订单的id存储到session中
-			// request.getSession().setAttribute("orderId", order.getId());
-			// // 还要将orderId返回给客户端
-			// res.put("orderId", order.getId());
-			// System.err.println("属性设置完毕");
-			// // 设置status的值为0，代表处理成功
-			// res.put("status", 0);
-			// // 设置消息提示
-			// res.put("message", "出库信息录入成功");
-			// System.err.println("设置停车场剩余数量+1");
-			// diySite.setParkingNowNumber(diySite.getParkingNowNumber() + 1);
-			// tdDiySiteService.save(diySite);
+			diySite.setParkingNowNumber(diySite.getParkingNowNumber() + 1);
+			tdDiySiteService.save(diySite);
+			order.setOutputTime(ioData.getIoDate());
+			tdOrderService.save(order);
 		}
 		System.err.println("存储订单信息（属性设置完毕）");
+		res.put("status", 0);
 		return res;
 
 	}
@@ -355,10 +384,11 @@ public class TdCooperationController {
 		System.err.println("停车场信息获取完毕");
 
 		// 根据停车场ID，状态（6L——交易完成，已缴费），出库时间（为NULL）的所有订单
-		List<TdOrder> payed_orders = tdOrderService.findByDiyIdAndStatusIdAndOutputTimeIsNull(diyUser.getDiyId());
+		List<TdOrder> payed_orders = tdOrderService.findByDiyIdAndStatusIdAndOutputAndIsOverTime(diyUser.getDiyId());
 		List<String> carCodes = new ArrayList<>();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		for (TdOrder tdOrder : payed_orders) {
-			carCodes.add(tdOrder.getId() + "," + tdOrder.getCarCode());
+			carCodes.add(tdOrder.getId() + "," + tdOrder.getCarCode() + "," + sdf.format(tdOrder.getFinishTime()));
 		}
 		res.put("carCodes", carCodes);
 		res.put("status", 0);
@@ -371,7 +401,7 @@ public class TdCooperationController {
 	@RequestMapping(value = "/payed/order")
 	@ResponseBody
 	public Map<String, Object> getPayedOrder(HttpServletRequest req, String carCode, String finishDate,
-			Double totalPrice) {
+			Double totalPrice, Long type) {
 		Map<String, Object> res = new HashMap<>();
 		res.put("status", -1);
 		System.err.println("开始获取session中的停车场信息");
@@ -393,6 +423,17 @@ public class TdCooperationController {
 			res.put("message", "数据错误，未能找到指定车牌号码的订单");
 			return res;
 		}
+
+		if (null == type) {
+			res.put("message", "未获取到支付方式（type）");
+			return res;
+		}
+
+		if (!(1L == type || 2L == type)) {
+			res.put("message", "参数type（支付方式）的值不正确");
+			return res;
+		}
+
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Date finishTime = null;
 		try {
@@ -406,6 +447,12 @@ public class TdCooperationController {
 		order.setFinishTime(finishTime);
 		order.setTotalPrice(totalPrice);
 		order.setStatusId(6L);
+		order.setThePayType(type);
+		TdUser user = tdUserService.findByUsername(carCode);
+		if (null != user) {
+			user.setBalance(user.getBalance() + order.getFirstPay() - order.getTotalPrice());
+			tdUserService.save(user);
+		}
 		tdOrderService.save(order);
 		res.put("status", 0);
 		return res;
@@ -430,12 +477,30 @@ public class TdCooperationController {
 
 		TdDiySite site = tdDiySiteService.findOne(diyUser.getDiyId());
 
+		if (null == orderDate) {
+			res.put("message", "未获取到orderDate");
+			return res;
+		}
+
 		Date orderTime = null;
 		try {
 			orderTime = sdf.parse(orderDate);
 		} catch (ParseException e) {
 			e.printStackTrace();
 			res.put("message", "时间参数错误！");
+			return res;
+		}
+		/**
+		 * 把超时的订单设置出库
+		 */
+		List<TdOrder> orders = tdOrderService
+				.findByDiyIdAndStatusIdAndCarCodeAndOutputTimeIsNullOrderByOrderTimeDesc(diyUser.getDiyId(), carCode);
+		if (null != orders && orders.size() > 0) {
+			orders.get(0).setOutputTime(new Date());
+			orders.get(0).setIsOvertime(true);
+			tdOrderService.save(orders.get(0));
+		} else {
+			res.put("message", "未找到指定车辆超时的订单！");
 			return res;
 		}
 
@@ -449,13 +514,15 @@ public class TdCooperationController {
 		TdOrder order = new TdOrder();
 		order.setOrderNumber(orderNum);
 		order.setCarCode(carCode);
+		order.setUsername(carCode);
 		order.setDiyTitle(site.getTitle());
 		order.setDiyId(site.getId());
+		order.setFirstPay(0.00);
 		order.setOrderTime(orderTime);
 		order.setTotalPrice(totalPrice);
 		order.setRemarkInfo("缴费后15分钟以内未离开车库而产生了新的订单");
 		order.setUsername(carCode);
-		order.setStatusId(4L);
+		tdOrderService.save(order);
 		/**
 		 * 在此应该给客户发送短信提示
 		 */
@@ -464,12 +531,14 @@ public class TdCooperationController {
 		res.put("message", "信息录入成功！");
 		res.put("status", 0);
 		return res;
+
 	}
 
 	/**
 	 * @author dengxiao 8. 在新华软件修改价格之后传递到优泊B端
 	 */
 	@RequestMapping(value = "/setPrice")
+	@ResponseBody
 	public Map<String, Object> setPrice(HttpServletRequest req, Long dayType, Long nightType, Long dayBaseTime,
 			Long nightBaseTime, Double dayBasePrice, Double nightBasePrice, Double dayHourPrice, Double nightHourPrice,
 			Double dayOncePrice, Double nightOncePrice, Double maxPrice) {
@@ -597,7 +666,59 @@ public class TdCooperationController {
 			res.put("nightType", site.getNightType());
 			res.put("nightOncePrice", site.getNightOncePrice());
 		}
+		res.put("maxPrice", site.getMaxPrice());
 		res.put("leftNum", site.getParkingNowNumber());
+		res.put("status", 0);
+		return res;
+	}
+	
+	@RequestMapping(value = "/getTime")
+	@ResponseBody
+	public Map<String, Object> getTime(HttpServletRequest req){
+		Map<String, Object> res = new HashMap<>();
+		res.put("status", -1);
+		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("cooperDiy");
+		if (null == diyUser) {
+			res.put("message", "停车场用户未登陆");
+			return res;
+		}
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date time = new Date();
+		String now = sdf.format(time);
+		res.put("time", now);
+		return res;
+	}
+	
+	@RequestMapping(value = "/settlement")
+	@ResponseBody
+	public Map<String, Object> settlement(HttpServletRequest req,String busNo){
+		Map<String, Object> res = new HashMap<>();
+		res.put("status", -1);
+		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("cooperDiy");
+		if (null == diyUser) {
+			res.put("message", "停车场用户未登陆");
+			return res;
+		}
+		TdOrder order = tdOrderService
+				.findTopByCarCodeAndDiyIdAndOrderFinishOrderByOrderTimeDescOr(busNo, diyUser.getDiyId());
+		TdUser user = tdUserService.findByUsername(busNo);
+		if(user!=null){
+			if(null != order.getTotalPrice()&&user.getBalance() > order.getTotalPrice()){
+				if(null == order.getFirstPay()){
+					order.setFirstPay(0.00);
+				}
+				user.setBalance(user.getBalance() - order.getTotalPrice() + order.getFirstPay());
+				order.setThePayType(0L);
+				order.setFinishTime(new Date());
+				order.setRemarkInfo("离开车库时自动支付");
+			}else{
+				res.put("message", "账户余额不足，不能完成交易");
+				return res;
+			}
+		}else{
+			res.put("message", "该车辆未注册");
+			return res;
+		}
 		res.put("status", 0);
 		return res;
 	}

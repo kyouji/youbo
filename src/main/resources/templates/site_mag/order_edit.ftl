@@ -393,13 +393,6 @@
                                 <p class="name">正在停车</p>
                             </span>
                         </div>
-                        <div class="order-flow-wait">
-                            <a class="order-flow-input"></a>
-                            <span>
-                                <p class="name">办理出库</p>
-                                <p></p>
-                            </span>
-                        </div>
                         <div class="order-flow-right-wait">
                             <a class="order-flow-input"></a>
                             <span>
@@ -433,13 +426,6 @@
                                 <p class="name">正在停车</p>
                             </span>
                         </div>
-                        <div class="order-flow-wait">
-                            <a class="order-flow-input"></a>
-                            <span>
-                                <p class="name">办理出库</p>
-                                <p></p>
-                            </span>
-                        </div>
                         <div class="order-flow-right-wait">
                             <a class="order-flow-input"></a>
                             <span>
@@ -471,13 +457,6 @@
                             <a class="order-flow-input"></a>
                             <span>
                                 <p class="name">正在停车</p>
-                            </span>
-                        </div>
-                        <div class="order-flow-wait">
-                            <a class="order-flow-input"></a>
-                            <span>
-                                <p class="name">办理出库</p>
-                                <p></p>
                             </span>
                         </div>
                         <div class="order-flow-right-wait">
@@ -522,13 +501,6 @@
                                 </span>
                             </div>
                         </#if>
-                        <div class="order-flow-wait">
-                            <a class="order-flow-input"></a>
-                            <span>
-                                <p class="name">办理出库</p>
-                                <p></p>
-                            </span>
-                        </div>
                         <div class="order-flow-right-wait">
                             <a class="order-flow-input"></a>
                             <span>
@@ -620,13 +592,6 @@
                             </span>
                         </div>
                         </#if>
-                        <div class="order-flow-arrive">
-                            <a class="order-flow-input"></a>
-                            <span>
-                                <p class="name">办理出库</p>
-                                <p></p>
-                            </span>
-                        </div>
                         <div class="order-flow-right-arrive">
                             <a class="order-flow-input"></a>
                             <span>
@@ -634,37 +599,11 @@
                                 <p></p>
                             </span>
                         </div>
-                    <#elseif order.statusId == 7>
-                        <div class="order-flow-left">
-                            <a class="order-flow-input"></a>
-                            <span>
-                                <p class="name">正在审核</p>
-                            </span>
-                        </div>
-                        <div class="order-flow-right-wait">
-                            <a class="order-flow-input"></a>
-                            <span>
-                                <p class="name">审核通过</p>
-                            </span>
-                        </div>
-                    <#elseif order.statusId == 8>
-                        <div class="order-flow-left">
-                            <a class="order-flow-input"></a>
-                            <span>
-                                <p class="name">正在审核</p>
-                            </span>
-                        </div>
-                        <div class="order-flow-right-arrive">
-                            <a class="order-flow-input"></a>
-                            <span>
-                                <p class="name">审核未通过</p>
-                            </span>
-                        </div>
                     <#elseif order.statusId == 9>
                         <div class="order-flow-left">
                             <a class="order-flow-input"></a>
                             <span>
-                                <p class="name">正在审核</p>
+                                <p class="name">生成订单</p>
                             </span>
                         </div>
                         <div class="order-flow-right-arrive">

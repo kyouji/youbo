@@ -186,7 +186,7 @@ function cancelOrder(id){
                         <td><input type="submit" onclick="clearing(${order.id?c},1);" value="支付定金：￥${firstPay?string("0.00")}" /></td>
                     <#break>
                     <#case 4>
-                        <td><input type="submit" onclick="clearing(${order.id?c},0);" value="结算订单：￥${order.totalPrice?string("0.00")}" /></td>
+                        <td><input type="submit" onclick="clearing(${order.id?c},0);" value="结算订单：￥${order.totalPrice?string("0.00")!'0.00'}" /></td>
                     <#break>
                     <#default>
                         <td><input type="submit" style="background:#999999;" value="结算订单" /></td>

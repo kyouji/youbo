@@ -50,7 +50,12 @@
     <div class="account_withdrawals">
     <form>
         <ul>
+            <li style="height:60px;line-height:60px;">
+            <p class="p1" >总金额</p>
+            <P class="p2" style="padding:0 13px; width:60%;font-size:1.4em;color:#ef0000;">${allMoney}</p>
+            </li>
             <li>
+
                 <p class="p1">银行卡</p>
                 <p class="p2">
                     <select name="bankcard">
@@ -66,7 +71,7 @@
             </li>
             <li>
                 <p class="p1">金额(元)</p>
-                <p class="p2"><input type="text" name="money" placeholder="当前可提现余额<#if allMoney??>${allMoney?string("0.00")}<#else>0.00</#if>元" /></p>
+                <p class="p2"><input type="text" name="money" placeholder="当前可提现金额<#if allMoney??>${allMoney?string("0.00")}<#else>0.00</#if>元" /></p>
             </li>
         </ul>
         <#if cards??&&allMoney??&&allMoney gt 0>

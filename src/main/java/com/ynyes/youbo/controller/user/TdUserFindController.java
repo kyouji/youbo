@@ -189,11 +189,14 @@ public class TdUserFindController {
 						order.setCancelReason("指定停车场无剩余车位");
 						res.put("message", "抱歉，已经没有车位了，预定失败！");
 						tdOrderService.save(order);
+						tdUserService.save(user);
 						return res;
 					}
 					site.setParkingNowNumber(site.getParkingNowNumber() - 1);
 					order.setStatusId(3L);
 					order.setReserveTime(new Date());
+					tdOrderService.save(order);
+					tdDiySiteService.save(site);
 					res.put("message", "预约成功，请在2个小时之内到达指定的车库停车！");
 					// 开始判定2小时后车辆是否进入车库
 					final Long orderId = order.getId();

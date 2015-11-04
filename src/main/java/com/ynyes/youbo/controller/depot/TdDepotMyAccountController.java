@@ -58,7 +58,6 @@ public class TdDepotMyAccountController {
 
 	@Autowired
 	private TdPayTypeService tdPayTypeService;
-
 	@Autowired
 	private TdBankcardService tdBankcardService;
 
@@ -90,11 +89,11 @@ public class TdDepotMyAccountController {
 	 */
 	@RequestMapping
 	public String index(HttpServletRequest req, Device device, ModelMap map) {
-		TdDiySite site = (TdDiySite) req.getSession().getAttribute("site");
 		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("diyUser");
-		if (null == site) {
+		if (null == diyUser) {
 			return "redirect:/depot/login";
 		}
+		TdDiySite site = tdDiySiteService.findOne(diyUser.getDiyId());
 		tdCommonService.setHeader(map, req);
 		map.addAttribute("depot", site);
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -138,11 +137,10 @@ public class TdDepotMyAccountController {
 	@RequestMapping("/bankcard")
 	public String bankcard(HttpServletRequest req, Device device, ModelMap map) {
 		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("diyUser");
-		TdDiySite site = (TdDiySite) req.getSession().getAttribute("site");
 		if (null == diyUser) {
 			return "/depot/login";
 		}
-
+		TdDiySite site = tdDiySiteService.findOne(diyUser.getDiyId());
 		List<TdBankcard> bankcardList = tdBankcardService.findByDiyId(site.getId());
 		map.addAttribute("bankcardList", bankcardList);
 		return "/depot/bankcard";
@@ -251,11 +249,10 @@ public class TdDepotMyAccountController {
 	@RequestMapping("/withdrawal")
 	public String withdrawal(HttpServletRequest req, Device device, ModelMap map) {
 		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("diyUser");
-		TdDiySite site = (TdDiySite) req.getSession().getAttribute("site");
-
 		if (null == diyUser) {
 			return "/depot/login";
 		}
+		TdDiySite site = tdDiySiteService.findOne(diyUser.getDiyId());
 
 		if (null == site.getAllMoney()) {
 			site.setAllMoney(new Double(0));
@@ -281,7 +278,7 @@ public class TdDepotMyAccountController {
 		if (null == diyUser) {
 			return "/depot/login";
 		}
-		TdDiySite site = (TdDiySite) req.getSession().getAttribute("site");
+		TdDiySite site = tdDiySiteService.findOne(diyUser.getDiyId());
 		List<TdDeposit> deposit_list = tdDepositService.findByDiyIdOrderByDepositDateDesc(site.getId());
 		map.addAttribute("deposit_list", deposit_list);
 		return "/depot/withdraw_record";
@@ -290,10 +287,10 @@ public class TdDepotMyAccountController {
 	@RequestMapping(value = "/reserve")
 	public String reserve(HttpServletRequest req, ModelMap map) {
 		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("diyUser");
-		TdDiySite site = (TdDiySite) req.getSession().getAttribute("site");
 		if (null == diyUser) {
 			return "/depot/login";
 		}
+		TdDiySite site = tdDiySiteService.findOne(diyUser.getDiyId());
 		List<TdOrder> list = tdOrderService.findByDiyIdAndStatusIdOrderByOrderTime(site.getId());
 		map.addAttribute("reserved_list", list);
 		return "/depot/reserved_list";
@@ -374,7 +371,7 @@ public class TdDepotMyAccountController {
 	@RequestMapping(value = "/operate")
 	public String operate(HttpServletRequest req, Long id, Long type) {
 		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("diyUser");
-		TdDiySite site = (TdDiySite) req.getSession().getAttribute("site");
+		TdDiySite site = tdDiySiteService.findOne(diyUser.getDiyId());
 		if (null == site || null == diyUser) {
 			return "/depot/login";
 		}
@@ -392,7 +389,9 @@ public class TdDepotMyAccountController {
 				log.setRemark(diyUser.getUsername() + "同意了" + order.getCarCode() + "的预约， 预约前车位剩余"
 						+ site.getParkingNowNumber() + "个");
 				order.setStatusId(3L);
+				order.setReserveTime(new Date());
 				site.setParkingNowNumber(site.getParkingNowNumber() - 1);
+				tdDiySiteService.save(site);
 			}
 
 			if (1 == type) {
@@ -591,5 +590,112 @@ public class TdDepotMyAccountController {
 		res.put("status", 0);
 		res.put("info", "操作成功！");
 		return res;
+	}
+
+	@RequestMapping(value = "/tradeDetail")
+	public String detail(HttpServletRequest request, ModelMap map) {
+		TdDiyUser diyUser = (TdDiyUser) request.getSession().getAttribute("diyUser");
+		if (null == diyUser) {
+			return "user/login";
+		}
+		// 获取当前年份
+		Calendar c = Calendar.getInstance();
+		Integer year = c.get(Calendar.YEAR);
+		map.addAttribute("year", year);
+		return "/depot/detail";
+	}
+
+	@RequestMapping(value = "/OrderDetail")
+	public String getOrderDeatail(Long year, Long month, HttpServletRequest req, ModelMap map) {
+		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("diyUser");
+		if (null == diyUser) {
+			return "/depot/login";
+		}
+		Long days = new Long(0);
+		if (2 == month) {
+			if ((year % 100 == 0 && year % 400 == 0) || year % 4 == 0) {
+				days = new Long(29);
+			}
+		}
+
+		if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12) {
+			days = new Long(31);
+		}
+
+		if (month == 4 || month == 6 || month == 9 || month == 11) {
+			days = new Long(30);
+		}
+
+		map.addAttribute("days", days);
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+		Double totalPrice = new Double(0.00);
+		for (int i = 1; i <= days; i++) {
+			String sBegin = year + "-" + month + "-" + i + " 00:00:00";
+			String sFinish = year + "-" + month + "-" + i + " 23:59:59";
+			Date beginDate = null;
+			Date finishDate = null;
+			try {
+				beginDate = sdf.parse(sBegin);
+				finishDate = sdf.parse(sFinish);
+				List<TdOrder> list = tdOrderService.findByDiyIdAndOrderTimeBetween(diyUser.getDiyId(), beginDate,
+						finishDate);
+				Double income = new Double(0.00);
+				if (null != list) {
+					for (TdOrder order : list) {
+						if (null != order.getTotalPrice() && order.getTotalPrice() > 0
+								&& (order.getStatusId() == 6L || order.getStatusId() == 9L)
+								&& (null == order.getThePayType() || order.getThePayType() == 0L)) {
+							income += order.getTotalPrice();
+							totalPrice += order.getTotalPrice();
+						}
+					}
+				}
+				map.addAttribute("income" + i, income);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		map.addAttribute("year", year);
+		map.addAttribute("month", month);
+		map.addAttribute("totalPrice", totalPrice);
+		return "/depot/fee_detial";
+	}
+
+	@RequestMapping(value = "/detailDay")
+	public String detailDay(Long year, Long month, Long day, HttpServletRequest req, ModelMap map) {
+		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("diyUser");
+		if (null == diyUser) {
+			return "user/login";
+		}
+
+		Date beginDate = null;
+		Date finishDate = null;
+
+		String sBegin = year + "-" + month + "-" + day + " 00:00:00";
+		String sFinish = year + "-" + month + "-" + day + " 23:59:59";
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Double totalPrice = new Double(0.00);
+
+		try {
+			beginDate = sdf.parse(sBegin);
+			finishDate = sdf.parse(sFinish);
+			List<TdOrder> list = tdOrderService.findByDiyIdAndOrderTimeBetween(diyUser.getDiyId(), beginDate,
+					finishDate);
+			List<TdOrder> incomeOrder = new ArrayList<>();
+			for (TdOrder order : list) {
+				if (null != order.getTotalPrice() && order.getTotalPrice() > 0
+						&& (order.getStatusId() == 6L || order.getStatusId() == 9L)
+						&& (null == order.getThePayType() || order.getThePayType() == 0L)) {
+					totalPrice += order.getTotalPrice();
+					incomeOrder.add(order);
+				}
+			}
+			map.addAttribute("orders", incomeOrder);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		map.addAttribute("totalPrice", totalPrice);
+		return "/depot/detail_day";
 	}
 }

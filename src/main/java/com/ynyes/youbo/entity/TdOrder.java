@@ -352,7 +352,19 @@ public class TdOrder {
     @Column
     private String operator;
     
-    public String getOperator() {
+    //是否已经超时
+    @Column
+    private Boolean isOvertime;
+
+	public Boolean getIsOvertime() {
+		return isOvertime;
+	}
+
+	public void setIsOvertime(Boolean isOvertime) {
+		this.isOvertime = isOvertime;
+	}
+
+	public String getOperator() {
 		return operator;
 	}
 

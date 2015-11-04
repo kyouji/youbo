@@ -49,7 +49,8 @@
     </dl>
     <a>
         <dl class="mycenter_last" style="background-color:#f65741;">
-            <dd style="width:100%"><a href="/user/center/recharge" style="color:#fff;text-align:center;">充值</a></dd>
+            <dd style="width:50%;background-color:#00aaef;"><a href="#" style="color:#fff;text-align:center;">提现</a></dd>
+            <dd style="width:50%"><a href="/user/center/recharge" style="color:#fff;text-align:center;">充值</a></dd>
         </dl>
     </a>
     

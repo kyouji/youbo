@@ -36,9 +36,9 @@
     
     <#if diyUser??&&diyUser.roleId??>
         <#if diyUser.roleId==0>
-            <a class="ip_1" type="button" style="ali" href="/depot/myaccount/withdrawal">提现</a>
+            <a class="ip_1" type="button" style="ali" href="/depot/myaccount/withdrawal">我的钱包</a>
         <#else>
-            <a class="ip_1" type="button" style="ali;background-color:#999999" >提现</a>
+            <a class="ip_1" type="button" style="ali;background-color:#999999" >我的钱包</a>
         </#if>
         
     </#if>
@@ -52,6 +52,10 @@
                 </dl>
             </#if>
         </#if>
+        <dl>
+            <dd><a href="/depot/myaccount/tradeDetail">交易明细</a></dd>
+            <dt><a href="/depot/myaccount/tradeDetail"><img src="/depot/images/advance.png" /></a></dt>
+        </dl>
         <dl>
             <dd><a href="/depot/charge">订单管理</a></dd>
             <dt><a href="/depot/charge"><img src="/depot/images/advance.png" /></a></dt>

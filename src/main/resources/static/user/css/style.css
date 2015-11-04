@@ -115,7 +115,7 @@ body{ background:#efefef; }
 .find01 dt { width:96%; height:auto; float:left; margin-left:4%;}
 .find01 dt span{ float:left; color:#333; font-size:0.8em;}
 .find01 dt p{ float:right;}
-.find01 dd { width:96%;margin-left:4%; height:auto; float:left; margin-top:2px;font-size:0.8em; }
+.find01 dd { width:96%;margin-left:2%; height:auto; float:left; margin-top:2px;font-size:0.8em; }
 .find01 dd div{ float:left; background:url(../images/find_icon01.png) no-repeat left; background-size:16px; padding-left:30px;}
 .find01 dd span{ float:left; margin-left:40px; background:url(../images/find_icon02.png) no-repeat left; background-size:16px; padding-left:30px; }
 .find01 dd p{margin-bottom:0px; padding:0px; margin-top:2px;}

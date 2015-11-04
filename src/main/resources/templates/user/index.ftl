@@ -20,7 +20,7 @@
     <#if currentOrder??>
         <#if currentOrder.statusId==4>
             getOrderPrice();
-            setInterval("getOrderPrice()",1000);
+            setInterval("getOrderPrice()",(1000*60));
         </#if>
         reloadWindow();
         setInterval("reloadWindow()",(1000*60));
@@ -49,8 +49,7 @@
     }
 
     function changeHeads(){
-        var filebutton = document.getElementById("filebutton");
-        filebutton.click();
+        window.location.reload();
     }
     
     function currentOrder(){
@@ -164,7 +163,7 @@
                         <#case 4>
                             <a href="javascript:currentOrder()" class="four_1 a2">
                                 <img src="/user/images/my_order.png">
-                                <span class="add_price" id="price"></span>
+                                <span class="add_price" id="price"><#if currentOrder.totalPrice??>${currentOrder.totalPrice?string("0.00")}<#else>0.00</#if></span>
                                 <p>结算订单</p>
                             </a> 
                         <#break>

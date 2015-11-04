@@ -132,7 +132,7 @@ input.text {background:none; border:none;}
 /*头部*/
 .header{height: 60px;line-height: 60px;background: #0e5baa;color:#fff;font-size: 1em;}
 .header p{color:#fff;font-size:1.4em;text-align: center;}
-.header .a1{background: url(../images/top01.png) no-repeat;background-size: 30px;display: block;position: absolute;left:3%;top:15px;width: 30px;height: 30px;}
+.header .a1{background: url(/images/refresh.png) no-repeat;background-size: 30px;display: block;position: absolute;left:3%;top:15px;width: 30px;height: 30px;}
 .header .a2{background: url(../images/fdj.png) no-repeat;background-size: 30px;display: block;position: absolute;left:3%;top:15px;width: 30px;height: 30px;}
 .header .a3{background: url(../images/top03.png) no-repeat;background-size: 30px;display: block;position: absolute;right:3%;top:15px;width: 30px;height: 30px;}
 .header .a4{background: url(../images/back.png) no-repeat;background-size: 20px;display: block;position: absolute;left:3%;top:15px;width: 33px;height: 56px;}

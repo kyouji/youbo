@@ -129,9 +129,11 @@ public class TdChargeRecordController {
 			order.setStatusId(6L);
 			order.setFinishTime(new Date());
 			tdOrderService.save(order);
+			if(null != order.getUsername()){
 			TdUser user = tdUserService.findByUsername(order.getUsername());
 			user.setBalance(user.getBalance() + order.getFirstPay());
-		}
+			tdUserService.save(user);
+		}}
 		if (null != re && re) {
 			return "redirect:/depot/depot/myaccount/detail?orderId=" + id;
 		} else {

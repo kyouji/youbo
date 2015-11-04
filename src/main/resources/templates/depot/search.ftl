@@ -39,7 +39,7 @@
     <!--头部开始-->
     <div class="header">
         <p>订单查询</p>
-        <a href="javascript:history.go(-1);" class="a4"></a>
+        <a href="/depot" class="a4"></a>
         <a href="javascript:addNewCar();" class="lcy_a1"></a>
     </div>
     <!--头部结束-->

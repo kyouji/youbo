@@ -35,8 +35,8 @@ public class TdDepotInfoController {
     public String site(HttpServletRequest req, Device device, ModelMap map)
 	{
 		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("diyUser");
-		TdDiySite site = (TdDiySite) req.getSession().getAttribute("site");
-        if (null == diyUser)
+		TdDiySite site = tdDiySiteService.findOne(diyUser.getDiyId());
+		if (null == diyUser)
         {
             return "redirect:/depot/login";
         }

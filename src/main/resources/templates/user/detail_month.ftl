@@ -17,7 +17,7 @@
 <body>
 
     <div class="header">
-        <p>月份明细</p>
+        <p>明细</p>
         <a href="javascript:history.back(-1);" class="a4"></a>
     </div>
     

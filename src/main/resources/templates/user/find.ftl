@@ -141,9 +141,11 @@
                      var info${item_index} = new AMap.InfoWindow({
                         isCustom:true,
                         closeWhenClickMap:true,
-                        content:"<div style='margin:0 auto; width:64%;'><dl class='find01'><dt><span>${item.title!''}</span></dt>"+
-                        "<dd><div>${item.parkingNowNumber}</div><span>10元/小时</span></dd>"+
-                        "<dd><p>定金：${firstPay?string("0.00")}</p></dd>"+
+                        content:"<div style='margin:0 auto; width:64%;border:3px #ef0000 solid;'><dl class='find01'><dt><span style='margin:5px 0;'>${item.title!''}</span></dt>"+
+                        "<dd><div style='margin-right:0px;margin-bottom:5px;padding-left:20px;'>${item.parkingNowNumber}</div><label style='margin-left:35px;'>定金：${firstPay?string("0.00")}</label></dd>"+
+                        "<dd><span style='float:left;margin-bottom:5px;padding-left:17px;margin-left:0;'>白天:前2小时10元,后2元每小时</span>"+
+                        "<p style='float:left;margin-bottom:5px;padding-left:17px;margin-left:0;'>白天:前2小时10元,后2元每小时</p>"+
+                        "</dd>"+
                         "</dl>"+
                         "<dl class='find_btn'>"+
                         "<dt><a onclick='javascript:goNavigation(${item.longitude},${item.latitude},${item.id});'><img src='/user/images/park_icon01.png' /><span>导航</span></a></dt>"+
@@ -190,6 +192,7 @@
                 } else{//winphone手机
                     alert("只有ios和android系统的手机才能够实现导航功能！");
                 }
+                window.location.href="/user";  
             }
         });
     <#else>

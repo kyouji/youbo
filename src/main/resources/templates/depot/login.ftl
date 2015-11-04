@@ -82,12 +82,13 @@ function login(){
     </div>
   
     <div class="clear h15"></div>
-    
+    <!--
     <footer class="mainbox loginbot">
       <a href="#">100%正品保障</a>
       <a href="#">100%正品保障</a>
       <a href="#">100%正品保障</a>
     </footer>
+    -->
     <!--登录结束-->
     
 </body>

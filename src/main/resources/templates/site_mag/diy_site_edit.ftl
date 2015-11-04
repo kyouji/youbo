@@ -243,7 +243,7 @@ $(function () {
     <dt>经度</dt>
     <dd>
       <input name="longitude" type="text" value="<#if diy_site?? && diy_site.longitude??>${diy_site.longitude?string("#.######")}</#if>" class="input normal" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,6})?$/" errormsg="" sucmsg=" ">
-      <a href="http://api.map.baidu.com/lbsapi/getpoint/" target="_blank">坐标拾取</a>
+      <a href="http://lbs.amap.com/console/show/picker" target="_blank">坐标拾取</a>
       <span class="Validform_checktip"></span>
     </dd>
   </dl>
@@ -252,7 +252,7 @@ $(function () {
     <dt>纬度</dt>
     <dd>
       <input name="latitude" type="text" value="<#if diy_site?? && diy_site.latitude??>${diy_site.latitude?string("#.######")}</#if>" class="input normal" datatype="/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,6})?$/" errormsg="" sucmsg=" ">
-      <a href="http://api.map.baidu.com/lbsapi/getpoint/" target="_blank">坐标拾取</a>
+      <a href="http://lbs.amap.com/console/show/picker" target="_blank">坐标拾取</a>
       <span class="Validform_checktip"></span>
     </dd>
   </dl>
@@ -300,9 +300,22 @@ $(function () {
             <label>否</label>
         </span>
       </div>
-      <span class="Validform_checktip">*不启用则不显示该门店</span>
+      <span class="Validform_checktip"></span>
     </dd>
   </dl>
+    <dl>
+    <dt>车牌识别系统</dt>
+    <dd>
+      <div class="rule-multi-radio multi-radio">
+        <span id="rblStatus" style="display: none;">
+            <input type="radio" name="isCamera" value="1" <#if !diy_site??||(diy_site??&&diy_site.isCamera??&&diy_site.isCamera)>checked="checked"</#if>>
+            <label>是</label>
+            <input type="radio" name="isCamera" value="0" <#if diy_site??&&diy_site.isCamera??&&!diy_site.isCamera>checked="checked"</#if>>
+            <label>否</label>
+        </span>
+      </div>
+      <span class="Validform_checktip"></span>
+    </dd>
   <dl>
     <dt>排序数字</dt>
     <dd>

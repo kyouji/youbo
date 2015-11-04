@@ -70,10 +70,10 @@
     <!--导航开始-->
     <div class="topNav">
         <a class="add_sao" href="javascript:analysis();" style="">扫一扫收费</a>
-        <a href="/depot/myaccount" class="four_1 a1"><img src="/depot/images/index01.png"><p>账 户</p></a>
+        <a href="/depot/charge" class="four_1 a4"><img src="/depot/images/index04.png"><p>订单管理</p></a>
         <a href="/depot/myaccount/reserve" class="four_1 a2"><img src="/depot/images/reserve.png"><p>预约审核</p></a>
+        <a href="/depot/myaccount" class="four_1 a1"><img src="/depot/images/index01.png"><p>账 户</p></a>
         <a href="/depot/info" class="four_1 a3"><img src="/depot/images/index03.png"><p>车库信息</p></a>
-        <a href="/depot/myaccount/chargeManage" class="four_1 a4"><img src="/depot/images/index04.png"><p>收费记录</p></a>
         <div class="clear"></div>
     </div>
     <!--导航结束--

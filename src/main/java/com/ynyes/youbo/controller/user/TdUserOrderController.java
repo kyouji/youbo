@@ -132,6 +132,14 @@ public class TdUserOrderController {
 			if (3L == order.getStatusId()) {
 				TdDiySite site = tdDiySiteService.findOne(order.getDiyId());
 				site.setParkingNowNumber(site.getParkingNowNumber() + 1);
+				tdDiySiteService.save(site);
+				if (!site.getIsCamera()) {
+					Double price = DiySiteFee.GET_PARKING_PRICE(site, order.getReserveTime(), new Date());
+					order.setTotalPrice(price);
+					TdUser user = tdUserService.findByUsername(order.getUsername());
+					user.setBalance(user.getBalance() + order.getFirstPay() - order.getTotalPrice());
+					tdUserService.save(user);
+				}
 			}
 			order.setCancelReason(reason);
 			order.setStatusId(9L);
@@ -271,9 +279,10 @@ public class TdUserOrderController {
 					tdUserService.save(user);
 					return res;
 				} else {
-					user.setBalance(user.getBalance() - order.getTotalPrice() + setting.getFirstPay());
+					user.setBalance(user.getBalance() - order.getTotalPrice() + order.getFirstPay());
 					order.setStatusId(6L);
 					order.setPayTypeId(28L);
+					order = tdOrderService.save(order);
 					res.put("status", 0);
 					res.put("message", "支付成功，您可在15分钟之内离开车库！");
 				}
@@ -291,7 +300,7 @@ public class TdUserOrderController {
 	 * @author dengxiao
 	 */
 	@RequestMapping(value = "/detail")
-	public String orderDetail(HttpServletRequest req, Long orderId, ModelMap map,Boolean reload) {
+	public String orderDetail(HttpServletRequest req, Long orderId, ModelMap map, Boolean reload) {
 		String username = (String) req.getSession().getAttribute("username");
 		TdUser user = tdUserService.findByUsername(username);
 		if (null == user) {
@@ -301,6 +310,12 @@ public class TdUserOrderController {
 		if (null != order && null != order.getPayTypeId()) {
 			TdPayType payType = tdPayService.findOne(order.getPayTypeId());
 			map.addAttribute("payType", payType.getTitle());
+		}
+		if(null != order&&null == order.getTotalPrice()){
+			TdDiySite site = tdDiySiteService.findOne(order.getDiyId());
+			if(site!=null&&!site.getIsCamera()){
+				order.setTotalPrice(DiySiteFee.GET_PARKING_PRICE(site, order.getReserveTime(), new Date()));
+			}
 		}
 		TdSetting setting = tdSettingService.findOne(1L);
 		map.addAttribute("firstPay", setting.getFirstPay());
@@ -409,7 +424,7 @@ public class TdUserOrderController {
 					order.setStatusId(9L);
 					// 设置订单取消的原因
 					order.setCancelReason("指定停车场无剩余车位");
-
+					
 					tdOrderService.save(order);
 					tdUserService.save(user);
 					// 设置消息提示
@@ -437,7 +452,7 @@ public class TdUserOrderController {
 					res.put("message", "余额不足，支付失败！");
 					return res;
 				} else {
-					user.setBalance(user.getBalance() - order.getTotalPrice() + setting.getFirstPay());
+					user.setBalance(user.getBalance() - order.getTotalPrice() + order.getFirstPay());
 					order.setStatusId(6L);
 					order.setThePayType(0L);
 					res.put("status", 0);
@@ -479,6 +494,14 @@ public class TdUserOrderController {
 			if (3L == order.getStatusId()) {
 				TdDiySite site = tdDiySiteService.findOne(order.getDiyId());
 				site.setParkingNowNumber(site.getParkingNowNumber() + 1);
+				tdDiySiteService.save(site);
+				if (!site.getIsCamera()) {
+					Double price = DiySiteFee.GET_PARKING_PRICE(site, order.getReserveTime(), new Date());
+					order.setTotalPrice(price);
+					TdUser user = tdUserService.findByUsername(order.getUsername());
+					user.setBalance(user.getBalance() + order.getFirstPay() - order.getTotalPrice());
+					tdUserService.save(user);
+				}
 			}
 			order.setStatusId(9L);
 			tdOrderService.save(order);
