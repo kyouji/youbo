@@ -245,5 +245,5 @@ public interface TdOrderRepo extends PagingAndSortingRepository<TdOrder, Long>, 
 	//根据停车场ID和车牌号和订单状态和出库时间为NULL查找订单
 	List<TdOrder> findByDiyIdAndStatusIdAndCarCodeAndOutputTimeIsNullOrderByOrderTimeDesc(Long diyId,Long statusId,String carCode);
 	
-	List<TdOrder> findByDiyIdAndStatusIdAndOutputTimeIsNullAndIsOvertimeNot(Long diyId, Long statusId,Boolean isOverTime);
+	List<TdOrder> findByDiyIdAndStatusIdAndOutputTimeIsNullAndIsOvertime(Long diyId, Long statusId,Boolean isOverTime);
 }

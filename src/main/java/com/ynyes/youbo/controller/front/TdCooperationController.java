@@ -306,6 +306,7 @@ public class TdCooperationController {
 			if (isVip) {
 				order.setThePayType(3L);
 			}
+			order.setIsOvertime(false);
 			// 设置订单的入库时间
 			order.setInputTime(ioData.getIoDate());
 			// 将订单的状态改变为4L（正在停车）
@@ -522,6 +523,8 @@ public class TdCooperationController {
 		order.setTotalPrice(totalPrice);
 		order.setRemarkInfo("缴费后15分钟以内未离开车库而产生了新的订单");
 		order.setUsername(carCode);
+		order.setIsOvertime(false);
+		order.setStatusId(4L);
 		tdOrderService.save(order);
 		/**
 		 * 在此应该给客户发送短信提示

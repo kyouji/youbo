@@ -778,6 +778,6 @@ public class TdOrderService {
 		if (null == diyId) {
 			return null;
 		}
-		return repository.findByDiyIdAndStatusIdAndOutputTimeIsNullAndIsOvertimeNot(diyId, 6L, true);
+		return repository.findByDiyIdAndStatusIdAndOutputTimeIsNullAndIsOvertime(diyId, 6L, false);
 	}
 }
