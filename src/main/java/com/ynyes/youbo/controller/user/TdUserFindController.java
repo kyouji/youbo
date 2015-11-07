@@ -192,7 +192,6 @@ public class TdUserFindController {
 						tdUserService.save(user);
 						return res;
 					}
-					site.setParkingNowNumber(site.getParkingNowNumber() - 1);
 					order.setStatusId(3L);
 					order.setReserveTime(new Date());
 					tdOrderService.save(order);
@@ -255,6 +254,7 @@ public class TdUserFindController {
 
 		user = tdUserService.save(user);
 		site = tdDiySiteService.save(site);
+		order.setIsSendReserve(false);
 		order = tdOrderService.save(order);
 		res.put("status", 0);
 		res.put("id", order.getId());

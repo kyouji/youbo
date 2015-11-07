@@ -355,6 +355,30 @@ public class TdOrder {
     //是否已经超时
     @Column
     private Boolean isOvertime;
+    
+    //是否已经投递预约
+    @Column
+    private Boolean isSendReserve;
+    
+    //是否已经取消
+    @Column
+    private Boolean isCancel;
+
+	public Boolean getIsCancel() {
+		return isCancel;
+	}
+
+	public void setIsCancel(Boolean isCancel) {
+		this.isCancel = isCancel;
+	}
+
+	public Boolean getIsSendReserve() {
+		return isSendReserve;
+	}
+
+	public void setIsSendReserve(Boolean isSendReserve) {
+		this.isSendReserve = isSendReserve;
+	}
 
 	public Boolean getIsOvertime() {
 		return isOvertime;

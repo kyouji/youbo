@@ -11,43 +11,43 @@ import javax.persistence.Id;
 import org.springframework.format.annotation.DateTimeFormat;
 
 /**
- * @author dengxiao 
- * 提取现金
+ * @author dengxiao
+ * 用户充值记录
  */
 @Entity
-public class TdDeposit {
+public class TdRechargeLog {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
-	//提现单号
+	//充值单号
 	@Column
 	private String num;
 	
-	//提现金额
+	//充值金额
 	@Column
 	private Double money;
 	
-	//提现时间
+	//充值时间
 	@Column
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-	private Date depositDate;
-	
-	//属于哪个车库
-	@Column
-	private Long diyId;
+	private Date rechargeDate;
 	
 	//属于哪个用户
 	@Column
 	private Long userId;
+	
+	//是否已经支付
+	@Column
+	private Long statusId;
 
-	public Long getUserId() {
-		return userId;
+	public Long getStatusId() {
+		return statusId;
 	}
 
-	public void setUserId(Long userId) {
-		this.userId = userId;
+	public void setStatusId(Long statusId) {
+		this.statusId = statusId;
 	}
 
 	public Long getId() {
@@ -74,23 +74,19 @@ public class TdDeposit {
 		this.money = money;
 	}
 
-	public Date getDepositDate() {
-		return depositDate;
+	public Date getRechargeDate() {
+		return rechargeDate;
 	}
 
-	public void setDepositDate(Date depositDate) {
-		this.depositDate = depositDate;
+	public void setRechargeDate(Date rechargeDate) {
+		this.rechargeDate = rechargeDate;
 	}
 
-	public Long getDiyId() {
-		return diyId;
+	public Long getUserId() {
+		return userId;
 	}
 
-	public void setDiyId(Long diyId) {
-		this.diyId = diyId;
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
-	
-	
-	
-	
 }

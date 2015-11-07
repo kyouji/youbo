@@ -246,4 +246,8 @@ public interface TdOrderRepo extends PagingAndSortingRepository<TdOrder, Long>, 
 	List<TdOrder> findByDiyIdAndStatusIdAndCarCodeAndOutputTimeIsNullOrderByOrderTimeDesc(Long diyId,Long statusId,String carCode);
 	
 	List<TdOrder> findByDiyIdAndStatusIdAndOutputTimeIsNullAndIsOvertime(Long diyId, Long statusId,Boolean isOverTime);
+	
+	List<TdOrder> findByDiyIdAndStatusIdAndIsSendReserveFalse(Long diyId,Long statusId);
+	
+	List<TdOrder> findByDiyIdAndStatusIdAndIsCancelTrue(Long diyId,Long statusId);
 }

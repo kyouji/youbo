@@ -14,11 +14,11 @@ import org.dom4j.Node;
 import org.dom4j.io.SAXReader;
 
 import com.alipay.config.AlipayConfig;
-import com.alipay.sign.MD5;
 import com.alipay.util.httpClient.HttpProtocolHandler;
 import com.alipay.util.httpClient.HttpRequest;
 import com.alipay.util.httpClient.HttpResponse;
 import com.alipay.util.httpClient.HttpResultType;
+import com.alipay.sign.RSA;
 
 /* *
  *类名：AlipaySubmit
@@ -46,8 +46,8 @@ public class AlipaySubmit {
 	public static String buildRequestMysign(Map<String, String> sPara) {
     	String prestr = AlipayCore.createLinkString(sPara); //把数组所有元素，按照“参数=参数值”的模式用“&”字符拼接成字符串
         String mysign = "";
-        if(AlipayConfig.sign_type.equals("MD5") ) {
-        	mysign = MD5.sign(prestr, AlipayConfig.key, AlipayConfig.input_charset);
+        if(AlipayConfig.sign_type.equals("RSA") ){
+        	mysign = RSA.sign(prestr, AlipayConfig.private_key, AlipayConfig.input_charset);
         }
         return mysign;
     }
@@ -89,8 +89,8 @@ public class AlipaySubmit {
                       + "\">");
 
         for (int i = 0; i < keys.size(); i++) {
-            String name = keys.get(i);
-            String value = sPara.get(name);
+            String name = (String) keys.get(i);
+            String value = (String) sPara.get(name);
 
             sbHtml.append("<input type=\"hidden\" name=\"" + name + "\" value=\"" + value + "\"/>");
         }
@@ -122,8 +122,8 @@ public class AlipaySubmit {
                       + "\">");
 
         for (int i = 0; i < keys.size(); i++) {
-            String name = keys.get(i);
-            String value = sPara.get(name);
+            String name = (String) keys.get(i);
+            String value = (String) sPara.get(name);
 
             sbHtml.append("<input type=\"hidden\" name=\"" + name + "\" value=\"" + value + "\"/>");
         }

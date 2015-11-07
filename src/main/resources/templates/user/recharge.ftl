@@ -19,6 +19,14 @@
             tiptype: 3,
         });
     });
+    
+    function alipay(){
+        var money = $("#rechargeMoney").val();
+        if(""==money||isNaN(money)){
+            return;
+        }
+        window.location.href = "/user/pay/alipay/recharge?money="+money;        
+    }
 </script>
 </head>
 
@@ -37,10 +45,10 @@
     </dl>
 
     <div class="pay_way">请选择充值方式</div>
-        <a>
+        <a href="javascript:alipay();">
             <dl class="pay_last">
-                <dd><img src="/user/images/pay_icon01.png" /><a>支付宝</a></dd>
-                <dt><a><img src="/user/images/aboutus_right.png" /></a></dt>
+                <dd><img src="/user/images/pay_icon01.png" /><a href="javascript:alipay();">支付宝</a></dd>
+                <dt><a href="javascript:alipay();"><img src="/user/images/aboutus_right.png" /></a></dt>
             </dl>
         </a>
         <a>

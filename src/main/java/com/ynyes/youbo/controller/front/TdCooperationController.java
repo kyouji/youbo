@@ -91,6 +91,10 @@ public class TdCooperationController {
 			}
 			System.err.println("结束查找原因");
 		}
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date time = new Date();
+		String now = sdf.format(time);
+		res.put("time", now);
 		return res;
 	}
 
@@ -187,36 +191,6 @@ public class TdCooperationController {
 				}
 			}
 		}
-
-		// for (String string : prices) {
-		// String[] infos = string.split(",");
-		// TdOrder order = tdOrderService.findOne(Long.parseLong(infos[0]));
-		//
-		// if (null != order && null != infos[1] &&
-		// infos[1].trim().equals(order.getCarCode())) {
-		// order.setTotalPrice(new Double(infos[2]));
-		// // 如果是违约订单，则开始根据消费金额返还定金的余额
-		// if (9L == order.getStatusId()) {
-		// TdUser user = tdUserService.findByUsername(order.getUsername());
-		// user.setBalance(user.getBalance() + order.getFirstPay() -
-		// order.getTotalPrice());
-		// tdUserService.save(user);
-		// }
-		// tdOrderService.save(order);
-		// res.put(infos[0] + "", "车牌号为" + infos[1] + "，费用为" + infos[2]);
-		// } else {
-		// if (null == order) {
-		// res.put("message", "未找到id为" + infos[0] + "的订单");
-		// return res;
-		// } else if (null == infos[1]) {
-		// res.put("message", "未获取到id为" + infos[0] + "的订单的车牌号");
-		// return res;
-		// } else if (!infos[1].trim().equals(order.getCarCode())) {
-		// res.put("message", "id为" + infos[0] + "的订单车牌号信息不符合");
-		// return res;
-		// }
-		// }
-		// }
 		res.put("status", 0);
 		return res;
 	}
@@ -281,9 +255,20 @@ public class TdCooperationController {
 			System.err.println("订单信息已经获取");
 			// 如果说没有找到相对应的订单，则表示该车辆没有预约，且立即为它生成一个订单
 			if (null == order) {
+				
+				SimpleDateFormat sdf1 = new SimpleDateFormat("yyyyMMddHHmmss");
+				
+				// 以下代码用于生成订单编号
+				Date date = new Date();
+				String sDate = sdf1.format(date);
+				Random random = new Random();
+				Integer suiji = random.nextInt(900) + 100;
+				String orderNum = sDate + suiji;
+				
 				System.err.println("未预约车辆进入车库，创建一个新的订单");
 				TdOrder theOrder = new TdOrder();
 				System.err.println("开始设置属性");
+				theOrder.setOrderNumber(orderNum);
 				theOrder.setDiyId(diySite.getId());
 				theOrder.setDiyTitle(diySite.getTitle());
 				theOrder.setOrderTime(theDate);
@@ -297,8 +282,6 @@ public class TdCooperationController {
 				theOrder.setCarCodePhoto(theOrder.getCarCodePhoto() + lujing + ",");
 				System.err.println("开始存储新的订单");
 				order = tdOrderService.save(theOrder);
-				System.err.println("设置停车场的剩余数量-1");
-				diySite.setParkingNowNumber(diySite.getParkingNowNumber() - 1);
 				tdDiySiteService.save(diySite);
 			}
 			System.err.println("继续设置属性");
@@ -333,29 +316,12 @@ public class TdCooperationController {
 						order.setThePayType(3L);
 					}
 				}
-				if (4L == order.getStatusId()) {
-					TdUser user = tdUserService.findByUsername(busNo);
-					if(user!=null){
-						if(null != order.getTotalPrice()&&user.getBalance() > order.getTotalPrice()){
-							user.setBalance(user.getBalance() - order.getTotalPrice() + order.getFirstPay());
-							order.setFinishTime(ioData.getIoDate());
-							order.setThePayType(0L);
-						}else{
-							res.put("message", "账户余额不足，不能完成交易");
-							return res;
-						}
-					}else{
-						res.put("message", "该车辆未注册");
-						return res;
-					}	
-				}
+				order.setOutputTime(ioData.getIoDate());
 				tdOrderService.save(order);
 			} else {
 				res.put("message", "未找到指定订单！");
 				return res;
 			}
-			diySite.setParkingNowNumber(diySite.getParkingNowNumber() + 1);
-			tdDiySiteService.save(diySite);
 			order.setOutputTime(ioData.getIoDate());
 			tdOrderService.save(order);
 		}
@@ -526,9 +492,6 @@ public class TdCooperationController {
 		order.setIsOvertime(false);
 		order.setStatusId(4L);
 		tdOrderService.save(order);
-		/**
-		 * 在此应该给客户发送短信提示
-		 */
 		tdOrderService.save(order);
 
 		res.put("message", "信息录入成功！");
@@ -670,31 +633,16 @@ public class TdCooperationController {
 			res.put("nightOncePrice", site.getNightOncePrice());
 		}
 		res.put("maxPrice", site.getMaxPrice());
-		res.put("leftNum", site.getParkingNowNumber());
 		res.put("status", 0);
 		return res;
 	}
-	
-	@RequestMapping(value = "/getTime")
-	@ResponseBody
-	public Map<String, Object> getTime(HttpServletRequest req){
-		Map<String, Object> res = new HashMap<>();
-		res.put("status", -1);
-		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("cooperDiy");
-		if (null == diyUser) {
-			res.put("message", "停车场用户未登陆");
-			return res;
-		}
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		Date time = new Date();
-		String now = sdf.format(time);
-		res.put("time", now);
-		return res;
-	}
-	
+
+	/**
+	 * @author dengxiao 出库时未支付，一直判定车辆是否支付的接口
+	 */
 	@RequestMapping(value = "/settlement")
 	@ResponseBody
-	public Map<String, Object> settlement(HttpServletRequest req,String busNo){
+	public Map<String, Object> settlement(HttpServletRequest req, String busNo) {
 		Map<String, Object> res = new HashMap<>();
 		res.put("status", -1);
 		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("cooperDiy");
@@ -702,26 +650,155 @@ public class TdCooperationController {
 			res.put("message", "停车场用户未登陆");
 			return res;
 		}
-		TdOrder order = tdOrderService
-				.findTopByCarCodeAndDiyIdAndOrderFinishOrderByOrderTimeDescOr(busNo, diyUser.getDiyId());
+		TdOrder order = tdOrderService.findbyStatusFour(busNo, diyUser.getDiyId());
 		TdUser user = tdUserService.findByUsername(busNo);
-		if(user!=null){
-			if(null != order.getTotalPrice()&&user.getBalance() > order.getTotalPrice()){
-				if(null == order.getFirstPay()){
+		if (user != null) {
+			if (null != order.getTotalPrice() && user.getBalance() > order.getTotalPrice()) {
+				if (null == order.getFirstPay()) {
 					order.setFirstPay(0.00);
 				}
 				user.setBalance(user.getBalance() - order.getTotalPrice() + order.getFirstPay());
+				tdUserService.save(user);
 				order.setThePayType(0L);
 				order.setFinishTime(new Date());
 				order.setRemarkInfo("离开车库时自动支付");
-			}else{
+				tdOrderService.save(order);
+			} else {
 				res.put("message", "账户余额不足，不能完成交易");
 				return res;
 			}
-		}else{
+		} else {
 			res.put("message", "该车辆未注册");
 			return res;
 		}
+		res.put("status", 0);
+		return res;
+	}
+
+	/**
+	 * @author dengxiao 将预约的信息传递至新华软件已预留停车位
+	 */
+	@RequestMapping(value = "/reserve")
+	@ResponseBody
+	public Map<String, Object> getReserve(HttpServletRequest req) {
+		Map<String, Object> res = new HashMap<>();
+		res.put("status", -1);
+
+		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("cooperDiy");
+		if (null == diyUser) {
+			res.put("message", "停车场用户未登陆");
+			return res;
+		}
+
+		List<String> data = new ArrayList<>();
+		List<TdOrder> reserve_list = tdOrderService.findByDiyIdAndStatusIdAndIsSendReserveFalse(diyUser.getDiyId());
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		if (null != reserve_list) {
+			for (TdOrder order : reserve_list) {
+				data.add(order.getId() + "," + order.getCarCode() + "," + sdf.format(order.getReserveTime()));
+				order.setIsSendReserve(true);
+				tdOrderService.save(order);
+			}
+		}
+		res.put("orders", data);
+		res.put("status", 0);
+		return res;
+	}
+
+	/**
+	 * @author dengxiao 开闸放行之后调用的接口，用于控制停车场的车位数
+	 */
+	@RequestMapping(value = "/parkingNum")
+	@ResponseBody
+	public Map<String, Object> parkingNum(HttpServletRequest req, Integer leftNum) {
+		Map<String, Object> res = new HashMap<>();
+		res.put("status", -1);
+
+		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("cooperDiy");
+		if (null == diyUser) {
+			res.put("message", "停车场用户未登陆");
+			return res;
+		}
+
+		if (null == leftNum) {
+			res.put("message", "未能获取到参数LeftNum");
+			return res;
+		}
+
+		TdDiySite site = tdDiySiteService.findOne(diyUser.getDiyId());
+		site.setParkingNowNumber(leftNum);
+		tdDiySiteService.save(site);
+		res.put("status", 0);
+		return res;
+	}
+
+	/**
+	 * @author dengxiao 将违约的订单发送回A端的接口
+	 */
+	@RequestMapping(value = "/overTime")
+	@ResponseBody
+	public Map<String, Object> overTime(HttpServletRequest req, Long id, Double totalPrice) {
+		Map<String, Object> res = new HashMap<>();
+		res.put("status", -1);
+
+		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("cooperDiy");
+		if (null == diyUser) {
+			res.put("message", "停车场用户未登陆");
+			return res;
+		}
+
+		if (null == id) {
+			res.put("message", "未能获取到参数id");
+			return res;
+		}
+
+		if (null == totalPrice) {
+			res.put("message", "未能获取到totalPrice参数");
+			return res;
+		}
+
+		TdOrder order = tdOrderService.findOne(id);
+		if (null != order) {
+			order.setStatusId(9L);
+			order.setFinishTime(new Date());
+			order.setTotalPrice(totalPrice);
+			order.setRemarkInfo("预约后2小时内未进入车库，订单自动取消");
+			TdUser user = tdUserService.findByUsername(order.getUsername());
+			if (null != user) {
+				user.setBalance(user.getBalance() + order.getFirstPay() - order.getTotalPrice());
+				tdUserService.save(user);
+			}
+		} else {
+			res.put("message", "未能查找到指定的订单");
+			return res;
+		}
+		res.put("status", 0);
+		return res;
+	}
+
+	/**
+	 * @author dengxiao 在APP上取消的订单，将其传递给PC软件
+	 */
+	@RequestMapping(value = "/cancel/order")
+	@ResponseBody
+	public Map<String, Object> cancelOrder(HttpServletRequest req) {
+		Map<String, Object> res = new HashMap<>();
+		res.put("status", -1);
+
+		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("cooperDiy");
+		if (null == diyUser) {
+			res.put("message", "停车场用户未登陆");
+			return res;
+		}
+
+		List<TdOrder> cancel_list = tdOrderService.findByCancelOrder(diyUser.getDiyId());
+		List<String> data = new ArrayList<>();
+		for (TdOrder order : cancel_list) {
+			data.add(order.getId() + "," + order.getCarCode());
+			order.setIsCancel(false);
+			tdOrderService.save(order);
+		}
+		res.put("orders", data);
 		res.put("status", 0);
 		return res;
 	}

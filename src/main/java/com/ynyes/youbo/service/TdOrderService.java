@@ -780,4 +780,18 @@ public class TdOrderService {
 		}
 		return repository.findByDiyIdAndStatusIdAndOutputTimeIsNullAndIsOvertime(diyId, 6L, false);
 	}
+	
+	public List<TdOrder> findByDiyIdAndStatusIdAndIsSendReserveFalse(Long diyId){
+		if(null == diyId){
+			return null;
+		}
+		return repository.findByDiyIdAndStatusIdAndIsSendReserveFalse(diyId, 3L);
+	}
+	
+	public List<TdOrder> findByCancelOrder(Long diyId){
+		if(null == diyId){
+			return null;
+		}
+		return repository.findByDiyIdAndStatusIdAndIsCancelTrue(diyId, 9L);
+	}
 }

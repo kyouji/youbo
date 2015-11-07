@@ -43,7 +43,7 @@
                     <dd>
                         <img src="/user/images/detail_month_01.png" />
                         <span><#if item.orderTime??>${item.orderTime?string("yyyy-MM-dd HH:mm")}</#if></span>
-                        <span style="float:right;"><a href="/user/order/detail?orderId=${item.id?c}">详情</a></span>
+                        <span style="float:right;"><a href="/depot/myaccount/detail?orderId=${item.id?c}">详情</a></span>
                     </dd>
                     <dd>
                         <img src="/user/images/detail_month_02.png" />

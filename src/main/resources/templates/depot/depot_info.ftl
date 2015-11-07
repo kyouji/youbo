@@ -81,8 +81,8 @@
                 </dl>
         
                 <dl class="park_last">
-                    <dd><span>车位数<font style="font-size:0.6em;" color="gray">(点击数字可修改剩余车位数)</font></span></dd>
-                    <dt onclick="pupopen()"><span style=" color:#ff665e;" id="surplus">${site.parkingNowNumber!'0'}</span>/<span>${site.parkingTotalNumber!'0'}</span></dt>
+                    <dd><span>车位数<font style="font-size:0.6em;" color="gray"></font></span></dd>
+                    <dt><span style=" color:#ff665e;" id="surplus">${site.parkingNowNumber!'0'}</span>/<span>${site.parkingTotalNumber!'0'}</span></dt>
                 </dl>
         
                 <dl class="park_last_01">

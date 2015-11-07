@@ -131,7 +131,6 @@ public class TdUserOrderController {
 			}
 			if (3L == order.getStatusId()) {
 				TdDiySite site = tdDiySiteService.findOne(order.getDiyId());
-				site.setParkingNowNumber(site.getParkingNowNumber() + 1);
 				tdDiySiteService.save(site);
 				if (!site.getIsCamera()) {
 					Double price = DiySiteFee.GET_PARKING_PRICE(site, order.getReserveTime(), new Date());
@@ -141,12 +140,13 @@ public class TdUserOrderController {
 					tdUserService.save(user);
 				}
 			}
-			order.setCancelReason(reason);
+			order.setRemarkInfo(reason);
 			order.setStatusId(9L);
 			order.setFinishTime(new Date());
+			order.setIsCancel(true);
 			tdOrderService.save(order);
 		}
-		if (true == isDetail) {
+		if (null != isDetail && true == isDetail) {
 			return "redirect:/user/order/detail?orderId=" + id;
 		}
 		return "redirect:/user/order";
@@ -199,46 +199,9 @@ public class TdUserOrderController {
 							tdUserService.save(user);
 							return res;
 						}
-						site.setParkingNowNumber(site.getParkingNowNumber() - 1);
 						order.setStatusId(3L);
 						order.setReserveTime(new Date());
 						res.put("message", "预约成功，请在2个小时之内到达指定的车库停车！");
-						// 开始判定2小时后车辆是否进入车库
-						final Long orderId = order.getId();
-						final Double firstPay = setting.getFirstPay();
-						final TdUser theUser = user;
-						Timer timer = new Timer();
-						timer.schedule(new TimerTask() {
-							@Override
-							public void run() {
-								TdOrder theOrder = tdOrderService.findOne(orderId);
-								TdDiySite theSite = tdDiySiteService.findOne(theOrder.getDiyId());
-								// 如果两小时之后订单的状态还是“预约成功”，则表示没有进入车库
-								if (3L == theOrder.getStatusId()) {
-									long reserve = theOrder.getReserveTime().getTime();
-									// 设置取消时间
-									theOrder.setFinishTime(new Date(reserve + (1000 * 60 * 60 * 2)));
-									// 设置订单状态为交易取消
-									theOrder.setStatusId(9L);
-									// 设置取消订单的原因
-									theOrder.setCancelReason("预约2小时后车辆未进入指定车库");
-									// 判断消费了多少钱
-									if (null != theSite && null != theSite.getIsCamera() && !theSite.getIsCamera()) {
-										Double price = DiySiteFee.GET_PARKING_PRICE(theSite, theOrder.getReserveTime(),
-												theOrder.getFinishTime());
-										theOrder.setTotalPrice(price);
-									}
-									// 如果定金还有剩余就退还剩余部分的钱
-									if (firstPay > theOrder.getTotalPrice()) {
-										Double left = firstPay - theOrder.getTotalPrice();
-										theUser.setBalance(theUser.getBalance() + left);
-									}
-									// 保存已经改动的订单信息和用户信息
-									tdOrderService.save(theOrder);
-									tdUserService.save(theUser);
-								}
-							}
-						}, 1000 * 60 * 60 * 2);
 					} else {// 如果没有摄像头就需要等待泊车员手动确认预约
 						res.put("message", "定金已支付，等待工作人员确认预约！");
 					}
@@ -311,9 +274,9 @@ public class TdUserOrderController {
 			TdPayType payType = tdPayService.findOne(order.getPayTypeId());
 			map.addAttribute("payType", payType.getTitle());
 		}
-		if(null != order&&null == order.getTotalPrice()){
+		if (null != order && null == order.getTotalPrice()) {
 			TdDiySite site = tdDiySiteService.findOne(order.getDiyId());
-			if(site!=null&&!site.getIsCamera()){
+			if (site != null && !site.getIsCamera()) {
 				order.setTotalPrice(DiySiteFee.GET_PARKING_PRICE(site, order.getReserveTime(), new Date()));
 			}
 		}
@@ -373,46 +336,10 @@ public class TdUserOrderController {
 							res.put("message", "抱歉，已经没有车位了，预定失败！");
 							return res;
 						}
-						site.setParkingNowNumber(site.getParkingNowNumber() - 1);
 						order.setStatusId(3L);
 						order.setReserveTime(new Date());
+						order.setIsSendReserve(false);
 						res.put("message", "预约成功，请在2个小时之内到达指定的车库停车！");
-						// 开始判定2小时后车辆是否进入车库
-						final Long orderId = order.getId();
-						final Double firstPay = setting.getFirstPay();
-						final TdUser theUser = user;
-						Timer timer = new Timer();
-						timer.schedule(new TimerTask() {
-							@Override
-							public void run() {
-								TdOrder theOrder = tdOrderService.findOne(orderId);
-								TdDiySite theSite = tdDiySiteService.findOne(theOrder.getDiyId());
-								// 如果两小时之后订单的状态还是“预约成功”，则表示没有进入车库
-								if (3L == theOrder.getStatusId()) {
-									long reserve = theOrder.getReserveTime().getTime();
-									// 设置取消时间
-									theOrder.setFinishTime(new Date(reserve + (1000 * 60 * 60 * 2)));
-									// 设置订单状态为交易取消
-									theOrder.setStatusId(9L);
-									// 设置取消订单的原因
-									theOrder.setCancelReason("预约2小时后车辆未进入指定车库");
-									// 判断消费了多少钱
-									if (null != theSite && null != theSite.getIsCamera() && !theSite.getIsCamera()) {
-										Double price = DiySiteFee.GET_PARKING_PRICE(theSite, theOrder.getReserveTime(),
-												theOrder.getFinishTime());
-										theOrder.setTotalPrice(price);
-									}
-									// 如果定金还有剩余就退还剩余部分的钱
-									if (firstPay > theOrder.getTotalPrice()) {
-										Double left = firstPay - theOrder.getTotalPrice();
-										theUser.setBalance(theUser.getBalance() + left);
-									}
-									// 保存已经改动的订单信息和用户信息
-									tdOrderService.save(theOrder);
-									tdUserService.save(theUser);
-								}
-							}
-						}, 1000 * 60 * 60 * 2);
 					} else {// 如果没有摄像头就需要等待泊车员手动确认预约
 						res.put("message", "定金已支付，等待工作人员确认预约！");
 					}
@@ -424,7 +351,7 @@ public class TdUserOrderController {
 					order.setStatusId(9L);
 					// 设置订单取消的原因
 					order.setCancelReason("指定停车场无剩余车位");
-					
+
 					tdOrderService.save(order);
 					tdUserService.save(user);
 					// 设置消息提示
@@ -484,7 +411,7 @@ public class TdUserOrderController {
 		TdOrder order = tdOrderService.findOne(id);
 		if (null != order) {
 			order.setFinishTime(new Date());
-			order.setCancelReason("用户自主取消");
+			order.setRemarkInfo("用户自主取消");
 			if (2L == order.getStatusId() || 1L == order.getStatusId()) {
 				TdUser user = tdUserService.findByUsername(order.getUsername());
 				user.setBalance(order.getFirstPay() + user.getBalance());
@@ -493,7 +420,6 @@ public class TdUserOrderController {
 			}
 			if (3L == order.getStatusId()) {
 				TdDiySite site = tdDiySiteService.findOne(order.getDiyId());
-				site.setParkingNowNumber(site.getParkingNowNumber() + 1);
 				tdDiySiteService.save(site);
 				if (!site.getIsCamera()) {
 					Double price = DiySiteFee.GET_PARKING_PRICE(site, order.getReserveTime(), new Date());
@@ -504,8 +430,9 @@ public class TdUserOrderController {
 				}
 			}
 			order.setStatusId(9L);
+			order.setFinishTime(new Date());
+			order.setIsCancel(true);
 			tdOrderService.save(order);
-			res.put("status", 0);
 			res.put("message", "订单已取消");
 		} else {
 			res.put("message", "未找到指定的订单");
@@ -545,7 +472,7 @@ public class TdUserOrderController {
 				// 设置订单状态为交易取消
 				currentOrder.setStatusId(9L);
 				// 设置取消订单的原因
-				currentOrder.setCancelReason("预约2小时后车辆未进入指定车库");
+				currentOrder.setRemarkInfo("预约后2小时内未进入车库，订单自动取消");
 				// 判断消费了多少钱
 				if (null == currentOrder.getTotalPrice()) {
 					currentOrder.setTotalPrice(0.00);
@@ -560,7 +487,6 @@ public class TdUserOrderController {
 					Double left = firstPay - currentOrder.getTotalPrice();
 					theUser.setBalance(theUser.getBalance() + left);
 				}
-				// 保存已经改动的订单信息和用户信息
 				tdOrderService.save(currentOrder);
 				tdUserService.save(theUser);
 				res.put("status", 0);

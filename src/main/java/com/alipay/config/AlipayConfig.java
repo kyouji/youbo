@@ -25,16 +25,19 @@ public class AlipayConfig {
 	
 	//↓↓↓↓↓↓↓↓↓↓请在这里配置您的基本信息↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
 	// 合作身份者ID，以2088开头由16位纯数字组成的字符串
-	public static String partner = "2088711810860604";
-	// 商户的私钥
-	public static String key = "1sfhrsrza6k9hwy0y07c902lc9ayhpvs";
-
-	//必填，页面跳转同步通知页面路径
-	public static String return_url = "http://www.cytm99.com/login/alipay_return_url";
+	public static String partner = "2088121132896195";
 	
-	//需http://格式的完整路径，不允许加?id=123这类自定义参数
+	// 收款支付宝账号，以2088开头由16位纯数字组成的字符串，一般情况下收款账号就是签约账号
+	public static String seller_id = partner;
+	// 商户的私钥
+	public static String private_key = "MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAN71b0YzkX3zp+0DPAsAyf0Me8rq2CIcAQuxsYEJAhkfGntFtWqkFEhMxbJONDhPaCjpZGyen5WcuwWZ6UrHEQYc1Sjb7Q+e53YQ1/x4ZJRDUgSfdr95FTmasxdbXRk3FH4RTEsLrsvUfEn+U5ERhca8oOZn4+D1IWzw6uvfWUEJAgMBAAECgYB3vp2auIuFd91SoBAZYL0bGR9LZkHaX+v32eGZibsEvv28Az5iHel+wyzSjMnjDFLG1kLHS5IuClUvtu/i53MuMpFUw9dERs8JaQ+Hw7HPPst8PabGq2w6Sv7V9uGKFwVF7syJ4PU5j68rwqX0tHFvkaZsZgMD7VKdg7BjAV8XeQJBAPRUdXo0k16SJiBStNAhAXFA4uSBNUD1eOecmvDVga93DI2156eHJyz8QzN5orSdOKYUa8ANmv8Cv41epZNyousCQQDpm6jqF4A1FFUaTiS8v4ttOg61xfTqLbRmKK0pq+C4+aU2Ajq87/TMNafKvKsvb4tf5CJ5D3g+1S7zS4YoCybbAkAGwlNhpxSwmBBv8nnIDDGzBV2BfsWPX3sRxTZQFUf6J6v0O6UF8Go4B16AjQvgPT008vmsHXQ9O8E60vR3qMMzAkAuUUCieVpgK9Hbz1aVXd0FIRe9jqxKqhk0kCgVNRDvXAAXv0VqJKGCw7irB9FhLFqT/qWfHyQWQSp37qeA1QU1AkEAonet3COev7VT02Q+NNGThzp+5G6eriY9PtsgGiAZeGVwgUa1ae/LSSvTS0b3e19HUEoKsuG5A/8G0m/WVqGvsw==";
+	
+	// 支付宝的公钥，无需修改该值
+	public static String ali_public_key  = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCnxj/9qwVfgoUh/y2W89L6BkRAFljhNhgPdyPuBV64bfQNN1PjbCzkIM6qRdKBoLPXmKKMiFYnkd6rAoprih3/PrQEB/VsW8OoM8fxn67UDYuyBTqA23MML9q1+ilIZwBC2AQ2UBVOrFXfFl75p6/B5KsiNG9zpgmLCUYuLkxpLQIDAQAB";
+
 	//↑↑↑↑↑↑↑↑↑↑请在这里配置您的基本信息↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
 	
+
 	// 调试用，创建TXT日志文件夹路径
 	public static String log_path = "D:\\";
 
@@ -42,6 +45,6 @@ public class AlipayConfig {
 	public static String input_charset = "utf-8";
 	
 	// 签名方式 不需修改
-	public static String sign_type = "MD5";
+	public static String sign_type = "RSA";
 
 }

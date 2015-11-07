@@ -7,7 +7,7 @@ import java.net.URL;
 import java.util.Map;
 
 import com.alipay.config.AlipayConfig;
-import com.alipay.sign.MD5;
+import com.alipay.sign.RSA;
 
 /* *
  *类名：AlipayNotify
@@ -39,7 +39,7 @@ public class AlipayNotify {
         //判断responsetTxt是否为true，isSign是否为true
         //responsetTxt的结果不是true，与服务器设置问题、合作身份者ID、notify_id一分钟失效有关
         //isSign不是true，与安全校验码、请求时的参数格式（如：带自定义参数等）、编码格式有关
-    	String responseTxt = "true";
+    	String responseTxt = "false";
 		if(params.get("notify_id") != null) {
 			String notify_id = params.get("notify_id");
 			responseTxt = verifyResponse(notify_id);
@@ -72,8 +72,8 @@ public class AlipayNotify {
         String preSignStr = AlipayCore.createLinkString(sParaNew);
         //获得签名验证结果
         boolean isSign = false;
-        if(AlipayConfig.sign_type.equals("MD5") ) {
-        	isSign = MD5.verify(preSignStr, sign, AlipayConfig.key, AlipayConfig.input_charset);
+        if(AlipayConfig.sign_type.equals("RSA")){
+        	isSign = RSA.verify(preSignStr, sign, AlipayConfig.ali_public_key, AlipayConfig.input_charset);
         }
         return isSign;
     }
