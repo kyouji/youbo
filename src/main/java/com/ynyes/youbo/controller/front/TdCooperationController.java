@@ -255,16 +255,16 @@ public class TdCooperationController {
 			System.err.println("订单信息已经获取");
 			// 如果说没有找到相对应的订单，则表示该车辆没有预约，且立即为它生成一个订单
 			if (null == order) {
-				
+
 				SimpleDateFormat sdf1 = new SimpleDateFormat("yyyyMMddHHmmss");
-				
+
 				// 以下代码用于生成订单编号
 				Date date = new Date();
 				String sDate = sdf1.format(date);
 				Random random = new Random();
 				Integer suiji = random.nextInt(900) + 100;
 				String orderNum = sDate + suiji;
-				
+
 				System.err.println("未预约车辆进入车库，创建一个新的订单");
 				TdOrder theOrder = new TdOrder();
 				System.err.println("开始设置属性");
@@ -690,18 +690,15 @@ public class TdCooperationController {
 			return res;
 		}
 
-		List<String> data = new ArrayList<>();
 		List<TdOrder> reserve_list = tdOrderService.findByDiyIdAndStatusIdAndIsSendReserveFalse(diyUser.getDiyId());
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		if (null != reserve_list) {
-			for (TdOrder order : reserve_list) {
-				data.add(order.getId() + "," + order.getCarCode() + "," + sdf.format(order.getReserveTime()));
-				order.setIsSendReserve(true);
-				tdOrderService.save(order);
-			}
+		if (null != reserve_list && reserve_list.size() > 0) {
+			TdOrder order = reserve_list.get(0);
+			order.setIsSendReserve(true);
+			tdOrderService.save(order);
+			res.put("orders", order.getId() + "," + order.getCarCode() + "," + sdf.format(order.getReserveTime()));
+			res.put("status", 0);
 		}
-		res.put("orders", data);
-		res.put("status", 0);
 		return res;
 	}
 
@@ -792,14 +789,13 @@ public class TdCooperationController {
 		}
 
 		List<TdOrder> cancel_list = tdOrderService.findByCancelOrder(diyUser.getDiyId());
-		List<String> data = new ArrayList<>();
-		for (TdOrder order : cancel_list) {
-			data.add(order.getId() + "," + order.getCarCode());
+		if (null != cancel_list && cancel_list.size() > 0) {
+			TdOrder order = cancel_list.get(0);
 			order.setIsCancel(false);
 			tdOrderService.save(order);
+			res.put("orders", order.getId() + "," + order.getCarCode());
+			res.put("status", 0);
 		}
-		res.put("orders", data);
-		res.put("status", 0);
 		return res;
 	}
 }

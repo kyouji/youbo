@@ -753,7 +753,6 @@ public class TdUserCenterController {
 		}
 
 		return "redirect:/user/center/info";
-
 	}
 
 	@RequestMapping(value = "/recharge")
