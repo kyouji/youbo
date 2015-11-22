@@ -243,6 +243,11 @@
         	<artifactId>neo4j-cypher-commons</artifactId>
         	<version>2.1.2</version>
         </dependency>
+        <dependency>
+            <groupId>com.unionpay</groupId>
+            <artifactId>acp</artifactId>
+            <version>1.0.0</version>
+        </dependency>
 	</dependencies>
 
 	<properties>

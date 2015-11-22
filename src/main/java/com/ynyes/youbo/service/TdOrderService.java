@@ -739,7 +739,7 @@ public class TdOrderService {
 		if (null == diyId) {
 			return null;
 		}
-		return repository.findByDiyIdAndStatusIdAndFirstPayGreaterThanAndTotalPrice(diyId, 9L, 0.00, 0.00);
+		return repository.findByDiyIdAndStatusIdAndFirstPayGreaterThanAndTotalPrice(diyId, 9L, 0.00, null);
 	}
 
 	// 查找指定停车场内已缴费但未出库的订单

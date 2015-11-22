@@ -126,7 +126,7 @@
                 <a href="javascript:changeOrder(2);" id="xj_label" style="width:20%" class="a1">现金</a>
                 <a href="javascript:changeOrder(3);" id="md_label" style="width:20%" class="a1">免单</a>
                 <a href="javascript:changeOrder(4);" id="yk_label" style="width:20%" class="a1">月卡</a>
-                <a href="javascript:changeOrder(5);" id="wy_label" style="width:20%" class="a1">其他</a>
+                <a href="javascript:changeOrder(5);" id="wy_label" style="width:20%" class="a1">违约</a>
             </div>
             
             <div id="theOrder">

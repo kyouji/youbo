@@ -144,6 +144,8 @@ public class TdUserOrderController {
 			order.setStatusId(9L);
 			order.setFinishTime(new Date());
 			order.setIsCancel(true);
+			TdDiySite site = tdDiySiteService.findOne(order.getDiyId());
+			site.setAllMoney(site.getAllMoney() + order.getTotalPrice());
 			tdOrderService.save(order);
 		}
 		if (null != isDetail && true == isDetail) {
@@ -177,9 +179,15 @@ public class TdUserOrderController {
 				 * 
 				 * @author dengxiao
 				 */
-				res.put("message", "余额不足");
+				res.put("status", 2);
+				res.put("message", "您的余额不足！");
+				res.put("orderId", order.getId());
 				return res;
 			} else {
+				if (null != user.getIsFrost() && user.getIsFrost()) {
+					res.put("message", "您的余额已经被冻结");
+					return res;
+				}
 				// 余额足够便扣除定金
 				user.setBalance(user.getBalance() - setting.getFirstPay());
 				// 设置订单状态为已支付定金
@@ -203,6 +211,7 @@ public class TdUserOrderController {
 						order.setReserveTime(new Date());
 						res.put("message", "预约成功，请在2个小时之内到达指定的车库停车！");
 					} else {// 如果没有摄像头就需要等待泊车员手动确认预约
+						order.setStatusId(2L);
 						res.put("message", "定金已支付，等待工作人员确认预约！");
 					}
 				} else {// 剩余车位不足即预定失败，订单结束
@@ -238,14 +247,22 @@ public class TdUserOrderController {
 					/**
 					 * 此处在后期修改为跳转到第三方支付的页面
 					 */
-					res.put("message", "余额不足，支付失败！");
+					res.put("status", 2);
+					res.put("message", "您的余额不足！");
+					res.put("orderId", order.getId());
 					tdUserService.save(user);
 					return res;
 				} else {
+					if (null != user.getIsFrost() && user.getIsFrost()) {
+						res.put("message", "您的余额已经被冻结");
+						return res;
+					}
 					user.setBalance(user.getBalance() - order.getTotalPrice() + order.getFirstPay());
 					order.setStatusId(6L);
 					order.setPayTypeId(28L);
 					order = tdOrderService.save(order);
+					site.setAllMoney(site.getAllMoney() + order.getTotalPrice());
+					tdDiySiteService.save(site);
 					res.put("status", 0);
 					res.put("message", "支付成功，您可在15分钟之内离开车库！");
 				}
@@ -314,7 +331,9 @@ public class TdUserOrderController {
 				 * 
 				 * @author dengxiao
 				 */
-				res.put("message", "余额不足，支付失败！");
+				res.put("status", 2);
+				res.put("message", "您的余额不足！");
+				res.put("orderId", order.getId());
 				return res;
 			} else {
 				// 余额足够便扣除定金
@@ -341,6 +360,8 @@ public class TdUserOrderController {
 						order.setIsSendReserve(false);
 						res.put("message", "预约成功，请在2个小时之内到达指定的车库停车！");
 					} else {// 如果没有摄像头就需要等待泊车员手动确认预约
+						order.setStatusId(2L);
+						tdOrderService.save(order);
 						res.put("message", "定金已支付，等待工作人员确认预约！");
 					}
 				} else {// 剩余车位不足即预定失败，订单结束
@@ -355,7 +376,7 @@ public class TdUserOrderController {
 					tdOrderService.save(order);
 					tdUserService.save(user);
 					// 设置消息提示
-					res.put("message", "抱歉，已经没有车位了，预定失败！");
+					res.put("message", "抱歉，已经没有车位了，预约失败！");
 					return res;
 				}
 			}
@@ -366,7 +387,6 @@ public class TdUserOrderController {
 				order.setTotalPrice(0.00);
 				order.setStatusId(6L);
 			} else {
-				order.setFinishTime(new Date());
 				if (null == site.getIsCamera() || !site.getIsCamera()) {
 					order.setTotalPrice(
 							DiySiteFee.GET_PARKING_PRICE(site, order.getOrderTime(), order.getFinishTime()));
@@ -376,12 +396,17 @@ public class TdUserOrderController {
 					 * 此处在后期修改为跳转到第三方支付的页面
 					 */
 					tdUserService.save(user);
-					res.put("message", "余额不足，支付失败！");
+					res.put("status", 2);
+					res.put("message", "您的余额不足！");
+					res.put("orderId", order.getId());
 					return res;
 				} else {
+					order.setFinishTime(new Date());
 					user.setBalance(user.getBalance() - order.getTotalPrice() + order.getFirstPay());
 					order.setStatusId(6L);
 					order.setThePayType(0L);
+					site.setAllMoney(site.getAllMoney() + order.getTotalPrice());
+					tdDiySiteService.save(site);
 					res.put("status", 0);
 					res.put("message", "支付成功，您可在15分钟之内离开车库！");
 				}
@@ -530,6 +555,34 @@ public class TdUserOrderController {
 			res.put("price", df.format(order.getTotalPrice()));
 		}
 		return res;
+	}
+
+	@RequestMapping(value = "/payOnline")
+	public String payOnline(Long orderId, ModelMap map, HttpServletRequest req) {
+		String username = (String) req.getSession().getAttribute("username");
+		TdUser user = tdUserService.findByUsername(username);
+		if (null == user) {
+			return "/user/login";
+		}
+		TdOrder order = tdOrderService.findOne(orderId);
+		TdSetting setting = tdSettingService.findOne(1L);
+		Double poundage = null;
+		Double all = null;
+		Double due = null;
+		if (null != order.getStatusId() && 1L == order.getStatusId()) {
+			due = setting.getFirstPay();
+			all = setting.getFirstPay();
+			poundage = 0.0;
+		} else {
+			poundage = setting.getPoundage();
+			due = order.getTotalPrice();
+			all = order.getTotalPrice() * (1 + poundage / 100);
+		}
+		map.addAttribute("due", due);
+		map.addAttribute("order", order);
+		map.addAttribute("all", all);
+		map.addAttribute("poundage", poundage);
+		return "/user/pay_online";
 	}
 
 }

@@ -53,14 +53,22 @@
     }
     
     function currentOrder(){
-        $.post("/user/order/currentOrder",function(res){
-            if(1==res.status){
-                window.location.href="/user/order/detail?reload=true&orderId="+res.orderId;
-            }else{
-                alert(res.message);
-                window.location.reload();
-            }
-        });
+        var check = null;
+        <#if currentOrder??&&(currentOrder.statusId==1||currentOrder.statusId==4)>
+            var check = confirm("是否确认？");
+        </#if>
+        if(null==check||check){
+            $.post("/user/order/currentOrder",function(res){
+                if(2 == res.status){
+                    window.location.href="/user/order/payOnline?orderId="+res.orderId;
+                }else if(1==res.status){
+                    window.location.href="/user/order/detail?reload=true&orderId="+res.orderId;
+                }else{
+                    alert(res.message);
+                    window.location.reload();
+                }
+            });
+        }
     }
     
     function navigation(x,y){

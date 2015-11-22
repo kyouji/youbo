@@ -156,7 +156,13 @@ public class TdUserCenterController {
 	 * @return
 	 */
 	@RequestMapping(value = "setting")
-	public String setting() {
+	public String setting(HttpServletRequest req,ModelMap map) {
+		String username = (String) req.getSession().getAttribute("username");
+		if (null == username) {
+			return "redirect:/user/center/login";
+		}
+		TdUser user = tdUserService.findByUsername(username);
+		map.addAttribute("user", user);
 		return "/user/setting";
 	}
 
@@ -762,5 +768,21 @@ public class TdUserCenterController {
 			return "/user/login";
 		}
 		return "/user/recharge";
+	}
+	
+	@RequestMapping(value = "/frost")
+	public String frost(HttpServletRequest req){
+		String username = (String) req.getSession().getAttribute("username");
+		if (null == username) {
+			return "/user/login";
+		}
+		TdUser user = tdUserService.findByUsername(username);
+		if(null!=user.getIsFrost()&&user.getIsFrost()){
+			user.setIsFrost(false);
+		}else{
+			user.setIsFrost(true);
+		}
+		tdUserService.save(user);
+		return "redirect:/user/center/setting";
 	}
 }

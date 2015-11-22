@@ -16,21 +16,11 @@
 <script type="text/javascript">
     
     function alipay(){
-        var money = $("#rechargeMoney").val();
-        if( /^0\.([1-9]|\d[1-9])$|^[1-9]\d{0,8}\.\d{0,2}$|^[1-9]\d{0,8}$/.test(money)){
-            window.location.href = "/user/pay/alipay/recharge?money="+money; 
-        }else{
-            alert("请输入一个正确的数字（精确度不超过小数点后2位）！");
-        }
+        window.location.href = "/user/pay/alipay/online?money=<#if all??>${all?string("0.00")}<#else>0.00</#if>&id=${order.id?c}"; 
     }
     
     function unionpay(){
-        var money = $("#rechargeMoney").val();
-        if( /^0\.([1-9]|\d[1-9])$|^[1-9]\d{0,8}\.\d{0,2}$|^[1-9]\d{0,8}$/.test(money)){
-            window.location.href = "/user/pay/unionpay/recharge?money="+money; 
-        }else{
-            alert("请输入一个正确的数字（精确度不超过小数点后2位）！");
-        }
+        window.location.href = "/user/pay/unionpay/online?money=<#if all??>${all?string("0.00")}<#else>0.00</#if>&id=${order.id?c}"; 
     }
 </script>
 </head>
@@ -38,15 +28,14 @@
 <body>
 
     <div class="header">
-        <p>账户充值</p>
+        <p>线上支付</p>
         <a href="javascript:history.go(-1);" class="a4"></a>
     </div>
 
     <dl style="margin-bottom:5%;" class="pay_min_01">
-        <form id="rechargeForm">
-            <input style="height:35px;line-height:35px;width:90%;padding:0 5%;font-size:1em;margin-top:10px;margin-bottom:10px;border-radius:2px;" type="text" datatype="n" id="rechargeMoney" placeholder="充值金额"><br />
-            <span class="Validform_checktip Validform_wrong" style="color:red;"></span>      
-        </form>
+        <span>支付金额：<#if due??>${due?string("0.00")}<#else>0.00</#if></span>
+        <span>手续费：<#if poundage??>${poundage!'0'}%</#if></span>
+        <span>总额：<#if all??>${all?string("0.00")}</#if></span>
     </dl>
 
     <div class="pay_way">请选择充值方式</div>

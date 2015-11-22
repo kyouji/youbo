@@ -180,9 +180,11 @@
     }
     
     function reserve(depotId,x,y){
-    <#if user??&&user.balance??&&user.balance gt firstPay>
         $.post("/user/find/reserve",{"username":"${user.username!''}",diyId:depotId},function(res){
             alert(res.message);
+            if(2 == res.status){
+                window.location.href="/user/order/payOnline?orderId="+res.orderId;            
+            }
             if(0==res.status){
                 var u = navigator.userAgent;
                 if (u.indexOf('Android') > -1 || u.indexOf('Linux') > -1) {
@@ -195,9 +197,6 @@
                 window.location.href="/user";  
             }
         });
-    <#else>
-        window.location.href="/user/find/bespeak?depotId="+depotId;
-    </#if>
     }
     
     </script>

@@ -250,4 +250,5 @@ public interface TdOrderRepo extends PagingAndSortingRepository<TdOrder, Long>, 
 	List<TdOrder> findByDiyIdAndStatusIdAndIsSendReserveFalse(Long diyId,Long statusId);
 	
 	List<TdOrder> findByDiyIdAndStatusIdAndIsCancelTrue(Long diyId,Long statusId);
+	
 }

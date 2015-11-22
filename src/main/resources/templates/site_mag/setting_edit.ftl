@@ -193,6 +193,13 @@ $(function () {
                 <div class="photo-list thumb_iOsImgUrl_show"></div>
             </dd>
         </dl>
+        <dl>
+            <dt>手续费率</dt>
+            <dd>
+                <input name="poundage" type="text" value="<#if setting??&&setting.poundage??>${setting.poundage}</#if>" class="input normal" datatype="n" sucmsg=" ">%
+                <span class="Validform_checktip"></span>
+            </dd>
+        </dl>
         <#--
         <dl>
             <dt>安卓App二维码</dt>

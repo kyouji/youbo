@@ -166,6 +166,11 @@ public class TdCooperationController {
 		String[] infos = prices.split(",");
 		for (int i = 0; i < infos.length; i++) {
 			if ((i + 1) % 3 == 0) {
+				if (-1.0 == new Double(infos[i])) {
+					res.put("status", 0);
+					res.put("message", "接收到价格为-1的数据，不做处理");
+					return res;
+				}
 				TdOrder order = tdOrderService.findOne(Long.parseLong(infos[i - 2]));
 				if (null != order && null != infos[i - 1] && infos[i - 1].trim().equals(order.getCarCode())) {
 					order.setTotalPrice(new Double(infos[i]));
@@ -228,7 +233,7 @@ public class TdCooperationController {
 		String lujing = "/root/ftpimages/" + picture;
 
 		Date theDate = new Date();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
 		try {
 			theDate = sdf.parse(ioDate);
 		} catch (Exception e) {
@@ -324,6 +329,7 @@ public class TdCooperationController {
 			}
 			order.setOutputTime(ioData.getIoDate());
 			tdOrderService.save(order);
+			res.put("message", "出库信息录入成功！");
 		}
 		System.err.println("存储订单信息（属性设置完毕）");
 		res.put("status", 0);
@@ -415,11 +421,6 @@ public class TdCooperationController {
 		order.setTotalPrice(totalPrice);
 		order.setStatusId(6L);
 		order.setThePayType(type);
-		TdUser user = tdUserService.findByUsername(carCode);
-		if (null != user) {
-			user.setBalance(user.getBalance() + order.getFirstPay() - order.getTotalPrice());
-			tdUserService.save(user);
-		}
 		tdOrderService.save(order);
 		res.put("status", 0);
 		return res;
@@ -486,6 +487,8 @@ public class TdCooperationController {
 		order.setDiyId(site.getId());
 		order.setFirstPay(0.00);
 		order.setOrderTime(orderTime);
+		order.setReserveTime(orderTime);
+		order.setInputTime(orderTime);
 		order.setTotalPrice(totalPrice);
 		order.setRemarkInfo("缴费后15分钟以内未离开车库而产生了新的订单");
 		order.setUsername(carCode);
@@ -651,8 +654,16 @@ public class TdCooperationController {
 			return res;
 		}
 		TdOrder order = tdOrderService.findbyStatusFour(busNo, diyUser.getDiyId());
+		if (null == order) {
+			res.put("message", "未找到指定的订单！");
+			return res;
+		}
 		TdUser user = tdUserService.findByUsername(busNo);
 		if (user != null) {
+			if (null != user.getIsFrost() && user.getIsFrost()) {
+				res.put("message", "该用于的余额已被冻结");
+				return res;
+			}
 			if (null != order.getTotalPrice() && user.getBalance() > order.getTotalPrice()) {
 				if (null == order.getFirstPay()) {
 					order.setFirstPay(0.00);
@@ -660,8 +671,12 @@ public class TdCooperationController {
 				user.setBalance(user.getBalance() - order.getTotalPrice() + order.getFirstPay());
 				tdUserService.save(user);
 				order.setThePayType(0L);
+				order.setStatusId(6L);
 				order.setFinishTime(new Date());
 				order.setRemarkInfo("离开车库时自动支付");
+				TdDiySite site = tdDiySiteService.findOne(diyUser.getDiyId());
+				site.setAllMoney(site.getAllMoney() + order.getTotalPrice());
+				tdDiySiteService.save(site);
 				tdOrderService.save(order);
 			} else {
 				res.put("message", "账户余额不足，不能完成交易");

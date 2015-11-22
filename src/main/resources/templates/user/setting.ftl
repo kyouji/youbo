@@ -11,13 +11,17 @@
 
 <link href="/user/css/common.css" rel="stylesheet" type="text/css" />
 <link href="/user/css/style.css" rel="stylesheet" type="text/css" />
-
+<script>
+    function frost(){
+        window.location.href = "/user/center/frost";        
+    }    
+</script>
 </head>
 
 <body>
 <div class="header">
         <p>设置</p>
-        <a onclick="javascript:history.back(-1);" class="a4"></a>
+        <a onclick="window.location.href='/user/center'" class="a4"></a>
         <a href="#" class="a5"></a>
 </div>
 <div style=" margin-top:5%;" class="main">
@@ -29,16 +33,10 @@
     </dl>
     </a>
     -->
-  <a href="/user/center/setting/changecity"> 
-    <dl class="setting_last">
-        <dd><span>城市切换</span></dd>
-        <dt><span><img src="/user/images/setting_guide.png"/></span><p>重庆市</p></dt>
-    </dl>
-  </a>
   <a> 
-    <dl class="setting_last">
-        <dd><span>检查更新</span></dd>
-        <dt><span><img src="/user/images/setting_guide.png"/></span><p>V1.0</p></dt>
+    <dl class="setting_last" onclick="frost();">
+        <dd><span><#if user??&&user.isFrost??&&user.isFrost==true>解除冻结<#else>冻结余额</#if></span></dd>
+        <dt><span><img src="/user/images/setting_guide.png"/></span><p></p></dt>
     </dl>
   </a>
 

@@ -174,7 +174,19 @@ public class TdSetting {
     @Column(scale=2)
     private Double firstPay;
     
-    public Double getFirstPay() {
+    //手续费
+    @Column(scale=2)
+    private Double poundage;
+    
+    public Double getPoundage() {
+		return poundage;
+	}
+
+	public void setPoundage(Double poundage) {
+		this.poundage = poundage;
+	}
+
+	public Double getFirstPay() {
 		return firstPay;
 	}
 

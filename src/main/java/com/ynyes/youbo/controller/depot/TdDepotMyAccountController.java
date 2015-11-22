@@ -436,7 +436,7 @@ public class TdDepotMyAccountController {
 		map.addAttribute("xj_list", xj_list);
 		map.addAttribute("md_list", md_list);
 		map.addAttribute("yk_list", yk_list);
-
+		map.addAttribute("wy_list", wy_list);
 		return "/depot/charge_manage";
 	}
 

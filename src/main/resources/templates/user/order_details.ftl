@@ -21,7 +21,11 @@ function clearing(id,type){
     }
     $.post("/user/order/clearing",{"id":id,"type":type},function(res){
         alert(res.message);
-        window.location.reload();
+        if(2 == res.status){
+            window.location.href="/user/order/payOnline?orderId="+res.orderId;
+        }else{
+            window.location.reload();
+        }
     });
 }
 
@@ -155,10 +159,10 @@ function cancelOrder(id){
                         <p>
                             <#if order.thePayType??>
                                 <#switch order.thePayType>
-                                    <#case 1>线上支付<#break>
+                                    <#case 0>线上支付<#break>
                                     <#case 1>现金支付<#break>
-                                    <#case 1>免除费用<#break>
-                                    <#case 1>月卡用户<#break>
+                                    <#case 2>免除费用<#break>
+                                    <#case 3>月卡用户<#break>
                                 </#switch>
                             </#if>
                         </p>
@@ -186,7 +190,7 @@ function cancelOrder(id){
                         <td><input type="submit" onclick="clearing(${order.id?c},1);" value="支付定金：￥${firstPay?string("0.00")}" /></td>
                     <#break>
                     <#case 4>
-                        <td><input type="submit" onclick="clearing(${order.id?c},0);" value="结算订单：￥${order.totalPrice?string("0.00")!'0.00'}" /></td>
+                        <td><input type="submit" onclick="clearing(${order.id?c},0);" value="结算订单：￥<#if order??&&order.totalPrice??>${order.totalPrice?string("0.00")!'0.00'}<#else>0.00</#if>" /></td>
                     <#break>
                     <#default>
                         <td><input type="submit" style="background:#999999;" value="结算订单" /></td>

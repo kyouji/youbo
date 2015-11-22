@@ -155,10 +155,10 @@
                         <p>
                             <#if order.thePayType??>
                                 <#switch order.thePayType>
-                                    <#case 1>线上支付<#break>
+                                    <#case 0>线上支付<#break>
                                     <#case 1>现金支付<#break>
-                                    <#case 1>免除费用<#break>
-                                    <#case 1>月卡用户<#break>
+                                    <#case 2>免除费用<#break>
+                                    <#case 3>月卡用户<#break>
                                 </#switch>
                             </#if>
                         </p>
