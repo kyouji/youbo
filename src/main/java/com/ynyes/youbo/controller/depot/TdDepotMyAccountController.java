@@ -138,7 +138,7 @@ public class TdDepotMyAccountController {
 	public String bankcard(HttpServletRequest req, Device device, ModelMap map) {
 		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("diyUser");
 		if (null == diyUser) {
-			return "/depot/login";
+			return "redirect:/depot/login";
 		}
 		TdDiySite site = tdDiySiteService.findOne(diyUser.getDiyId());
 		List<TdBankcard> bankcardList = tdBankcardService.findByDiyId(site.getId());
@@ -209,7 +209,7 @@ public class TdDepotMyAccountController {
 		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("diyUser");
 		TdDiySite site = (TdDiySite) req.getSession().getAttribute("site");
 		if (null == diyUser) {
-			return "/depot/login";
+			return "redirect:/depot/login";
 		}
 
 		List<TdOrder> all_refund = tdOrderService.findByIdAndRefund(site.getId());
@@ -250,7 +250,7 @@ public class TdDepotMyAccountController {
 	public String withdrawal(HttpServletRequest req, Device device, ModelMap map) {
 		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("diyUser");
 		if (null == diyUser) {
-			return "/depot/login";
+			return "redirect:/depot/login";
 		}
 		TdDiySite site = tdDiySiteService.findOne(diyUser.getDiyId());
 
@@ -276,7 +276,7 @@ public class TdDepotMyAccountController {
 	public String cashrecord(HttpServletRequest req, Device device, ModelMap map) {
 		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("diyUser");
 		if (null == diyUser) {
-			return "/depot/login";
+			return "redirect:/depot/login";
 		}
 		TdDiySite site = tdDiySiteService.findOne(diyUser.getDiyId());
 		List<TdDeposit> deposit_list = tdDepositService.findByDiyIdOrderByDepositDateDesc(site.getId());
@@ -288,7 +288,7 @@ public class TdDepotMyAccountController {
 	public String reserve(HttpServletRequest req, ModelMap map) {
 		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("diyUser");
 		if (null == diyUser) {
-			return "/depot/login";
+			return "redirect:/depot/login";
 		}
 		TdDiySite site = tdDiySiteService.findOne(diyUser.getDiyId());
 		List<TdOrder> list = tdOrderService.findByDiyIdAndStatusIdOrderByOrderTime(site.getId());
@@ -311,7 +311,7 @@ public class TdDepotMyAccountController {
 		String siteUsername = (String) req.getSession().getAttribute("siteUsername");
 		TdDiySite site = tdDiySiteService.findbyUsername(siteUsername);
 		if (null == site) {
-			return "/depot/login";
+			return "redirect:/depot/login";
 		}
 
 		String name = Filedata.getOriginalFilename();
@@ -353,7 +353,7 @@ public class TdDepotMyAccountController {
 	public String orderDetail(HttpServletRequest req, Long orderId, ModelMap map) {
 		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("diyUser");
 		if (null == diyUser) {
-			return "/depot/login";
+			return "redirect:/depot/login";
 		}
 		TdOrder order = tdOrderService.findOne(orderId);
 		if (null != order && null != order.getUsername()) {
@@ -373,7 +373,7 @@ public class TdDepotMyAccountController {
 		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("diyUser");
 		TdDiySite site = tdDiySiteService.findOne(diyUser.getDiyId());
 		if (null == site || null == diyUser) {
-			return "/depot/login";
+			return "redirect:/depot/login";
 		}
 
 		TdOrder order = tdOrderService.findOne(id);
@@ -415,7 +415,7 @@ public class TdDepotMyAccountController {
 	public String chargeManage(HttpServletRequest req, ModelMap map) {
 		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("diyUser");
 		if (null == diyUser) {
-			return "/depot/login";
+			return "redirect:/depot/login";
 		}
 		// 查找不同支付方式的订单
 		List<TdOrder> xs_list = tdOrderService.findXszf(diyUser.getDiyId());
@@ -444,7 +444,7 @@ public class TdDepotMyAccountController {
 	public String subAccount(HttpServletRequest req, ModelMap map) {
 		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("diyUser");
 		if (null == diyUser) {
-			return "/depot/login";
+			return "redirect:/depot/login";
 		}
 		List<TdDiyUser> subAccount_list = tdDiyUserService.findByDiyIdAndRoleId(diyUser.getDiyId());
 		map.addAttribute("subAccount_list", subAccount_list);
@@ -455,7 +455,7 @@ public class TdDepotMyAccountController {
 	public String addSubAccount(HttpServletRequest req, Long id, ModelMap map) {
 		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("diyUser");
 		if (null == diyUser) {
-			return "/depot/login";
+			return "redirect:/depot/login";
 		}
 		if (null != id) {
 			TdDiyUser theUser = tdDiyUserService.findOne(id);
@@ -469,7 +469,7 @@ public class TdDepotMyAccountController {
 			Boolean isEnable) {
 		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("diyUser");
 		if (null == diyUser) {
-			return "/depot/login";
+			return "redirect:/depot/login";
 		}
 		TdDiyUser theUser = new TdDiyUser();
 		theUser.setId(id);
@@ -505,7 +505,7 @@ public class TdDepotMyAccountController {
 	public String deleteSubAccount(HttpServletRequest req, Long id) {
 		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("diyUser");
 		if (null == diyUser) {
-			return "/depot/login";
+			return "redirect:/depot/login";
 		}
 		tdDiyUserService.delete(id);
 		return "redirect:/depot/myaccount/subAccount";
@@ -515,7 +515,7 @@ public class TdDepotMyAccountController {
 	public String sureInput(HttpServletRequest req, Long id, String keywords, ModelMap map) {
 		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("diyUser");
 		if (null == diyUser) {
-			return "/depot/login";
+			return "redirect:/depot/login";
 		}
 
 		TdOrder order = tdOrderService.findOne(id);
@@ -596,7 +596,7 @@ public class TdDepotMyAccountController {
 	public String detail(HttpServletRequest request, ModelMap map) {
 		TdDiyUser diyUser = (TdDiyUser) request.getSession().getAttribute("diyUser");
 		if (null == diyUser) {
-			return "user/login";
+			return "redirect:/depot/login";
 		}
 		// 获取当前年份
 		Calendar c = Calendar.getInstance();
@@ -609,7 +609,7 @@ public class TdDepotMyAccountController {
 	public String getOrderDeatail(Long year, Long month, HttpServletRequest req, ModelMap map) {
 		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("diyUser");
 		if (null == diyUser) {
-			return "/depot/login";
+			return "redirect:/depot/login";
 		}
 		Long days = new Long(0);
 		if (2 == month) {
@@ -666,7 +666,7 @@ public class TdDepotMyAccountController {
 	public String detailDay(Long year, Long month, Long day, HttpServletRequest req, ModelMap map) {
 		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("diyUser");
 		if (null == diyUser) {
-			return "user/login";
+			return "redirect:/depot/login";
 		}
 
 		Date beginDate = null;

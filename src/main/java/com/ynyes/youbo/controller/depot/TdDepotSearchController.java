@@ -25,7 +25,7 @@ public class TdDepotSearchController {
 	public String search(HttpServletRequest req){
 		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("diyUser");
 		if(null == diyUser){
-			return "/depot/login";
+			return "redirect:/depot/login";
 		}
 		return "/depot/search";
 	}
@@ -34,7 +34,7 @@ public class TdDepotSearchController {
 	public String getOrders(HttpServletRequest req,String keywords,ModelMap map){
 		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("diyUser");
 		if(null == diyUser){
-			return "/depot/login";
+			return "redirect:/depot/login";
 		}
 		List<TdOrder> search_list = tdOrderService.findByDiyIdAndCarCodeContainingOrderByOrderTimeDesc(diyUser.getDiyId(), keywords);
 		map.addAttribute("search_list", search_list);

@@ -65,7 +65,7 @@ public class TdChargeRecordController {
 		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("diyUser");
 		TdDiySite site = tdDiySiteService.findOne(diyUser.getDiyId());
 		if (null == site) {
-			return "/depot/login";
+			return "redirect:/depot/login";
 		}
 
 		return "/depot/site";
@@ -74,6 +74,9 @@ public class TdChargeRecordController {
 	@RequestMapping(value = "/date")
 	public String changeDate(HttpServletRequest req, String date, ModelMap map) {
 		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("diyUser");
+		if (null == diyUser) {
+			return "redirect:/depot/login";
+		}
 		TdDiySite site = tdDiySiteService.findOne(diyUser.getDiyId());
 		String sBeginDate = date + " 00:00:00";
 		String sFinishDate = date + " 24:00:00";
@@ -101,7 +104,7 @@ public class TdChargeRecordController {
 	public String cashOrFree(HttpServletRequest req, Long id, Long type, Boolean re) {
 		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("diyUser");
 		if (null == diyUser) {
-			return "/depot/login";
+			return "redirect:/depot/login";
 		}
 		TdOrder order = tdOrderService.findOne(id);
 		if (null == diyUser.getRealName()) {
@@ -113,16 +116,18 @@ public class TdChargeRecordController {
 
 		if (null != order) {
 			if (0 == type) {
-				order.setThePayType(3L);
+				order.setThePayType(2L);
 				order.setPayTypeTitle("免除费用");
 				order.setRemarkInfo(diyUser.getRealName() + "免除了" + order.getCarCode() + "的停车费用");
+				order.setOperator(diyUser.getRealName());
 				log.setActionType("免单操作");
 				log.setRemark(diyUser.getRealName() + "免除了" + order.getCarCode() + "的停车费用");
 			}
 			if (1 == type) {
-				order.setThePayType(2L);
+				order.setThePayType(1L);
 				order.setPayTypeTitle("现金支付");
 				order.setRemarkInfo(diyUser.getRealName() + "以现金的方式收取了" + order.getCarCode() + "的停车费用");
+				order.setOperator(diyUser.getRealName());
 				log.setActionType("收取现金");
 				log.setRemark(diyUser.getRealName() + "以现金的方式收取了" + order.getCarCode() + "的停车费用");
 			}
@@ -144,6 +149,9 @@ public class TdChargeRecordController {
 	@RequestMapping("/manageDate")
 	public String manageDate(HttpServletRequest req, String date, ModelMap map) {
 		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("diyUser");
+		if (null == diyUser) {
+			return "redirect:/depot/login";
+		}
 		TdDiySite site = tdDiySiteService.findOne(diyUser.getDiyId());
 		String sBeginDate = date + " 00:00:00";
 		String sFinishDate = date + " 24:00:00";

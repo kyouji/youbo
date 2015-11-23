@@ -82,7 +82,7 @@ public class TdUserOrderController {
 	public String cancel(HttpServletRequest request, ModelMap map) {
 		String username = (String) request.getSession().getAttribute("username");
 		if (null == username) {
-			return "/user/login";
+			return "redirect:/user/center/login";
 		}
 
 		List<TdOrder> list = tdOrderService.findCancelOrderByUsername(username);
@@ -101,7 +101,7 @@ public class TdUserOrderController {
 		String username = (String) request.getSession().getAttribute("username");
 		TdUser user = tdUserService.findByUsername(username);
 		if (null == user) {
-			return "/user/login";
+			return "redirect:/user/center/login";
 		}
 		TdOrder order = tdOrderService.findOne(id);
 		map.addAttribute("user", user);
@@ -118,7 +118,7 @@ public class TdUserOrderController {
 	public String cancelOrder(HttpServletRequest req, Boolean isDetail, Long id) {
 		String username = (String) req.getSession().getAttribute("username");
 		if (null == username) {
-			return "/user/login";
+			return "redirect:/user/center/login";
 		}
 		String reason = "用户自主取消";
 		TdOrder order = tdOrderService.findOne(id);
@@ -284,7 +284,7 @@ public class TdUserOrderController {
 		String username = (String) req.getSession().getAttribute("username");
 		TdUser user = tdUserService.findByUsername(username);
 		if (null == user) {
-			return "/user/login";
+			return "redirect:/user/center/login";
 		}
 		TdOrder order = tdOrderService.findOne(orderId);
 		if (null != order && null != order.getPayTypeId()) {
@@ -562,7 +562,7 @@ public class TdUserOrderController {
 		String username = (String) req.getSession().getAttribute("username");
 		TdUser user = tdUserService.findByUsername(username);
 		if (null == user) {
-			return "/user/login";
+			return "redirect:/user/center/login";
 		}
 		TdOrder order = tdOrderService.findOne(orderId);
 		TdSetting setting = tdSettingService.findOne(1L);

@@ -91,7 +91,7 @@ public class TdUserFindController {
 		TdUser user = tdUserService.findByUsername(username);
 
 		if (null == user) {
-			return "/user/login";
+			return "redirect:/user/center/login";
 		}
 		if (null == user.getCarCode() || "".equalsIgnoreCase(user.getCarCode())) {
 			// 在此回到添加车牌页面
@@ -115,7 +115,7 @@ public class TdUserFindController {
 		String username = (String) request.getSession().getAttribute("username");
 		TdUser user = tdUserService.findByUsername(username);
 		if (null == user) {
-			return "/user/login";
+			return "redirect:/user/center/login";
 		}
 		TdDiySite diySite = tdDiySiteService.findByIdAndIsEnableTrue(id);
 		map.addAttribute("diySite", diySite);
@@ -246,7 +246,7 @@ public class TdUserFindController {
 		String username = (String) request.getSession().getAttribute("username");
 		TdUser user = tdUserService.findByUsername(username);
 		if (null == user) {
-			return "/user/login";
+			return "redirect:/user/center/login";
 		}
 		TdDiySite site = tdDiySiteService.findByIdAndIsEnableTrue(id);
 		map.addAttribute("site", site);

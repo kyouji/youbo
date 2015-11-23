@@ -26,78 +26,76 @@ import com.ynyes.youbo.util.VerifServlet;
 @Controller
 @RequestMapping("/depot")
 public class TdDepotLoginAndRegisterController {
-	
+
 	@Autowired
 	private TdUserService tdUserService;
-	
+
 	@Autowired
 	private TdDiySiteService tdDiySiteService;
-	
+
 	@Autowired
 	private TdDiyUserService tdDiyUserService;
-	
+
 	/**
 	 * 用户登录
+	 * 
 	 * @param req
 	 * @param device
 	 * @param map
 	 * @return
 	 */
 	@RequestMapping("/login")
-    public String login(HttpServletRequest req, Device device, ModelMap map,String username,String password)
-	{
-		TdDiySite site =  (TdDiySite) req.getSession().getAttribute("site");
-		if (site != null)
-		{
+	public String login(HttpServletRequest req, Device device, ModelMap map, String username, String password) {
+		TdDiySite site = (TdDiySite) req.getSession().getAttribute("site");
+		if (site != null) {
 			return "redirect:/depot/myaccount";
 		}
 		return "/depot/login";
 	}
-	
+
 	/**
 	 * 用户登录
+	 * 
 	 * @param req
 	 * @param device
 	 * @param map
 	 * @return
 	 */
-	 @RequestMapping(value = "/login", method=RequestMethod.POST)
-     @ResponseBody
-    public Map<String, Object> login(HttpServletRequest req, 
-                        String username,
-                        String password,
-                        ModelMap map){
-        Map<String, Object> res = new HashMap<String, Object>();
-        res.put("code", 1);
-        
-        TdDiyUser diyUser = tdDiyUserService.findByUsernameAndPasswordAndIsEnableTrue(username, password);
-        
-        if (diyUser == null)
-        {
+	@RequestMapping(value = "/login", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> login(HttpServletRequest req, String username, String password, ModelMap map) {
+		Map<String, Object> res = new HashMap<String, Object>();
+		res.put("code", 1);
+
+		TdDiyUser diyUser = tdDiyUserService.findByUsernameAndPasswordAndIsEnableTrue(username, password);
+
+		if (diyUser == null) {
 			res.put("msg", "账号或密码错误!");
 			return res;
 		}
-        res.put("code", 0);
-        
-        TdDiySite site = tdDiySiteService.findOne(diyUser.getDiyId());
-        req.getSession().setAttribute("site", site);
-        req.getSession().setAttribute("diyUser", diyUser);
-        
-        return res;
-    }
-	
-	/**                      
+		res.put("code", 0);
+
+		TdDiySite site = tdDiySiteService.findOne(diyUser.getDiyId());
+		req.getSession().setMaxInactiveInterval(60 * 60 * 24);
+		req.getSession().setAttribute("site", site);
+		req.getSession().setAttribute("diyUser", diyUser);
+
+		return res;
+	}
+
+	/**
 	 * 用注册
+	 * 
 	 * @param req
 	 * @param device
 	 * @param map
 	 * @return
 	 */
 	@RequestMapping("/register")
-    public String register(HttpServletRequest req, Device device, ModelMap map)
-	{
+	public String register(HttpServletRequest req, Device device, ModelMap map) {
 		return "/depot/register";
 	}
+
 	@RequestMapping(value = "/code", method = RequestMethod.GET)
 	public void verify(HttpServletResponse response, HttpServletRequest request) {
 		response.setContentType("image/jpeg");
@@ -107,75 +105,62 @@ public class TdDepotLoginAndRegisterController {
 		VerifServlet randomValidateCode = new VerifServlet();
 		randomValidateCode.getRandcode(request, response);
 	}
-	
-	@RequestMapping(value="/save",method=RequestMethod.POST)
-    public String reg(String username,
-                String mobile,
-                String password,
-                String email,
-                String smsCode,
-                String code,
-                String carCode,
-                Long shareId,
-                HttpServletRequest request){
-        String codeBack = (String) request.getSession().getAttribute("RANDOMVALIDATECODEKEY");
-        if (!codeBack.equalsIgnoreCase(code))
-        {
-            if (null == shareId)
-            {
-                return "redirect:/reg?errCode=1&name= "+username+"&carCode="+carCode;
-            }
-            else
-            {
-                return "redirect:/reg?errCode=1&shareId=" + shareId + "&name= "+username+"&carCode="+carCode;
-            }
-        }
-        
-        /**
-         * 因为是手机注册，所以将username字段的值赋值给mobile
-         * @author dengxiao
-         */
-        mobile = username;
-        
-        TdUser user = tdUserService.addNewUser(username, password, mobile, email, carCode);
-        user.setRoleId(2L);
-        
-        user = tdUserService.save(user);
-        
-        request.getSession().setAttribute("username", username);
-        
-        String referer = (String) request.getAttribute("referer");
-        
-        if (null != request.getAttribute("referer"))
-        {
-            return "redirect:" + referer;
-        }
-        
-        if (null == shareId)
-        {
-            return "redirect:/depot";
-        }
-        
-        return "redirect:/depot";
-    }
-	
-	
+
+	@RequestMapping(value = "/save", method = RequestMethod.POST)
+	public String reg(String username, String mobile, String password, String email, String smsCode, String code,
+			String carCode, Long shareId, HttpServletRequest request) {
+		String codeBack = (String) request.getSession().getAttribute("RANDOMVALIDATECODEKEY");
+		if (!codeBack.equalsIgnoreCase(code)) {
+			if (null == shareId) {
+				return "redirect:/reg?errCode=1&name= " + username + "&carCode=" + carCode;
+			} else {
+				return "redirect:/reg?errCode=1&shareId=" + shareId + "&name= " + username + "&carCode=" + carCode;
+			}
+		}
+
+		/**
+		 * 因为是手机注册，所以将username字段的值赋值给mobile
+		 * 
+		 * @author dengxiao
+		 */
+		mobile = username;
+
+		TdUser user = tdUserService.addNewUser(username, password, mobile, email, carCode);
+		user.setRoleId(2L);
+
+		user = tdUserService.save(user);
+
+		request.getSession().setAttribute("username", username);
+
+		String referer = (String) request.getAttribute("referer");
+
+		if (null != request.getAttribute("referer")) {
+			return "redirect:" + referer;
+		}
+
+		if (null == shareId) {
+			return "redirect:/depot";
+		}
+
+		return "redirect:/depot";
+	}
+
 	@RequestMapping(value = "/check/{type}", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String, String> validateForm(@PathVariable String type,String param,HttpServletRequest request) {
+	public Map<String, String> validateForm(@PathVariable String type, String param, HttpServletRequest request) {
 		Map<String, String> res = new HashMap<String, String>();
-		
+
 		res.put("status", "n");
-		if("username".equalsIgnoreCase(type)){
+		if ("username".equalsIgnoreCase(type)) {
 			TdUser user = tdUserService.findByUsername(param);
-			if(null != user){
-				res.put("info",	"该用户已经存在！");
+			if (null != user) {
+				res.put("info", "该用户已经存在！");
 				return res;
 			}
 		}
-		if("yzm".equalsIgnoreCase(type)){
+		if ("yzm".equalsIgnoreCase(type)) {
 			String codeBack = (String) request.getSession().getAttribute("RANDOMVALIDATECODEKEY");
-			if(!param.equalsIgnoreCase(codeBack)){
+			if (!param.equalsIgnoreCase(codeBack)) {
 				res.put("info", "验证码错误！");
 				return res;
 			}

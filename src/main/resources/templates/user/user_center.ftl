@@ -81,8 +81,8 @@
     </a>
     <a>
     <dl style="margin-top:5%;" class="mycenter_last">
-        <dd><a href="/user/center/setting">设置</a></dd>
-        <dt><a href="/user/center/setting"><img src="/user/images/aboutus_right.png" /></a></dt>
+        <dd><a href="/user/center/frost"><#if user??&&user.isFrost??&&user.isFrost==true>解除冻结<#else>冻结余额</#if></a></dd>
+        <dt><a href="/user/center/frost"><img src="/user/images/aboutus_right.png" /></a></dt>
     </dl>
     </a>
     <#--

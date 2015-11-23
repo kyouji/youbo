@@ -145,7 +145,7 @@
                     <dd><span>完成时间</span></dd>
                     <dt>
                         <#if order.finishTime??>
-                            <p>${order.orderTime?string("yyyy-MM-dd HH:mm")}</p>
+                            <p>${order.finishTime?string("yyyy-MM-dd HH:mm")}</p>
                         </#if>
                     </dt>
                 </dl>

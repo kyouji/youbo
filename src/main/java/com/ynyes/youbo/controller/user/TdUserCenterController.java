@@ -156,7 +156,7 @@ public class TdUserCenterController {
 	 * @return
 	 */
 	@RequestMapping(value = "setting")
-	public String setting(HttpServletRequest req,ModelMap map) {
+	public String setting(HttpServletRequest req, ModelMap map) {
 		String username = (String) req.getSession().getAttribute("username");
 		if (null == username) {
 			return "redirect:/user/center/login";
@@ -205,7 +205,7 @@ public class TdUserCenterController {
 	public String bankcard(HttpServletRequest req, ModelMap map) {
 		String username = (String) req.getSession().getAttribute("username");
 		if (null == username) {
-			return "/user/login";
+			return "redirect:/user/center/login";
 		}
 		TdUser user = tdUserService.findByUsername(username);
 		List<TdBankcard> bankcardList = user.getBankcardList();
@@ -331,12 +331,12 @@ public class TdUserCenterController {
 		// 获取到当前登陆的用户
 		String username = (String) req.getSession().getAttribute("username");
 		if (null == username || username.isEmpty()) {
-			return "/user/login";
+			return "redirect:/user/center/login";
 		}
 		// 通过用户名得到当前登陆用户的一系列信息
 		TdUser tdUser = tdUserService.findByUsername(username);
 		if (null == tdUser) {
-			return "/user/login";
+			return "redirect:/user/center/login";
 		}
 
 		// 查询到当前登陆用户的未读信息和已读信息
@@ -383,7 +383,7 @@ public class TdUserCenterController {
 		String username = (String) req.getSession().getAttribute("username");
 		TdUser user = tdUserService.findByUsernameAndIsEnabled(username);
 		if (null == user) {
-			return "/user/login";
+			return "redirect:/user/center/login";
 		}
 		map.addAttribute("user", user);
 		return "/user/user_center_info";
@@ -402,7 +402,7 @@ public class TdUserCenterController {
 		String username = (String) req.getSession().getAttribute("username");
 		TdUser user = tdUserService.findByUsernameAndIsEnabled(username);
 		if (null == user) {
-			return "/user/login";
+			return "redirect:/user/center/login";
 		}
 		switch (editType) {
 		case "username":// 用户名
@@ -466,7 +466,9 @@ public class TdUserCenterController {
 		}
 		res.put("code", 0);
 
+		req.getSession().setMaxInactiveInterval(60 * 60 * 24);
 		req.getSession().setAttribute("username", username);
+
 		try {
 			String encode_username = URLEncoder.encode(username, "utf-8");
 			String encode_password = URLEncoder.encode(password, "utf-8");
@@ -553,7 +555,7 @@ public class TdUserCenterController {
 		String username = (String) req.getSession().getAttribute("username");
 		TdUser user = tdUserService.findByUsernameAndIsEnabled(username);
 		if (null == user) {
-			return "/user/login";
+			return "redirect:/user/center/login";
 		}
 		user.setPassword(password);
 		tdUserService.save(user);
@@ -565,7 +567,7 @@ public class TdUserCenterController {
 		String username = (String) req.getSession().getAttribute("username");
 		TdUser user = tdUserService.findByUsernameAndIsEnabled(username);
 		if (null == user) {
-			return "/user/login";
+			return "redirect:/user/center/login";
 		}
 		if (null != user.getPayPassword()) {
 			String payPassword = user.getPayPassword();
@@ -600,7 +602,7 @@ public class TdUserCenterController {
 		String username = (String) req.getSession().getAttribute("username");
 		TdUser user = tdUserService.findByUsernameAndIsEnabled(username);
 		if (null == user) {
-			return "/user/login";
+			return "redirect:/user/center/login";
 		}
 		user.setPayPassword(password);
 		tdUserService.save(user);
@@ -611,7 +613,7 @@ public class TdUserCenterController {
 	public String detail(HttpServletRequest request, ModelMap map) {
 		String username = (String) request.getSession().getAttribute("username");
 		if (null == username) {
-			return "user/login";
+			return "redirect:/user/center/login";
 		}
 		// 获取当前年份
 		Calendar c = Calendar.getInstance();
@@ -624,7 +626,7 @@ public class TdUserCenterController {
 	public String findDetail(HttpServletRequest request, Integer year, Integer month, ModelMap map) {
 		String username = (String) request.getSession().getAttribute("username");
 		if (null == username) {
-			return "/user/login";
+			return "redirect:/user/center/login";
 		}
 		if (null == year || null == month) {
 			return "redict:/user/center/detail";
@@ -675,7 +677,7 @@ public class TdUserCenterController {
 		String username = (String) request.getSession().getAttribute("username");
 		TdUser user = tdUserService.findByUsername(username);
 		if (null == user) {
-			return "user/login";
+			return "redirect:/user/center/login";
 		}
 		map.addAttribute("nickname", user.getNickname());
 		return "/user/user_info_nickname";
@@ -686,7 +688,7 @@ public class TdUserCenterController {
 		String username = (String) request.getSession().getAttribute("username");
 		TdUser user = tdUserService.findByUsername(username);
 		if (null == user) {
-			return "/user/login";
+			return "redirect:/user/center/login";
 		}
 		user.setNickname(nickname);
 		tdUserService.save(user);
@@ -698,7 +700,7 @@ public class TdUserCenterController {
 		String username = (String) request.getSession().getAttribute("username");
 		TdUser user = tdUserService.findByUsername(username);
 		if (null == user) {
-			return "/user/login";
+			return "redirect:/user/center/login";
 		}
 		return "/user/share";
 	}
@@ -708,7 +710,7 @@ public class TdUserCenterController {
 		String username = (String) request.getSession().getAttribute("username");
 		TdUser user = tdUserService.findByUsername(username);
 		if (null == user) {
-			return "user/login";
+			return "redirect:/user/center/login";
 		}
 		map.addAttribute("phone", user.getMobile());
 		return "/user/user_info_phone";
@@ -719,7 +721,7 @@ public class TdUserCenterController {
 		String username = (String) request.getSession().getAttribute("username");
 		TdUser user = tdUserService.findByUsername(username);
 		if (null == user) {
-			return "/user/login";
+			return "redirect:/user/center/login";
 		}
 		user.setMobile(phone);
 		tdUserService.save(user);
@@ -731,7 +733,7 @@ public class TdUserCenterController {
 		String username = (String) req.getSession().getAttribute("username");
 		TdUser user = tdUserService.findByUsername(username);
 		if (null == user) {
-			return "/user/login";
+			return "redirect:/user/center/login";
 		}
 
 		String name = Filedata.getOriginalFilename();
@@ -765,24 +767,24 @@ public class TdUserCenterController {
 	public String reCharge(HttpServletRequest req) {
 		String username = (String) req.getSession().getAttribute("username");
 		if (null == username) {
-			return "/user/login";
+			return "redirect:/user/center/login";
 		}
 		return "/user/recharge";
 	}
-	
+
 	@RequestMapping(value = "/frost")
-	public String frost(HttpServletRequest req){
+	public String frost(HttpServletRequest req) {
 		String username = (String) req.getSession().getAttribute("username");
 		if (null == username) {
-			return "/user/login";
+			return "redirect:/user/center/login";
 		}
 		TdUser user = tdUserService.findByUsername(username);
-		if(null!=user.getIsFrost()&&user.getIsFrost()){
+		if (null != user.getIsFrost() && user.getIsFrost()) {
 			user.setIsFrost(false);
-		}else{
+		} else {
 			user.setIsFrost(true);
 		}
 		tdUserService.save(user);
-		return "redirect:/user/center/setting";
+		return "redirect:/user/center";
 	}
 }

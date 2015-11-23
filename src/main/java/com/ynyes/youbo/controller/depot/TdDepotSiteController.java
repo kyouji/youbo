@@ -68,7 +68,7 @@ public class TdDepotSiteController {
 	public String change(HttpServletRequest req, ModelMap map) {
 		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("diyUser");
 		if (null == diyUser) {
-			return "/depot/login";
+			return "redirect:/depot/login";
 		}
 		TdDiySite site = TdDiySiteService.findOne(diyUser.getDiyId());
 		map.addAttribute("site", site);

@@ -424,6 +424,8 @@ public class TdGoods {
     @Column(scale=2)
     private Double trainServiceReturnRation;
     
+    //是否满赠
+    
     public Long getId() {
         return id;
     }
