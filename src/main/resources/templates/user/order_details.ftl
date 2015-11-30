@@ -7,6 +7,7 @@
 <meta name="keywords" content="">
 <meta name="description" content="">
 <meta name="copyright" content="" />
+<meta name="format-detection" content="telephone=no" />
 <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
 <!--css-->
 <link href="/user/css/common.css" rel="stylesheet" type="text/css" />
@@ -57,7 +58,7 @@ function cancelOrder(id){
             <div class="park">
                 <#if order.carCodePhoto??>
                     <dl class="park_min">
-                        <dt><img src="images/park/park_img.png" /></dt>
+                        <dt><img src="${order.carCodePhoto!''}" /></dt>
                     </dl>
                 </#if>
                 
@@ -84,14 +85,6 @@ function cancelOrder(id){
                 <dl class="park_last">
                     <dd><span>车牌号</span></dd>
                     <dt><p>${order.carCode!''}</p></dt>
-                </dl>
-                <dl class="park_last">
-                    <dd><span>下单时间</span></dd>
-                    <dt>
-                        <#if order.orderTime??>
-                            <p>${order.orderTime?string("yyyy-MM-dd HH:mm")}</p>
-                        </#if>
-                    </dt>
                 </dl>
                 <dl class="park_last">
                     <dd><span>订单状态</span></dd>
@@ -130,6 +123,46 @@ function cancelOrder(id){
                     </dt>
                 </dl>
                 <dl class="park_last">
+                    <dd><span>下单时间</span></dd>
+                    <dt>
+                        <#if order.orderTime??>
+                            <p>${order.orderTime?string("yyyy-MM-dd HH:mm")}</p>
+                        </#if>
+                    </dt>
+                </dl>
+                <dl class="park_last">
+                    <dd><span>预约时间</span></dd>
+                    <dt>
+                        <#if order.reserveTime??>
+                            <p>${order.reserveTime?string("yyyy-MM-dd HH:mm")}</p>
+                        </#if>
+                    </dt>
+                </dl>
+                <dl class="park_last">
+                    <dd><span>入库时间</span></dd>
+                    <dt>
+                        <#if order.inputTime??>
+                            <p>${order.inputTime?string("yyyy-MM-dd HH:mm")}</p>
+                        </#if>
+                    </dt>
+                </dl>
+                <dl class="park_last">
+                    <dd><span>缴费时间</span></dd>
+                    <dt>
+                        <#if order.finishTime??>
+                            <p>${order.finishTime?string("yyyy-MM-dd HH:mm")}</p>
+                        </#if>
+                    </dt>
+                </dl>
+                <dl class="park_last">
+                    <dd><span>出库时间</span></dd>
+                    <dt>
+                        <#if order.outputTime??>
+                            <p>${order.outputTime?string("yyyy-MM-dd HH:mm")}</p>
+                        </#if>
+                    </dt>
+                </dl>
+                <dl class="park_last">
                     <dd><span>预付定金</span></dd>
                     <dt>
                         <#if order??&&order.firstPay??&&order.firstPay  gt 0>
@@ -142,14 +175,6 @@ function cancelOrder(id){
                     <dt>
                         <#if order??&&order.totalPrice??&&order.totalPrice gt 0>
                             <p>${order.totalPrice?string("0.00")}元</p>
-                        </#if>
-                    </dt>
-                </dl>
-                <dl class="park_last">
-                    <dd><span>完成时间</span></dd>
-                    <dt>
-                        <#if order.finishTime??>
-                            <p>${order.finishTime?string("yyyy-MM-dd HH:mm")}</p>
                         </#if>
                     </dt>
                 </dl>
@@ -169,12 +194,6 @@ function cancelOrder(id){
                     </dt>
                 </dl>
                 <dl class="park_last">
-                    <dd><span>取消原因</span></dd>
-                    <dt>
-                        <p>${order.cancelReason!''}</p>
-                    </dt>
-                </dl>
-                <dl class="park_last">
                     <dd><span>订单备注</span></dd>
                     <dt><p>${order.remarkInfo!''}</p></dt>
                 </dl>
@@ -190,7 +209,7 @@ function cancelOrder(id){
                         <td><input type="submit" onclick="clearing(${order.id?c},1);" value="支付定金：￥${firstPay?string("0.00")}" /></td>
                     <#break>
                     <#case 4>
-                        <td><input type="submit" onclick="clearing(${order.id?c},0);" value="结算订单：￥<#if order??&&order.totalPrice??>${order.totalPrice?string("0.00")!'0.00'}<#else>0.00</#if>" /></td>
+                        <td><input type="submit" onclick="clearing(${order.id?c},0);" value="￥<#if order??&&order.totalPrice??>${order.totalPrice?string("0.00")!'0.00'}<#else>0.00</#if>" /></td>
                     <#break>
                     <#default>
                         <td><input type="submit" style="background:#999999;" value="结算订单" /></td>

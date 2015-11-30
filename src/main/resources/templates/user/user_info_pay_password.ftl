@@ -26,7 +26,7 @@
 <body>
 
 <div class="header">
-    <p><#if payPassword??>修改支付密码<#else>设置支付密码</#if></p>
+    <p><#if payPassword??>修改提现密码<#else>设置提现密码</#if></p>
     <a href="/user/center/info" class="a4"></a>
     <#--<a class="a5" href="javascript:submitTheForm();">保存</a>-->
 </div>
@@ -36,15 +36,15 @@
     <form id="theForm" action="/user/center/pay/save" method="post">
         <#if payPassword??>
             <div class="personal_info_pwd">
-                <input class="btn1" name="oldpassword" type="password" datatype="*" nullmsg="请输入原支付密码！" ajaxurl="/user/center/pay/check" placeholder="原支付密码"/ >
+                <input class="btn1" name="oldpassword" type="password" datatype="*" nullmsg="请输入原提现密码！" ajaxurl="/user/center/pay/check" placeholder="原提现密码"/ >
                 <span style="color:red;margin-left:4%;" class="Validform_checktip Validform_wrong"></span>
             </div>
             <div class="personal_info_pwd">
-                <input class="btn2" name="password"  type="password" datatype="*6-12" nullmsg="请输入新支付密码！" placeholder="新支付密码"/ >
+                <input class="btn2" name="password"  type="password" datatype="*6-12" nullmsg="请输入新提现密码！" placeholder="新提现密码"/ >
                 <span style="color:red;margin-left:4%;" class="Validform_checktip Validform_wrong"></span>
             </div>  
             <div class="personal_info_pwd">
-                <input class="btn3" name="repassword" type="password" datatype="*" placeholder="确认支付密码" recheck="password" nullmsg="请再次输入新支付密码" / >
+                <input class="btn3" name="repassword" type="password" datatype="*" placeholder="确认提现密码" recheck="password" nullmsg="请再次输入新提现密码" / >
                 <span style="color:red;margin-left:4%;" class="Validform_checktip Validform_wrong"></span>
             </div>
             <div class="personal_info_pwd">
@@ -53,11 +53,11 @@
             </div>
         <#else>
             <div class="personal_info_pwd">
-                <input class="btn2" name="password"  type="password" datatype="*6-6" nullmsg="请输入支付密码！" errormsg="请输入6位任意字符！" placeholder="支付密码"/ >
+                <input class="btn2" name="password"  type="password" datatype="*6-6" nullmsg="请输入提现密码！" errormsg="请输入6位任意字符！" placeholder="提现密码"/ >
                 <span style="color:red;margin-left:4%;" class="Validform_checktip Validform_wrong"></span>
             </div>  
             <div class="personal_info_pwd">
-                <input class="btn3" name="repassword" type="password" datatype="*" placeholder="确认支付密码" recheck="password" nullmsg="请再次输入支付密码" / >
+                <input class="btn3" name="repassword" type="password" datatype="*" placeholder="确认提现密码" recheck="password" nullmsg="请再次输入提现密码" / >
                 <span style="color:red;margin-left:4%;" class="Validform_checktip Validform_wrong"></span>
             </div>
             <div class="personal_info_pwd">

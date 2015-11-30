@@ -780,18 +780,66 @@ public class TdOrderService {
 		}
 		return repository.findByDiyIdAndStatusIdAndOutputTimeIsNullAndIsOvertime(diyId, 6L, false);
 	}
-	
-	public List<TdOrder> findByDiyIdAndStatusIdAndIsSendReserveFalse(Long diyId){
-		if(null == diyId){
+
+	public List<TdOrder> findByDiyIdAndStatusIdAndIsSendReserveFalse(Long diyId) {
+		if (null == diyId) {
 			return null;
 		}
 		return repository.findByDiyIdAndStatusIdAndIsSendReserveFalse(diyId, 3L);
 	}
-	
-	public List<TdOrder> findByCancelOrder(Long diyId){
-		if(null == diyId){
+
+	public List<TdOrder> findByCancelOrder(Long diyId) {
+		if (null == diyId) {
 			return null;
 		}
 		return repository.findByDiyIdAndStatusIdAndIsCancelTrue(diyId, 9L);
+	}
+
+	public Page<TdOrder> findByStatusId(Long statusId, int page, int size) {
+		if (null == statusId) {
+			return null;
+		}
+		PageRequest pageRequest = new PageRequest(page, size);
+		return repository.findByStatusIdOrderByOrderTimeDesc(statusId, pageRequest);
+	}
+
+	public Page<TdOrder> findByStatusIdAndOrderNumberContainingOrStatusIdAndUsernameContainingOrStatusIdAndDiyTitleOrderByOrderTimeDesc(
+			Long statusId, String keywords, int page, int size) {
+		if (null == statusId || null == keywords) {
+			return null;
+		}
+		PageRequest pageRequest = new PageRequest(page, size);
+		return repository
+				.findByStatusIdAndOrderNumberContainingOrStatusIdAndUsernameContainingOrStatusIdAndDiyTitleOrderByOrderTimeDesc(
+						statusId, keywords, statusId, keywords, statusId, keywords, pageRequest);
+	}
+
+	public Page<TdOrder> findAll(int page, int size) {
+		PageRequest pageRequest = new PageRequest(page, size);
+		return repository.findAll(pageRequest);
+	}
+
+	public Page<TdOrder> findByOrderNumberContainingOrUsernameContainingOrDiyTitleContainingOrderByOrderTimeDesc(
+			String keywords, int page, int size) {
+		if (null == keywords) {
+			return null;
+		}
+		PageRequest pageRequest = new PageRequest(page, size);
+		return repository.findByOrderNumberContainingOrUsernameContainingOrDiyTitleContainingOrderByOrderTimeDesc(
+				keywords, keywords, keywords, pageRequest);
+	}
+
+	public List<TdOrder> findByStatusIdAndCarCode(Long statusId, String carCode) {
+		if (null == statusId || null == carCode) {
+			return null;
+		}
+		return repository.findByStatusIdAndCarCode(statusId, carCode);
+	}
+	
+	public List<TdOrder> findByStatusIdAndCarCodeContainingAndDiyIdOrderByOrderTimeDesc(Long diyId){
+		if(null == diyId){
+			return null;
+		}
+		return repository.findByStatusIdAndCarCodeContainingAndDiyIdOrderByOrderTimeDesc(4L, "WCP", diyId);
 	}
 }

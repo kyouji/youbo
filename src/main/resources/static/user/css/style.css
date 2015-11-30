@@ -105,7 +105,10 @@ body{ background:#efefef; }
 .detail_month_01 dd img{ float:left; margin-top:8px;}
 
 /*feedback*/
-.feedback_btn01{ width:92%; padding-left:4%; padding-right:4%;  height:320px; background:white; padding-top:5%; border:none;}
+.consult-title {padding:2%;height:30px;line-height:30px;background:#fff;}
+.consult-title input{width:80%;height:30px;line-height:30px;border:1px solid #ddd;}
+
+.feedback_btn01{border:1px solid #ddd; margin:2%;width:96%; /*padding-left:4%; padding-right:4%; padding-top:5%; */ height:280px; background:white;font-size:1.1em;}
 .feedback_btn02{ width:92%; margin-left:4%; margin-right:4%;  background:#0e5baa; height:50px; border-radius:6px; line-height:50px; color:white; font-size:1.2em; border:none; margin-top:5%; }
 
 /*find*/
@@ -185,12 +188,15 @@ body{ background:#efefef; }
 .mycenter_min dt a{ float:right; display:block;float:right;  margin-top:9%; }
 .mycenter_min dd{ width:100%; height:60px; border:#dddddd 1px solid; border-radius:6px; float:left; line-height:60px; text-align:center;}
 .mycenter_min dd a{ height:58px; width:50%; display:block; float:left; background:url(../images/mycenter_line.png) no-repeat left;}
-.mycenter_last{ background:white; height:auto; width:100%; display:block; overflow:hidden;  border-bottom:#dddddd 1px solid;}
-.mycenter_last dd{ float:left;}
+.mycenter_last{padding:2%; background:white; height:50px; line-height:50px;width:96%; display:block; overflow:hidden;  border-bottom:#dddddd 1px solid;}
+.mycenter_last dd{ float:left;font-size:1.3em;}
 .mycenter_last dd a{ font-size:1.3em; display:block;  line-height:50px; margin-left:10px;}
-.mycenter_last dt{ float:right;  margin-top:3%; margin-right:10px;}
+.mycenter_last dt{ float:right;  margin-top:5%;}
 .mycenter_last dt img{ width:70%;}
 .mycenter_last dt a{ line-height:60px;}
+.mycenter_title {overflow:hidden;width:100%;height:50px;line-height:50px;}
+.mycenter_title a {float:left;width:50%;height:50px;line-height:50px;}
+.mycenter_title a.blue-color{background:#00aaef;}
 
 /*myQRcode*/
 .myQRcode{ width:100%; height:auto; overflow:hidden;}
@@ -200,18 +206,18 @@ body{ background:#efefef; }
 
 
 /*bespeak_success*/
-.park_min{   position:relative; text-align:center; height:auto; margin-bottom:5%;}
+.park_min{   position:relative; text-align:center; height:auto; margin-bottom:0%;}
 .park_min dt{ width:100%; heihgt:228px;}
 .park_min dt img{ width:100%; heihgt:228px; }
 .park_min dd{ width:100%; height:auto; display:block; overflow:hidden; background:white;}
 .park_min dd span{ width:100%; color:#333; font-size:1.3em; display:block; line-height:50px; height:50px;}
 
 .park_last{ background:white; height:auto;  width:92%; padding-left:4%; padding-right:4%; display:block; overflow:hidden; border-bottom:#dddddd 1px solid;}
-.park_last dd{ float:left; height:50px;}
-.park_last dd span{ font-size:1.3em; display:block;  line-height:50px;  color:#333;}
-.park_last dt{ float:right;  height:50px;}
-.park_last dt span{ line-height:50px; font-size:1.2em;color:#999; }
-.park_last dt p{ line-height:50px; color:#999; }
+.park_last dd{ float:left;}
+.park_last dd span{ font-size:1.3em; display:block;  color:#333;}
+.park_last dt{ float:right; }
+.park_last dt span{  font-size:1.2em;color:#999; }
+.park_last dt p{  color:#999; }
 
 .park_last_01{ background:white; height:auto;  width:92%; padding-left:4%; padding-right:4%; display:block; overflow:hidden; border-bottom:#dddddd 1px solid;}
 .park_last_01 dd{ float:left; height:70px; widht:30%;}
@@ -238,6 +244,11 @@ body{ background:#efefef; }
 .pay_min dd{ width:100%; height:30px; line-height:30px;}
 .pay_min dd span{ color:#999; float:left;}
 .pay_min dd p{ color:#999; float:right; text-align:right;}
+
+.pay_min_01_1 {padding:2%;margin-bottom:2%;background:#fff;}
+.pay_min_01_1 div{width:100%;height:30px;line-height:30px;text-align:left;}
+.pay_min_01_1 div label {display:inline-block;width:30%;text-align:left;}
+.pay_min_01_1 div span {display:inline-block;width:65%;color:#999;}
 
 .pay_min_01{ width:92%; padding-left:4%; padding-right:4%; height:auto; background-color:white;  overflow:hidden; display:block;  border-bottom:#dddddd 1px solid;}
 .pay_min_01 dt{ width:100%; height:40px; line-height:40px;}
@@ -461,12 +472,12 @@ body{ background:#efefef; }
 .order_green{ color:#00bf70;}
 
 /*订单详情*/
-.park_last{ background:white; height:auto;  width:92%; padding-left:4%; padding-right:4%; display:block; overflow:hidden; border-bottom:#dddddd 1px solid;}
-.park_last dd{ float:left;width:30%; height:50px;}
-.park_last dd span{ font-size:1.3em; display:block;  line-height:50px;  color:#333;}
-.park_last dt{ float: left;width:60%;margin-left:10%;  height:50px;}
-.park_last dt span{ line-height:50px; font-size:1.2em;color:#999; }
-.park_last dt p{ line-height:50px; color:#999; }
+.park_last{ background:white; height:auto;  width:92%; padding:4%; display:block; overflow:hidden; border-bottom:#dddddd 1px solid;}
+.park_last dd{ float:left;width:30%; }
+.park_last dd span{ font-size:1.3em; display:block; color:#333;}
+.park_last dt{ float: left;width:60%;margin-left:10%; }
+.park_last dt span{ font-size:1.2em;color:#999; }
+.park_last dt p{ color:#999; }
 /*This chapter end*/
 
 

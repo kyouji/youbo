@@ -4,8 +4,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -22,6 +20,7 @@ import com.ynyes.youbo.entity.TdDiySite;
 import com.ynyes.youbo.entity.TdOrder;
 import com.ynyes.youbo.entity.TdSetting;
 import com.ynyes.youbo.entity.TdUser;
+import com.ynyes.youbo.entity.TdVip;
 import com.ynyes.youbo.service.TdAdService;
 import com.ynyes.youbo.service.TdAdTypeService;
 import com.ynyes.youbo.service.TdCommonService;
@@ -29,7 +28,7 @@ import com.ynyes.youbo.service.TdDiySiteService;
 import com.ynyes.youbo.service.TdOrderService;
 import com.ynyes.youbo.service.TdSettingService;
 import com.ynyes.youbo.service.TdUserService;
-import com.ynyes.youbo.util.DiySiteFee;
+import com.ynyes.youbo.service.TdVipService;
 
 @Controller
 @RequestMapping("/user/find")
@@ -54,6 +53,9 @@ public class TdUserFindController {
 
 	@Autowired
 	private TdSettingService tdSettingService;
+
+	@Autowired
+	private TdVipService tdVipService;
 
 	@RequestMapping
 	public String index(HttpServletRequest req, Boolean isOrder, Device device, ModelMap map) {
@@ -143,6 +145,19 @@ public class TdUserFindController {
 			res.put("message", "参数错误！");
 			return res;
 		}
+
+		/*
+		 * 在此判断用户是否预约了拥有月卡的停车场
+		 */
+		TdVip tdVip = tdVipService.findByCarCodeAndDiyId(user.getUsername(), site.getId());
+		Long now = new Date().getTime();
+		if (null != tdVip) {
+			if (now > tdVip.getBeginDate().getTime() && now < tdVip.getFinishDate().getTime()) {
+				res.put("message", "您属于该停车场的月卡用户，无需预约！");
+				return res;
+			}
+		}
+
 		TdSetting setting = tdSettingService.findOne(1L);
 		TdOrder order = new TdOrder();
 		// 以下代码用于生成订单编号
@@ -170,7 +185,7 @@ public class TdUserFindController {
 			 * @author dengxiao
 			 */
 			res.put("message", "你的账户余额不足！");
-			res.put("status",2);
+			res.put("status", 2);
 			res.put("orderId", order.getId());
 			return res;
 

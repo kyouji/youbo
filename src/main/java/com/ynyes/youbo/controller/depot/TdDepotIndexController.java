@@ -69,7 +69,6 @@ public class TdDepotIndexController {
 			String filePath = SiteMagConstant.imagePath + "/20151023092515674637QR.jpg";
 			File file = new File(filePath);
 			BufferedImage image = ImageIO.read(file);
-			;
 			LuminanceSource source = new BufferedImageLuminanceSource(image);
 			Binarizer binarizer = new HybridBinarizer(source);
 			BinaryBitmap binaryBitmap = new BinaryBitmap(binarizer);

@@ -25,7 +25,7 @@
     <!--头部开始-->
     <div class="header">
         <p>子账户管理</p>
-        <a onclick="javascript:history.back(-1);" class="a4"></a>
+        <a href="/depot/myaccount" class="a4"></a>
         <a href="/depot/myaccount/editSubAccount" class="a5">添加</a>
     </div>
     <!--头部结束-->

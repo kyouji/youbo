@@ -97,7 +97,7 @@ public class TdManagerOrderController {
 
 	@Autowired
 	TdManagerLogService tdManagerLogService;
-	
+
 	@Autowired
 	TdDiyUserService tdDiyUserService;
 
@@ -240,53 +240,53 @@ public class TdManagerOrderController {
 			res.put("info", "该字段不能为空");
 			return res;
 		}
-		
-		if(null == id){
+
+		if (null == id) {
 			TdDiySite site = tdDiySiteService.findbyUsername(param);
-			if(null != site){
+			if (null != site) {
 				res.put("info", "该登录名不能使用");
 				return res;
 			}
 		}
-		
-		if(null != id){
+
+		if (null != id) {
 			TdDiySite site = tdDiySiteService.findOne(id);
-			if(!param.equals(site.getUsername())){
+			if (!param.equals(site.getUsername())) {
 				res.put("info", "不能修改登录名");
 				return res;
 			}
 		}
-		
+
 		res.put("status", "y");
 
 		return res;
 	}
-//		}
-//		TdUser tdUser = tdUserService.findByUsername(param);
-//
-//		if (null == id) // 新增
-//		{
-//			if (null != tdUser) {
-//				res.put("info", "该登录名不能使用");
-//				return res;
-//			}
-//		} else // 修改，查找除当前ID的所有
-//		{
-//			TdDiySite dSite = tdDiySiteService.findOne(id);
-//
-//			if (null == dSite) {
-//				if (null != tdUser && tdUser.getRoleId() == 2L) {
-//					res.put("info", "该登录名不能使用");
-//					return res;
-//				}
-//			} else {
-//				if (null != tdUser && tdUser.getUsername() != dSite.getUsername() && tdUser.getRoleId() != 2L) {
-//					res.put("info", "该登录名不能使用");
-//					return res;
-//				}
-//			}
-//		}
-
+	// }
+	// TdUser tdUser = tdUserService.findByUsername(param);
+	//
+	// if (null == id) // 新增
+	// {
+	// if (null != tdUser) {
+	// res.put("info", "该登录名不能使用");
+	// return res;
+	// }
+	// } else // 修改，查找除当前ID的所有
+	// {
+	// TdDiySite dSite = tdDiySiteService.findOne(id);
+	//
+	// if (null == dSite) {
+	// if (null != tdUser && tdUser.getRoleId() == 2L) {
+	// res.put("info", "该登录名不能使用");
+	// return res;
+	// }
+	// } else {
+	// if (null != tdUser && tdUser.getUsername() != dSite.getUsername() &&
+	// tdUser.getRoleId() != 2L) {
+	// res.put("info", "该登录名不能使用");
+	// return res;
+	// }
+	// }
+	// }
 
 	@RequestMapping(value = "/edit")
 	public String orderEdit(Long id, Long statusId, String __VIEWSTATE, ModelMap map, HttpServletRequest req) {
@@ -334,81 +334,81 @@ public class TdManagerOrderController {
 		if (null == username) {
 			return "redirect:/Verwalter/login";
 		}
-		if (null != __EVENTTARGET) {
-			if (__EVENTTARGET.equalsIgnoreCase("btnCancel")) {
-				btnCancel(listId, listChkId);
-				tdManagerLogService.addLog("cancel", "取消订单", req);
-			} else if (__EVENTTARGET.equalsIgnoreCase("btnConfirm")) {
-				btnConfirm(listId, listChkId);
-				tdManagerLogService.addLog("confirm", "确认订单", req);
-			} else if (__EVENTTARGET.equalsIgnoreCase("btnDelete")) {
-				btnDelete(listId, listChkId);
-				tdManagerLogService.addLog("delete", "删除订单", req);
-			} else if (__EVENTTARGET.equalsIgnoreCase("btnPage")) {
-				if (null != __EVENTARGUMENT) {
-					page = Integer.parseInt(__EVENTARGUMENT);
-				}
-			}
-		}
-
-		if (null == page || page < 0) {
+		if (null == page) {
 			page = 0;
 		}
-
-		if (null == size || size <= 0) {
+		if (null == size) {
 			size = SiteMagConstant.pageSize;
-			;
 		}
-		/**
-		 * @author libiao 添加订单金额统计
-		 */
 
-		// 在此更改为两个价格，一个为实际收入的价格price，另一个为所有订单总额的价格totalprice
-		Double totalPrice = new Double(0.00);
-		Double price = new Double(0.00);
-
-		if (null != statusId) {
-			if (statusId.equals(0L)) // 判断为全部订单
-			{
-				List<TdOrder> list = tdOrderService.findAll();
-				for (int i = 0; i < list.size(); i++) {
-					if (null != list.get(i).getTotalPrice()) {
-						totalPrice += list.get(i).getTotalPrice();
-						// 在已经完成的状态下才有实际收入
-						if (list.get(i).getStatusId() == 6) {
-							price += list.get(i).getTotalPrice();
-						}
-					}
-				}
-				map.addAttribute("order_page", tdOrderService.findAllOrderByIdDesc(page, size));
+		if (0L == statusId) {
+			if (null == keywords || "".equals(keywords)) {
+				Page<TdOrder> order_page = tdOrderService.findAll(page, size);
+				map.addAttribute("order_page", order_page);
 			} else {
-				// 判断为状态订单（1:未支付定金 2:已支付定金 3:预约成功 4:正在停车 5:办理出库 6:交易完成
-				// 7:等待审核8:审核失败9:交易取消)
-				List<TdOrder> orderList = tdOrderService.findByStatusId(statusId);
-				for (int i = 0; i < orderList.size(); i++) {
-					if (null != orderList.get(i).getTotalPrice()) {
-						totalPrice += orderList.get(i).getTotalPrice();
-						if (6 == statusId) {
-							price += orderList.get(i).getTotalPrice();
-						}
-					}
-				}
-				map.addAttribute("order_page", tdOrderService.findByStatusIdOrderByIdDesc(statusId, page, size));
+				Page<TdOrder> order_page = tdOrderService
+						.findByOrderNumberContainingOrUsernameContainingOrDiyTitleContainingOrderByOrderTimeDesc(
+								keywords, page, size);
+				map.addAttribute("order_page", order_page);
+			}
+		} else {
+			if (null == keywords || "".equals(keywords)) {
+				Page<TdOrder> order_page = tdOrderService.findByStatusId(statusId, page, size);
+				map.addAttribute("order_page", order_page);
+			} else {
+				Page<TdOrder> order_page = tdOrderService
+						.findByStatusIdAndOrderNumberContainingOrStatusIdAndUsernameContainingOrStatusIdAndDiyTitleOrderByOrderTimeDesc(
+								statusId, keywords, page, size);
+				map.addAttribute("order_page", order_page);
 			}
 		}
 
-		// 参数注回
-		// map.addAttribute("dateId",dateId);
-		map.addAttribute("price", price);
-		map.addAttribute("totalPrice", totalPrice);
 		map.addAttribute("page", page);
 		map.addAttribute("size", size);
-		map.addAttribute("keywords", keywords);
-		map.addAttribute("statusId", statusId);
-		map.addAttribute("__EVENTTARGET", __EVENTTARGET);
-		map.addAttribute("__EVENTARGUMENT", __EVENTARGUMENT);
-		map.addAttribute("__VIEWSTATE", __VIEWSTATE);
+		return "/site_mag/order_list";
+	}
 
+	@RequestMapping(value = "/switch/{statusId}", method = RequestMethod.POST)
+	public String switchOrder(String keywords, @PathVariable Long statusId, Integer page, Integer size,
+			String __EVENTTARGET, String __EVENTARGUMENT, String __VIEWSTATE, Long[] listId, Integer[] listChkId,
+			ModelMap map,
+			// String dateId,
+			HttpServletRequest req) {
+		String username = (String) req.getSession().getAttribute("manager");
+		if (null == username) {
+			return "redirect:/Verwalter/login";
+		}
+		if (null == page) {
+			page = 0;
+		}
+		if (null == size) {
+			size = SiteMagConstant.pageSize;
+		}
+
+		if (0L == statusId) {
+			if (null == keywords || "".equals(keywords)) {
+				Page<TdOrder> order_page = tdOrderService.findAll(page, size);
+				map.addAttribute("order_page", order_page);
+			} else {
+				Page<TdOrder> order_page = tdOrderService
+						.findByOrderNumberContainingOrUsernameContainingOrDiyTitleContainingOrderByOrderTimeDesc(
+								keywords, page, size);
+				map.addAttribute("order_page", order_page);
+			}
+		} else {
+			if (null == keywords || "".equals(keywords)) {
+				Page<TdOrder> order_page = tdOrderService.findByStatusId(statusId, page, size);
+				map.addAttribute("order_page", order_page);
+			} else {
+				Page<TdOrder> order_page = tdOrderService
+						.findByStatusIdAndOrderNumberContainingOrStatusIdAndUsernameContainingOrStatusIdAndDiyTitleOrderByOrderTimeDesc(
+								statusId, keywords, page, size);
+				map.addAttribute("order_page", order_page);
+			}
+		}
+
+		map.addAttribute("page", page);
+		map.addAttribute("size", size);
 		return "/site_mag/order_list";
 	}
 
@@ -451,11 +451,11 @@ public class TdManagerOrderController {
 				order.setStatusId(order.getStatusId() + 1L);
 				order.setRemarkInfo(reason);
 				order.setCheckStatus("审核未通过");
-			}else if (1 == order.getStatusId()) {
+			} else if (1 == order.getStatusId()) {
 				order.setStatusId(9L);
 				order.setFinishTime(new Date());
 				order.setAbolishReason(reason);
-			}else if (8 == order.getStatusId()) {
+			} else if (8 == order.getStatusId()) {
 				order.setStatusId(9L);
 				order.setFinishTime(new Date());
 				order.setAbolishReason(reason);
@@ -709,7 +709,7 @@ public class TdManagerOrderController {
 
 		TdDiySite diySite = tdDiySiteService.save(tdDiySite);
 		TdDiyUser diyUser = tdDiyUserService.findOne(diySite.getId());
-		if(null == diyUser){
+		if (null == diyUser) {
 			diyUser = new TdDiyUser();
 			diyUser.setDiyId(diySite.getId());
 			diyUser.setRoleId(0L);

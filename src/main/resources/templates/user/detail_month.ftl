@@ -23,7 +23,7 @@
     
     <div class="main">
         <ul class="detail_month">
-            <li><span><#if year??>${year?c}</#if>年<#if month??>${month}</#if>月所有已完成订单</span></li>
+            <li><span><#if year??>${year?c}</#if>年<#if month??>${month}</#if>月</span></li>
             <li class="detail_month_style"><span>-<#if totalPrice??>${totalPrice?string("0.00")}</#if></span></li>
         </ul>
         <#if orders??>

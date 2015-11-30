@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mobile.device.Device;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,6 +35,7 @@ import com.ynyes.youbo.entity.TdOrder;
 import com.ynyes.youbo.entity.TdPayType;
 import com.ynyes.youbo.entity.TdSetting;
 import com.ynyes.youbo.entity.TdUser;
+import com.ynyes.youbo.entity.TdVip;
 import com.ynyes.youbo.service.TdBankcardService;
 import com.ynyes.youbo.service.TdCommonService;
 import com.ynyes.youbo.service.TdDepositService;
@@ -44,6 +46,7 @@ import com.ynyes.youbo.service.TdOrderService;
 import com.ynyes.youbo.service.TdPayTypeService;
 import com.ynyes.youbo.service.TdSettingService;
 import com.ynyes.youbo.service.TdUserService;
+import com.ynyes.youbo.service.TdVipService;
 import com.ynyes.youbo.util.SiteMagConstant;
 
 @Controller
@@ -58,6 +61,7 @@ public class TdDepotMyAccountController {
 
 	@Autowired
 	private TdPayTypeService tdPayTypeService;
+
 	@Autowired
 	private TdBankcardService tdBankcardService;
 
@@ -78,6 +82,9 @@ public class TdDepotMyAccountController {
 
 	@Autowired
 	private TdSettingService tdSettingService;
+
+	@Autowired
+	private TdVipService tdVipService;
 
 	/**
 	 * 我的账户首页
@@ -144,6 +151,26 @@ public class TdDepotMyAccountController {
 		List<TdBankcard> bankcardList = tdBankcardService.findByDiyId(site.getId());
 		map.addAttribute("bankcardList", bankcardList);
 		return "/depot/bankcard";
+	}
+
+	@RequestMapping(value = "/vip/carcode")
+	public String vipCarCode(HttpServletRequest req,ModelMap map) {
+		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("diyUser");
+		if (null == diyUser) {
+			return "redirect:/depot/login";
+		}
+		Long now = new Date().getTime();
+		List<TdVip> list = tdVipService.findByDiyId(diyUser.getDiyId());
+		for (int i = 0; i < list.size(); i++) {
+			TdVip vip = list.get(i);
+			Long begin = vip.getBeginDate().getTime();
+			Long finish = vip.getFinishDate().getTime();
+			if (!(begin < now && finish > now)) {
+				list.remove(i);
+			}
+		}
+		map.addAttribute("vip_list", list);
+		return "/depot/vip_carcode";
 	}
 
 	/**
@@ -258,10 +285,60 @@ public class TdDepotMyAccountController {
 			site.setAllMoney(new Double(0));
 		}
 		map.addAttribute("allMoney", site.getAllMoney());
-		List<TdBankcard> bankcardList = tdBankcardService.findByDiyId(site.getId());
-		map.addAttribute("cards", bankcardList);
+		List<TdPayType> all_pay_type = tdPayTypeService.findAll();
+		map.addAttribute("all_pay_type", all_pay_type);
 
 		return "/depot/withdraw";
+	}
+
+	@RequestMapping(value = "/recharge/check")
+	@ResponseBody
+	public Map<String, Object> rechargeChcek(Double money, String pwd, HttpServletRequest req) {
+		Map<String, Object> res = new HashMap<>();
+		res.put("status", -1);
+
+		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("diyUser");
+
+		if (null != diyUser) {
+			TdDiySite site = tdDiySiteService.findOne(diyUser.getDiyId());
+			if (!pwd.equals(site.getDepositPassword())) {
+				res.put("message", "密码错误！");
+				return res;
+			} else {
+				// 以下代码用于生成订单编号
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+				Date date = new Date();
+				String sDate = sdf.format(date);
+				Random random = new Random();
+				Integer suiji = random.nextInt(900) + 100;
+				String orderNum = "TX" + sDate + suiji;
+				// 生成订单编号结束
+				TdDeposit deposit = new TdDeposit();
+				deposit.setNum(orderNum);
+				deposit.setMoney(money);
+				deposit.setDepositDate(new Date());
+				deposit.setDiyId(diyUser.getDiyId());
+				deposit.setDiyName(site.getTitle());
+				tdDepositService.save(deposit);
+				res.put("message", "提现申请提交成功，请耐心等待！");
+			}
+		} else {
+			res.put("message", "未找到指定停车场！");
+			return res;
+		}
+		res.put("status", 0);
+		return res;
+	}
+
+	@RequestMapping(value = "/deposit/detail/{id}")
+	public String depositDetail(@PathVariable Long id, HttpServletRequest req, ModelMap map) {
+		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("diyUser");
+		if (null == diyUser) {
+			return "redirect:/depot/login";
+		}
+		TdDeposit deposit = tdDepositService.findOne(id);
+		map.addAttribute("deposit", deposit);
+		return "/depot/deposit_detail";
 	}
 
 	/**
@@ -534,6 +611,56 @@ public class TdDepotMyAccountController {
 		map.addAttribute("search_list", search_list);
 		map.addAttribute("keywords", keywords);
 		return "/depot/search";
+	}
+
+	@RequestMapping(value = "/noCarCode")
+	public String noCarCode(HttpServletRequest req, ModelMap map) {
+		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("diyUser");
+		if (null == diyUser) {
+			return "redirect:/depot/login";
+		}
+		List<TdOrder> no_carCode_list = tdOrderService
+				.findByStatusIdAndCarCodeContainingAndDiyIdOrderByOrderTimeDesc(diyUser.getDiyId());
+		map.addAttribute("no_carCode_list", no_carCode_list);
+		return "/depot/no_carcode";
+	}
+
+	@RequestMapping(value = "/change/password")
+	public String changePassword(HttpServletRequest req, ModelMap map) {
+		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("diyUser");
+		if (null == diyUser) {
+			return "redirect:/depot/login";
+		}
+
+		map.addAttribute("diyUser", diyUser);
+		return "/depot/change_password";
+	}
+
+	@RequestMapping(value = "/password/check")
+	@ResponseBody
+	public Map<String, Object> passwordCheck(String param, HttpServletRequest req) {
+		Map<String, Object> res = new HashMap<>();
+		res.put("status", "n");
+		res.put("info", "原密码输入错误!");
+		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("diyUser");
+		if (null != diyUser) {
+			if (diyUser.getPassword().equals(param)) {
+				res.put("status", "y");
+				res.put("info", "");
+			}
+		}
+		return res;
+	}
+
+	@RequestMapping(value = "/change/password/save")
+	public String saveNewPassword(String password, HttpServletRequest req, ModelMap map) {
+		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("diyUser");
+		if (null == diyUser) {
+			return "redirect:/depot/login";
+		}
+		diyUser.setPassword(password);
+		tdDiyUserService.save(diyUser);
+		return "redirect:/depot/site";
 	}
 
 	@RequestMapping(value = "/addNewCar", method = RequestMethod.POST)

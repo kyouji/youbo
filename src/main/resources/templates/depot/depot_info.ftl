@@ -84,19 +84,36 @@
                     <dd><span>车位数<font style="font-size:0.6em;" color="gray"></font></span></dd>
                     <dt><span style=" color:#ff665e;" id="surplus">${site.parkingNowNumber!'0'}</span>/<span>${site.parkingTotalNumber!'0'}</span></dt>
                 </dl>
-        
+                <#--
                 <dl class="park_last_01">
                     <dd><span>价格</span></dd>
                     <dt>
-                        <#if site.dayPrice??&&site.dayPrice gt 0>
-                            <span>${site.dayPrice?string("0.00")}元/小时(08：00-20:00)</span>
+                        <#if site.dayType??&&site.dayType==0>
+                            <span>前${site.dayBaseTime!'0'}小时${site.dayBasePrice?string("0.00")}元，后${site.dayHourPrice?string("0.00")}元每小时</span>
                         </#if>
-                        <#if site.nightPrice??&&site.nightPrice gt 0>
+                        <#if site.nightPrice??&&site.nightPrice==0>
                             <span>${site.nightPrice?string("0.00")}/小时(20：00-08:00)</span>
                         </#if>
                     </dt>
                 </dl>
-        
+                -->
+                <dl class="park_last_01">
+                    <dd><span>价格</span></dd>
+                    <dt>
+                        <#if site.isCamera??&&site.isCamera==true>
+                            <span>白天：<#if site.dayType??&&site.dayType==0>前${site.dayBaseTime!'0'}小时${site.dayBasePrice?string("0.00")}元，后${site.dayHourPrice?string("0.00")}每小时<#else>每次${site.dayOncePrice?string("0.00")}元</#if></span>
+                            <span>晚上：<#if site.nightType??&&site.nightType==0>前${site.nightBaseTime!'0'}小时${site.nightBasePrice?string("0.00")}元，后${site.nightHourPrice?string("0.00")}每小时<#else>每次${site.nightOncePrice?string("0.00")}元</#if></span>
+                        <#else>
+                            <span><#if site.dayType??&&site.dayType==0>前${site.dayBaseTime!'0'}小时${site.dayBasePrice?string("0.00")}元，后${site.dayHourPrice?string("0.00")}每小时<#else>每次${site.dayOncePrice?string("0.00")}元</#if></span>
+                        </#if>
+                    </dt>
+                </dl>
+                <dl class="park_last_01">
+                    <dd><span>收费上限</span></dd>
+                    <dt>
+                        <span><#if site.maxPrice??>${site.maxPrice?string("0.00")}元/天</#if></span>
+                    </dt>
+                </dl>
                 <dl class="park_last">
                     <dd><span>车库类型</span></dd>
                     <dt><p>${site.parkingType!''}</p></dt>

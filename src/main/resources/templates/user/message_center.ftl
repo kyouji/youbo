@@ -20,31 +20,19 @@
     <!--头部开始-->
     <div class="header">
         <p>消息中心</p>
-        <a onclick="javascript:history.back(-1);" class="a4"></a>
+        <a href="/user/center" class="a4"></a>
     </div>
     <!--头部结束-->
     
     <div class="ybtx">
         <!--消息中心开始-->
         <div class="message_center">
-            <!--未读消息-->
-            <#if unread_list??&&unread_list?size gt 0>
-                <#list unread_list as unread>
-                    <a href="/user/center/message/content/${unread.id?c}">
-                        <ul>
-                            <li class="li_1">${unread.title!''}</li>
-                            <li><p class="time_1">${unread.releaseTime?string("yyyy-MM-dd")}</p></li>
-                            <span class="red_dot"></span>
-                        </ul>
-                    </a>
-                </#list>
-            </#if>
-            <!--已读消息-->
-            <#if read_list??&&read_list?size gt 0>
-                <#list read_list as read>
+            <!--所有消息-->
+            <#if infos??&&infos?size gt 0>
+                <#list infos as read>
                     <ul>
                         <a href="/user/center/message/content/${read.id?c}">
-                            <li class="li_1">${read.title!''}</li>
+                            <li class="li_1" <#if read.isSubRead??&&read.isSubRead==true>style="color:red"</#if>>${read.title!''}</li>
                             <li><p class="time_1">${read.releaseTime?string("yyyy-MM-dd")}</p></li>
                         </a>
                     </ul>

@@ -26,7 +26,7 @@
     <#if deposit_list??>
         <div class="withdraw_record_list">
             <#list deposit_list as item>
-                <ul onclick="window.location.href='/depot/myaccount/deposit/detail/${item.id?c}'">
+                <ul onclick="window.location.href='/user/center/deposit/detail/${item.id?c}'">
                     <li class="li_1">
                         <span>提现单号</span>
                         <p>${item.num!''}</p>

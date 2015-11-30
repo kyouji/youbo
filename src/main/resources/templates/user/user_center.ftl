@@ -17,7 +17,20 @@
 
 <link href="/user/css/common.css" rel="stylesheet" type="text/css" />
 <link href="/user/css/style.css" rel="stylesheet" type="text/css" />
-
+<script type="text/javascript">
+    function navigation(x,y){
+        var u = navigator.userAgent;
+        if (u.indexOf('Android') > -1 || u.indexOf('Linux') > -1) {
+            window.location.href = "androidamap://navi?sourceApplication=amap&lat="+x+"&lon="+y+"&dev=1&style=2";
+            alert("启动导航功能前请确认已经安装了“高德地图”APP");
+        } else if (u.indexOf('iPhone') > -1) {//苹果手机
+            alert("启动导航功能前请确认已经安装了“高德地图”APP");
+            window.location.href = "iosamap://navi?sourceApplication=applicationName&lat="+x+"&lon="+y+"&dev=1&style=2";
+        } else{//winphone手机
+            alert("只有ios和android系统的手机才能够实现导航功能！");
+        }
+    }
+</script>
 </head>
 
 <body>
@@ -44,72 +57,90 @@
         </dt>
         <dd>
             <a style="color:#ff665e; background:none;" href="/user/order">我的订单</a>
-            <a style="color:#69afff; " href="/user/find?isOrder=<#if currentOrder??>true<#else>false</#if>"><#if currentOrder??>车位导航<#else>寻找车位</#if></a>
+            <a style="color:#69afff; " href="<#if currentOrder??&&currentOrder.statusId!=6&&currentOrder.statusId!=9>javascript:navigation(${x!'0'},${y!'0'});<#else>/user/find</#if>"><#if currentOrder??&&currentOrder.statusId!=6&&currentOrder.statusId!=9>车位导航<#else>寻找车位</#if></a>
         </dd>
     </dl>
-    <a>
-        <dl class="mycenter_last" style="background-color:#f65741;">
-            <dd style="width:50%;background-color:#00aaef;"><a href="#" style="color:#fff;text-align:center;">提现</a></dd>
-            <dd style="width:50%"><a href="/user/center/recharge" style="color:#fff;text-align:center;">充值</a></dd>
-        </dl>
-    </a>
+        <div class="mycenter_title" style="background-color:#f65741;">
+            <a class="blue-color" <#if user.payPassword??>href="/user/center/deposit"<#else>href="javascript:alert('请设置提现密码！');window.location.href='/user/center/info/pay'"</#if> style="color:#fff;text-align:center;">提现</a>
+            <a href="/user/center/recharge" style="color:#fff;text-align:center;">充值</a>
+        </div>
     
     <div style="height:15px;"></div>  
-    <a>
-    <dl class="mycenter_last">
-        <dd><a href="/user/center/detail">明细</a></dd>
-        <dt><a href="/user/center/detail"><img src="/user/images/aboutus_right.png" /></a></dt>
-    </dl>
+    <a href="/user/center/info">
+        <dl class="mycenter_last">
+            <dd>用户资料</dd>
+            <dt><img src="/user/images/aboutus_right.png" /></dt>
+        </dl>
     </a>
-    <a>
-    <dl class="mycenter_last">
-        <dd><a href="/user/center/bankcard">银行卡</a></dd>
-        <dt><a href="/user/center/bankcard"><img src="/user/images/aboutus_right.png" /></a></dt>
-    </dl>
+    <a href="/user/center/detail">
+        <dl class="mycenter_last">
+            <dd>明细</dd>
+            <dt><img src="/user/images/aboutus_right.png" /></dt>
+        </dl>
     </a>
-    <a>
-    <dl class="mycenter_last">
-        <dd><a href="/user/center/message">消息中心</a></dd>
-        <dt><a href="/user/center/message"><img src="/user/images/aboutus_right.png" /></a></dt>
-    </dl>
+    <a href="/user/center/cashrecord">
+        <dl class="mycenter_last">
+            <dd>提现记录</dd>
+            <dt><img src="/user/images/aboutus_right.png" /></dt>
+        </dl>
     </a>
-    <a>
-    <dl class="mycenter_last">
-        <dd><a href="/user/order/cancel">已取消订单</a></dd>
-        <dt><a href="/user/order/cancel"><img src="/user/images/aboutus_right.png" /></a></dt>
-    </dl>
+    <a  href="/user/center/message">
+        <dl class="mycenter_last">
+            <dd>消息中心</dd>
+            <dt><img src="/user/images/aboutus_right.png" /></dt>
+        </dl>
     </a>
-    <a>
-    <dl style="margin-top:5%;" class="mycenter_last">
-        <dd><a href="/user/center/frost"><#if user??&&user.isFrost??&&user.isFrost==true>解除冻结<#else>冻结余额</#if></a></dd>
-        <dt><a href="/user/center/frost"><img src="/user/images/aboutus_right.png" /></a></dt>
-    </dl>
+    <#--
+    <a href="/user/order/cancel">
+        <dl class="mycenter_last">
+            <dd>已取消订单</dd>
+            <dt><img src="/user/images/aboutus_right.png" /></dt>
+        </dl>
+    </a>
+    -->
+    <a  href="/user/center/comment">
+        <dl class="mycenter_last">
+            <dd>意见反馈</dd>
+            <dt><img src="/user/images/aboutus_right.png" /></dt>
+        </dl>
     </a>
     <#--
     <a>
-    <dl class="mycenter_last">
-        <dd><a href="/user/center/comment">意见反馈</a></dd>
-        <dt><a href="/user/center/comment"><img src="/user/images/aboutus_right.png" /></a></dt>
-    </dl>
+        <dl class="mycenter_last">
+            <dd><a href="/user/center/about">关于我们</a></dd>
+            <dt><a href="/user/center/about"><img src="/user/images/aboutus_right.png" /></a></dt>
+        </dl>
     </a>
     <a>
-    <dl class="mycenter_last">
-        <dd><a href="/user/center/about">关于我们</a></dd>
-        <dt><a href="/user/center/about"><img src="/user/images/aboutus_right.png" /></a></dt>
-    </dl>
-    </a>
-    <a>
-    <dl class="mycenter_last">
-        <dd><a href="/user/code">我的二维码</a></dd>
-        <dt><a><img src="/user/images/aboutus_right.png" /></a></dt>
-    </dl>
+        <dl class="mycenter_last">
+            <dd><a href="/user/code">我的二维码</a></dd>
+            <dt><a><img src="/user/images/aboutus_right.png" /></a></dt>
+        </dl>
     </a>
     -->
+    <a <#if setting??>href="tel://${setting.telephone!''}"</#if>>
+        <dl class="mycenter_last">
+            <dd>联系我们</dd>
+            <dt><img src="/user/images/aboutus_right.png" /></dt>
+        </dl>
+    </a>
+    <a href="/user/center/frost">
+        <dl class="mycenter_last">
+            <dd><#if user??&&user.isFrost??&&user.isFrost==true>解除冻结<#else>冻结余额</#if></dd>
+            <dt><img src="/user/images/aboutus_right.png" /></dt>
+        </dl>
+    </a>
+    <a href="javascript:alert('暂未开放！')">
+        <dl class="mycenter_last">
+            <dd>我的车位分享</dd>
+            <dt><img src="/user/images/aboutus_right.png" /></dt>
+        </dl>
+    </a>
     <a href="/user/center/exit">
-    <dl class="mycenter_last">
-        <dd><a href="/user/center/exit">退出登录</a></dd>
-        <dt><a href="/user/center/exit"><img src="/user/images/aboutus_right.png" /></a></dt>
-    </dl>
+        <dl class="mycenter_last">
+            <dd>退出登录</dd>
+            <dt><img src="/user/images/aboutus_right.png" /></dt>
+        </dl>
     </a>
  
     

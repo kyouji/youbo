@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ynyes.youbo.entity.TdDiySite;
 import com.ynyes.youbo.entity.TdDiyUser;
+import com.ynyes.youbo.entity.TdSetting;
 import com.ynyes.youbo.service.TdCommonService;
 import com.ynyes.youbo.service.TdDiySiteService;
+import com.ynyes.youbo.service.TdSettingService;
 import com.ynyes.youbo.service.TdUserService;
 
 @Controller
@@ -34,6 +36,9 @@ public class TdDepotSiteController {
 	@Autowired
 	private TdDiySiteService tdDiySiteService;
 	
+	@Autowired
+	private TdSettingService tdSettingService;
+	
 	@RequestMapping
 	public String site(HttpServletRequest req, Device device, ModelMap map) {
 		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("diyUser");
@@ -41,6 +46,8 @@ public class TdDepotSiteController {
 		if (null == diyUser) {
 			return "redirect:/depot/login";
 		}
+		TdSetting setting = tdSettingService.findOne(1L);
+		map.addAttribute("setting", setting);
 		map.addAttribute("site", site);
 		return "/depot/site";
 	}

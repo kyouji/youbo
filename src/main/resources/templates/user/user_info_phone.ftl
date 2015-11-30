@@ -14,7 +14,8 @@
 <link href="/user/css/style.css" rel="stylesheet" type="text/css" />
 <script>
     function submitPhone(){
-        var phone=$("#carcode").val().trim();
+        var phone=$.trim($("#phone").val());
+        console.debug(phone);
         if(!/^1\d{10}$/.test(phone)){
             alert("请输入正确的手机号码！");
             return;

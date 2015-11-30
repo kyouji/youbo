@@ -8,59 +8,42 @@
 <meta name="copyright" content="" />
 <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
 
-<script type="text/javascript" src="/user/js/jquery-1.9.1.min.js"></script>
-<script src="/user/js/Validform_v5.3.2_min.js"></script>
-
 <link href="/user/css/common.css" rel="stylesheet" type="text/css" />
 <link href="/user/css/style.css" rel="stylesheet" type="text/css" />
 
+<script type="text/javascript" src="/user/js/jquery-1.9.1.min.js"></script>
 <script type="text/javascript">
-    $(document).ready(function(){
-        
-        //初始化表单验证
-        $("#form1").Validform({
-            tiptype: 3,
-            ajaxPost:true,
-            callback: function(data) {
-                if (data.code==0)
-                {
-                    alert("提交成功");
-                    window.location.reload();
-                }
-                else
-                {
-                    alert(data.message);
-                }
-            }
-        });
-       $("#Validform_msg").hide();
-    });
+    function send(){
+        var content = $("#content").val();
+        var title = $("#title").val();
+        if(""==title||title.length < 4||title.length > 20){
+            alert("请输入长度在4-25之间的标题！");
+            return;
+        }
+        if(""==content){
+            alert("请输入您的意见！");
+            return;
+        }
+        window.location.href="/user/center/comment/save?title="+title+"&content="+content;
+    }
 </script>
 
 
-<body>
-
+<body ng-app="app">
 
 <div class="header">
         <p>意见反馈</p>
         <a onclick="javascript:history.back(-1);" class="a4"></a>
         <a href="#" class="a5"></a>
 </div>
-<div class="main">
-    <form action="/user/center/comment" id="form1" method="post">
-        <span class="Validform_checktip input1" style="color:red; al" ></span>
-        <textarea class="feedback_btn01 normal" datatype="*1-255" sucmsg=" "name="content" cols="" rows=""></textarea>
+<div class="main" ng-controller="ctrl">
+    <form name="consultForm" ng-submit="submitForm()">
+        <div class="consult-title"> 标题：<input type="text" id="title"></div>
+        <textarea class="feedback_btn01 normal" name="content" id="content"></textarea>
         
-        <input class="feedback_btn02" type="submit" value="提交" />
+        <input class="feedback_btn02" type="button" onclick="send();" value="提交" />
     </form>
 </div><!--main END-->
-
-
-
-
-
-
-
 
 </body>
 </html>

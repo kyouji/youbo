@@ -101,7 +101,7 @@
                         "</dl>"+
                         "<dl class='find_btn'>"+
                         "<dt><a onclick='javascript:goNavigation(${item.longitude},${item.latitude},${item.id});'><img src='/user/images/park_icon01.png' /><span>导航</span></a></dt>"+
-                        "<dd><a <#if haveBankCard??>onclick='reserve(${item.id},${item.longitude},${item.latitude});'<#else>onclick='userAlert();'</#if>><img src='/user/images/park_icon02.png' /><span>预约</span></a></dd>"+
+                        "<dd><a onclick='reserve(${item.id},${item.longitude},${item.latitude});'><img src='/user/images/park_icon02.png' /><span>预约</span></a></dd>"+
                         "</dl></div>"
                     })
                     AMap.event.addListener(mk${item_index},'click',function(){
@@ -127,7 +127,7 @@
                         "</dl>"+
                         "<dl class='find_btn'>"+
                         "<dt><a onclick='javascript:goNavigation(${item.longitude},${item.latitude},${item.id});'><img src='/user/images/park_icon01.png' /><span>导航</span></a></dt>"+
-                        "<dd><a <#if haveBankCard??>onclick='reserve(${item.id},${item.longitude},${item.latitude});'<#else>onclick='userAlert();'</#if>><img src='/user/images/park_icon02.png' /><span>预约</span></a></dd>"+
+                        "<dd><a onclick='reserve(${item.id},${item.longitude},${item.latitude});'><img src='/user/images/park_icon02.png' /><span>预约</span></a></dd>"+
                         "</dl></div>"
                     })
                     AMap.event.addListener(mk${item_index},'click',function(){
@@ -153,7 +153,7 @@
                         "</dl>"+
                         "<dl class='find_btn'>"+
                         "<dt><a onclick='javascript:goNavigation(${item.longitude},${item.latitude},${item.id});'><img src='/user/images/park_icon01.png' /><span>导航</span></a></dt>"+
-                        "<dd><a <#if haveBankCard??>onclick='reserve(${item.id},${item.longitude},${item.latitude});'<#else>onclick='userAlert();'</#if>><img src='/user/images/park_icon02.png' /><span>预约</span></a></dd>"+
+                        "<dd><a onclick='reserve(${item.id},${item.longitude},${item.latitude});'><img src='/user/images/park_icon02.png' /><span>预约</span></a></dd>"+
                         "</dl></div>"
                     })
                     AMap.event.addListener(mk${item_index},'click',function(){

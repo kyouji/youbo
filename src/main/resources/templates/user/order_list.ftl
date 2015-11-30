@@ -145,7 +145,13 @@
                             </dd>
                         </dl>
                         <dl class="order_btn">
-                            <dd><input class="sel_2" onclick="cancelOrder(${item.id?c});" style="border-radius:0;" type="button" value="取消订单"/ ></dd>
+                            <dd>
+                                <#if item.statusId==9>
+                                    <dd><input class="sel_2" style="background-color:#999999;border-radius:0;" type="button" value="取消订单"/ ></dd>
+                                <#else>
+                                    <input class="sel_2" onclick="cancelOrder(${item.id?c});" style="border-radius:0;" type="button" value="取消订单"/ >
+                                </#if>
+                            </dd>
                         </dl>
                     </#list>
                 </div>

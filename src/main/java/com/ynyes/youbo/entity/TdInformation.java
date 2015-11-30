@@ -53,6 +53,22 @@ public class TdInformation {
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     @Temporal(TemporalType.TIMESTAMP)
     private Date releaseTime;
+    
+    //上级消息
+    @Column
+    private Long parentId;
+    
+    //是否具有未读子消息（是则是false，不是则是true）
+    @Column
+    private Boolean isSubRead;
+
+	public Boolean getIsSubRead() {
+		return isSubRead;
+	}
+
+	public void setIsSubRead(Boolean isSubRead) {
+		this.isSubRead = isSubRead;
+	}
 
 	public Long getId() {
 		return id;
@@ -116,6 +132,14 @@ public class TdInformation {
 
 	public void setReleaseTime(Date releaseTime) {
 		this.releaseTime = releaseTime;
+	}
+
+	public Long getParentId() {
+		return parentId;
+	}
+
+	public void setParentId(Long parentId) {
+		this.parentId = parentId;
 	}
 
 }

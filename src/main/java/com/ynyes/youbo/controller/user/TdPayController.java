@@ -86,6 +86,7 @@ public class TdPayController {
 		log.setNum(orderNum);
 		log.setMoney(money);
 		log.setUserId(user.getId());
+		log.setUsername(username);
 		log.setRechargeDate(new Date());
 		log.setStatusId(new Long(-1));
 		tdRechargetLogService.save(log);

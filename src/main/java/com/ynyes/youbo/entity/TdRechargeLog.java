@@ -38,9 +38,21 @@ public class TdRechargeLog {
 	@Column
 	private Long userId;
 	
+	//用户名
+	@Column
+	private String username;
+	
 	//是否已经支付
 	@Column
 	private Long statusId;
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
 
 	public Long getStatusId() {
 		return statusId;

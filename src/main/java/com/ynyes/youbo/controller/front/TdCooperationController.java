@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -21,11 +22,13 @@ import com.ynyes.youbo.entity.TdDiyUser;
 import com.ynyes.youbo.entity.TdIOData;
 import com.ynyes.youbo.entity.TdOrder;
 import com.ynyes.youbo.entity.TdUser;
+import com.ynyes.youbo.entity.TdVip;
 import com.ynyes.youbo.service.TdDiySiteService;
 import com.ynyes.youbo.service.TdDiyUserService;
 import com.ynyes.youbo.service.TdIODataService;
 import com.ynyes.youbo.service.TdOrderService;
 import com.ynyes.youbo.service.TdUserService;
+import com.ynyes.youbo.service.TdVipService;
 
 /**
  * @author dengxiao 提供给第三方的接口
@@ -48,6 +51,9 @@ public class TdCooperationController {
 
 	@Autowired
 	private TdUserService tdUserService;
+
+	@Autowired
+	private TdVipService tdVipService;
 
 	/**
 	 * @author dengxiao 1. 第三方登陆接口
@@ -254,6 +260,12 @@ public class TdCooperationController {
 		if ("正常进入".equals(ioData.getIoState())) {
 			System.err.println("接收到车辆入库数据");
 			System.err.println("开始获取订单信息");
+			// 查看该车辆是否已经入库
+			List<TdOrder> carCodes = tdOrderService.findByStatusIdAndCarCode(4L, busNo);
+			if (null != carCodes && carCodes.size() > 0) {
+				res.put("message", "该车辆已经入库");
+				return res;
+			}
 			// 根据车牌号码停车场id订单状态（状态为3，预约成功）查找一系列订单信息，按照时间倒序排序，选择第一个（第一个即是指定用户在指定停车场预约成功的最后一个订单）
 			TdOrder order = tdOrderService.findTopByCarCodeAndDiyIdAndStatusIdOrderByOrderTimeDesc(ioData.getBusNo(),
 					diySite.getId());
@@ -281,10 +293,6 @@ public class TdCooperationController {
 				theOrder.setCarCode(busNo);
 				theOrder.setFirstPay(0.00);
 				theOrder.setUsername(busNo);
-				if (null == theOrder.getCarCodePhoto()) {
-					theOrder.setCarCodePhoto("");
-				}
-				theOrder.setCarCodePhoto(theOrder.getCarCodePhoto() + lujing + ",");
 				System.err.println("开始存储新的订单");
 				order = tdOrderService.save(theOrder);
 				tdDiySiteService.save(diySite);
@@ -297,6 +305,11 @@ public class TdCooperationController {
 			order.setIsOvertime(false);
 			// 设置订单的入库时间
 			order.setInputTime(ioData.getIoDate());
+
+			if (null == order.getCarCodePhoto()) {
+				order.setCarCodePhoto("");
+			}
+			order.setCarCodePhoto(lujing);
 			// 将订单的状态改变为4L（正在停车）
 			order.setStatusId(4L);
 			tdOrderService.save(order);
@@ -328,6 +341,9 @@ public class TdCooperationController {
 				return res;
 			}
 			order.setOutputTime(ioData.getIoDate());
+			if (null == order.getCarCodePhoto()) {
+				order.setCarCodePhoto("");
+			}
 			tdOrderService.save(order);
 			res.put("message", "出库信息录入成功！");
 		}
@@ -374,7 +390,7 @@ public class TdCooperationController {
 	@RequestMapping(value = "/payed/order")
 	@ResponseBody
 	public Map<String, Object> getPayedOrder(HttpServletRequest req, String carCode, String finishDate,
-			Double totalPrice, Long type) {
+			Double totalPrice, Long type, String name) {
 		Map<String, Object> res = new HashMap<>();
 		res.put("status", -1);
 		System.err.println("开始获取session中的停车场信息");
@@ -421,6 +437,7 @@ public class TdCooperationController {
 		order.setTotalPrice(totalPrice);
 		order.setStatusId(6L);
 		order.setThePayType(type);
+		order.setOperator(name);
 		tdOrderService.save(order);
 		res.put("status", 0);
 		return res;
@@ -811,6 +828,53 @@ public class TdCooperationController {
 			res.put("orders", order.getId() + "," + order.getCarCode());
 			res.put("status", 0);
 		}
+		return res;
+	}
+
+	/**
+	 * @author dengxiao 传递月卡会员信息至服务器
+	 */
+	@RequestMapping(value = "/get/vip")
+	@ResponseBody
+	public Map<String, Object> getVip(HttpServletRequest req, String carCode, String beginDate, String finishDate) {
+		Map<String, Object> res = new HashMap<>();
+		res.put("status", -1);
+
+		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("cooperDiy");
+		if (null == diyUser) {
+			res.put("message", "停车场用户未登陆");
+			return res;
+		}
+
+		TdDiySite site = tdDiySiteService.findOne(diyUser.getDiyId());
+
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+		Date begin = new Date();
+		Date finish = new Date();
+
+		try {
+			begin = sdf.parse(beginDate);
+			finish = sdf.parse(finishDate);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+
+		TdVip vip = tdVipService.findByCarCodeAndDiyId(carCode, site.getId());
+		TdUser user = tdUserService.findByUsername(carCode);
+		if (null == vip) {
+			vip = new TdVip();
+		}
+		vip.setDiyName(site.getTitle());
+		vip.setDiyId(site.getId());
+		vip.setCarCode(carCode);
+		vip.setBeginDate(begin);
+		vip.setFinishDate(finish);
+		if (user != null) {
+			vip.setUserId(user.getId());
+		}
+		tdVipService.save(vip);
+		res.put("message", "信息录入成功！");
+		res.put("status", 0);
 		return res;
 	}
 }

@@ -64,4 +64,20 @@ public class TdInformationService {
 				.findByUserIdAndRoleIdAndStatusIdOrUserIdIsNullAndRoleIdAndStatusIdOrderByReleaseTimeDesc(userId,1L,statusId,1L,statusId);
 		return someInfo;
 	}
+	
+	// 根据用户名获取所有一级消息
+	public List<TdInformation> findByUserIdAndParentIdIsNullOrderByReleaseTimeDesc(Long userId){
+		if(null == userId){
+			return null;
+		}
+		return repository.findByUserIdAndParentIdIsNullOrderByReleaseTimeDesc(userId);
+	};
+	
+	//根据父id查找消息
+	public TdInformation findByParentId(Long parentId){
+		if(null == parentId){
+			return null;
+		}
+		return repository.findByParentId(parentId);
+	}
 }

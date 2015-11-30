@@ -238,17 +238,31 @@ public interface TdOrderRepo extends PagingAndSortingRepository<TdOrder, Long>, 
 
 	// 查找指定停车场内已缴费但未出库的订单
 	List<TdOrder> findByDiyIdAndStatusIdAndOutputTimeIsNull(Long diyId, Long statusId);
+
+	// 根据停车场ID和车牌号码和订单状态查找订单
+	List<TdOrder> findByDiyIdAndStatusIdAndCarCode(Long diyId, Long statusId, String carCode);
+
+	// 根据停车场ID和车牌号和订单状态和出库时间为NULL查找订单
+	List<TdOrder> findByDiyIdAndStatusIdAndCarCodeAndOutputTimeIsNullOrderByOrderTimeDesc(Long diyId, Long statusId,
+			String carCode);
+
+	List<TdOrder> findByDiyIdAndStatusIdAndOutputTimeIsNullAndIsOvertime(Long diyId, Long statusId, Boolean isOverTime);
+
+	List<TdOrder> findByDiyIdAndStatusIdAndIsSendReserveFalse(Long diyId, Long statusId);
+
+	List<TdOrder> findByDiyIdAndStatusIdAndIsCancelTrue(Long diyId, Long statusId);
+
+	Page<TdOrder> findByStatusIdOrderByOrderTimeDesc(Long statusId, Pageable page);
+
+	Page<TdOrder> findByStatusIdAndOrderNumberContainingOrStatusIdAndUsernameContainingOrStatusIdAndDiyTitleOrderByOrderTimeDesc(
+			Long statusId01, String keywords01, Long statusId02, String keywords02, Long statusId03, String keywords03,
+			Pageable page);
+
+
+	Page<TdOrder> findByOrderNumberContainingOrUsernameContainingOrDiyTitleContainingOrderByOrderTimeDesc(
+			String keywords01, String keywords02, String keywords03, Pageable page);
 	
-	//根据停车场ID和车牌号码和订单状态查找订单
-	List<TdOrder> findByDiyIdAndStatusIdAndCarCode(Long diyId,Long statusId,String carCode);
+	List<TdOrder> findByStatusIdAndCarCode(Long statusId,String carCode);
 	
-	//根据停车场ID和车牌号和订单状态和出库时间为NULL查找订单
-	List<TdOrder> findByDiyIdAndStatusIdAndCarCodeAndOutputTimeIsNullOrderByOrderTimeDesc(Long diyId,Long statusId,String carCode);
-	
-	List<TdOrder> findByDiyIdAndStatusIdAndOutputTimeIsNullAndIsOvertime(Long diyId, Long statusId,Boolean isOverTime);
-	
-	List<TdOrder> findByDiyIdAndStatusIdAndIsSendReserveFalse(Long diyId,Long statusId);
-	
-	List<TdOrder> findByDiyIdAndStatusIdAndIsCancelTrue(Long diyId,Long statusId);
-	
+	List<TdOrder> findByStatusIdAndCarCodeContainingAndDiyIdOrderByOrderTimeDesc(Long statusId,String carCode,Long diyId);
 }

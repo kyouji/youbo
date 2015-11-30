@@ -27,15 +27,15 @@
 
 <div class="header">
     <p>修改密码</p>
-    <a href="/user/center/info" class="a4"></a>
+    <a href="/depot/site" class="a4"></a>
     <#--<a class="a5" href="javascript:submitTheForm();">保存</a>-->
 </div>
 
 <div class="main">
 
-    <form id="theForm" action="/user/center/password/save" method="post">
+    <form id="theForm" action="/depot/myaccount/change/password/save" method="post">
         <div class="personal_info_pwd">
-            <input class="btn1" name="oldpassword" type="password" datatype="*" nullmsg="请输入原密码！" ajaxurl="/user/center/password/check" placeholder="原密码"/ >
+            <input class="btn1" name="oldpassword" type="password" datatype="*" nullmsg="请输入原密码！" ajaxurl="/depot/myaccount/password/check" placeholder="原密码"/ >
             <span style="color:red;margin-left:4%;" class="Validform_checktip Validform_wrong"></span>
         </div>
         <div class="personal_info_pwd">

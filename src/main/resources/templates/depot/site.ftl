@@ -34,25 +34,31 @@ function pupopen(){
         <dl class="about_us_min">
             <dt>
                 <img src="images/logo.png"  />
-                <p>优泊天下  收费版</p>
+                <p>优泊天下（停车场）</p>
             </dt>
         </dl>
         <div class="site_us">
-            <dl class="about_us_last">
-                <dd><a>检查更新</a></dd>                
-                <dt class="arrow"><a href="#"><img src="/depot/images/advance.png" /></a></dt>
-                <dt><p>V2.0</p></dt>
-            </dl>
-            <dl class="about_us_last" onclick="pupopen()">
-                <dd><a>切换收费模式</a></dd>
-                <dt class="arrow"><a href="#"><img src="/depot/images/advance.png" /></a></dt>
-                <dt><p>计时+收费</p></dt>
-            </dl>
-            <dl class="about_us_last">
-                <dd><a>联系客服</a></dd>
-                <dt class="arrow"><a href="#"><img src="/depot/images/advance.png" /></a></dt>
-                <dt><p>800-820-8820</p></dt>
-            </dl>
+            <a href="/depot/myaccount/change/password">
+                <dl class="about_us_last">
+                    <dd>修改密码</dd>
+                    <dt class="arrow"><img src="/depot/images/advance.png" /></dt>
+                    <dt><p></p></dt>
+                </dl>
+            </a>
+            <a>
+                <dl class="about_us_last" onclick="pupopen()">
+                    <dd>切换收费模式</dd>
+                    <dt class="arrow"><img src="/depot/images/advance.png" /></dt>
+                    <dt><p>计时+收费</p></dt>
+                </dl>
+            </a>
+            <a href="tel://${setting.telephone!''}">
+                <dl class="about_us_last">
+                    <dd>联系客服</dd>
+                    <dt class="arrow"><img src="/depot/images/advance.png" /></dt>
+                    <dt><p>${setting.telephone!''}</p></dt>
+                </dl>
+            </a>
         </div>
         <ul class="sign_out">
             <li><a href="/depot/site/exit">退出登录</a></li>

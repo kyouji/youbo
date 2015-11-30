@@ -42,12 +42,12 @@ body{background:#efefef;}
 .ip_1{text-align:center;display:block;width:100%;margin:5% auto;background:#f65741;border:none;outline:0;color:#fff;font-size:1.875em;padding:3% 0;}
 
 .my_account_record{border-top:solid 1px #dddddd;}
-.my_account_record dl{display:block; overflow:hidden;background:#fff; height:auto; width:96%;padding: 0 2%;border-bottom:solid 1px #dddddd;}
+.my_account_record a{ overflow:hidden;display:block;}
+.my_account_record dl{display:block; overflow:hidden;background:#fff; height:auto; width:96%;padding: 4% 2%;border-bottom:solid 1px #dddddd;}
 .my_account_record dl dd{ float:left;}
 .my_account_record dl dd a{ font-size: 1.2em; display:block;  line-height:60px; margin-left:10px;}
-.my_account_record dl dt{ float:right;position:relative;margin-top:7%; margin-right:10px;}
-.my_account_record dl dt a{ line-height:60px;}
-.my_account_record dl dt a img{width:60%;}
+.my_account_record dl dt{ float:right;position:relative; margin-right:10px;}
+.my_account_record dl dt img{width:60%;}
 .my_account_record dl dt a span{display:block;position:absolute;top:0px;right:30px;width:15px;height:15px;background:#f00;border-radius:50%;}
 /*This chapter end*/
 
@@ -119,7 +119,7 @@ body{background:#efefef;}
 
 /*park*/
 .park{width:100%;}
-.park_min{position:relative; text-align:center; height:auto; margin-bottom:5%;}
+.park_min{position:relative; text-align:center; height:auto; margin-bottom:0%;}
 .park_min dt{ width:100%; heihgt:228px;}
 .park_min dd{ width:100%; height:auto; display:block; overflow:hidden; background:white;}
 .park_min dd span{ width:100%; color:#333; font-size:1.3em; display:block; line-height:50px; height:50px;}
@@ -131,11 +131,11 @@ body{background:#efefef;}
 .park_last dt span{ line-height:50px; font-size:1.2em;color:#999; }
 .park_last dt p{ line-height:50px; color:#999; }
 
-.park_last_01{ background:white; height:auto;  width:92%; padding-left:4%; padding-right:4%; display:block; overflow:hidden; border-bottom:#dddddd 1px solid;}
-.park_last_01 dd{ float:left; height:70px; widht:30%;}
-.park_last_01 dd span{ font-size:1.3em; display:block;  line-height:70px;  color:#333;}
-.park_last_01 dt{ float:right;  height:55px; width:70%; margin-top:15px;}
-.park_last_01 dt span{ width:100%; float:left; text-align:right; color:#999;}
+.park_last_01{ background:white; height:auto;  width:96%; padding-left:4%;  padding-top:4%; padding-bottom:4%; display:block; overflow:hidden; border-bottom:#dddddd 1px solid;}
+.park_last_01 dd{ float:left;  widht:10%;}
+.park_last_01 dd span{ font-size:1.3em; display:block;   color:#333;}
+.park_last_01 dt{ float:right;   width:62%; }
+.park_last_01 dt span{ width:100%; float:left; text-align:left; color:#999;display:block;}
 
 /*This chapter end*/
 
@@ -197,15 +197,15 @@ body{background:#efefef;}
 .about_us_last dd a{ font-size:1.4em; display:block;  line-height:60px; margin-left:10px;}
 .about_us_last dt{ float:right;  /* margin-top:3%; */ margin-right:10px;}
 .about_us_last dt a{ line-height:60px;}
-.about_us_last dt p{line-height: 60px;color:#999999;}
+.about_us_last dt p{color:#999999;}
 .about_us_last dt img{width:60%;/* margin-top:3%; */}
-.about_us_last .arrow{margin-top: 3%;}
-@media screen and (max-width:320px) {
-.about_us_last .arrow{margin-top: 6%;}
-} 
-.about_us_fin{bottom:0;left:0;height:60px; width:100%; text-align:center; background:#efefef; margin-top:50px;}
+/*.about_us_last .arrow{margin-top: 3%;}*/
+@media screen and (max-width:1080px) {
+
+.about_us_fin{bottom:0;left:0;width:100%; text-align:center; background:#efefef; margin-top:50px;}
 .site .site_us{border-top:solid 1px #dddddd;}
-.site .site_us dl{border-bottom:solid 1px #dddddd;}
+.site .site_us a{display:block;}
+.site .site_us dl{border-bottom:solid 1px #dddddd;padding:4% 0%;}
 /*退出登录*/
 .site ul{margin-top:3%;border-top:solid 1px #dddddd;border-bottom:solid 1px #dddddd;background:#fff;}
 .site ul li a{display:block;height:40px;line-height:40px;text-align:center;color:#999999;}
@@ -254,7 +254,7 @@ body{background:#efefef;}
 .account_withdrawals ul li .p1{width:23%;text-align:center;color:#999999;}
 .account_withdrawals ul li .p2{width:77%;}
 .account_withdrawals select{-webkit-appearance:none;width:100%;height:60px;border:none; font-family:"微软雅黑";font-size:1em; line-height:60px;padding:0 10px;}
-.account_withdrawals ul li .p2 input{width:92%;height:60px;line-height:60px;border:none;padding:0 10px;}
+.account_withdrawals ul li .p2 input{width:92%;height:60px;line-height:60px;border:none;padding:0 10px;font-size:1.0em}
 .bank_01{width:100%;  height:56px; background-color:#fff;}
 .bank_01 dt{ float:left;}
 .bank_01 dt a{ font-size:1.5em; line-height:56px; margin-left:10px;}

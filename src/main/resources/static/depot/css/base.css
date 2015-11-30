@@ -138,7 +138,7 @@ input.text {background:none; border:none;}
 .header .a4{background: url(../images/back.png) no-repeat;background-size: 20px;display: block;position: absolute;left:3%;top:15px;width: 33px;height: 56px;}
 .header .a5{display: block;position: absolute;right:3%;top:0px;height: 56px;line-height:56px;color:#fff;font-size:1.4em;}
 /*banner*/
-.addWrap{ position:relative; width:96%;background:#fff;margin-top:20px; padding:0 2%;}
+.addWrap{ position:relative; width:96%;background:#fff;margin-top:10px; padding:0 2%;}
 .addWrap .swipe{overflow: hidden;visibility: hidden;position:relative;}
 .addWrap .swipe-wrap{overflow:hidden;position:relative;}
 .addWrap .swipe-wrap > div {float: left;width: 100%;position:relative;}
@@ -147,7 +147,7 @@ input.text {background:none; border:none;}
 #position li.cur{background-color:#0e5baa;}
 .img-responsive { display: block; max-width: 100%;  height: auto;}
 /*顶部导航*/
-.topNav{position:relative;width:100%;padding:0 2%;margin-top:20px;display:table; table-layout:fixed; border-collapse:collapse;}
+.topNav{position:relative;width:100%;padding:0 2%;margin-top:5px;display:table; table-layout:fixed; border-collapse:collapse;}
 
 .topNav .four_1{float:left;display:block;width:46%;text-align: center;padding-top: 10px;border-radius:20px;margin:2%;}
 .topNav a img{width: 60%;}
@@ -171,7 +171,7 @@ input.text {background:none; border:none;}
 .topNav .a1{background:#ffbd2e;}
 .topNav .a2{background:#ff665e;}
 .topNav .a3{background:#69afff;}
-.topNav .a4{background:#00bf70;}
+.topNav .a4{background:#00B7BF;}
 .topNav .p5{position:absolute;left: 39.4%;top: 35.4%;z-index:99;width:62px;height:62px;padding: 1%;}
 @media screen and (max-width:1920px) {
 .topNav .p5{position:absolute;left: 41.3%;top:38%;width:120px;height:120px;}
@@ -253,7 +253,7 @@ input.text {background:none; border:none;}
 
 
 /*saoyisao*/
-.add_sao{width:96%;text-align:center;color:#ffffff;background:#ff8b2e;float:left;border-radius:10px;margin:0 2% 10px 2%;height:80px;line-height:80px;font-size:1.4em;}
+.add_sao{width:96%;text-align:center;color:#ffffff;background:#ff8b2e;float:left;border-radius:10px;margin:0 2% 5px 2%;height:80px;line-height:80px;font-size:1.4em;}
     @media screen and (max-width:1024px) {
     .add_sao {height:110px;line-height:110px;font-size:2.6em;}}
     @media screen and (max-width:414px) {

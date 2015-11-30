@@ -7,11 +7,17 @@
 <meta name="keywords" content="">
 <meta name="description" content="">
 <meta name="copyright" content="" />
+<meta name="format-detection" content="telephone=no" />
 <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
 <!--css-->
 <link href="/depot/css/common.css" rel="stylesheet" type="text/css" />
 <link href="/depot/css/base.css" rel="stylesheet" type="text/css" />
 <link href="/depot/css/style.css" rel="stylesheet" type="text/css" />
+<style>
+    input{
+        -webkit-appearance:none;
+    }
+</style>
 <script>
     function orderFreeOrCash(id,type){
         if(null==id||null==type){
@@ -49,25 +55,21 @@
             <div class="park">
                 <#if order.carCodePhoto??>
                     <dl class="park_min">
-                        <dt><img src="images/park/park_img.png" /></dt>
+                        <dt><img src="${order.carCodePhoto!''}" /></dt>
                     </dl>
                 </#if>
                 
                 <dl class="park_last">
                     <dd><span>会员账户</span></dd>
-                    <dt>
-                        <#if user??>
-                            <p>${user.username!''}</p>
-                        </#if>
-                    </dt>
+                    <dt><p>${user.username!''}</p></dt>
                 </dl>        
                 <dl class="park_last">
                     <dd><span>会员昵称</span></dd>
-                    <dt>
-                        <#if user??>
-                            <p>${user.nickname!''}</p>
-                        </#if>
-                    </dt>
+                    <dt><p>${user.nickname!''}</p></dt>
+                </dl>
+                <dl class="park_last">
+                    <dd><span>车库名称</span></dd>
+                    <dt><p>${order.diyTitle!''}</p></dt>
                 </dl>
                 <dl class="park_last">
                     <dd><span>订单编号</span></dd>
@@ -80,14 +82,6 @@
                 <dl class="park_last">
                     <dd><span>车牌号</span></dd>
                     <dt><p>${order.carCode!''}</p></dt>
-                </dl>
-                <dl class="park_last">
-                    <dd><span>下单时间</span></dd>
-                    <dt>
-                        <#if order.orderTime??>
-                            <p>${order.orderTime?string("yyyy-MM-dd HH:mm")}</p>
-                        </#if>
-                    </dt>
                 </dl>
                 <dl class="park_last">
                     <dd><span>订单状态</span></dd>
@@ -126,6 +120,46 @@
                     </dt>
                 </dl>
                 <dl class="park_last">
+                    <dd><span>下单时间</span></dd>
+                    <dt>
+                        <#if order.orderTime??>
+                            <p>${order.orderTime?string("yyyy-MM-dd HH:mm")}</p>
+                        </#if>
+                    </dt>
+                </dl>
+                <dl class="park_last">
+                    <dd><span>预约时间</span></dd>
+                    <dt>
+                        <#if order.reserveTime??>
+                            <p>${order.reserveTime?string("yyyy-MM-dd HH:mm")}</p>
+                        </#if>
+                    </dt>
+                </dl>
+                <dl class="park_last">
+                    <dd><span>入库时间</span></dd>
+                    <dt>
+                        <#if order.inputTime??>
+                            <p>${order.inputTime?string("yyyy-MM-dd HH:mm")}</p>
+                        </#if>
+                    </dt>
+                </dl>
+                <dl class="park_last">
+                    <dd><span>缴费时间</span></dd>
+                    <dt>
+                        <#if order.finishTime??>
+                            <p>${order.finishTime?string("yyyy-MM-dd HH:mm")}</p>
+                        </#if>
+                    </dt>
+                </dl>
+                <dl class="park_last">
+                    <dd><span>出库时间</span></dd>
+                    <dt>
+                        <#if order.outputTime??>
+                            <p>${order.outputTime?string("yyyy-MM-dd HH:mm")}</p>
+                        </#if>
+                    </dt>
+                </dl>
+                <dl class="park_last">
                     <dd><span>预付定金</span></dd>
                     <dt>
                         <#if order??&&order.firstPay??&&order.firstPay  gt 0>
@@ -138,14 +172,6 @@
                     <dt>
                         <#if order??&&order.totalPrice??&&order.totalPrice gt 0>
                             <p>${order.totalPrice?string("0.00")}元</p>
-                        </#if>
-                    </dt>
-                </dl>
-                <dl class="park_last">
-                    <dd><span>完成时间</span></dd>
-                    <dt>
-                        <#if order.finishTime??>
-                            <p>${order.finishTime?string("yyyy-MM-dd HH:mm")}</p>
                         </#if>
                     </dt>
                 </dl>
@@ -163,16 +189,6 @@
                             </#if>
                         </p>
                     </dt>
-                </dl>
-                <dl class="park_last">
-                    <dd><span>取消原因</span></dd>
-                    <dt>
-                        <p>${order.cancelReason!''}</p>
-                    </dt>
-                </dl>
-                <dl class="park_last">
-                    <dd><span>审核状态</span></dd>
-                    <dt><p>${order.checkStatus!''}</p></dt>
                 </dl>
                 <dl class="park_last">
                     <dd><span>订单备注</span></dd>

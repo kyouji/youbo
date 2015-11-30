@@ -32,10 +32,10 @@
         <a href="javascript:history.go(-1);" class="a4"></a>
     </div>
 
-    <dl style="margin-bottom:5%;" class="pay_min_01">
-        <span>支付金额：<#if due??>${due?string("0.00")}<#else>0.00</#if></span>
-        <span>手续费：<#if poundage??>${poundage!'0'}%</#if></span>
-        <span>总额：<#if all??>${all?string("0.00")}</#if></span>
+    <dl class="pay_min_01_1">
+        <div><label>支付金额：</label><span><#if due??>${due?string("0.00")}<#else>0.00</#if></span></div>
+        <div><label>手&nbsp;续&nbsp;费：</label><span><#if poundage??>${poundage!'0'}%</#if></span></div>
+        <div><label>总&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;额：</label><span><#if all??>${all?string("0.00")}</#if></span></div>
     </dl>
 
     <div class="pay_way">请选择充值方式</div>

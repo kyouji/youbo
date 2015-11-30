@@ -46,24 +46,45 @@
     <div class="my_account_record">
         <#if diyUser??&&diyUser.roleId??>
             <#if diyUser.roleId==0>
-                <dl>
-                    <dd><a href="/depot/myaccount/cashrecord">提现记录</a></dd>
-                    <dt><a href="/depot/myaccount/cashrecord"><img src="/depot/images/advance.png" /></a></dt>
-                </dl>
+                <a href="/depot/myaccount/cashrecord">
+                    <dl>
+                        <dd>提现记录</dd>
+                        <dt><img src="/depot/images/advance.png" /></dt>
+                    </dl>
+                </a>
             </#if>
         </#if>
-        <dl>
-            <dd><a href="/depot/myaccount/tradeDetail">交易明细</a></dd>
-            <dt><a href="/depot/myaccount/tradeDetail"><img src="/depot/images/advance.png" /></a></dt>
-        </dl>
-        <dl>
-            <dd><a href="/depot/charge">订单管理</a></dd>
-            <dt><a href="/depot/charge"><img src="/depot/images/advance.png" /></a></dt>
-        </dl>
-        <dl>
-            <dd><a href="/depot/myaccount/reserve">预约审核</a></dd>
-            <dt><a href="/depot/myaccount/reserve"><img src="/depot/images/advance.png" /></a></dt>
-        </dl>
+        <a href="/depot/myaccount/tradeDetail">
+            <dl>
+                <dd>交易明细</dd>
+                <dt><img src="/depot/images/advance.png" /></dt>
+            </dl>
+        </a>
+        <a href="/depot/charge">
+            <dl>
+                <dd>订单管理</dd>
+                <dt><img src="/depot/images/advance.png" /></dt>
+            </dl>
+        </a>
+        <a href="/depot/myaccount/reserve">
+            <dl>
+                <dd>预约审核</dd>
+                <dt><img src="/depot/images/advance.png" /></dt>
+            </dl>
+        </a>
+        <a href="/depot/myaccount/vip/carcode">
+            <dl>
+                <dd>月卡车辆</dd>
+                <dt><img src="/depot/images/advance.png" /></dt>
+            </dl>
+        </a>
+        <a href="/depot/myaccount/noCarCode">
+            <dl>
+                <dd>无牌车管理</dd>
+                <dt><img src="/depot/images/advance.png" /></dt>
+            </dl>
+        </a>
+        <#--
         <#if diyUser??&&diyUser.roleId??>
             <#if diyUser.roleId==0>
                 <dl>
@@ -76,12 +97,15 @@
             <dd><a href="/depot/myaccount/message">消息中心</a></dd>
             <dt><a href="/depot/myaccount/message"><img src="/depot/images/advance.png" /></a></dt>
         </dl>
+        -->
         <#if diyUser??&&diyUser.roleId??>
             <#if diyUser.roleId==0>
-                <dl>
-                    <dd><a href="/depot/myaccount/subAccount">子账户管理</a></dd>
-                    <dt><a href="/depot/myaccount/subAccount"><img src="/depot/images/advance.png" /></a></dt>
-                </dl>
+                <a href="/depot/myaccount/subAccount">
+                    <dl>
+                        <dd>子账户管理</dd>
+                        <dt><img src="/depot/images/advance.png" /></dt>
+                    </dl>
+                </a>
             </#if>
         </#if>
     </div>

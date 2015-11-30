@@ -70,7 +70,10 @@ public class TdUserOrderController {
 		List<TdOrder> all_order_list = tdOrderService.findByUsername(username);
 		List<TdOrder> parked_order_list = tdOrderService.findByUsernameAndParked(username);
 		List<TdOrder> unparked_order_list = tdOrderService.findByUsernameAndNotParked(username);
-
+		List<TdOrder> list = tdOrderService.findCancelOrderByUsername(username);
+		for (TdOrder tdOrder : list) {
+			unparked_order_list.add(tdOrder);
+		}
 		map.addAttribute("all_order_list", all_order_list);
 		map.addAttribute("parked_order_list", parked_order_list);
 		map.addAttribute("unparked_order_list", unparked_order_list);

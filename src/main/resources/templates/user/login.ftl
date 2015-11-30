@@ -75,15 +75,9 @@ function login(){
                 <input type="submit" class="loginbtn" id="btn_login" value="登录" />
                 <p class="login_a">
                   <!--<a href="#">找回密码</a>-->
-                  <a class="a1" href="/user/center/register">注册</a>
+                  <a class="a1" href="/user/center/register" style="font-size:1.0em;">注册</a>
                 </p>
            <!-- </form>-->
-        </div>
-        <div class="otherlogin">
-          <p class="ta-c fs10 pb20"><span>第三方账号登录</span></p>
-          <a href="#"><img src="/depot/images/login01.png" height="40" /><span>支付宝</span></a>
-          <a href="#"><img src="/depot/images/login02.png" height="40" /><span>微信</span></a>
-          <a href="#"><img src="/depot/images/login03.png" height="40" /><span>腾讯QQ</span></a>
         </div>
     </div>
   

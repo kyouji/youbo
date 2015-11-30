@@ -2,8 +2,6 @@ package com.ynyes.youbo.controller.user;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.net.URLEncoder;
 import java.text.ParseException;
@@ -12,6 +10,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -20,7 +19,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mobile.device.Device;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,19 +31,25 @@ import org.springframework.web.multipart.MultipartFile;
 import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.Calendar;
 import com.ynyes.youbo.entity.TdBankcard;
+import com.ynyes.youbo.entity.TdDeposit;
+import com.ynyes.youbo.entity.TdDiyUser;
 import com.ynyes.youbo.entity.TdInformation;
 import com.ynyes.youbo.entity.TdOrder;
+import com.ynyes.youbo.entity.TdPayType;
+import com.ynyes.youbo.entity.TdSetting;
 import com.ynyes.youbo.entity.TdUser;
 import com.ynyes.youbo.entity.TdUserComment;
 import com.ynyes.youbo.service.TdBankcardService;
 import com.ynyes.youbo.service.TdCommonService;
 import com.ynyes.youbo.service.TdCouponService;
+import com.ynyes.youbo.service.TdDepositService;
 import com.ynyes.youbo.service.TdDiySiteService;
 import com.ynyes.youbo.service.TdGoodsService;
 import com.ynyes.youbo.service.TdInformationService;
 import com.ynyes.youbo.service.TdOrderGoodsService;
 import com.ynyes.youbo.service.TdOrderService;
 import com.ynyes.youbo.service.TdPayTypeService;
+import com.ynyes.youbo.service.TdSettingService;
 import com.ynyes.youbo.service.TdShippingAddressService;
 import com.ynyes.youbo.service.TdUserCashRewardService;
 import com.ynyes.youbo.service.TdUserCollectService;
@@ -121,6 +125,12 @@ public class TdUserCenterController {
 	@Autowired
 	private TdInformationService tdInfoService;
 
+	@Autowired
+	private TdSettingService tdSettingService;
+
+	@Autowired
+	private TdDepositService tdDepositService;
+
 	/**
 	 * 用户个人中心
 	 * 
@@ -142,7 +152,10 @@ public class TdUserCenterController {
 			}
 			map.addAttribute("currentOrder", currentOrder);
 		}
+
+		TdSetting setting = tdSettingService.findOne(1L);
 		tdCommonService.setHeader(map, req);
+		map.addAttribute("setting", setting);
 		map.addAttribute("user", tdUserService.findByUsername(username));
 		map.addAttribute("server_ip", req.getLocalName());
 		map.addAttribute("server_port", req.getLocalPort());
@@ -165,7 +178,19 @@ public class TdUserCenterController {
 		map.addAttribute("user", user);
 		return "/user/setting";
 	}
-
+	
+	@RequestMapping(value = "/deposit/detail/{id}")
+	public String depositDetail(@PathVariable Long id, HttpServletRequest req, ModelMap map) {
+		String username = (String) req.getSession().getAttribute("username");
+		if (null == username) {
+			return "redirect:/user/center/login";
+		}
+		TdDeposit deposit = tdDepositService.findOne(id);
+		map.addAttribute("deposit", deposit);
+		return "/user/deposit_detail";
+	}
+	
+	
 	/**
 	 * 设置城市
 	 * 
@@ -223,6 +248,18 @@ public class TdUserCenterController {
 		map.addAttribute("paytape_list", tdPayTypeService.findAll());
 		return "/user/bankcard_add";
 	}
+	
+	@RequestMapping(value = "/cashrecord")
+	public String cashrecord(HttpServletRequest req,ModelMap map){
+		String username = (String) req.getSession().getAttribute("username");
+		TdUser user = tdUserService.findByUsername(username);
+		if (null == username) {
+			return "redirect:/user/center/login";
+		}
+		List<TdDeposit> deposit_list = tdDepositService.findByUserIdOrderByDepositDateDesc(user.getId());
+		map.addAttribute("deposit_list", deposit_list);
+		return "/user/withdraw_record";
+	}
 
 	/**
 	 * 保存银行卡
@@ -272,7 +309,33 @@ public class TdUserCenterController {
 	 */
 	@RequestMapping(value = "/comment")
 	public String comment(HttpServletRequest req, ModelMap map) {
+		String username = (String) req.getSession().getAttribute("username");
+		if (null == username) {
+			return "redirect:/user/center/login";
+		}
 		return "/user/feedback";
+	}
+
+	/**
+	 * 提交意见的方法
+	 * 
+	 * @author dengxiao
+	 */
+	@RequestMapping(value = "/comment/save")
+	public String commentSave(HttpServletRequest req, String title, String content) {
+		String username = (String) req.getSession().getAttribute("username");
+		if (null == username) {
+			return "redirect:/user/center/login";
+		}
+		TdUser user = tdUserService.findByUsername(username);
+		TdInformation info = new TdInformation();
+		info.setUserId(user.getId());
+		info.setTitle(title);
+		info.setStatusId(1L);
+		info.setContent(content);
+		info.setReleaseTime(new Date());
+		tdInfoService.save(info);
+		return "redirect:/user/center/message";
 	}
 
 	/**
@@ -335,17 +398,8 @@ public class TdUserCenterController {
 		}
 		// 通过用户名得到当前登陆用户的一系列信息
 		TdUser tdUser = tdUserService.findByUsername(username);
-		if (null == tdUser) {
-			return "redirect:/user/center/login";
-		}
-
-		// 查询到当前登陆用户的未读信息和已读信息
-		List<TdInformation> unread_list = tdInfoService.findByUserIdAndRoleIdAndStatusId(0L, tdUser.getId());
-		List<TdInformation> read_list = tdInfoService.findByUserIdAndRoleIdAndStatusId(1L, tdUser.getId());
-
-		map.addAttribute("unread_list", unread_list);
-		map.addAttribute("read_list", read_list);
-
+		List<TdInformation> infos = tdInfoService.findByUserIdAndParentIdIsNullOrderByReleaseTimeDesc(tdUser.getId());
+		map.addAttribute("infos", infos);
 		return "/user/message_center";
 	}
 
@@ -353,19 +407,27 @@ public class TdUserCenterController {
 	 * @author dengxiao 消息详情
 	 */
 	@RequestMapping("/message/content/{id}")
-	public String messageContent(@PathVariable Long id, ModelMap map) {
+	public String messageContent(@PathVariable Long id, ModelMap map, HttpServletRequest req) {
+		String username = (String) req.getSession().getAttribute("username");
+		if (null == username) {
+			return "redirect:/user/center/login";
+		}
+
 		if (null == id) {
 			return "/user/error404";
 		}
 
 		TdInformation theInfo = tdInfoService.findOne(id);
-
-		// 如果此消息处于未读状态
-		if (theInfo.getStatusId() == 0) {
-			theInfo.setStatusId(1L);
-			theInfo = tdInfoService.save(theInfo);
+		if (null != theInfo) {
+			TdInformation subInfo = tdInfoService.findByParentId(theInfo.getId());
+			if (null != subInfo && 0L == subInfo.getStatusId()) {
+				subInfo.setStatusId(1L);
+				theInfo.setIsSubRead(true);
+				tdInfoService.save(subInfo);
+				tdInfoService.save(theInfo);
+				map.addAttribute("subInfo", subInfo);
+			}
 		}
-
 		map.addAttribute("info", theInfo);
 		return "/user/message_content";
 	}
@@ -550,6 +612,19 @@ public class TdUserCenterController {
 		return res;
 	}
 
+	@RequestMapping(value = "/deposit")
+	public String deposit(HttpServletRequest req, ModelMap map) {
+		String username = (String) req.getSession().getAttribute("username");
+		if (null == username) {
+			return "redirect:/user/center/login";
+		}
+		TdUser user = tdUserService.findByUsername(username);
+		List<TdPayType> all_pay_type = tdPayTypeService.findAll();
+		map.addAttribute("all_pay_type", all_pay_type);
+		map.addAttribute("user", user);
+		return "/user/withdraw";
+	}
+
 	@RequestMapping(value = "/password/save")
 	public String savePassword(String password, HttpServletRequest req, ModelMap map) {
 		String username = (String) req.getSession().getAttribute("username");
@@ -594,6 +669,45 @@ public class TdUserCenterController {
 				res.put("info", "");
 			}
 		}
+		return res;
+	}
+
+	@RequestMapping(value = "/deposit/check")
+	@ResponseBody
+	public Map<String, Object> depositCheck(Double money, String pwd, HttpServletRequest req) {
+		Map<String, Object> res = new HashMap<>();
+		res.put("stauts", -1);
+
+		String username = (String) req.getSession().getAttribute("username");
+		TdUser user = tdUserService.findByUsername(username);
+		if (null != user) {
+			if (null != user.getPayPassword() && pwd.equals(user.getPayPassword())) {
+				// 以下代码用于生成订单编号
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+				Date date = new Date();
+				String sDate = sdf.format(date);
+				Random random = new Random();
+				Integer suiji = random.nextInt(900) + 100;
+				String orderNum = "TX" + sDate + suiji;
+				// 生成订单编号结束
+				TdDeposit deposit = new TdDeposit();
+				deposit.setNum(orderNum);
+				deposit.setMoney(money);
+				deposit.setDepositDate(new Date());
+				deposit.setUserId(user.getId());
+				deposit.setUsername(user.getUsername());
+				tdDepositService.save(deposit);
+				res.put("message", "提现申请提交成功，请耐心等待！");
+			} else {
+				res.put("message", "密码错误！");
+				return res;
+			}
+		}else{
+			res.put("message", "未找到指定用户！");
+			return res;
+		}
+
+		res.put("status", 0);
 		return res;
 	}
 
@@ -739,6 +853,10 @@ public class TdUserCenterController {
 		String name = Filedata.getOriginalFilename();
 
 		String ext = name.substring(name.lastIndexOf("."));
+
+		if (!".jpg".equals(ext) && !".png".equals(ext)) {
+			return "redirect:/user/center/info";
+		}
 
 		try {
 			byte[] bytes = Filedata.getBytes();

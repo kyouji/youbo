@@ -142,7 +142,7 @@
         <#if currentOrder??>
             <input type="hidden" id="hidden" value="${currentOrder.statusId!'0'}">
         </#if>
-        <a href="<#if currentOrder??&&currentOrder.statusId!=6&&currentOrder.statusId!=9>javascript:navigation(${x!'0'},${y!'0'});<#else>/user/find</#if>" class="four_1 a1"><img src="/depot/images/index03.png">
+        <a style="background-color:#69afff;" href="<#if currentOrder??&&currentOrder.statusId!=6&&currentOrder.statusId!=9>javascript:navigation(${x!'0'},${y!'0'});<#else>/user/find</#if>" class="four_1 a1"><img src="/depot/images/index03.png">
             <p><#if currentOrder??&&currentOrder.statusId!=6&&currentOrder.statusId!=9>导航<#else>找车位</#if></p>
         </a>
                 <#if currentOrder??>
@@ -190,8 +190,8 @@
                         <p>最新订单</p>
                     </a>
                 </#if>
-        <a href="/user/center" class="four_1 a3"><img src="/depot/images/index01.png"><p>个人中心</p></a>
-        <a href="/user/code" class="four_1 a4"><img src="/user/images/index04.png"><p>二维码</p></a>
+        <a style="background-color:#ffbd2e;" href="/user/center" class="four_1 a3"><img src="/depot/images/index01.png"><p>个人中心</p></a>
+        <a style="background-color:#00B7BF;" href="/user/code" class="four_1 a4"><img src="/user/images/index04.png"><p>二维码</p></a>
         <div class="clear"></div>
         <form id="uploadImgForm" enctype="multipart/form-data" action="/user/center/headImg" method="post">
             <input style="display:none" name="Filedata" type="file" onchange="getFile();" id="filebutton">
