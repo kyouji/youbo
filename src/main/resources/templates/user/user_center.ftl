@@ -132,7 +132,7 @@
     </a>
     <a href="javascript:alert('暂未开放！')">
         <dl class="mycenter_last">
-            <dd>我的车位分享</dd>
+            <dd>我的车位共享</dd>
             <dt><img src="/user/images/aboutus_right.png" /></dt>
         </dl>
     </a>
