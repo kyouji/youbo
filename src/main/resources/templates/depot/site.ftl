@@ -37,6 +37,7 @@ function pupopen(){
                 <p>优泊天下（停车场）</p>
             </dt>
         </dl>
+        
         <div class="site_us">
             <a href="/depot/myaccount/change/password">
                 <dl class="about_us_last">
@@ -45,6 +46,16 @@ function pupopen(){
                     <dt><p></p></dt>
                 </dl>
             </a>
+            <#if diyUser??&&diyUser.roleId??>
+                <#if diyUser.roleId==0>
+                    <a href="/depot/myaccount/subAccount">
+                        <dl class="about_us_last">
+                            <dd>子账户管理</dd>
+                            <dt><img src="/depot/images/advance.png" /></dt>
+                        </dl>
+                    </a>
+                </#if>
+            </#if>
             <a>
                 <dl class="about_us_last" onclick="pupopen()">
                     <dd>切换收费模式</dd>

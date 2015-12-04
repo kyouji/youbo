@@ -46,6 +46,7 @@ public class TdDepotSiteController {
 		if (null == diyUser) {
 			return "redirect:/depot/login";
 		}
+		map.addAttribute("diyUser", diyUser);
 		TdSetting setting = tdSettingService.findOne(1L);
 		map.addAttribute("setting", setting);
 		map.addAttribute("site", site);

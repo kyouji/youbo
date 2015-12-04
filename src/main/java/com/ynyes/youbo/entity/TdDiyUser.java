@@ -40,6 +40,30 @@ public class TdDiyUser {
 	// 是否使能
 	@Column
 	private Boolean isEnable;
+	
+	//当日累计收现额
+	@Column
+	private Double allash;
+	
+	//当日累计免单数量
+	@Column
+	private Long mdNum;
+	
+	public Double getAllash() {
+		return allash;
+	}
+
+	public void setAllash(Double allash) {
+		this.allash = allash;
+	}
+
+	public Long getMdNum() {
+		return mdNum;
+	}
+
+	public void setMdNum(Long mdNum) {
+		this.mdNum = mdNum;
+	}
 
 	public String getRealName() {
 		return realName;

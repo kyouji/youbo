@@ -104,29 +104,50 @@ public class TdDepotMyAccountController {
 		tdCommonService.setHeader(map, req);
 		map.addAttribute("depot", site);
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		SimpleDateFormat sdf_temp = new SimpleDateFormat("yyyy-MM-dd");
+
+		Double income = 0.00;
+		
+		// 获取当前可提现金额
 		Calendar cal = Calendar.getInstance();
-		String year = cal.get(Calendar.YEAR) + "";
-		String month = (cal.get(Calendar.MONTH) + 1) + "";
-		String day = cal.get(Calendar.DAY_OF_MONTH) + "";
-		String sBeginDate = year + "-" + month + "-" + day + " 00:00:00";
-		String sFinishDate = year + "-" + month + "-" + day + " 24:00:00";
+
+		String sBeginDate = null;
+		String sFinishDate = null;
 		Date beginDate = null;
 		Date finishDate = null;
+		
+		//获取提现结束时间
+		cal.add(Calendar.DATE, -1);
+		sFinishDate = sdf_temp.format(cal.getTime());
 		try {
-			beginDate = sdf.parse(sBeginDate);
 			finishDate = sdf.parse(sFinishDate);
-		} catch (ParseException e) {
-			e.printStackTrace();
+		} catch (ParseException e1) {
+			e1.printStackTrace();
 		}
-		List<TdOrder> orders = tdOrderService.findByDiyIdAndOrderTimeBetween(site.getId(), beginDate, finishDate);
-		Double income = new Double(0);
-		for (TdOrder order : orders) {
-			if (null != order.getTotalPrice() && order.getTotalPrice() > 0
-					&& (order.getStatusId() == 6L || order.getStatusId() == 9L)
-					&& (null == order.getThePayType() || order.getThePayType() == 0L)) {
+
+		List<TdOrder> about_income = null;
+		
+		// 获取上一次提现的时间
+		List<TdDeposit> deposits = tdDepositService.findByDiyIdOrderByDepositDateDesc(diyUser.getDiyId());
+		if (null != deposits && null != deposits.get(0) && null != deposits.get(0).getDepositDate()) {
+			sBeginDate = sdf_temp.format(deposits.get(0).getDepositDate()) + " 00:00:00";
+			try {
+				beginDate = sdf.parse(sBeginDate);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+			about_income = tdOrderService.findByDiyIdAndFinishTimeBetween(diyUser.getDiyId(), beginDate, finishDate);
+		}else{
+			about_income = tdOrderService.findByDiyIdAndFinishTimeBefore(diyUser.getDiyId(), finishDate);
+		}
+
+		//计算当前可提现金额
+		for (TdOrder order : about_income) {
+			if(null != order&&null != order.getThePayType()&&0 == order.getThePayType()){
 				income += order.getTotalPrice();
 			}
 		}
+		
 		map.addAttribute("site", site);
 		map.addAttribute("diyUser", diyUser);
 		map.addAttribute("income", income);
@@ -154,7 +175,7 @@ public class TdDepotMyAccountController {
 	}
 
 	@RequestMapping(value = "/vip/carcode")
-	public String vipCarCode(HttpServletRequest req,ModelMap map) {
+	public String vipCarCode(HttpServletRequest req, ModelMap map) {
 		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("diyUser");
 		if (null == diyUser) {
 			return "redirect:/depot/login";
@@ -368,7 +389,7 @@ public class TdDepotMyAccountController {
 			return "redirect:/depot/login";
 		}
 		TdDiySite site = tdDiySiteService.findOne(diyUser.getDiyId());
-		List<TdOrder> list = tdOrderService.findByDiyIdAndStatusIdOrderByOrderTime(site.getId());
+		List<TdOrder> list = tdOrderService.findByReserve(site.getId());
 		map.addAttribute("reserved_list", list);
 		return "/depot/reserved_list";
 	}
@@ -489,19 +510,40 @@ public class TdDepotMyAccountController {
 	}
 
 	@RequestMapping(value = "/chargeManage")
-	public String chargeManage(HttpServletRequest req, ModelMap map) {
+	public String chargeManage(HttpServletRequest req, ModelMap map, Integer year, Integer month, Integer day) {
 		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("diyUser");
 		if (null == diyUser) {
 			return "redirect:/depot/login";
 		}
-		// 查找不同支付方式的订单
-		List<TdOrder> xs_list = tdOrderService.findXszf(diyUser.getDiyId());
-		List<TdOrder> xj_list = tdOrderService.findXjzf(diyUser.getDiyId());
-		List<TdOrder> md_list = tdOrderService.findMd(diyUser.getDiyId());
-		List<TdOrder> yk_list = tdOrderService.findYk(diyUser.getDiyId());
 
-		// 查找违约订单
-		List<TdOrder> wy = tdOrderService.findWy(diyUser.getDiyId());
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+		if (null == year || month == year || null == day) {
+			Calendar cal = Calendar.getInstance();
+			year = cal.get(Calendar.YEAR);
+			month = cal.get(Calendar.MONTH) + 1;
+			day = cal.get(Calendar.DATE);
+		}
+		String date = year + "-" + month + "-" + day;
+
+		String sBeginDate = date + " 00:00:00";
+		String sFinishDate = date + " 23:59:59";
+
+		Date beginTime = null;
+		Date finishTime = null;
+		try {
+			beginTime = sdf.parse(sBeginDate);
+			finishTime = sdf.parse(sFinishDate);
+			map.addAttribute("theDate", beginTime);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		List<TdOrder> xs_list = tdOrderService.findByXszfTime(diyUser.getDiyId(), beginTime, finishTime);
+		List<TdOrder> xj_list = tdOrderService.findByXjzfTime(diyUser.getDiyId(), beginTime, finishTime);
+		List<TdOrder> md_list = tdOrderService.findByMdTime(diyUser.getDiyId(), beginTime, finishTime);
+		List<TdOrder> yk_list = tdOrderService.findByYkTime(diyUser.getDiyId(), beginTime, finishTime);
+		List<TdOrder> wy = tdOrderService.findByWyTime(diyUser.getDiyId(), beginTime, finishTime);
 		List<TdOrder> wy_list = new ArrayList<>();
 		for (TdOrder tdOrder : wy) {
 			if (null != tdOrder.getTotalPrice() && tdOrder.getTotalPrice() > 0) {
@@ -509,6 +551,61 @@ public class TdDepotMyAccountController {
 			}
 		}
 
+		Double xsAll = 0.00;
+		Double xjAll = 0.00;
+		Double wyAll = 0.00;
+
+		// 获取所有的泊车员账号
+		List<TdDiyUser> diyUser_list = tdDiyUserService.findByDiyIdAndRoleId(diyUser.getDiyId());
+
+		// 计算当日线上金额
+		for (TdOrder order : xs_list) {
+			if (null != order && null != order.getTotalPrice()) {
+				xsAll += order.getTotalPrice();
+			}
+		}
+
+		// 计算当日现金金额
+		for (TdOrder order : xj_list) {
+			if (null != order && null != order.getTotalPrice()) {
+				xjAll += order.getTotalPrice();
+				// 计算泊车员现金收费量
+				for (TdDiyUser subDiyUser : diyUser_list) {
+					if (null != subDiyUser && null != subDiyUser.getRealName()
+							&& subDiyUser.getRealName().equals(order.getOperator())) {
+						if (null == subDiyUser.getAllash()) {
+							subDiyUser.setAllash(0.00);
+						}
+						subDiyUser.setAllash(subDiyUser.getAllash() + order.getTotalPrice());
+					}
+				}
+			}
+		}
+
+		// 计算当日泊车员免单数量
+		for (TdOrder order : md_list) {
+			for (TdDiyUser subDiyUser : diyUser_list) {
+				if (null != subDiyUser && null != subDiyUser.getRealName()
+						&& subDiyUser.getRealName().equals(order.getOperator())) {
+					if (null == subDiyUser.getMdNum()) {
+						subDiyUser.setMdNum(0L);
+					}
+					subDiyUser.setMdNum(subDiyUser.getMdNum() + 1);
+				}
+			}
+		}
+
+		// 计算当日违约金额
+		for (TdOrder order : wy_list) {
+			if (null != order && null != order.getTotalPrice()) {
+				wyAll += order.getTotalPrice();
+			}
+		}
+
+		map.addAttribute("xsAll", xsAll);
+		map.addAttribute("xjAll", xjAll);
+		map.addAttribute("wyAll", wyAll);
+		map.addAttribute("diyUser_list", diyUser_list);
 		map.addAttribute("xs_list", xs_list);
 		map.addAttribute("xj_list", xj_list);
 		map.addAttribute("md_list", md_list);
@@ -756,6 +853,11 @@ public class TdDepotMyAccountController {
 		map.addAttribute("days", days);
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
+		Double allXs = 0.00;
+		Double allXj = 0.00;
+		Integer mdNum = 0;
+		Double allWy = 0.00;
+
 		Double totalPrice = new Double(0.00);
 		for (int i = 1; i <= days; i++) {
 			String sBegin = year + "-" + month + "-" + i + " 00:00:00";
@@ -765,19 +867,36 @@ public class TdDepotMyAccountController {
 			try {
 				beginDate = sdf.parse(sBegin);
 				finishDate = sdf.parse(sFinish);
-				List<TdOrder> list = tdOrderService.findByDiyIdAndOrderTimeBetween(diyUser.getDiyId(), beginDate,
+				List<TdOrder> list = tdOrderService.findByDiyIdAndFinishTimeBetween(diyUser.getDiyId(), beginDate,
 						finishDate);
 				Double income = new Double(0.00);
 				if (null != list) {
 					for (TdOrder order : list) {
 						if (null != order.getTotalPrice() && order.getTotalPrice() > 0
 								&& (order.getStatusId() == 6L || order.getStatusId() == 9L)
-								&& (null == order.getThePayType() || order.getThePayType() == 0L)) {
+								&& (null != order.getThePayType() && 2L != order.getThePayType())
+								&& 3L != order.getThePayType()) {
 							income += order.getTotalPrice();
 							totalPrice += order.getTotalPrice();
+							if (null != order.getThePayType() && 0L == order.getThePayType()) {
+								allXs += order.getTotalPrice();
+							}
+							if (null != order.getThePayType() && 1L == order.getThePayType()) {
+								allXj += order.getTotalPrice();
+							}
+							if (null != order.getThePayType() && 2L == order.getThePayType()) {
+								mdNum += 1;
+							}
+							if (9L == order.getStatusId()) {
+								allWy += order.getTotalPrice();
+							}
 						}
 					}
 				}
+				map.addAttribute("allXs", allXs);
+				map.addAttribute("allXj", allXj);
+				map.addAttribute("mdNum", mdNum);
+				map.addAttribute("allWy", allWy);
 				map.addAttribute("income" + i, income);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -807,7 +926,7 @@ public class TdDepotMyAccountController {
 		try {
 			beginDate = sdf.parse(sBegin);
 			finishDate = sdf.parse(sFinish);
-			List<TdOrder> list = tdOrderService.findByDiyIdAndOrderTimeBetween(diyUser.getDiyId(), beginDate,
+			List<TdOrder> list = tdOrderService.findByDiyIdAndFinishTimeBetween(diyUser.getDiyId(), beginDate,
 					finishDate);
 			List<TdOrder> incomeOrder = new ArrayList<>();
 			for (TdOrder order : list) {

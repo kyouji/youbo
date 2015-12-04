@@ -20,7 +20,7 @@
 </script>
 <div id="unpayed"> 
     <#if unpayed_list??> 
-        <#list unpayed_list as item>  
+        <#list unpayed_list as item>
             <dl class="detail_month_01">
                 <dt>
                     <span>${item.carCode!''}</span>
@@ -52,7 +52,7 @@
                         </#if>
                     </span>
                     <span style="float:right;color:red;">
-                        <#if item.totalPrice??&&item.totalPrice gt 0>停车费用：
+                        <#if item.totalPrice??&&item.totalPrice gt 0>￥
                             ${item.totalPrice?string("0.00")}
                         </#if>
                     </span>
@@ -92,6 +92,11 @@
                     <span>
                         <#if item.orderTime??>
                             ${item.orderTime?string("yyyy-MM-dd HH:mm")}
+                        </#if>
+                    </span>
+                    <span style="float:right;color:red;">
+                        <#if item.totalPrice??&&item.totalPrice gt 0>￥
+                            ${item.totalPrice?string("0.00")}
                         </#if>
                     </span>
                 </dd>

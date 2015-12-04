@@ -192,21 +192,21 @@ public interface TdOrderRepo extends PagingAndSortingRepository<TdOrder, Long>, 
 	List<TdOrder> findByDiyIdAndCheckStatusOrderByOrderTimeDesc(Long id, String checkStatus);
 
 	// 根据停车场的ID和下单时间查找订单
-	List<TdOrder> findByDiyIdAndOrderTimeBetween(Long id, Date beginDate, Date finishDate);
+	List<TdOrder> findByDiyIdAndFinishTimeBetween(Long id, Date beginDate, Date finishDate);
 
 	// 查找指定停车场未支付的订单
 	List<TdOrder> findByDiyIdAndStatusIdNotAndStatusIdNotAndStatusIdNotAndStatusIdNotOrderByOrderTimeDesc(Long id,
 			Long statusId1, Long statusId2, Long statusId3, Long statusId4);
 
 	// 查找指定停车场指定时间段的未支付订单
-	List<TdOrder> findByDiyIdAndStatusIdNotAndStatusIdNotAndStatusIdNotAndStatusIdNotAndOrderTimeBetweenOrderByOrderTimeDesc(
+	List<TdOrder> findByDiyIdAndStatusIdNotAndStatusIdNotAndStatusIdNotAndStatusIdNotAndFinishTimeBetweenOrderByOrderTimeDesc(
 			Long id, Long statusId1, Long statusId2, Long statusId3, Long statusId4, Date beginDate, Date finishDate);
 
 	// 查找指定停车场已支付的订单
 	List<TdOrder> findByDiyIdAndStatusIdOrderByOrderTimeDesc(Long id, Long statusId);
 
 	// 查找指定停车场指定时间段内已支付的订单
-	List<TdOrder> findByDiyIdAndStatusIdAndOrderTimeBetweenOrderByOrderTimeDesc(Long id, Long statusId, Date beginDate,
+	List<TdOrder> findByDiyIdAndStatusIdAndFinishTimeBetweenOrderByOrderTimeDesc(Long id, Long statusId, Date beginDate,
 			Date finishDate);
 
 	List<TdOrder> findByUsernameAndFinishTimeBetweenOrderByOrderTimeAsc(String username, Date beginDate,
@@ -219,11 +219,18 @@ public interface TdOrderRepo extends PagingAndSortingRepository<TdOrder, Long>, 
 	List<TdOrder> findByThePayTypeAndStatusIdAndDiyIdAndOrderTimeBetweenOrderByOrderTimeDesc(Long thePayType,
 			Long statusId, Long diyId, Date beginTime, Date finishTime);
 
+	// 根据订单的支付方式查找一定时间段的订单
+	List<TdOrder> findByThePayTypeAndStatusIdAndDiyIdAndFinishTimeBetweenOrderByOrderTimeDesc(Long thePayType,
+			Long statusId, Long diyId, Date beginTime, Date finishTime);
+
 	// 查找违约订单
 	List<TdOrder> findByStatusIdAndDiyIdOrderByOrderTimeDesc(Long statusId, Long diyId);
 
 	// 查找一定时间内的违约订单
 	List<TdOrder> findByStatusIdAndDiyIdAndOrderTimeBetweenOrderByOrderTimeDesc(Long statusId, Long diyId,
+			Date beginTime, Date finishTime);
+
+	List<TdOrder> findByStatusIdAndDiyIdAndFinishTimeBetweenOrderByOrderTimeDesc(Long statusId, Long diyId,
 			Date beginTime, Date finishTime);
 
 	// 根据车牌号码和停车场ID模糊查询订单
@@ -258,11 +265,14 @@ public interface TdOrderRepo extends PagingAndSortingRepository<TdOrder, Long>, 
 			Long statusId01, String keywords01, Long statusId02, String keywords02, Long statusId03, String keywords03,
 			Pageable page);
 
-
 	Page<TdOrder> findByOrderNumberContainingOrUsernameContainingOrDiyTitleContainingOrderByOrderTimeDesc(
 			String keywords01, String keywords02, String keywords03, Pageable page);
-	
-	List<TdOrder> findByStatusIdAndCarCode(Long statusId,String carCode);
-	
-	List<TdOrder> findByStatusIdAndCarCodeContainingAndDiyIdOrderByOrderTimeDesc(Long statusId,String carCode,Long diyId);
+
+	List<TdOrder> findByStatusIdAndCarCode(Long statusId, String carCode);
+
+	List<TdOrder> findByStatusIdAndCarCodeContainingAndDiyIdOrderByOrderTimeDesc(Long statusId, String carCode,
+			Long diyId);
+
+	// 根据停车场id订单状态和支付方法查找不超过指定时间的订单
+	List<TdOrder> findByDiyIdAndFinishTimeBefore(Long diyId, Date finish);
 }

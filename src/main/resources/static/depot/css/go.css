@@ -69,9 +69,91 @@
     width: 74%;
     color: #999999;
 }
+.car_num{
+    width: 94%;
+    padding: 2% 3%;
+    background: white;
+    overflow: hidden;
+}
+.car_num p{
+    float:left;
+}
+.car_num span{
+    float:left;
+    margin-left: 10%;
+    color: #EF0000;
+}
+.money_today{
+    width: 94%;
+    padding: 2% 3%;
+    background: white;
+    overflow: hidden;
+    margin-top: 2%;
+}
+.money_today p{
+    float:left;
+}
+.money_today span{
+    float:left;
+    margin-left: 10%;
+    color: #EF0000;
+}
+.rich05_people{
+    width: 94%;
+    padding: 2% 3%;
+    background: white;
+    overflow: hidden;
+    margin-top: 2%;
+}
+.rich05_people p{
+    float:left;
+}
+.rich05_people span{
+    float:left;
+    margin-left: 10%;
+    color: #EF0000;
+}
 
+/*rich14*/
+.rich_get{
+    width: 100%;
 
+}
+/*.rich_get dt{
+    width: 94%;
+    padding: 3% 3%;
+    border-bottom: #DDDDDD 1px solid;
+    background: white;
+}*/
+.rich_get dd{
+    width: 94%;
+    padding: 0 3%;
+    margin-top: 2%;
+    background: white;
 
+}
+.rich_get dd a{
+    display: block;
+    width: 100%;
+    padding: 3% 0;
+    height: 100%;
+    overflow: hidden;
+    border-bottom: #DDDDDD 1px solid;
+}
+.rich_get dd a p{
+    float: left;
+    width: 48%;
+    play-during: 2%;
+    text-align: left;
+}
+.rich_get dd a span{
+    display: block;
+    float: left;
+    width: 48%;
+    padding-right: 2%;
+    text-align: right;
+    color: red;
+}
 
 
 

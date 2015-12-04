@@ -70,15 +70,17 @@
                         </p>
                     </dt>
                 </dl>
+                <#--
                 <div class="bespeak_list_btn">
                     <input class="sel_2" type="button" style="background-color:#00aaef;width:50%;float:left;" onclick="reserveResult(${item.id?c},0)" value="同意"/ >
                     <input type="button" style="width:50%;float:left;background-color:#ef0000;" onclick="reserveResult(${item.id?c},1)" value="拒绝">
                 </div>
+                -->
                 </a>
             </#list>
         </#if>
     </div>
-    
+    <div style="height:80px;width:100%;float:left;"></div>
     <div class="mb98"></div>
     </div>
     

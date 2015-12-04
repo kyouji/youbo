@@ -11,6 +11,7 @@
 <!--css-->
 <link href="/depot/css/base.css" rel="stylesheet" type="text/css" />
 <link href="/depot/css/style.css" rel="stylesheet" type="text/css" />
+<link href="/depot/css/go.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="/depot/js/jquery-1.9.1.min.js"></script>
 <script type="text/javascript">
     var check;
@@ -57,12 +58,18 @@
         <a href="/depot/search" style="background-image:url('/images/fdj.png')" class="a3"></a>
     </div>
     <!--头部结束-->
-
+    
     <div class="ybtx">
         <!--收费信息开始-->
         <div class="pay_record">
+            <#--
             <div class="select_dates">
                 <p class="select_1"><input type="date" style="-webkit-appearance:none;height:30px;width:90%;font-size:0.8em;padding-left:5%;" id="date" onChange="changeDate();" <#if theDate??>value="${theDate?string("YYYY-MM-dd")}"</#if>></p>
+            </div>
+            -->
+            <div class="car_num">
+                <p>当前库内车辆总数</p>
+                <span>${nowNum!'0'}</span>
             </div>
             <div class="payment_situation">
                 <a href="javascript:changeOrder(1);" id="unpayed_label" class="a1 sel">未付款</a>

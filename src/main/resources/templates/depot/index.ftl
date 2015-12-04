@@ -32,7 +32,7 @@
     <!--导航开始-->
     <div class="topNav">
         <a class="add_sao" href="javascript:alert('暂未开放！');" style="">扫一扫收费</a>
-        <a class="add_sao" href="" style="background-color:#BF7EE2">无牌车管理</a>
+        <a class="add_sao" href="/depot/myaccount/noCarCode" style="background-color:#BF7EE2">无牌车管理</a>
         <a href="/depot/charge" class="four_1 a4" style="background-color:#00B7BF"><img src="/depot/images/index04.png"><p>订单管理</p></a>
         <a href="/depot/myaccount/reserve" class="four_1 a2"><img src="/depot/images/reserve.png"><p>预约审核</p></a>
         <a href="/depot/myaccount" class="four_1 a1"><img src="/depot/images/index01.png"><p>账 户</p></a>

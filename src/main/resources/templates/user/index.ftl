@@ -74,8 +74,8 @@
     function navigation(x,y){
         var u = navigator.userAgent;
         if (u.indexOf('Android') > -1 || u.indexOf('Linux') > -1) {
-            window.location.href = "androidamap://navi?sourceApplication=amap&lat="+x+"&lon="+y+"&dev=1&style=2";
             alert("启动导航功能前请确认已经安装了“高德地图”APP");
+            window.location.href = "androidamap://navi?sourceApplication=amap&lat="+x+"&lon="+y+"&dev=1&style=2";
         } else if (u.indexOf('iPhone') > -1) {//苹果手机
             alert("启动导航功能前请确认已经安装了“高德地图”APP");
             window.location.href = "iosamap://navi?sourceApplication=applicationName&lat="+x+"&lon="+y+"&dev=1&style=2";

@@ -180,6 +180,7 @@ public class TdCooperationController {
 				TdOrder order = tdOrderService.findOne(Long.parseLong(infos[i - 2]));
 				if (null != order && null != infos[i - 1] && infos[i - 1].trim().equals(order.getCarCode())) {
 					order.setTotalPrice(new Double(infos[i]));
+					order.setThePayType(0L);
 					// 如果是违约订单，则开始根据消费金额返还定金的余额
 					if (9L == order.getStatusId()) {
 						TdUser user = tdUserService.findByUsername(order.getUsername());

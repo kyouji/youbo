@@ -564,11 +564,11 @@ public class TdOrderService {
 	}
 
 	// 根据停车场ID查找在某个时间段之内的所有订单
-	public List<TdOrder> findByDiyIdAndOrderTimeBetween(Long id, Date beginDate, Date finishDate) {
+	public List<TdOrder> findByDiyIdAndFinishTimeBetween(Long id, Date beginDate, Date finishDate) {
 		if (null == id || null == beginDate || null == finishDate) {
 			return null;
 		}
-		return repository.findByDiyIdAndOrderTimeBetween(id, beginDate, finishDate);
+		return repository.findByDiyIdAndFinishTimeBetween(id, beginDate, finishDate);
 	}
 
 	// 查找指定停车场未支付的订单
@@ -582,13 +582,13 @@ public class TdOrderService {
 	};
 
 	// 查找指定停车场指定时间段的未支付订单
-	public List<TdOrder> findByDiyIdAndStatusIdNotAndStatusIdNotAndStatusIdNotAndStatusIdNotAndOrderTimeBetweenOrderByOrderTimeDesc(
+	public List<TdOrder> findByDiyIdAndStatusIdNotAndStatusIdNotAndStatusIdNotAndStatusIdNotAndFinishTimeBetweenOrderByOrderTimeDesc(
 			Long id, Date beginDate, Date finishDate) {
 		if (null == id || null == beginDate || null == finishDate) {
 			return null;
 		}
 		return repository
-				.findByDiyIdAndStatusIdNotAndStatusIdNotAndStatusIdNotAndStatusIdNotAndOrderTimeBetweenOrderByOrderTimeDesc(
+				.findByDiyIdAndStatusIdNotAndStatusIdNotAndStatusIdNotAndStatusIdNotAndFinishTimeBetweenOrderByOrderTimeDesc(
 						id, 6L, 7L, 8L, 9L, beginDate, finishDate);
 	};
 
@@ -601,12 +601,12 @@ public class TdOrderService {
 	};
 
 	// 查找指定停车场指定时间段内已支付的订单
-	public List<TdOrder> findByDiyIdAndStatusIdAndOrderTimeBetweenOrderByOrderTimeDesc(Long id, Date beginDate,
+	public List<TdOrder> findByDiyIdAndStatusIdAndFinishTimeBetweenOrderByOrderTimeDesc(Long id, Date beginDate,
 			Date finishDate) {
 		if (null == id || null == beginDate || null == finishDate) {
 			return null;
 		}
-		return repository.findByDiyIdAndStatusIdAndOrderTimeBetweenOrderByOrderTimeDesc(id, 6L, beginDate, finishDate);
+		return repository.findByDiyIdAndStatusIdAndFinishTimeBetweenOrderByOrderTimeDesc(id, 6L, beginDate, finishDate);
 	};
 
 	// 查找指定停车场指定时间段内已预约的订单
@@ -614,7 +614,7 @@ public class TdOrderService {
 		if (null == id || null == beginDate || null == finishDate) {
 			return null;
 		}
-		return repository.findByDiyIdAndStatusIdAndOrderTimeBetweenOrderByOrderTimeDesc(id, 3L, beginDate, finishDate);
+		return repository.findByDiyIdAndStatusIdAndFinishTimeBetweenOrderByOrderTimeDesc(id, 3L, beginDate, finishDate);
 	}
 
 	// 查找指定用户已经取消的订单
@@ -631,6 +631,14 @@ public class TdOrderService {
 			return null;
 		}
 		return repository.findByDiyIdAndStatusIdOrderByOrderTimeDesc(diyId, 2L);
+	}
+
+	// 根据停车场ID查找预约审核的订单
+	public List<TdOrder> findByReserve(Long diyId) {
+		if (null == diyId) {
+			return null;
+		}
+		return repository.findByDiyIdAndStatusIdOrderByOrderTimeDesc(diyId, 3L);
 	}
 
 	// 查找线上支付的订单
@@ -670,7 +678,7 @@ public class TdOrderService {
 		if (null == diyId || null == beginTime || null == finishTime) {
 			return null;
 		}
-		return repository.findByThePayTypeAndStatusIdAndDiyIdAndOrderTimeBetweenOrderByOrderTimeDesc(0L, 6L, diyId,
+		return repository.findByThePayTypeAndStatusIdAndDiyIdAndFinishTimeBetweenOrderByOrderTimeDesc(0L, 6L, diyId,
 				beginTime, finishTime);
 	}
 
@@ -679,7 +687,7 @@ public class TdOrderService {
 		if (null == diyId || null == beginTime || null == finishTime) {
 			return null;
 		}
-		return repository.findByThePayTypeAndStatusIdAndDiyIdAndOrderTimeBetweenOrderByOrderTimeDesc(1L, 6L, diyId,
+		return repository.findByThePayTypeAndStatusIdAndDiyIdAndFinishTimeBetweenOrderByOrderTimeDesc(1L, 6L, diyId,
 				beginTime, finishTime);
 	}
 
@@ -688,7 +696,7 @@ public class TdOrderService {
 		if (null == diyId || null == beginTime || null == finishTime) {
 			return null;
 		}
-		return repository.findByThePayTypeAndStatusIdAndDiyIdAndOrderTimeBetweenOrderByOrderTimeDesc(2L, 6L, diyId,
+		return repository.findByThePayTypeAndStatusIdAndDiyIdAndFinishTimeBetweenOrderByOrderTimeDesc(2L, 6L, diyId,
 				beginTime, finishTime);
 	}
 
@@ -697,7 +705,7 @@ public class TdOrderService {
 		if (null == diyId || null == beginTime || null == finishTime) {
 			return null;
 		}
-		return repository.findByThePayTypeAndStatusIdAndDiyIdAndOrderTimeBetweenOrderByOrderTimeDesc(3L, 6L, diyId,
+		return repository.findByThePayTypeAndStatusIdAndDiyIdAndFinishTimeBetweenOrderByOrderTimeDesc(3L, 6L, diyId,
 				beginTime, finishTime);
 	}
 
@@ -714,7 +722,7 @@ public class TdOrderService {
 		if (null == diyId || null == beginTime || null == finishTime) {
 			return null;
 		}
-		return repository.findByStatusIdAndDiyIdAndOrderTimeBetweenOrderByOrderTimeDesc(9L, diyId, beginTime,
+		return repository.findByStatusIdAndDiyIdAndFinishTimeBetweenOrderByOrderTimeDesc(9L, diyId, beginTime,
 				finishTime);
 	}
 
@@ -835,11 +843,25 @@ public class TdOrderService {
 		}
 		return repository.findByStatusIdAndCarCode(statusId, carCode);
 	}
-	
-	public List<TdOrder> findByStatusIdAndCarCodeContainingAndDiyIdOrderByOrderTimeDesc(Long diyId){
-		if(null == diyId){
+
+	public List<TdOrder> findByStatusIdAndCarCodeContainingAndDiyIdOrderByOrderTimeDesc(Long diyId) {
+		if (null == diyId) {
 			return null;
 		}
 		return repository.findByStatusIdAndCarCodeContainingAndDiyIdOrderByOrderTimeDesc(4L, "WCP", diyId);
 	}
+
+	public List<TdOrder> findFinishTimeBetween(Long diyId, Date begin, Date finish) {
+		if (null == diyId || null == begin || null == finish) {
+			return null;
+		}
+		return repository.findByDiyIdAndFinishTimeBetween(diyId, begin, finish);
+	};
+
+	public List<TdOrder> findByDiyIdAndFinishTimeBefore(Long diyId, Date finish) {
+		if (null == diyId || null == finish) {
+			return null;
+		}
+		return repository.findByDiyIdAndFinishTimeBefore(diyId, finish);
+	};
 }

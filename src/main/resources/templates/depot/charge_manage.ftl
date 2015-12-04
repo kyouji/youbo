@@ -11,6 +11,7 @@
 <!--css-->
 <link href="/depot/css/base.css" rel="stylesheet" type="text/css" />
 <link href="/depot/css/style.css" rel="stylesheet" type="text/css" />
+<link href="/depot/css/go.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="/depot/js/jquery-1.9.1.min.js"></script>
 <script>
     var check;

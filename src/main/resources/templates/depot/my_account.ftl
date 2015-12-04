@@ -27,10 +27,12 @@
     <div class="ybtx">
     <!--我的账户开始-->
     <dl class="my_account">
-        <dt>
+        <dt style="padding:10px;">
             <img src="/depot/images/money.png"/>
+            <#--
             <p class="p1">当日累计收费</p>
             <p class="p2">￥<span><#if income??>${income?string("0.00")!''}元<#else>0.00元</#if></span></p>
+            -->
         </dt>
     </dl>
     
@@ -40,10 +42,23 @@
         <#else>
             <a class="ip_1" type="button" style="ali;background-color:#999999" >我的钱包</a>
         </#if>
-        
     </#if>
     
     <div class="my_account_record">
+        <a href="">
+            <dl>
+                <dd>当前可提现金额:￥<#if income??>${income?string("0.00")}<#else>0.00</#if></dd>
+                <dt></dt>
+            </dl>
+        </a>
+        <#--
+            <a href="">
+                <dl>
+                    <dd>当前收现金额</dd>
+                    <dt></dt>
+                </dl>
+            </a>
+        -->
         <#if diyUser??&&diyUser.roleId??>
             <#if diyUser.roleId==0>
                 <a href="/depot/myaccount/cashrecord">
@@ -60,15 +75,17 @@
                 <dt><img src="/depot/images/advance.png" /></dt>
             </dl>
         </a>
+        <#--
         <a href="/depot/charge">
             <dl>
                 <dd>订单管理</dd>
                 <dt><img src="/depot/images/advance.png" /></dt>
             </dl>
         </a>
+        -->
         <a href="/depot/myaccount/reserve">
             <dl>
-                <dd>预约审核</dd>
+                <dd>预约管理</dd>
                 <dt><img src="/depot/images/advance.png" /></dt>
             </dl>
         </a>
@@ -78,12 +95,14 @@
                 <dt><img src="/depot/images/advance.png" /></dt>
             </dl>
         </a>
+        <#--
         <a href="/depot/myaccount/noCarCode">
             <dl>
                 <dd>无牌车管理</dd>
                 <dt><img src="/depot/images/advance.png" /></dt>
             </dl>
         </a>
+        -->
         <#--
         <#if diyUser??&&diyUser.roleId??>
             <#if diyUser.roleId==0>
@@ -98,6 +117,7 @@
             <dt><a href="/depot/myaccount/message"><img src="/depot/images/advance.png" /></a></dt>
         </dl>
         -->
+        <#--
         <#if diyUser??&&diyUser.roleId??>
             <#if diyUser.roleId==0>
                 <a href="/depot/myaccount/subAccount">
@@ -108,6 +128,7 @@
                 </a>
             </#if>
         </#if>
+        -->
     </div>
     <!--我的账户结束-->
 

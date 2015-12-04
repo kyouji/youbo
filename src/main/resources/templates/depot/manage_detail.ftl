@@ -1,6 +1,10 @@
 <div id="xs"> 
     <#if xs_list??> 
         <#list xs_list as item>  
+            <div class="money_today">
+                <p>当日线上金额</p>
+                <span>￥<#if xsAll??>${xsAll?string("0.00")}<#else>0.00</#if></span>
+            </div>  
             <dl class="detail_month_01">
                 <dt>
                     <span>${item.carCode!''}</span>
@@ -14,9 +18,7 @@
                         </#if>
                     </span>
                     <span style="float:right;color:red;">
-                        <#if item.totalPrice??&&item.totalPrice gt 0>停车费用：
-                            ${item.totalPrice?string("0.00")}
-                        </#if>
+                        <#if item.totalPrice??&&item.totalPrice gt 0>￥${item.totalPrice?string("0.00")}</#if>
                     </span>
                 </dd>
                 <dd>
@@ -36,7 +38,19 @@
 
 <div id="xj"> 
     <#if xj_list??> 
-        <#list xj_list as item>  
+        <div class="money_today">
+            <p>当日现金金额</p>
+            <span>￥<#if xjAll??>${xjAll?string("0.00")}<#else>0.00</#if></span>
+        </div>
+        <#if diyUser_list??>
+            <#list diyUser_list as item>
+                <div class="rich05_people">
+                    <p>${item.realName!''}</p>
+                    <span>￥<#if item.allash??>${item.allash?string("0.00")}<#else>0.00</#if></span>
+                </div>
+            </#list>
+        </#if>
+        <#list xj_list as item>
             <dl class="detail_month_01">
                 <dt>
                     <span>${item.carCode!''}</span>
@@ -50,7 +64,7 @@
                         </#if>
                     </span>
                     <span style="float:right;color:red;">
-                        <#if item.totalPrice??&&item.totalPrice gt 0>停车费用：
+                        <#if item.totalPrice??&&item.totalPrice gt 0>￥
                             ${item.totalPrice?string("0.00")}
                         </#if>
                     </span>
@@ -63,7 +77,7 @@
                     <span style="float:right;"><a href="/depot/myaccount/detail?orderId=${item.id?c}" style="color:#999;">详情</a></span>
                 </dd>
                 <dd>
-                    <span>泊车员：${item.operator!''}</span>
+                    <span>泊车员：${item.operator!'无'}</span>
                 </dd>
             </dl>
         </#list>
@@ -72,6 +86,18 @@
 
 <div id="md"> 
     <#if md_list??> 
+        <div class="money_today">
+            <p>当日免单</p>
+            <span>${md_list?size!'0'}笔</span>
+        </div>
+        <#if diyUser_list??>
+            <#list diyUser_list as item> 
+                <div class="rich05_people">
+                    <p>${item.realName!''}</p>
+                    <span>${item.mdNum!'0'}笔</span>
+                </div>
+            </#list>
+        </#if>
         <#list md_list as item>  
             <dl class="detail_month_01">
                 <dt>
@@ -86,7 +112,7 @@
                         </#if>
                     </span>
                     <span style="float:right;color:red;">
-                        <#if item.totalPrice??&&item.totalPrice gt 0>停车费用：
+                        <#if item.totalPrice??&&item.totalPrice gt 0>￥
                             ${item.totalPrice?string("0.00")}
                         </#if>
                     </span>
@@ -99,7 +125,7 @@
                     <span style="float:right;"><a href="/depot/myaccount/detail?orderId=${item.id?c}" style="color:#999;">详情</a></span>
                 </dd>
                 <dd>
-                    <span>泊车员：${item.operator}</span>
+                    <span>泊车员：${item.operator!'无'}</span>
                 </dd>
             </dl>
         </#list>
@@ -122,7 +148,7 @@
                         </#if>
                     </span>
                     <span style="float:right;color:red;">
-                        <#if item.totalPrice??&&item.totalPrice gt 0>停车费用：
+                        <#if item.totalPrice??&&item.totalPrice gt 0>￥
                             ${item.totalPrice?string("0.00")}
                         </#if>
                     </span>
@@ -145,6 +171,10 @@
 <div id="wy"> 
     <#if wy_list??> 
         <#list wy_list as item>  
+            <div class="money_today">
+                <p>当日违约金额</p>
+                <span>￥<#if wyAll??>${wyAll?string("0.00")}<#else>0.00</#if></span>
+            </div>
             <dl class="detail_month_01">
                 <dt>
                     <span>${item.carCode!''}</span>
@@ -158,7 +188,7 @@
                         </#if>
                     </span>
                     <span style="float:right;color:red;">
-                        <#if item.totalPrice??&&item.totalPrice gt 0>停车费用：
+                        <#if item.totalPrice??&&item.totalPrice gt 0>￥
                             ${item.totalPrice?string("0.00")}
                         </#if>
                     </span>
