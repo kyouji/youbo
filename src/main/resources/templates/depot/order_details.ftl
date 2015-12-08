@@ -60,13 +60,15 @@
                 </#if>
                 
                 <dl class="park_last">
-                    <dd><span>会员账户</span></dd>
-                    <dt><p>${user.username!''}</p></dt>
+                    <dd><span>车牌号码</span></dd>
+                    <dt><p>${order.carCode!''}</p></dt>
                 </dl>        
+                <#--
                 <dl class="park_last">
                     <dd><span>会员昵称</span></dd>
                     <dt><p>${user.nickname!''}</p></dt>
                 </dl>
+                -->
                 <dl class="park_last">
                     <dd><span>车库名称</span></dd>
                     <dt><p>${order.diyTitle!''}</p></dt>

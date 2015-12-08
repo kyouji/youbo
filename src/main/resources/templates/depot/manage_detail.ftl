@@ -1,10 +1,10 @@
 <div id="xs"> 
     <#if xs_list??> 
+        <div class="money_today">
+            <p>当日线上金额</p>
+            <span>￥<#if xsAll??>${xsAll?string("0.00")}<#else>0.00</#if></span>
+        </div>  
         <#list xs_list as item>  
-            <div class="money_today">
-                <p>当日线上金额</p>
-                <span>￥<#if xsAll??>${xsAll?string("0.00")}<#else>0.00</#if></span>
-            </div>  
             <dl class="detail_month_01">
                 <dt>
                     <span>${item.carCode!''}</span>

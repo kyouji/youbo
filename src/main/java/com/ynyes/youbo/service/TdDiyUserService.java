@@ -16,46 +16,57 @@ public class TdDiyUserService {
 
 	@Autowired
 	private TdDiyUserRepo repository;
-	
-	public TdDiyUser save(TdDiyUser diyUser){
+
+	public TdDiyUser save(TdDiyUser diyUser) {
 		return repository.save(diyUser);
 	}
-	
-	public void delete(Long id){
-		if(null != id){
+
+	public void delete(Long id) {
+		if (null != id) {
 			repository.delete(id);
 		}
 	}
-	
-	public TdDiyUser findOne(Long id){
-		if(null == id){
+
+	public TdDiyUser findOne(Long id) {
+		if (null == id) {
 			return null;
 		}
 		return repository.findOne(id);
 	}
-	
-	public List<TdDiyUser> findAll(){
+
+	public List<TdDiyUser> findAll() {
 		return (List<TdDiyUser>) repository.findAll();
 	}
-	
-	public TdDiyUser findByUsernameAndPasswordAndIsEnableTrue(String username,String password){
-		if(null == username||null == password){
+
+	public TdDiyUser findByUsernameAndPasswordAndIsEnableTrue(String username, String password) {
+		if (null == username || null == password) {
 			return null;
 		}
 		return repository.findByUsernameAndPasswordAndIsEnableTrue(username, password);
 	}
-	
-	public List<TdDiyUser> findByDiyIdAndRoleId(Long diyId){
-		if(null == diyId){
+
+	public List<TdDiyUser> findByDiyIdAndRoleId(Long diyId) {
+		if (null == diyId) {
 			return null;
 		}
 		return repository.findByDiyIdAndRoleId(diyId, 1L);
 	}
-	
-	public TdDiyUser findByUsername(String username){
-		if(null == username){
+
+	public TdDiyUser findByUsername(String username) {
+		if (null == username) {
 			return null;
 		}
 		return repository.findByUsername(username);
+	}
+
+	public TdDiyUser findByDiyIdAndRoleId0(Long diyId) {
+		if (null == diyId) {
+			return null;
+		}
+		List<TdDiyUser> list = repository.findByDiyIdAndRoleId(diyId, 0L);
+		if (null != list && list.size() > 0) {
+			return list.get(0);
+		}
+		return null;
 	}
 }

@@ -105,7 +105,7 @@
                     <#if item.finishTime??>
                         <span>${item.finishTime?string("yyyy-MM-dd HH:mm")}</span>
                     </#if>
-                    <span style="float:right;"><a href="/depot/myaccount/detail?orderId=${item.id}" style="color:#999;height:40px;line-height:40px;">详情</a></span>
+                    <span style="float:right;"><a href="/depot/myaccount/detail?orderId=${item.id?c}" style="color:#999;height:40px;line-height:40px;">详情</a></span>
                 </dd>
             </dl>
             <div class="bespeak_list_btn">

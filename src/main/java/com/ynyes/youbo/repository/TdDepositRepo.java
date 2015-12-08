@@ -13,8 +13,10 @@ public interface TdDepositRepo extends PagingAndSortingRepository<TdDeposit, Lon
 	 * @author dengxiao
 	 * 根据停车场ID查找到所有的提现记录
 	 */
-	List<TdDeposit> findByDiyIdOrderByDepositDateDesc(Long diyId);
+	List<TdDeposit> findByDiyIdAndIsRemitTrueOrderByDepositDateDesc(Long diyId);
 	
+	
+	List<TdDeposit> findByDiyIdOrderByDepositDateDesc(Long diyId);
 	/**
 	 * @author dengxiao
 	 * 根据用户id查找提现记录

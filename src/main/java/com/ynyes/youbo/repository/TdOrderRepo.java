@@ -275,4 +275,5 @@ public interface TdOrderRepo extends PagingAndSortingRepository<TdOrder, Long>, 
 
 	// 根据停车场id订单状态和支付方法查找不超过指定时间的订单
 	List<TdOrder> findByDiyIdAndFinishTimeBefore(Long diyId, Date finish);
+	
 }

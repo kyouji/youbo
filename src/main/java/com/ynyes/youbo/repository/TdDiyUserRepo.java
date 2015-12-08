@@ -18,4 +18,5 @@ public interface TdDiyUserRepo
 	
 	//根据用户名查找用户
 	TdDiyUser findByUsername(String username);
+	
 }

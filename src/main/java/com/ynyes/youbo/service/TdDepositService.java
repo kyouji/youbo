@@ -43,6 +43,13 @@ public class TdDepositService {
 	/**
 	 * @author dengxiao 根据停车场的ID查找所有的提现记录
 	 */
+	public List<TdDeposit> findByDiyIdAndIsRemitTrueOrderByDepositDateDesc(Long diyId) {
+		if (null == diyId) {
+			return null;
+		}
+		return repository.findByDiyIdAndIsRemitTrueOrderByDepositDateDesc(diyId);
+	}
+	
 	public List<TdDeposit> findByDiyIdOrderByDepositDateDesc(Long diyId) {
 		if (null == diyId) {
 			return null;

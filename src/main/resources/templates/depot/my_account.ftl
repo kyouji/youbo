@@ -29,10 +29,8 @@
     <dl class="my_account">
         <dt style="padding:10px;">
             <img src="/depot/images/money.png"/>
-            <#--
-            <p class="p1">当日累计收费</p>
-            <p class="p2">￥<span><#if income??>${income?string("0.00")!''}元<#else>0.00元</#if></span></p>
-            -->
+            <p class="p1">当前余额</p>
+            <p class="p2">￥<span><#if site??&&site.allMoney??>${site.allMoney?string("0.00")!''}<#else>0.00</#if></span></p>
         </dt>
     </dl>
     
@@ -45,7 +43,7 @@
     </#if>
     
     <div class="my_account_record">
-        <a href="">
+        <a>
             <dl>
                 <dd>当前可提现金额:￥<#if income??>${income?string("0.00")}<#else>0.00</#if></dd>
                 <dt></dt>
@@ -82,13 +80,14 @@
                 <dt><img src="/depot/images/advance.png" /></dt>
             </dl>
         </a>
-        -->
+        
         <a href="/depot/myaccount/reserve">
             <dl>
                 <dd>预约管理</dd>
                 <dt><img src="/depot/images/advance.png" /></dt>
             </dl>
         </a>
+        -->
         <a href="/depot/myaccount/vip/carcode">
             <dl>
                 <dd>月卡车辆</dd>

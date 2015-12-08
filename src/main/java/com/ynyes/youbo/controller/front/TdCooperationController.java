@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -180,12 +179,15 @@ public class TdCooperationController {
 				TdOrder order = tdOrderService.findOne(Long.parseLong(infos[i - 2]));
 				if (null != order && null != infos[i - 1] && infos[i - 1].trim().equals(order.getCarCode())) {
 					order.setTotalPrice(new Double(infos[i]));
-					order.setThePayType(0L);
 					// 如果是违约订单，则开始根据消费金额返还定金的余额
 					if (9L == order.getStatusId()) {
+						order.setThePayType(0L);
 						TdUser user = tdUserService.findByUsername(order.getUsername());
 						user.setBalance(user.getBalance() + order.getFirstPay() - order.getTotalPrice());
 						tdUserService.save(user);
+						TdDiySite site = tdDiySiteService.findOne(diyUser.getDiyId());
+						site.setAllMoney(site.getAllMoney() + order.getTotalPrice());
+						tdDiySiteService.save(site);
 					}
 					tdOrderService.save(order);
 					res.put(infos[i - 2] + "", "车牌号为" + infos[i - 1] + "，费用为" + infos[i]);
@@ -323,13 +325,19 @@ public class TdCooperationController {
 		}
 
 		if ("正常外出".equals(ioData.getIoState())) {
-			// 根据车牌号码停车场id订单状态（状态为6，交易完成）查找一系列订单信息，按照时间倒序排序，选择第一个（第一个即是指定用户在指定停车场停车缴费成功的最后一个订单）
-			TdOrder order = tdOrderService
-					.findTopByCarCodeAndDiyIdAndOrderFinishOrderByOrderTimeDescOr(ioData.getBusNo(), diySite.getId());
+			TdOrder order = null;
+			if (isVip) {
+				order = tdOrderService.findbyStatusFour(busNo, diyUser.getDiyId());
+			} else {
+				// 根据车牌号码停车场id订单状态（状态为6，交易完成）查找一系列订单信息，按照时间倒序排序，选择第一个（第一个即是指定用户在指定停车场停车缴费成功的最后一个订单）
+				order = tdOrderService.findTopByCarCodeAndDiyIdAndOrderFinishOrderByOrderTimeDescOr(ioData.getBusNo(),
+						diySite.getId());
+			}
 			System.err.println("订单信息已经获取");
 			if (null != order) {
 				if (isVip) {
 					if (4L == order.getStatusId()) {
+						order.setOutputTime(ioData.getIoDate());
 						order.setFinishTime(ioData.getIoDate());
 						order.setStatusId(6L);
 						order.setThePayType(3L);
@@ -777,6 +785,7 @@ public class TdCooperationController {
 			return res;
 		}
 
+		TdDiySite site = tdDiySiteService.findOne(diyUser.getDiyId());
 		if (null == id) {
 			res.put("message", "未能获取到参数id");
 			return res;
@@ -793,9 +802,12 @@ public class TdCooperationController {
 			order.setFinishTime(new Date());
 			order.setTotalPrice(totalPrice);
 			order.setRemarkInfo("预约后2小时内未进入车库，订单自动取消");
+			order.setThePayType(0L);
 			TdUser user = tdUserService.findByUsername(order.getUsername());
 			if (null != user) {
 				user.setBalance(user.getBalance() + order.getFirstPay() - order.getTotalPrice());
+				site.setAllMoney(site.getAllMoney() + order.getTotalPrice());
+				tdDiySiteService.save(site);
 				tdUserService.save(user);
 			}
 		} else {
@@ -878,4 +890,39 @@ public class TdCooperationController {
 		res.put("status", 0);
 		return res;
 	}
+
+	@RequestMapping(value = "/new/vip")
+	@ResponseBody
+	public Map<String, Object> newVip(HttpServletRequest req, String carCode) {
+		Map<String, Object> res = new HashMap<>();
+		res.put("status", -1);
+
+		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("cooperDiy");
+		if (null == diyUser) {
+			res.put("message", "停车场用户未登陆");
+			return res;
+		}
+		if (null == carCode) {
+			res.put("message", "参数carCode未获取成功");
+			return res;
+		}
+		List<TdOrder> list = tdOrderService.findByDiyIdAndStatusIdAndCarCode(diyUser.getDiyId(), carCode);
+		if (null != list && list.size() > 0) {
+			TdOrder order = list.get(0);
+			order.setThePayType(3L);
+			if (null != order.getFirstPay() && order.getFirstPay() > 0) {
+				TdUser user = tdUserService.findByUsername(carCode);
+				user.setBalance(user.getBalance() + order.getFirstPay());
+				tdUserService.save(user);
+			}
+			tdOrderService.save(order);
+		} else {
+			res.put("message", "未找到指定的订单");
+			return res;
+		}
+		res.put("message", "修改订单状态成功！");
+		res.put("status", 0);
+		return res;
+	}
+
 }

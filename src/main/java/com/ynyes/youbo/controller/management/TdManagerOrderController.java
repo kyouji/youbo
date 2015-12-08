@@ -708,7 +708,7 @@ public class TdManagerOrderController {
 		}
 
 		TdDiySite diySite = tdDiySiteService.save(tdDiySite);
-		TdDiyUser diyUser = tdDiyUserService.findOne(diySite.getId());
+		TdDiyUser diyUser = tdDiyUserService.findByDiyIdAndRoleId0(diySite.getId());
 		if (null == diyUser) {
 			diyUser = new TdDiyUser();
 			diyUser.setDiyId(diySite.getId());

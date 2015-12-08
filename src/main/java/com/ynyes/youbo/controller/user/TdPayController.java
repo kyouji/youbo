@@ -3,9 +3,11 @@ package com.ynyes.youbo.controller.user;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,6 +24,8 @@ import com.alipay.util.AlipayNotify;
 import com.alipay.util.AlipaySubmit;
 import com.unionpay.DemoBase;
 import com.unionpay.acp.sdk.SDKConfig;
+import com.unionpay.acp.sdk.SDKConstants;
+import com.unionpay.acp.sdk.SDKUtil;
 import com.ynyes.youbo.entity.TdDiySite;
 import com.ynyes.youbo.entity.TdOrder;
 import com.ynyes.youbo.entity.TdRechargeLog;
@@ -178,6 +182,8 @@ public class TdPayController {
 			return "redirect:/user/center/login";
 		}
 
+		TdUser user = tdUserService.findByUsername(username);
+
 		/**
 		 * 参数初始化 在java main 方式运行时必须每次都执行加载 如果是在web应用开发里,这个方写在可使用监听的方式写入缓存,无须在这出现
 		 */
@@ -202,7 +208,7 @@ public class TdPayController {
 		// 渠道类型，07-PC，08-手机
 		data.put("channelType", "08");
 		// 前台通知地址 ，控件接入方式无作用
-		data.put("frontUrl", "http://www.youbo100.cn/user");
+		data.put("frontUrl", "http://www.youbo100.cn/user/pay/unionpay/recharge/return");
 		// 接入类型，商户接入填0 0- 商户 ， 1： 收单， 2：平台商户
 		data.put("accessType", "0");
 		// 商户号码，请改成自己的商户号
@@ -216,6 +222,15 @@ public class TdPayController {
 		Integer suiji = random.nextInt(900) + 100;
 		int zs = (int) (money * 100);
 		String orderNum = "CZ" + sDate + suiji;
+
+		TdRechargeLog log = new TdRechargeLog();
+		log.setNum(orderNum);
+		log.setMoney(money);
+		log.setUserId(user.getId());
+		log.setUsername(username);
+		log.setRechargeDate(new Date());
+		log.setStatusId(new Long(-1));
+		tdRechargetLogService.save(log);
 
 		// 商户订单号，8-40位数字字母
 		data.put("orderId", orderNum);
@@ -239,12 +254,56 @@ public class TdPayController {
 		return "/user/waiting_pay";
 	}
 
+	@RequestMapping(value = "/unionpay/recharge/return")
+	public String unionPayReturn(HttpServletRequest req) {
+		SDKConfig.getConfig().loadPropertiesFromSrc();
+
+		try {
+			req.setCharacterEncoding("ISO-8859-1");
+		} catch (UnsupportedEncodingException e1) {
+			e1.printStackTrace();
+		}
+		String encoding = req.getParameter(SDKConstants.param_encoding);
+
+		Map<String, String> respParam = getAllRequestParam(req);
+		Map<String, String> valideData = null;
+		if (null != respParam && !respParam.isEmpty()) {
+			Iterator<Entry<String, String>> it = respParam.entrySet().iterator();
+			valideData = new HashMap<String, String>(respParam.size());
+			while (it.hasNext()) {
+				Entry<String, String> e = it.next();
+				String key = (String) e.getKey();
+				String value = (String) e.getValue();
+				try {
+					value = new String(value.getBytes("ISO-8859-1"), encoding);
+				} catch (UnsupportedEncodingException e1) {
+					e1.printStackTrace();
+				}
+				valideData.put(key, value);
+			}
+		}
+		if (SDKUtil.validate(valideData, encoding)) {
+			String orderNum = valideData.get("orderId");
+			TdRechargeLog rechargeLog = tdRechargetLogService.findByNum(orderNum);
+			rechargeLog.setStatusId(0L);
+			// 获取用户id
+			TdUser user = tdUserService.findOne(rechargeLog.getUserId());
+			user.setBalance(user.getBalance() + rechargeLog.getMoney());
+			tdUserService.save(user);
+		}
+
+		return "/user/pay_success";
+	}
+
 	@RequestMapping(value = "/unionpay/online")
-	public String unionPayOnline(HttpServletRequest req, HttpServletResponse resp, Double money, ModelMap map) {
+	public String unionPayOnline(HttpServletRequest req, HttpServletResponse resp, Double money, ModelMap map,
+			Long id) {
 		String username = (String) req.getSession().getAttribute("username");
 		if (null == username) {
 			return "redirect:/user/center/login";
 		}
+
+		TdOrder order = tdOrderService.findOne(id);
 
 		/**
 		 * 组装请求报文
@@ -265,23 +324,16 @@ public class TdPayController {
 		// 渠道类型，07-PC，08-手机
 		data.put("channelType", "08");
 		// 前台通知地址 ，控件接入方式无作用
-		data.put("frontUrl", "http://www.youbo100.cn/user");
+		data.put("frontUrl", "http://www.youbo100.cn:8020/user/pay/unionpay/online/return");
 		// 接入类型，商户接入填0 0- 商户 ， 1： 收单， 2：平台商户
 		data.put("accessType", "0");
 		// 商户号码，请改成自己的商户号
 		data.put("merId", "898510175231000");
 
-		// 以下代码用于生成充值单编号
-		Date date = new Date();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
-		String sDate = sdf.format(date);
-		Random random = new Random();
-		Integer suiji = random.nextInt(900) + 100;
 		int zs = (int) (money * 100);
-		String orderNum = "CZ" + sDate + suiji;
 
 		// 商户订单号，8-40位数字字母
-		data.put("orderId", orderNum);
+		data.put("orderId", order.getOrderNumber());
 		// 订单发送时间，取系统时间
 		data.put("txnTime", new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()));
 		// 交易金额，单位分
@@ -392,7 +444,7 @@ public class TdPayController {
 				TdDiySite site = tdDiySiteService.findOne(order.getDiyId());
 				TdUser user = tdUserService.findByUsername(order.getUsername());
 				TdSetting setting = tdSettingService.findOne(1L);
-				if ( 1L == order.getStatusId()) {
+				if (1L == order.getStatusId()) {
 					// 判断停车场是否还有剩余车位
 					if (site.getParkingNowNumber() > 0) {
 						// 如果还有剩余的车位，就开始判断停车场是否有摄像头
@@ -439,6 +491,110 @@ public class TdPayController {
 			// 该页面可做页面美工编辑
 		}
 		return "/user/pay_success";
+	}
+
+	@RequestMapping(value = "/unionpay/online/return")
+	public String unionOnlineReturn(HttpServletRequest req) {
+		SDKConfig.getConfig().loadPropertiesFromSrc();
+
+		try {
+			req.setCharacterEncoding("ISO-8859-1");
+		} catch (UnsupportedEncodingException e1) {
+			e1.printStackTrace();
+		}
+		String encoding = req.getParameter(SDKConstants.param_encoding);
+
+		Map<String, String> respParam = getAllRequestParam(req);
+		Map<String, String> valideData = null;
+		if (null != respParam && !respParam.isEmpty()) {
+			Iterator<Entry<String, String>> it = respParam.entrySet().iterator();
+			valideData = new HashMap<String, String>(respParam.size());
+			while (it.hasNext()) {
+				Entry<String, String> e = it.next();
+				String key = (String) e.getKey();
+				String value = (String) e.getValue();
+				try {
+					value = new String(value.getBytes("ISO-8859-1"), encoding);
+				} catch (UnsupportedEncodingException e1) {
+					e1.printStackTrace();
+				}
+				valideData.put(key, value);
+			}
+		}
+		if (SDKUtil.validate(valideData, encoding)) {
+			String orderNum = valideData.get("orderId");
+			TdOrder order = tdOrderService.findByOrderNumber(orderNum);
+			TdDiySite site = tdDiySiteService.findOne(order.getDiyId());
+			TdUser user = tdUserService.findByUsername(order.getUsername());
+			TdSetting setting = tdSettingService.findOne(1L);
+			if (1L == order.getStatusId()) {
+				// 判断停车场是否还有剩余车位
+				if (site.getParkingNowNumber() > 0) {
+					// 如果还有剩余的车位，就开始判断停车场是否有摄像头
+					if (null != site.getIsCamera() && site.getIsCamera()) {// 有摄像头就自动预约成功
+						if (!(site.getParkingNowNumber() > 0)) {
+							order.setFirstPay(0.00);
+							user.setBalance(user.getBalance() + setting.getFirstPay());
+							order.setStatusId(9L);
+							order.setCancelReason("指定停车场无剩余车位");
+							tdOrderService.save(order);
+							tdUserService.save(user);
+						}
+						order.setStatusId(3L);
+						order.setReserveTime(new Date());
+						tdOrderService.save(order);
+						tdDiySiteService.save(site);
+					} else {// 如果没有摄像头就需要等待泊车员手动确认预约
+						order.setStatusId(2L);
+						tdOrderService.save(order);
+					}
+				} else {// 剩余车位不足即预定失败，订单结束
+					order.setFirstPay(0.00);
+					// 返还定金
+					user.setBalance(user.getBalance() + setting.getFirstPay());
+					// 设置订单状态为交易结束
+					order.setStatusId(9L);
+					// 设置订单取消的原因
+					order.setCancelReason("指定停车场无剩余车位");
+
+					tdOrderService.save(order);
+					// 设置消息提示
+				}
+			} else if (4L == order.getStatusId()) {
+				order.setThePayType(0L);
+				order.setStatusId(6L);
+				order.setFinishTime(new Date());
+				order.setRemarkInfo("收取了" + setting.getPoundage() * 100 + "%的手续费");
+				site.setAllMoney(site.getAllMoney() + order.getTotalPrice());
+				tdOrderService.save(order);
+				tdDiySiteService.save(site);
+			}
+		}
+		return "/user/pay_success";
+	}
+
+	/**
+	 * 获取请求参数中所有的信息
+	 * 
+	 * @param request
+	 * @return
+	 */
+	public static Map<String, String> getAllRequestParam(final HttpServletRequest request) {
+		Map<String, String> res = new HashMap<String, String>();
+		Enumeration<?> temp = request.getParameterNames();
+		if (null != temp) {
+			while (temp.hasMoreElements()) {
+				String en = (String) temp.nextElement();
+				String value = request.getParameter(en);
+				res.put(en, value);
+				// 在报文上送时，如果字段的值为空，则不上送<下面的处理为在获取所有参数数据时，判断若值为空，则删除这个字段>
+				if (res.get(en) == null || "".equals(res.get(en))) {
+					// System.out.println("======为空的字段名===="+en);
+					res.remove(en);
+				}
+			}
+		}
+		return res;
 	}
 
 	@ModelAttribute

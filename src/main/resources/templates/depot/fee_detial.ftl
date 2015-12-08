@@ -20,7 +20,7 @@
 
 <body style="background: #EFEFEF;">
 <div class="header">
-        <p>月份明细</p>
+        <p>当月明细</p>
         <a href="javascript:history.go(-1);" class="a4"></a>
     </div>
     <!--头部结束-->

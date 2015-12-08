@@ -70,11 +70,39 @@ public class TdDeposit {
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date remitTime;
-	
-	//备注
+
+	// 备注
 	@Column
 	private String remark;
+
+	// 提现金额所属起始时间
+	@Column
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date belongBegin;
+
+	// 提现金额所属结束时间
+	@Column
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date belongFinish;
 	
+	public Date getBelongBegin() {
+		return belongBegin;
+	}
+
+	public void setBelongBegin(Date belongBegin) {
+		this.belongBegin = belongBegin;
+	}
+
+	public Date getBelongFinish() {
+		return belongFinish;
+	}
+
+	public void setBelongFinish(Date belongFinish) {
+		this.belongFinish = belongFinish;
+	}
+
 	public String getRemark() {
 		return remark;
 	}

@@ -107,7 +107,7 @@ public class TdDepotMyAccountController {
 		SimpleDateFormat sdf_temp = new SimpleDateFormat("yyyy-MM-dd");
 
 		Double income = 0.00;
-		
+
 		// 获取当前可提现金额
 		Calendar cal = Calendar.getInstance();
 
@@ -115,10 +115,10 @@ public class TdDepotMyAccountController {
 		String sFinishDate = null;
 		Date beginDate = null;
 		Date finishDate = null;
-		
-		//获取提现结束时间
+
+		// 获取提现结束时间
 		cal.add(Calendar.DATE, -1);
-		sFinishDate = sdf_temp.format(cal.getTime());
+		sFinishDate = sdf_temp.format(cal.getTime()) + " 23:59:59";
 		try {
 			finishDate = sdf.parse(sFinishDate);
 		} catch (ParseException e1) {
@@ -126,10 +126,11 @@ public class TdDepotMyAccountController {
 		}
 
 		List<TdOrder> about_income = null;
-		
+
 		// 获取上一次提现的时间
-		List<TdDeposit> deposits = tdDepositService.findByDiyIdOrderByDepositDateDesc(diyUser.getDiyId());
-		if (null != deposits && null != deposits.get(0) && null != deposits.get(0).getDepositDate()) {
+		List<TdDeposit> deposits = tdDepositService.findByDiyIdAndIsRemitTrueOrderByDepositDateDesc(diyUser.getDiyId());
+		if (null != deposits && deposits.size() > 0 && null != deposits.get(0)
+				&& null != deposits.get(0).getDepositDate()) {
 			sBeginDate = sdf_temp.format(deposits.get(0).getDepositDate()) + " 00:00:00";
 			try {
 				beginDate = sdf.parse(sBeginDate);
@@ -137,17 +138,17 @@ public class TdDepotMyAccountController {
 				e.printStackTrace();
 			}
 			about_income = tdOrderService.findByDiyIdAndFinishTimeBetween(diyUser.getDiyId(), beginDate, finishDate);
-		}else{
+		} else {
 			about_income = tdOrderService.findByDiyIdAndFinishTimeBefore(diyUser.getDiyId(), finishDate);
 		}
 
-		//计算当前可提现金额
+		// 计算当前可提现金额
 		for (TdOrder order : about_income) {
-			if(null != order&&null != order.getThePayType()&&0 == order.getThePayType()){
+			if (null != order && null != order.getThePayType() && 0 == order.getThePayType()) {
 				income += order.getTotalPrice();
 			}
 		}
-		
+
 		map.addAttribute("site", site);
 		map.addAttribute("diyUser", diyUser);
 		map.addAttribute("income", income);
@@ -309,6 +310,53 @@ public class TdDepotMyAccountController {
 		List<TdPayType> all_pay_type = tdPayTypeService.findAll();
 		map.addAttribute("all_pay_type", all_pay_type);
 
+		// 获取当前可提现金额
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		SimpleDateFormat sdf_temp = new SimpleDateFormat("yyyy-MM-dd");
+
+		Double income = 0.00;
+
+		Calendar cal = Calendar.getInstance();
+
+		String sBeginDate = null;
+		String sFinishDate = null;
+		Date beginDate = null;
+		Date finishDate = null;
+
+		// 获取提现结束时间
+		cal.add(Calendar.DATE, -1);
+		sFinishDate = sdf_temp.format(cal.getTime()) + " 23:59:59";
+		try {
+			finishDate = sdf.parse(sFinishDate);
+		} catch (ParseException e1) {
+			e1.printStackTrace();
+		}
+
+		List<TdOrder> about_income = null;
+
+		// 获取上一次提现的时间
+		List<TdDeposit> deposits = tdDepositService.findByDiyIdAndIsRemitTrueOrderByDepositDateDesc(diyUser.getDiyId());
+		if (null != deposits && deposits.size() > 0 && null != deposits.get(0)
+				&& null != deposits.get(0).getDepositDate()) {
+			sBeginDate = sdf_temp.format(deposits.get(0).getDepositDate()) + " 00:00:00";
+			try {
+				beginDate = sdf.parse(sBeginDate);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+			about_income = tdOrderService.findByDiyIdAndFinishTimeBetween(diyUser.getDiyId(), beginDate, finishDate);
+		} else {
+			about_income = tdOrderService.findByDiyIdAndFinishTimeBefore(diyUser.getDiyId(), finishDate);
+		}
+
+		// 计算当前可提现金额
+		for (TdOrder order : about_income) {
+			if (null != order && null != order.getThePayType() && 0 == order.getThePayType()) {
+				income += order.getTotalPrice();
+			}
+		}
+		map.addAttribute("income", income);
+
 		return "/depot/withdraw";
 	}
 
@@ -335,6 +383,34 @@ public class TdDepotMyAccountController {
 				String orderNum = "TX" + sDate + suiji;
 				// 生成订单编号结束
 				TdDeposit deposit = new TdDeposit();
+				String sBeginDate = null;
+				String sFinishDate = null;
+				Date beginDate = null;
+				Date finishDate = null;
+				SimpleDateFormat sdf_theone = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				SimpleDateFormat sdf_temp = new SimpleDateFormat("yyyy-MM-dd");
+				List<TdDeposit> deposits = tdDepositService
+						.findByDiyIdAndIsRemitTrueOrderByDepositDateDesc(diyUser.getDiyId());
+				if (null != deposits && deposits.size() > 0 && null != deposits.get(0)
+						&& null != deposits.get(0).getDepositDate()) {
+					sBeginDate = sdf_temp.format(deposits.get(0).getDepositDate()) + " 00:00:00";
+					try {
+						beginDate = sdf_theone.parse(sBeginDate);
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}
+				}
+				Calendar cal = Calendar.getInstance();
+				// 获取提现结束时间
+				cal.add(Calendar.DATE, -1);
+				sFinishDate = sdf_temp.format(cal.getTime()) + " 23:59:59";
+				try {
+					finishDate = sdf.parse(sFinishDate);
+				} catch (ParseException e1) {
+					e1.printStackTrace();
+				}
+				deposit.setBelongBegin(beginDate);
+				deposit.setBelongFinish(finishDate);
 				deposit.setNum(orderNum);
 				deposit.setMoney(money);
 				deposit.setDepositDate(new Date());
@@ -378,6 +454,7 @@ public class TdDepotMyAccountController {
 		}
 		TdDiySite site = tdDiySiteService.findOne(diyUser.getDiyId());
 		List<TdDeposit> deposit_list = tdDepositService.findByDiyIdOrderByDepositDateDesc(site.getId());
+		map.addAttribute("site", site);
 		map.addAttribute("deposit_list", deposit_list);
 		return "/depot/withdraw_record";
 	}
@@ -457,10 +534,6 @@ public class TdDepotMyAccountController {
 		if (null != order && null != order.getUsername()) {
 			TdUser user = tdUserService.findByUsername(order.getUsername());
 			map.addAttribute("user", user);
-		}
-		if (null != order && null != order.getPayTypeId()) {
-			TdPayType payType = tdPayTypeService.findOne(order.getPayTypeId());
-			map.addAttribute("payType", payType);
 		}
 		map.addAttribute("order", order);
 		return "/depot/order_details";
@@ -859,49 +932,55 @@ public class TdDepotMyAccountController {
 		Double allWy = 0.00;
 
 		Double totalPrice = new Double(0.00);
+
 		for (int i = 1; i <= days; i++) {
 			String sBegin = year + "-" + month + "-" + i + " 00:00:00";
 			String sFinish = year + "-" + month + "-" + i + " 23:59:59";
 			Date beginDate = null;
 			Date finishDate = null;
+			Double income = new Double(0.00);
 			try {
 				beginDate = sdf.parse(sBegin);
 				finishDate = sdf.parse(sFinish);
 				List<TdOrder> list = tdOrderService.findByDiyIdAndFinishTimeBetween(diyUser.getDiyId(), beginDate,
 						finishDate);
-				Double income = new Double(0.00);
 				if (null != list) {
 					for (TdOrder order : list) {
 						if (null != order.getTotalPrice() && order.getTotalPrice() > 0
 								&& (order.getStatusId() == 6L || order.getStatusId() == 9L)
-								&& (null != order.getThePayType() && 2L != order.getThePayType())
-								&& 3L != order.getThePayType()) {
-							income += order.getTotalPrice();
-							totalPrice += order.getTotalPrice();
-							if (null != order.getThePayType() && 0L == order.getThePayType()) {
+								&& (null != order.getThePayType() && 2L != order.getThePayType())) {
+							// && (null != order.getThePayType() && 2L !=
+							// order.getThePayType())
+							if (null != order.getThePayType() && 0L == order.getThePayType()
+									&& 9L != order.getStatusId()) {
+								income += order.getTotalPrice();
+								totalPrice += order.getTotalPrice();
 								allXs += order.getTotalPrice();
 							}
 							if (null != order.getThePayType() && 1L == order.getThePayType()) {
+								income += order.getTotalPrice();
+								totalPrice += order.getTotalPrice();
 								allXj += order.getTotalPrice();
 							}
-							if (null != order.getThePayType() && 2L == order.getThePayType()) {
-								mdNum += 1;
-							}
 							if (9L == order.getStatusId()) {
+								income += order.getTotalPrice();
+								totalPrice += order.getTotalPrice();
 								allWy += order.getTotalPrice();
 							}
+						} else if (null != order.getThePayType() && 2L == order.getThePayType()) {
+							mdNum += 1;
 						}
 					}
 				}
-				map.addAttribute("allXs", allXs);
-				map.addAttribute("allXj", allXj);
-				map.addAttribute("mdNum", mdNum);
-				map.addAttribute("allWy", allWy);
-				map.addAttribute("income" + i, income);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+			map.addAttribute("income" + i, income);
 		}
+		map.addAttribute("allXs", allXs);
+		map.addAttribute("allXj", allXj);
+		map.addAttribute("mdNum", mdNum);
+		map.addAttribute("allWy", allWy);
 		map.addAttribute("year", year);
 		map.addAttribute("month", month);
 		map.addAttribute("totalPrice", totalPrice);

@@ -262,7 +262,7 @@ public class TdUserOrderController {
 					}
 					user.setBalance(user.getBalance() - order.getTotalPrice() + order.getFirstPay());
 					order.setStatusId(6L);
-					order.setPayTypeId(28L);
+					order.setRemarkInfo("自主缴费");
 					order = tdOrderService.save(order);
 					site.setAllMoney(site.getAllMoney() + order.getTotalPrice());
 					tdDiySiteService.save(site);
@@ -408,6 +408,7 @@ public class TdUserOrderController {
 					user.setBalance(user.getBalance() - order.getTotalPrice() + order.getFirstPay());
 					order.setStatusId(6L);
 					order.setThePayType(0L);
+					order.setRemarkInfo("自主缴费");
 					site.setAllMoney(site.getAllMoney() + order.getTotalPrice());
 					tdDiySiteService.save(site);
 					res.put("status", 0);

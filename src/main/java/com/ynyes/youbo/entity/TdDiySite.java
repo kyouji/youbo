@@ -1,5 +1,6 @@
 package com.ynyes.youbo.entity;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -9,6 +10,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * 停车场
@@ -172,6 +177,20 @@ public class TdDiySite {
     @Column(scale=2)
     private Double nightHourPrice;
     
+    //注册时间
+    @Column
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@Temporal(TemporalType.TIMESTAMP)
+    private Date registDate;
+    
+	public Date getRegistDate() {
+		return registDate;
+	}
+
+	public void setRegistDate(Date registDate) {
+		this.registDate = registDate;
+	}
+
 	public Long getDayType() {
 		return dayType;
 	}

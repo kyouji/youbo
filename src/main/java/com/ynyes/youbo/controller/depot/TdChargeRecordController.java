@@ -43,10 +43,10 @@ public class TdChargeRecordController {
 
 	@Autowired
 	private TdDiyLogService tdDiyLogService;
-	
+
 	@Autowired
 	private TdDiyUserService tdDiyUserService;
-	
+
 	@RequestMapping
 	public String site(HttpServletRequest req, Device device, ModelMap map) {
 		TdDiyUser diyUser = (TdDiyUser) req.getSession().getAttribute("diyUser");
@@ -193,7 +193,6 @@ public class TdChargeRecordController {
 		if (null != order) {
 			if (0 == type) {
 				order.setThePayType(2L);
-				order.setPayTypeTitle("免除费用");
 				order.setRemarkInfo(diyUser.getRealName() + "免除了" + order.getCarCode() + "的停车费用");
 				order.setOperator(diyUser.getRealName());
 				log.setActionType("免单操作");
@@ -201,7 +200,6 @@ public class TdChargeRecordController {
 			}
 			if (1 == type) {
 				order.setThePayType(1L);
-				order.setPayTypeTitle("现金支付");
 				order.setRemarkInfo(diyUser.getRealName() + "以现金的方式收取了" + order.getCarCode() + "的停车费用");
 				order.setOperator(diyUser.getRealName());
 				log.setActionType("收取现金");
@@ -212,8 +210,10 @@ public class TdChargeRecordController {
 			tdOrderService.save(order);
 			if (null != order.getUsername()) {
 				TdUser user = tdUserService.findByUsername(order.getUsername());
-				user.setBalance(user.getBalance() + order.getFirstPay());
-				tdUserService.save(user);
+				if (null != user) {
+					user.setBalance(user.getBalance() + order.getFirstPay());
+					tdUserService.save(user);
+				}
 			}
 		}
 		if (null != re && re) {
